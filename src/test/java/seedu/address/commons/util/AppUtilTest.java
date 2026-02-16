@@ -1,20 +1,20 @@
 package seedu.address.commons.util;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static seedu.address.testutil.Assert.assertThrows;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import seedu.address.testutil.Assert;
 
 public class AppUtilTest {
 
     @Test
     public void getImage_exitingImage() {
-        assertNotNull(AppUtil.getImage("/images/address_book_32.png"));
+        Assertions.assertNotNull(AppUtil.getImage("/images/address_book_32.png"));
     }
 
     @Test
     public void getImage_nullGiven_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> AppUtil.getImage(null));
+        Assert.assertThrows(NullPointerException.class, () -> AppUtil.getImage(null));
     }
 
     @Test
@@ -25,12 +25,13 @@ public class AppUtilTest {
 
     @Test
     public void checkArgument_falseWithoutErrorMessage_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> AppUtil.checkArgument(false));
+        Assert.assertThrows(IllegalArgumentException.class, () -> AppUtil.checkArgument(false));
     }
 
     @Test
     public void checkArgument_falseWithErrorMessage_throwsIllegalArgumentException() {
         String errorMessage = "error message";
-        assertThrows(IllegalArgumentException.class, errorMessage, () -> AppUtil.checkArgument(false, errorMessage));
+        Assert.assertThrows(IllegalArgumentException.class, errorMessage,
+                () -> AppUtil.checkArgument(false, errorMessage));
     }
 }

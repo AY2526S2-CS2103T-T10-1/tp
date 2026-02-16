@@ -1,7 +1,6 @@
 package seedu.address.commons.core;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class GuiSettingsTest {
@@ -11,6 +10,6 @@ public class GuiSettingsTest {
         String expected = GuiSettings.class.getCanonicalName() + "{windowWidth=" + guiSettings.getWindowWidth()
                 + ", windowHeight=" + guiSettings.getWindowHeight() + ", windowCoordinates="
                 + guiSettings.getWindowCoordinates() + "}";
-        assertEquals(expected, guiSettings.toString());
+        Assertions.assertEquals(expected, guiSettings.toString());
     }
 }

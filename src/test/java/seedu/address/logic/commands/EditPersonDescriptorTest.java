@@ -32,12 +32,14 @@ public class EditPersonDescriptorTest {
         Assertions.assertFalse(CommandTestUtil.DESC_AMY.equals(editedAmy));
 
         // different phone -> returns false
-        editedAmy = new EditPersonDescriptorBuilder(CommandTestUtil.DESC_AMY).withPhone(CommandTestUtil.VALID_PHONE_BOB)
+        editedAmy = new EditPersonDescriptorBuilder(CommandTestUtil.DESC_AMY)
+                .withPhone(CommandTestUtil.VALID_PHONE_BOB)
                 .build();
         Assertions.assertFalse(CommandTestUtil.DESC_AMY.equals(editedAmy));
 
         // different email -> returns false
-        editedAmy = new EditPersonDescriptorBuilder(CommandTestUtil.DESC_AMY).withEmail(CommandTestUtil.VALID_EMAIL_BOB)
+        editedAmy = new EditPersonDescriptorBuilder(CommandTestUtil.DESC_AMY)
+                .withEmail(CommandTestUtil.VALID_EMAIL_BOB)
                 .build();
         Assertions.assertFalse(CommandTestUtil.DESC_AMY.equals(editedAmy));
 
