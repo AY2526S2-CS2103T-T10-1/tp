@@ -31,22 +31,22 @@ public class PersonBuilder {
      * Creates a {@code PersonBuilder} with the default details.
      */
     public PersonBuilder() {
-        name = new Name(DEFAULT_NAME);
-        phone = new Phone(DEFAULT_PHONE);
-        email = new Email(DEFAULT_EMAIL);
-        address = new Address(DEFAULT_ADDRESS);
-        tags = new HashSet<>();
+        this.name = new Name(PersonBuilder.DEFAULT_NAME);
+        this.phone = new Phone(PersonBuilder.DEFAULT_PHONE);
+        this.email = new Email(PersonBuilder.DEFAULT_EMAIL);
+        this.address = new Address(PersonBuilder.DEFAULT_ADDRESS);
+        this.tags = new HashSet<>();
     }
 
     /**
      * Initializes the PersonBuilder with the data of {@code personToCopy}.
      */
     public PersonBuilder(Person personToCopy) {
-        name = personToCopy.getName();
-        phone = personToCopy.getPhone();
-        email = personToCopy.getEmail();
-        address = personToCopy.getAddress();
-        tags = new HashSet<>(personToCopy.getTags());
+        this.name = personToCopy.getName();
+        this.phone = personToCopy.getPhone();
+        this.email = personToCopy.getEmail();
+        this.address = personToCopy.getAddress();
+        this.tags = new HashSet<>(personToCopy.getTags());
     }
 
     /**
@@ -58,9 +58,10 @@ public class PersonBuilder {
     }
 
     /**
-     * Parses the {@code tags} into a {@code Set<Tag>} and set it to the {@code Person} that we are building.
+     * Parses the {@code tags} into a {@code Set<Tag>} and set it to the
+     * {@code Person} that we are building.
      */
-    public PersonBuilder withTags(String ... tags) {
+    public PersonBuilder withTags(String... tags) {
         this.tags = SampleDataUtil.getTagSet(tags);
         return this;
     }
@@ -90,7 +91,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(name, phone, email, address, tags);
+        return new Person(this.name, this.phone, this.email, this.address, this.tags);
     }
 
 }

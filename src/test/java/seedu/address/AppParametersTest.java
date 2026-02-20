@@ -1,15 +1,12 @@
 package seedu.address;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javafx.application.Application;
@@ -21,29 +18,29 @@ public class AppParametersTest {
 
     @Test
     public void parse_validConfigPath_success() {
-        parametersStub.namedParameters.put("config", "config.json");
-        expected.setConfigPath(Paths.get("config.json"));
-        assertEquals(expected, AppParameters.parse(parametersStub));
+        this.parametersStub.namedParameters.put("config", "config.json");
+        this.expected.setConfigPath(Paths.get("config.json"));
+        Assertions.assertEquals(this.expected, AppParameters.parse(this.parametersStub));
     }
 
     @Test
     public void parse_nullConfigPath_success() {
-        parametersStub.namedParameters.put("config", null);
-        assertEquals(expected, AppParameters.parse(parametersStub));
+        this.parametersStub.namedParameters.put("config", null);
+        Assertions.assertEquals(this.expected, AppParameters.parse(this.parametersStub));
     }
 
     @Test
     public void parse_invalidConfigPath_success() {
-        parametersStub.namedParameters.put("config", "a\0");
-        expected.setConfigPath(null);
-        assertEquals(expected, AppParameters.parse(parametersStub));
+        this.parametersStub.namedParameters.put("config", "a\0");
+        this.expected.setConfigPath(null);
+        Assertions.assertEquals(this.expected, AppParameters.parse(this.parametersStub));
     }
 
     @Test
     public void toStringMethod() {
         AppParameters appParameters = new AppParameters();
         String expected = AppParameters.class.getCanonicalName() + "{configPath=" + appParameters.getConfigPath() + "}";
-        assertEquals(expected, appParameters.toString());
+        Assertions.assertEquals(expected, appParameters.toString());
     }
 
     @Test
@@ -51,21 +48,21 @@ public class AppParametersTest {
         AppParameters appParameters = new AppParameters();
 
         // same values -> returns true
-        assertTrue(appParameters.equals(new AppParameters()));
+        Assertions.assertTrue(appParameters.equals(new AppParameters()));
 
         // same object -> returns true
-        assertTrue(appParameters.equals(appParameters));
+        Assertions.assertTrue(appParameters.equals(appParameters));
 
         // null -> returns false
-        assertFalse(appParameters.equals(null));
+        Assertions.assertFalse(appParameters.equals(null));
 
         // different types -> returns false
-        assertFalse(appParameters.equals(5.0f));
+        Assertions.assertFalse(appParameters.equals(5.0f));
 
         // different config path -> returns false
         AppParameters otherAppParameters = new AppParameters();
         otherAppParameters.setConfigPath(Paths.get("configPath"));
-        assertFalse(appParameters.equals(otherAppParameters));
+        Assertions.assertFalse(appParameters.equals(otherAppParameters));
     }
 
     private static class ParametersStub extends Application.Parameters {
@@ -83,7 +80,7 @@ public class AppParametersTest {
 
         @Override
         public Map<String, String> getNamed() {
-            return Collections.unmodifiableMap(namedParameters);
+            return Collections.unmodifiableMap(this.namedParameters);
         }
     }
 }

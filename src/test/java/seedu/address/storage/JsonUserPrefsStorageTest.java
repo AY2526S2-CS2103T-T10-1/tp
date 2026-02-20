@@ -1,20 +1,18 @@
 package seedu.address.storage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static seedu.address.testutil.Assert.assertThrows;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.model.UserPrefs;
+import seedu.address.testutil.Assert;
 
 public class JsonUserPrefsStorageTest {
 
@@ -25,49 +23,49 @@ public class JsonUserPrefsStorageTest {
 
     @Test
     public void readUserPrefs_nullFilePath_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> readUserPrefs(null));
+        Assert.assertThrows(NullPointerException.class, () -> this.readUserPrefs(null));
     }
 
     private Optional<UserPrefs> readUserPrefs(String userPrefsFileInTestDataFolder) throws DataLoadingException {
-        Path prefsFilePath = addToTestDataPathIfNotNull(userPrefsFileInTestDataFolder);
+        Path prefsFilePath = this.addToTestDataPathIfNotNull(userPrefsFileInTestDataFolder);
         return new JsonUserPrefsStorage(prefsFilePath).readUserPrefs(prefsFilePath);
     }
 
     @Test
     public void readUserPrefs_missingFile_emptyResult() throws DataLoadingException {
-        assertFalse(readUserPrefs("NonExistentFile.json").isPresent());
+        Assertions.assertFalse(this.readUserPrefs("NonExistentFile.json").isPresent());
     }
 
     @Test
     public void readUserPrefs_notJsonFormat_exceptionThrown() {
-        assertThrows(DataLoadingException.class, () -> readUserPrefs("NotJsonFormatUserPrefs.json"));
+        Assert.assertThrows(DataLoadingException.class, () -> this.readUserPrefs("NotJsonFormatUserPrefs.json"));
     }
 
     private Path addToTestDataPathIfNotNull(String userPrefsFileInTestDataFolder) {
         return userPrefsFileInTestDataFolder != null
-                ? TEST_DATA_FOLDER.resolve(userPrefsFileInTestDataFolder)
+                ? JsonUserPrefsStorageTest.TEST_DATA_FOLDER.resolve(userPrefsFileInTestDataFolder)
                 : null;
     }
 
     @Test
     public void readUserPrefs_fileInOrder_successfullyRead() throws DataLoadingException {
-        UserPrefs expected = getTypicalUserPrefs();
-        UserPrefs actual = readUserPrefs("TypicalUserPref.json").get();
-        assertEquals(expected, actual);
+        UserPrefs expected = this.getTypicalUserPrefs();
+        UserPrefs actual = this.readUserPrefs("TypicalUserPref.json").get();
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void readUserPrefs_valuesMissingFromFile_defaultValuesUsed() throws DataLoadingException {
-        UserPrefs actual = readUserPrefs("EmptyUserPrefs.json").get();
-        assertEquals(new UserPrefs(), actual);
+        UserPrefs actual = this.readUserPrefs("EmptyUserPrefs.json").get();
+        Assertions.assertEquals(new UserPrefs(), actual);
     }
 
     @Test
     public void readUserPrefs_extraValuesInFile_extraValuesIgnored() throws DataLoadingException {
-        UserPrefs expected = getTypicalUserPrefs();
-        UserPrefs actual = readUserPrefs("ExtraValuesUserPref.json").get();
+        UserPrefs expected = this.getTypicalUserPrefs();
+        UserPrefs actual = this.readUserPrefs("ExtraValuesUserPref.json").get();
 
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     private UserPrefs getTypicalUserPrefs() {
@@ -79,20 +77,21 @@ public class JsonUserPrefsStorageTest {
 
     @Test
     public void savePrefs_nullPrefs_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> saveUserPrefs(null, "SomeFile.json"));
+        Assert.assertThrows(NullPointerException.class, () -> this.saveUserPrefs(null, "SomeFile.json"));
     }
 
     @Test
     public void saveUserPrefs_nullFilePath_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> saveUserPrefs(new UserPrefs(), null));
+        Assert.assertThrows(NullPointerException.class, () -> this.saveUserPrefs(new UserPrefs(), null));
     }
 
     /**
-     * Saves {@code userPrefs} at the specified {@code prefsFileInTestDataFolder} filepath.
+     * Saves {@code userPrefs} at the specified {@code prefsFileInTestDataFolder}
+     * filepath.
      */
     private void saveUserPrefs(UserPrefs userPrefs, String prefsFileInTestDataFolder) {
         try {
-            new JsonUserPrefsStorage(addToTestDataPathIfNotNull(prefsFileInTestDataFolder))
+            new JsonUserPrefsStorage(this.addToTestDataPathIfNotNull(prefsFileInTestDataFolder))
                     .saveUserPrefs(userPrefs);
         } catch (IOException ioe) {
             throw new AssertionError("There should not be an error writing to the file", ioe);
@@ -105,19 +104,19 @@ public class JsonUserPrefsStorageTest {
         UserPrefs original = new UserPrefs();
         original.setGuiSettings(new GuiSettings(1200, 200, 0, 2));
 
-        Path pefsFilePath = testFolder.resolve("TempPrefs.json");
+        Path pefsFilePath = this.testFolder.resolve("TempPrefs.json");
         JsonUserPrefsStorage jsonUserPrefsStorage = new JsonUserPrefsStorage(pefsFilePath);
 
-        //Try writing when the file doesn't exist
+        // Try writing when the file doesn't exist
         jsonUserPrefsStorage.saveUserPrefs(original);
         UserPrefs readBack = jsonUserPrefsStorage.readUserPrefs().get();
-        assertEquals(original, readBack);
+        Assertions.assertEquals(original, readBack);
 
-        //Try saving when the file exists
+        // Try saving when the file exists
         original.setGuiSettings(new GuiSettings(5, 5, 5, 5));
         jsonUserPrefsStorage.saveUserPrefs(original);
         readBack = jsonUserPrefsStorage.readUserPrefs().get();
-        assertEquals(original, readBack);
+        Assertions.assertEquals(original, readBack);
     }
 
 }

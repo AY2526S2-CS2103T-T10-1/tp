@@ -1,17 +1,12 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.requireNonNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.testutil.Assert.assertThrows;
-import static seedu.address.testutil.TypicalPersons.ALICE;
-
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Predicate;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javafx.collections.ObservableList;
@@ -23,13 +18,15 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.testutil.Assert;
 import seedu.address.testutil.PersonBuilder;
+import seedu.address.testutil.TypicalPersons;
 
 public class AddCommandTest {
 
     @Test
     public void constructor_nullPerson_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> new AddCommand(null));
+        Assert.assertThrows(NullPointerException.class, () -> new AddCommand(null));
     }
 
     @Test
@@ -39,9 +36,9 @@ public class AddCommandTest {
 
         CommandResult commandResult = new AddCommand(validPerson).execute(modelStub);
 
-        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validPerson)),
+        Assertions.assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validPerson)),
                 commandResult.getFeedbackToUser());
-        assertEquals(Arrays.asList(validPerson), modelStub.personsAdded);
+        Assertions.assertEquals(Arrays.asList(validPerson), modelStub.personsAdded);
     }
 
     @Test
@@ -50,7 +47,8 @@ public class AddCommandTest {
         AddCommand addCommand = new AddCommand(validPerson);
         ModelStub modelStub = new ModelStubWithPerson(validPerson);
 
-        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
+        Assert.assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON,
+                () -> addCommand.execute(modelStub));
     }
 
     @Test
@@ -61,27 +59,27 @@ public class AddCommandTest {
         AddCommand addBobCommand = new AddCommand(bob);
 
         // same object -> returns true
-        assertTrue(addAliceCommand.equals(addAliceCommand));
+        Assertions.assertTrue(addAliceCommand.equals(addAliceCommand));
 
         // same values -> returns true
         AddCommand addAliceCommandCopy = new AddCommand(alice);
-        assertTrue(addAliceCommand.equals(addAliceCommandCopy));
+        Assertions.assertTrue(addAliceCommand.equals(addAliceCommandCopy));
 
         // different types -> returns false
-        assertFalse(addAliceCommand.equals(1));
+        Assertions.assertFalse(addAliceCommand.equals(1));
 
         // null -> returns false
-        assertFalse(addAliceCommand.equals(null));
+        Assertions.assertFalse(addAliceCommand.equals(null));
 
         // different person -> returns false
-        assertFalse(addAliceCommand.equals(addBobCommand));
+        Assertions.assertFalse(addAliceCommand.equals(addBobCommand));
     }
 
     @Test
     public void toStringMethod() {
-        AddCommand addCommand = new AddCommand(ALICE);
-        String expected = AddCommand.class.getCanonicalName() + "{toAdd=" + ALICE + "}";
-        assertEquals(expected, addCommand.toString());
+        AddCommand addCommand = new AddCommand(TypicalPersons.ALICE);
+        String expected = AddCommand.class.getCanonicalName() + "{toAdd=" + TypicalPersons.ALICE + "}";
+        Assertions.assertEquals(expected, addCommand.toString());
     }
 
     /**
@@ -166,13 +164,13 @@ public class AddCommandTest {
         private final Person person;
 
         ModelStubWithPerson(Person person) {
-            requireNonNull(person);
+            Objects.requireNonNull(person);
             this.person = person;
         }
 
         @Override
         public boolean hasPerson(Person person) {
-            requireNonNull(person);
+            Objects.requireNonNull(person);
             return this.person.isSamePerson(person);
         }
     }
@@ -185,14 +183,14 @@ public class AddCommandTest {
 
         @Override
         public boolean hasPerson(Person person) {
-            requireNonNull(person);
-            return personsAdded.stream().anyMatch(person::isSamePerson);
+            Objects.requireNonNull(person);
+            return this.personsAdded.stream().anyMatch(person::isSamePerson);
         }
 
         @Override
         public void addPerson(Person person) {
-            requireNonNull(person);
-            personsAdded.add(person);
+            Objects.requireNonNull(person);
+            this.personsAdded.add(person);
         }
 
         @Override
