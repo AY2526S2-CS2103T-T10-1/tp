@@ -17,6 +17,7 @@ import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
@@ -98,4 +99,14 @@ public class AddressBookParserTest {
         Assert.assertThrows(ParseException.class, Messages.MESSAGE_UNKNOWN_COMMAND,
                 () -> this.parser.parseCommand("unknownCommand"));
     }
+
+    @Test
+    public void parseCommand_remark() throws Exception {
+        Assertions.assertTrue(this.parser.parseCommand(RemarkCommand.COMMAND_WORD) instanceof RemarkCommand);
+        final String remark = "Some remark.";
+        RemarkCommand command = (RemarkCommand) this.parser.parseCommand(RemarkCommand.COMMAND_WORD + " "
+                + TypicalIndexes.INDEX_FIRST_PERSON.getOneBased() + " " + CliSyntax.PREFIX_REMARK + remark);
+        Assertions.assertEquals(new RemarkCommand(TypicalIndexes.INDEX_FIRST_PERSON, remark), command);
+    }
+
 }
