@@ -11,13 +11,13 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### John Doe
+### Toh Yi Zhong
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/tohyzhong.png" width="200px">
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
-[[github](https://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[linkedin](https://www.linkedin.com/in/yizhongtoh)]
+[[github](https://github.com/tohyzhong)]
+[[portfolio](team/tohyzhong.md)]
 
 * Role: Project Advisor
 
