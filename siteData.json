@@ -9,7 +9,8 @@
         "project-team": "Project team",
         "toh-yi-zhong": "Toh Yi Zhong",
         "li-zuyi": "Li Zuyi",
-        "wong-eu-en": "Wong Eu En"
+        "wong-eu-en": "Wong Eu En",
+        "terry-si": "Terry Si"
       },
       "headingKeywords": {}
     },
@@ -130,6 +131,14 @@
       "title": "",
       "headings": {
         "addressbook-level-3": "AddressBook Level-3"
+      },
+      "headingKeywords": {}
+    },
+    {
+      "src": "team/blerargh.md",
+      "title": "Terry's Project Portfolio Page",
+      "headings": {
+        "project-classroom-plus-plus": "Project: Classroom Plus Plus"
       },
       "headingKeywords": {}
     },
