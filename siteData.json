@@ -3,15 +3,13 @@
   "pages": [
     {
       "src": "AboutUs.md",
+      "title": "About Us",
       "headings": {
         "about-us": "About Us",
         "project-team": "Project team",
+        "toh-yi-zhong": "Toh Yi Zhong",
         "li-zuyi": "Li Zuyi",
-        "wong-eu-en": "Wong Eu En",
-        "jane-doe": "Jane Doe",
-        "johnny-doe": "Johnny Doe",
-        "jean-doe": "Jean Doe",
-        "james-doe": "James Doe"
+        "wong-eu-en": "Wong Eu En"
       },
       "headingKeywords": {}
     },
@@ -155,6 +153,14 @@
       "src": "team/lizuyi.md",
       "headings": {
         "project-addressbook-level-3": "Project: AddressBook Level 3"
+      },
+      "headingKeywords": {}
+    },
+    {
+      "src": "team/tohyzhong.md",
+      "title": "Yi Zhong's Project Portfolio Page",
+      "headings": {
+        "project-classroom-plus-plus": "Project: Classroom Plus Plus"
       },
       "headingKeywords": {}
     }
