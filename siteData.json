@@ -3,10 +3,10 @@
   "pages": [
     {
       "src": "AboutUs.md",
-      "title": "About Us",
       "headings": {
         "about-us": "About Us",
         "project-team": "Project team",
+        "li-zuyi": "Li Zuyi",
         "wong-eu-en": "Wong Eu En",
         "jane-doe": "Jane Doe",
         "johnny-doe": "Johnny Doe",
@@ -146,6 +146,13 @@
     {
       "src": "team/johndoe.md",
       "title": "John Doe's Project Portfolio Page",
+      "headings": {
+        "project-addressbook-level-3": "Project: AddressBook Level 3"
+      },
+      "headingKeywords": {}
+    },
+    {
+      "src": "team/lizuyi.md",
       "headings": {
         "project-addressbook-level-3": "Project: AddressBook Level 3"
       },
