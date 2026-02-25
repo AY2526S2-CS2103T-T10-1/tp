@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.Remark;
 import seedu.address.testutil.TypicalIndexes;
-import seedu.address.testutil.TypicalPersons;
+import seedu.address.testutil.TypicalPersons;;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -15,42 +16,46 @@ import seedu.address.testutil.TypicalPersons;
  */
 public class RemarkCommandTest {
 
-    private Model model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+        private Model model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
 
-    @Test
-    public void execute() {
-        final String remark = "Some remark";
+        @Test
+        public void execute() {
+                final Remark remark = new Remark("Some remark");
 
-        CommandTestUtil.assertCommandFailure(new RemarkCommand(TypicalIndexes.INDEX_FIRST_PERSON, remark), this.model,
-                String.format(RemarkCommand.MESSAGE_ARGUMENTS, TypicalIndexes.INDEX_FIRST_PERSON.getOneBased(),
-                        remark));
-    }
+                CommandTestUtil.assertCommandFailure(new RemarkCommand(TypicalIndexes.INDEX_FIRST_PERSON, remark),
+                                this.model,
+                                String.format(RemarkCommand.MESSAGE_ARGUMENTS,
+                                                TypicalIndexes.INDEX_FIRST_PERSON.getOneBased(),
+                                                remark));
+        }
 
-    @Test
-    public void equals() {
-        final RemarkCommand standardCommand = new RemarkCommand(TypicalIndexes.INDEX_FIRST_PERSON,
-                CommandTestUtil.VALID_REMARK_AMY);
+        @Test
+        public void equals() {
+                final RemarkCommand standardCommand = new RemarkCommand(TypicalIndexes.INDEX_FIRST_PERSON,
+                                new Remark(CommandTestUtil.VALID_REMARK_AMY));
 
-        // same values -> returns true
-        RemarkCommand commandWithSameValues = new RemarkCommand(TypicalIndexes.INDEX_FIRST_PERSON,
-                CommandTestUtil.VALID_REMARK_AMY);
-        Assertions.assertTrue(standardCommand.equals(commandWithSameValues));
+                // same values -> returns true
+                RemarkCommand commandWithSameValues = new RemarkCommand(TypicalIndexes.INDEX_FIRST_PERSON,
+                                new Remark(CommandTestUtil.VALID_REMARK_AMY));
+                Assertions.assertTrue(standardCommand.equals(commandWithSameValues));
 
-        // same object -> returns true
-        Assertions.assertTrue(standardCommand.equals(standardCommand));
+                // same object -> returns true
+                Assertions.assertTrue(standardCommand.equals(standardCommand));
 
-        // null -> returns false
-        Assertions.assertFalse(standardCommand.equals(null));
+                // null -> returns false
+                Assertions.assertFalse(standardCommand.equals(null));
 
-        // different types -> returns false
-        Assertions.assertFalse(standardCommand.equals(new ClearCommand()));
+                // different types -> returns false
+                Assertions.assertFalse(standardCommand.equals(new ClearCommand()));
 
-        // different index -> returns false
-        Assertions.assertFalse(standardCommand
-                .equals(new RemarkCommand(TypicalIndexes.INDEX_SECOND_PERSON, CommandTestUtil.VALID_REMARK_AMY)));
+                // different index -> returns false
+                Assertions.assertFalse(standardCommand
+                                .equals(new RemarkCommand(TypicalIndexes.INDEX_SECOND_PERSON,
+                                                new Remark(CommandTestUtil.VALID_REMARK_AMY))));
 
-        // different remark -> returns false
-        Assertions.assertFalse(standardCommand
-                .equals(new RemarkCommand(TypicalIndexes.INDEX_FIRST_PERSON, CommandTestUtil.VALID_REMARK_BOB)));
-    }
+                // different remark -> returns false
+                Assertions.assertFalse(standardCommand
+                                .equals(new RemarkCommand(TypicalIndexes.INDEX_FIRST_PERSON,
+                                                new Remark(CommandTestUtil.VALID_REMARK_BOB))));
+        }
 }
