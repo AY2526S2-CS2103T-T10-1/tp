@@ -6,5 +6,3 @@
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
   <ListView fx:id="personListView" VBox.vgrow="ALWAYS" />
 </VBox>
-
-<Label fx:id="remark" styleClass="cell_small_label" text="\$remark" />
