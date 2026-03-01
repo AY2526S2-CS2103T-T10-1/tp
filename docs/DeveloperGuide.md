@@ -35,7 +35,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S2-CS2103T-T10-1/tp/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S2-CS2103T-T10-1/tp/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
 
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
@@ -68,13 +68,13 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S2-CS2103T-T10-1/tp/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
 <puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
+The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S2-CS2103T-T10-1/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S2-CS2103T-T10-1/tp/tree/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
@@ -85,7 +85,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2526S2-CS2103T-T10-1/tp/tree/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -119,7 +119,7 @@ How the parsing works:
 
 ### Model component
 
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : [`Model.java`](https://github.com/AY2526S2-CS2103T-T10-1/tp/tree/master/src/main/java/seedu/address/model/Model.java)
 
 <puml src="diagrams/ModelClassDiagram.puml" width="450" />
 
@@ -140,7 +140,7 @@ The `Model` component,
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2526S2-CS2103T-T10-1/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
@@ -295,7 +295,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | Priority | As a ...                                   | I want to ...                                      | So that I can ...                                                          |
 | -------- | ------------------------------------------ | -------------------------------------------------- | -------------------------------------------------------------------------- |
 | `* * *`  | new user                                   | see usage instructions                             | refer to instructions when I forget how to use the App                     |
-| `* * *`  | user                                       | add a new person                                   |                                                                            |
 | `* * *`  | user                                       | delete a person                                    | remove entries that I no longer need                                       |
 | `* * *`  | user                                       | find a person by name                              | locate details of persons without having to go through the entire list     |
 | `* * *`  | user                                       | find contacts by a specific field                  |                                                                            |
@@ -322,32 +321,381 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is `ClassroomPlusPlus` and the **Actor** is the `user` (a teacher), unless specified otherwise)
 
-**Use case: Delete a person**
+#### Use Case 1: Add a New Contact
 
 **MSS**
 
-1. User requests to list persons
-1. AddressBook shows a list of persons
-1. User requests to delete a specific person in the list
-1. AddressBook deletes the person
-
-    Use case ends.
+1. User requests to add a contact with fields (Name, Phone, Email, Address, Class name, Assignment name).
+1. System <u>[shows updated contact list (Use Case 2)](#use-case-2-list-contacts)</u>.
+1. Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 1a. User left optional fields blank (e.g. Class name, Assignment name).
+  * 1a1. System accepts the input and proceeds.
+* 1b. A contact with the same Name and Phone number exists in contact list.
+  * 1b1. System shows an error message.
+  * 1b2. Use case ends.
+* 1c. Invalid or missing fields.
+  * 1c1. System shows an error message.
+  * 1c2. Use case ends.
 
-  Use case ends.
+#### Use Case 2: List Contacts
 
-* 3a. The given index is invalid.
+**MSS**
 
-  * 3a1. AddressBook shows an error message.
+1. User requests to list contacts.
+1. System shows the list of contacts.
+1. Use case ends.
 
-      Use case resumes at step 2.
+**Extensions**
 
-_{More to be added}_
+* 2a. No contacts exist in the list.
+  * 2a1. System shows an empty list with a message indicating that no contacts exist.
+
+#### Use Case 3: Add a New Class
+
+**MSS**
+
+1. User requests to add a class with fields (Class name).
+1. System <u>[shows class list (Use Case 4)](#use-case-4-list-classes)</u>.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. A class with the same name exists in class list.
+  * 1a1. System shows an error message.
+  * 1a2. Use case ends.
+* 1b. Invalid or missing fields.
+  * 1b1. System shows an error message.
+  * 1b2. Use case ends.
+
+#### Use Case 4: List Classes
+
+**MSS**
+
+1. User requests to list classes.
+1. System shows the list of classes.
+1. Use case ends.
+
+**Extensions**
+
+* 2a. No classes exist in the list.
+  * 2a1. System shows an empty list with a message indicating that no classes exist.
+  * 2a2. Use case ends.
+
+#### Use Case 5: Assign a Contact to a Class
+
+**MSS**
+
+1. User requests to assign a contact to a class.
+1. System assigns the contact to the class.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. Invalid contact or class.
+  * 1a1. System shows an error message.
+  * 1a2. Use case ends.
+* 1b. Contact is already assigned to the class.
+  * 1b1. System shows an error message.
+  * 1b2. Use case ends.
+
+#### Use Case 6: Remove a Contact from a Class
+
+**MSS**
+
+1. User <u>[views the list of contacts assigned to a class (Use Case 18)](#use-case-18-view-a-class)</u>.
+1. User requests to remove a contact from the class.
+1. System removes the contact from the class.
+1. Use case ends.
+
+**Extensions**
+
+* 2a. Invalid contact or class.
+  * 2a1. System shows an error message.
+  * 2a2. Use case ends.
+* 2b. Contact is not assigned to the class.
+  * 2b1. System shows an error message.
+  * 2b2. Use case ends.
+
+#### Use Case 7: Add a New Assignment
+
+**MSS**
+
+1. User requests to add an assignment with fields (Assignment name, Deadline, Class name, Contact indices).
+1. System <u>[shows updated assignment list (Use Case 8)](#use-case-8-list-assignments)</u>.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. A assignment with the same name exists in assignment list.
+  * 1a1. System shows an error message.
+  * 1a2. Use case ends.
+* 1b. Invalid or missing fields.
+  * 1b1. System shows an error message.
+  * 1b2. Use case ends.
+* 1c. User left optional fields blank (e.g. Class name, Contact indices).
+  * 1c1. System accepts the input and proceeds.
+
+#### Use Case 8: List Assignments
+
+**MSS**
+
+1. User requests to list assignments.
+1. System shows the list of assignments.
+1. Use case ends.
+
+**Extensions**
+
+* 2a. No assignments exist in the list.
+  * 2a1. System shows an empty list with a message indicating that no assignments exist.
+  * 2a2. Use case ends.
+
+#### Use Case 9: Assign an Assignment
+
+**MSS**
+
+1. User requests to assign an assignment with fields (Assignment name, Class name, Contact indices).
+1. System assigns the assignment to the contacts.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. Invalid assignment or contacts.
+  * 1a1. System shows an error message.
+  * 1a2. Use case ends.
+* 1b. Assignment is already assigned to one of the contacts.
+  * 1b1. System proceeds with Step 3.
+* 1c. User left Class name field blank.
+  * 1c1. System proceeds with Step 3, assigning only to contacts specified.
+* 1d. User left Contact indices field blank.
+  * 1d1. System proceeds with Step 3, assigning to all contacts in the specified class.
+
+#### Use Case 10: Unassign an Assignment
+
+**MSS**
+
+1. User <u>[views the list of contacts assigned to an assignment (Use Case 19)](#use-case-19-view-an-assignment)</u>.
+1. User requests to unassign an assignment with fields (Assignment name, Class name, Contact indices).
+1. System unassigns the assignment from the contacts.
+1. Use case ends.
+
+**Extensions**
+
+* 2a. Invalid assignment, classname, or contacts.
+  * 2a1. System shows an error message.
+  * 2a2. Use case ends.
+* 2b. Assignment is not assigned to one of the contacts.
+  * 2b1. System proceeds with Step 3 without the contact.
+* 2c. User left Class name field blank.
+  * 2c1. System proceeds with Step 3, unassigning only from contacts specified.
+* 2d. User left Contact indices field blank.
+  * 2d1. System proceeds with Step 3, unassigning from all contacts in the specified class.
+* 2e. User left both Class name and Contact indices fields blank.
+  * 2e1. System proceeds with Step 3, unassigning from all contacts assigned to the assignment.
+* 2f. No contacts are assigned to the assignment.
+  * 2f1. System shows an error message.
+  * 2f2. Use case ends.
+
+#### Use Case 11: Delete a Contact
+
+**MSS**
+
+1. User requests to delete a contact.
+1. System removes the contact from the contact list, any classes and assignments it is assigned to.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. Invalid contact.
+  * 1a1. System shows an error message.
+  * 1a2. Use case ends.
+* 1b. User specified multiple contacts to delete.
+  * 1b1. System repeats Steps 2 and 3 for all specified contacts.
+
+#### Use Case 12: Delete a Class
+
+**MSS**
+
+1. User requests to delete a class.
+1. System removes the class from the class list, and from any students belonging to the class.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. Invalid class.
+  * 1a1. System shows an error message.
+  * 1a2. Use case ends.
+* 1b. User specified multiple classes to delete.
+  * 1b1. System repeats Steps 2 and 3 for all classes.
+
+#### Use Case 13: Delete an Assignment
+
+**MSS**
+
+1. User requests to delete an assignment.
+1. System removes the assignment from the assignment list, and from any students who have it assigned.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. Invalid assignment.
+  * 1a1. System shows an error message.
+  * 1a2. Use case ends.
+* 1b. User specified multiple assignments to delete.
+  * 1b1. System repeats Steps 2 and 3 for all assignments.
+
+<!-- Start of non MVP feature use cases -->
+**The use cases below are for features that are not part of the MVP, but are proposed to be implemented if time permits.**
+
+#### Use Case 14: Find a Contact
+
+**MSS**
+
+1. User requests to find contacts by name, phone, class, or email.
+1. System displays the matching contacts.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. No contacts match the search query.
+  * 1a1. System shows an empty list with a message indicating no matches found.
+  * 1a2. Use case ends.
+* 1b. Invalid search query (e.g. invalid field, or missing search keyword).
+  * 1b1. System shows an error message.
+  * 1b2. Use case ends.
+
+#### Use Case 15: Find a Class
+
+**MSS**
+
+1. User requests to find a class by name.
+1. System displays the matching classes.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. No classes match the search query.
+  * 1a1. System shows an empty list with a message indicating no matches found.
+  * 1a2. Use case ends.
+
+#### Use Case 16: Find an Assignment
+
+**MSS**
+
+1. User requests to find an assignment by name or deadline.
+1. System displays the matching assignments.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. No assignments match the search query.
+  * 1a1. System shows an empty list with a message indicating no matches found.
+  * 1a2. Use case ends.
+* 1b. Invalid search query (e.g. invalid field, or missing search keyword).
+  * 1b1. System shows an error message.
+  * 1b2. Use case ends.
+
+#### Use Case 17: View a Contact
+
+**MSS**
+
+1. User <u>[views the list of contacts (Use Case 2)](#use-case-2-list-contacts)</u>.
+1. User requests to view a contact.
+1. System displays the contact details, including any assignments and their deadlines assigned to the contact.
+1. Use case ends.
+
+**Extensions**
+
+* 2a. Invalid contact.
+  * 2a1. System shows an error message.
+  * 2a2. Use case ends.
+
+#### Use Case 18: View a Class
+
+**MSS**
+
+1. User <u>[views the list of classes (Use Case 4)](#use-case-4-list-classes)</u>.
+1. User requests to view a class.
+1. System displays the class details and associated contacts.
+1. Use case ends.
+
+**Extensions**
+
+* 2a. Invalid class.
+  * 2a1. System shows an error message.
+  * 2a2. Use case ends.
+
+#### Use Case 19: View an Assignment
+
+**MSS**
+
+1. User <u>[views the list of assignments (Use Case 8)](#use-case-8-list-assignments)</u>.
+1. User requests to view an assignment.
+1. System displays the assignment details and associated contacts.
+1. Use case ends.
+
+**Extensions**
+
+* 2a. Invalid assignment.
+  * 2a1. System shows an error message.
+  * 2a2. Use case ends.
+
+#### Use Case 20: Update Submission Status of an Assignment
+
+**MSS**
+
+1. User requests to update a contact's submission status for an assignment.
+1. System updates the assignment's submission status for the contact.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. Invalid contact or assignment.
+  * 1a1. System shows an error message.
+  * 1a2. Use case ends.
+* 1b. Contact is not assigned the assignment.
+  * 1b1. System shows an error message.
+  * 1b2. Use case ends.
+
+#### Use Case 21: Mark an Assignment
+
+**MSS**
+
+1. User requests to mark an assignment for a contact with a score.
+1. System marks the assignment as graded for the contact and sets the score.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. Invalid assignment or contact.
+  * 1a1. System shows an error message.
+  * 1a2. Use case ends.
+* 1b. Assignment is already graded for the contact.
+  * 1b1. System continues with Step 3, overwriting the previous score.
+* 1c. Invalid score.
+  * 1c1. System shows an error message.
+  * 1c2. Use case ends.
+
+#### Use Case 22: Unmark an Assignment
+
+**MSS**
+
+1. User requests to unmark an assignment for a contact.
+1. System ungrades the assignment for the contact and removes the score.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. Invalid assignment or contact.
+  * 1a1. System shows an error message.
+  * 1a2. Use case ends.
+* 1b. Assignment is not marked for the contact.
+  * 1b1. System shows an error message.
+  * 1b2. Use case ends.
 
 ### Non-Functional Requirements
 
