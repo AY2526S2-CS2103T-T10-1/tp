@@ -10,7 +10,8 @@
         "toh-yi-zhong": "Toh Yi Zhong",
         "li-zuyi": "Li Zuyi",
         "wong-eu-en": "Wong Eu En",
-        "terry-si": "Terry Si"
+        "terry-si": "Terry Si",
+        "gabriel-tan": "Gabriel Tan"
       },
       "headingKeywords": {}
     },
@@ -169,6 +170,14 @@
     {
       "src": "team/tohyzhong.md",
       "title": "Yi Zhong's Project Portfolio Page",
+      "headings": {
+        "project-classroom-plus-plus": "Project: Classroom Plus Plus"
+      },
+      "headingKeywords": {}
+    },
+    {
+      "src": "team/underscoregt.md",
+      "title": "Gabriel Tan's Project Portfolio Page",
       "headings": {
         "project-classroom-plus-plus": "Project: Classroom Plus Plus"
       },
