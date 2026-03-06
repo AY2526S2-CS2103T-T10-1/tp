@@ -1,0 +1,57 @@
+package cpp.commons.util;
+
+/**
+ * Builds a string representation of an object that is suitable as the return
+ * value of {@link Object#toString()}.
+ */
+public class ToStringBuilder {
+    private static final String OBJECT_PREFIX = "{";
+    private static final String OBJECT_SUFFIX = "}";
+    private static final String FIELD_SEPARATOR = ", ";
+    private static final String FIELD_NAME_VALUE_SEPARATOR = "=";
+
+    private final StringBuilder stringBuilder = new StringBuilder();
+    private boolean hasField;
+
+    /**
+     * Constructs a {@code ToStringBuilder} whose formatted output will be prefixed
+     * with {@code objectName}.
+     */
+    public ToStringBuilder(String objectName) {
+        this.stringBuilder.append(objectName).append(ToStringBuilder.OBJECT_PREFIX);
+    }
+
+    /**
+     * Constructs a {@code ToStringBuilder} whose formatted output will be prefixed
+     * with the
+     * canonical class name of {@code object}.
+     */
+    public ToStringBuilder(Object object) {
+        this(object.getClass().getCanonicalName());
+    }
+
+    /**
+     * Adds a field name/value pair to the output string.
+     *
+     * @param fieldName  The name of the field.
+     * @param fieldValue The value of the field.
+     * @return A reference to this {@code ToStringBuilder} object, allowing method
+     *         calls to be chained.
+     */
+    public ToStringBuilder add(String fieldName, Object fieldValue) {
+        if (this.hasField) {
+            this.stringBuilder.append(ToStringBuilder.FIELD_SEPARATOR);
+        }
+        this.stringBuilder.append(fieldName).append(ToStringBuilder.FIELD_NAME_VALUE_SEPARATOR).append(fieldValue);
+        this.hasField = true;
+        return this;
+    }
+
+    /**
+     * Returns the built formatted string representation.
+     */
+    @Override
+    public String toString() {
+        return this.stringBuilder.toString() + ToStringBuilder.OBJECT_SUFFIX;
+    }
+}

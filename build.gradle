@@ -6,7 +6,7 @@ plugins {
     id 'jacoco'
 }
 
-mainClassName = 'address.Main'
+mainClassName = 'cpp.Main'
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
@@ -66,7 +66,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveFileName = 'addressbook.jar'
+    archiveFileName = 'cpp.jar'
 }
 
 defaultTasks 'clean', 'test'
