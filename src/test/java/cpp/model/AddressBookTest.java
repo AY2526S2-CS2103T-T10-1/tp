@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import cpp.logic.commands.CommandTestUtil;
+import cpp.model.assignment.Assignment;
 import cpp.model.person.Person;
 import cpp.model.person.exceptions.DuplicatePersonException;
 import cpp.testutil.Assert;
@@ -100,6 +101,11 @@ public class AddressBookTest {
         @Override
         public ObservableList<Person> getPersonList() {
             return this.persons;
+        }
+
+        @Override
+        public ObservableList<Assignment> getAssignmentList() {
+            throw new UnsupportedOperationException("Method 'getAssignmentList' should not be called.");
         }
     }
 

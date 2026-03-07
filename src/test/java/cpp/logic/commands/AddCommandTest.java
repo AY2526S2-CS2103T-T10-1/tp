@@ -16,6 +16,7 @@ import cpp.model.AddressBook;
 import cpp.model.Model;
 import cpp.model.ReadOnlyAddressBook;
 import cpp.model.ReadOnlyUserPrefs;
+import cpp.model.assignment.Assignment;
 import cpp.model.person.Person;
 import cpp.testutil.Assert;
 import cpp.testutil.PersonBuilder;
@@ -153,6 +154,16 @@ public class AddCommandTest {
 
         @Override
         public void updateFilteredPersonList(Predicate<Person> predicate) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasAssignment(Assignment assignment) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addAssignment(Assignment assignment) {
             throw new AssertionError("This method should not be called.");
         }
     }

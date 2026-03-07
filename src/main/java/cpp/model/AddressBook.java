@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Objects;
 
 import cpp.commons.util.ToStringBuilder;
+import cpp.model.assignment.Assignment;
+import cpp.model.assignment.UniqueAssignmentList;
 import cpp.model.person.Person;
 import cpp.model.person.UniquePersonList;
 import javafx.collections.ObservableList;
@@ -15,6 +17,7 @@ import javafx.collections.ObservableList;
 public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
+    private final UniqueAssignmentList assignments;
 
     /*
      * The 'unusual' code block below is a non-static initialization block,
@@ -23,11 +26,11 @@ public class AddressBook implements ReadOnlyAddressBook {
      * https://docs.oracle.com/javase/tutorial/java/javaOO/initial.html
      *
      * Note that non-static init blocks are not recommended to use. There are other
-     * ways to avoid duplication
-     * among constructors.
+     * ways to avoid duplication among constructors.
      */
     {
         this.persons = new UniquePersonList();
+        this.assignments = new UniqueAssignmentList();
     }
 
     public AddressBook() {
@@ -52,12 +55,21 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Replaces the contents of the assignment list with {@code assignments}.
+     * {@code assignments} must not contain duplicate assignments.
+     */
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments.setAssignments(assignments);
+    }
+
+    /**
      * Resets the existing data of this {@code AddressBook} with {@code newData}.
      */
     public void resetData(ReadOnlyAddressBook newData) {
         Objects.requireNonNull(newData);
 
         this.setPersons(newData.getPersonList());
+        this.setAssignments(newData.getAssignmentList());
     }
 
     //// person-level operations
@@ -100,18 +112,35 @@ public class AddressBook implements ReadOnlyAddressBook {
         this.persons.remove(key);
     }
 
+    //// assignment level operations
+    public boolean hasAssignment(Assignment assignment) {
+        Objects.requireNonNull(assignment);
+        return this.assignments.contains(assignment);
+    }
+
+    public void addAssignment(Assignment assignment) {
+        Objects.requireNonNull(assignment);
+        this.assignments.add(assignment);
+    }
+
     //// util methods
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("persons", this.persons)
+                .add("assignments", this.assignments)
                 .toString();
     }
 
     @Override
     public ObservableList<Person> getPersonList() {
         return this.persons.asUnmodifiableObservableList();
+    }
+
+    @Override
+    public ObservableList<Assignment> getAssignmentList() {
+        return this.assignments.asUnmodifiableObservableList();
     }
 
     @Override
@@ -126,11 +155,11 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
 
         AddressBook otherAddressBook = (AddressBook) other;
-        return this.persons.equals(otherAddressBook.persons);
+        return this.persons.equals(otherAddressBook.persons) && this.assignments.equals(otherAddressBook.assignments);
     }
 
     @Override
     public int hashCode() {
-        return this.persons.hashCode();
+        return Objects.hash(this.persons, this.assignments);
     }
 }

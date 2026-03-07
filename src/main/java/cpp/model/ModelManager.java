@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import cpp.commons.core.GuiSettings;
 import cpp.commons.core.LogsCenter;
 import cpp.commons.util.CollectionUtil;
+import cpp.model.assignment.Assignment;
 import cpp.model.person.Person;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -110,6 +111,16 @@ public class ModelManager implements Model {
         CollectionUtil.requireAllNonNull(target, editedPerson);
 
         this.addressBook.setPerson(target, editedPerson);
+    }
+
+    @Override
+    public boolean hasAssignment(Assignment assignment) {
+        return this.addressBook.hasAssignment(assignment);
+    }
+
+    @Override
+    public void addAssignment(Assignment assignment) {
+        this.addressBook.addAssignment(assignment);
     }
 
     // =========== Filtered Person List Accessors

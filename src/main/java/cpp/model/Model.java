@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.function.Predicate;
 
 import cpp.commons.core.GuiSettings;
+import cpp.model.assignment.Assignment;
 import cpp.model.person.Person;
 import javafx.collections.ObservableList;
 
@@ -88,4 +89,15 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    /**
+     * Returns true if an assignment with the same identity as {@code assignment}
+     * exists in the assignment list.
+     */
+    boolean hasAssignment(Assignment assignment);
+
+    /**
+     * Adds the given assignment.
+     */
+    void addAssignment(Assignment assignment);
 }
