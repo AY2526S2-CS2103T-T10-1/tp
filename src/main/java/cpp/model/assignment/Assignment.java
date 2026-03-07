@@ -19,6 +19,12 @@ public class Assignment {
         this.deadline = deadline;
     }
 
+    public Assignment(String id, Name name, LocalDateTime deadline) {
+        this.id = id;
+        this.name = name;
+        this.deadline = deadline;
+    }
+
     public String getId() {
         return this.id;
     }

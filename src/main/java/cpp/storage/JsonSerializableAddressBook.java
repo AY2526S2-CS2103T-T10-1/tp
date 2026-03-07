@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import cpp.commons.exceptions.IllegalValueException;
 import cpp.model.AddressBook;
 import cpp.model.ReadOnlyAddressBook;
+import cpp.model.assignment.Assignment;
 import cpp.model.person.Person;
 
 /**
@@ -20,15 +21,24 @@ import cpp.model.person.Person;
 class JsonSerializableAddressBook {
 
     public static final String MESSAGE_DUPLICATE_PERSON = "Persons list contains duplicate person(s).";
+    public static final String MESSAGE_DUPLICATE_ASSIGNMENT = "Assignments list contains duplicate assignment(s).";
 
     private final List<JsonAdaptedPerson> persons = new ArrayList<>();
+    private final List<JsonAdaptedAssignment> assignments = new ArrayList<>();
 
     /**
-     * Constructs a {@code JsonSerializableAddressBook} with the given persons.
+     * Constructs a {@code JsonSerializableAddressBook} with the given persons and
+     * assignments.
      */
     @JsonCreator
-    public JsonSerializableAddressBook(@JsonProperty("persons") List<JsonAdaptedPerson> persons) {
-        this.persons.addAll(persons);
+    public JsonSerializableAddressBook(@JsonProperty("persons") List<JsonAdaptedPerson> persons,
+            @JsonProperty("assignments") List<JsonAdaptedAssignment> assignments) {
+        if (persons != null) {
+            this.persons.addAll(persons);
+        }
+        if (assignments != null) {
+            this.assignments.addAll(assignments);
+        }
     }
 
     /**
@@ -39,6 +49,8 @@ class JsonSerializableAddressBook {
      */
     public JsonSerializableAddressBook(ReadOnlyAddressBook source) {
         this.persons.addAll(source.getPersonList().stream().map(JsonAdaptedPerson::new).collect(Collectors.toList()));
+        this.assignments.addAll(source.getAssignmentList().stream().map(JsonAdaptedAssignment::new)
+                .collect(Collectors.toList()));
     }
 
     /**
@@ -55,6 +67,15 @@ class JsonSerializableAddressBook {
             }
             addressBook.addPerson(person);
         }
+
+        for (JsonAdaptedAssignment jsonAdaptedAssignment : this.assignments) {
+            Assignment assignment = jsonAdaptedAssignment.toModelType();
+            if (addressBook.hasAssignment(assignment)) {
+                throw new IllegalValueException(JsonSerializableAddressBook.MESSAGE_DUPLICATE_ASSIGNMENT);
+            }
+            addressBook.addAssignment(assignment);
+        }
+
         return addressBook;
     }
 

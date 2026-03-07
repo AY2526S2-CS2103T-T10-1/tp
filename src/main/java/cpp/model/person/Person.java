@@ -40,6 +40,24 @@ public class Person {
         this.tags.addAll(tags);
     }
 
+    /**
+     * Constructor with id for loading from storage. Every field must be present and
+     * not null, except id (backward compatibility).
+     */
+    public Person(String id, Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+        CollectionUtil.requireAllNonNull(name, phone, email, address, tags);
+        if (id == null) {
+            this.id = UUID.randomUUID().toString();
+        } else {
+            this.id = id;
+        }
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.tags.addAll(tags);
+    }
+
     public String getId() {
         return this.id;
     }
