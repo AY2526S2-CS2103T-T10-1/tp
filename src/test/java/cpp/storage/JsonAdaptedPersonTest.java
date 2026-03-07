@@ -16,12 +16,14 @@ import cpp.testutil.Assert;
 import cpp.testutil.TypicalPersons;
 
 public class JsonAdaptedPersonTest {
+    private static final String INVALID_ID = null;
     private static final String INVALID_NAME = "R@chel";
     private static final String INVALID_PHONE = "+651234";
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
 
+    private static final String VALID_ID = "683f92b5-9e96-47bb-94cd-e8ede5523d7a";
     private static final String VALID_NAME = TypicalPersons.BENSON.getName().toString();
     private static final String VALID_PHONE = TypicalPersons.BENSON.getPhone().toString();
     private static final String VALID_EMAIL = TypicalPersons.BENSON.getEmail().toString();
@@ -38,7 +40,8 @@ public class JsonAdaptedPersonTest {
 
     @Test
     public void toModelType_invalidName_throwsIllegalValueException() {
-        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.INVALID_NAME,
+        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_ID,
+                JsonAdaptedPersonTest.INVALID_NAME,
                 JsonAdaptedPersonTest.VALID_PHONE, JsonAdaptedPersonTest.VALID_EMAIL,
                 JsonAdaptedPersonTest.VALID_ADDRESS,
                 JsonAdaptedPersonTest.VALID_TAGS);
@@ -48,7 +51,8 @@ public class JsonAdaptedPersonTest {
 
     @Test
     public void toModelType_nullName_throwsIllegalValueException() {
-        JsonAdaptedPerson person = new JsonAdaptedPerson(null, JsonAdaptedPersonTest.VALID_PHONE,
+        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_ID, null,
+                JsonAdaptedPersonTest.VALID_PHONE,
                 JsonAdaptedPersonTest.VALID_EMAIL, JsonAdaptedPersonTest.VALID_ADDRESS,
                 JsonAdaptedPersonTest.VALID_TAGS);
         String expectedMessage = String.format(JsonAdaptedPerson.MISSING_FIELD_MESSAGE_FORMAT,
@@ -58,7 +62,8 @@ public class JsonAdaptedPersonTest {
 
     @Test
     public void toModelType_invalidPhone_throwsIllegalValueException() {
-        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_NAME,
+        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_ID,
+                JsonAdaptedPersonTest.VALID_NAME,
                 JsonAdaptedPersonTest.INVALID_PHONE, JsonAdaptedPersonTest.VALID_EMAIL,
                 JsonAdaptedPersonTest.VALID_ADDRESS,
                 JsonAdaptedPersonTest.VALID_TAGS);
@@ -68,7 +73,8 @@ public class JsonAdaptedPersonTest {
 
     @Test
     public void toModelType_nullPhone_throwsIllegalValueException() {
-        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_NAME, null,
+        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_ID,
+                JsonAdaptedPersonTest.VALID_NAME, null,
                 JsonAdaptedPersonTest.VALID_EMAIL, JsonAdaptedPersonTest.VALID_ADDRESS,
                 JsonAdaptedPersonTest.VALID_TAGS);
         String expectedMessage = String.format(JsonAdaptedPerson.MISSING_FIELD_MESSAGE_FORMAT,
@@ -78,7 +84,8 @@ public class JsonAdaptedPersonTest {
 
     @Test
     public void toModelType_invalidEmail_throwsIllegalValueException() {
-        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_NAME,
+        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_ID,
+                JsonAdaptedPersonTest.VALID_NAME,
                 JsonAdaptedPersonTest.VALID_PHONE, JsonAdaptedPersonTest.INVALID_EMAIL,
                 JsonAdaptedPersonTest.VALID_ADDRESS,
                 JsonAdaptedPersonTest.VALID_TAGS);
@@ -88,7 +95,8 @@ public class JsonAdaptedPersonTest {
 
     @Test
     public void toModelType_nullEmail_throwsIllegalValueException() {
-        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_NAME,
+        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_ID,
+                JsonAdaptedPersonTest.VALID_NAME,
                 JsonAdaptedPersonTest.VALID_PHONE, null, JsonAdaptedPersonTest.VALID_ADDRESS,
                 JsonAdaptedPersonTest.VALID_TAGS);
         String expectedMessage = String.format(JsonAdaptedPerson.MISSING_FIELD_MESSAGE_FORMAT,
@@ -98,7 +106,8 @@ public class JsonAdaptedPersonTest {
 
     @Test
     public void toModelType_invalidAddress_throwsIllegalValueException() {
-        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_NAME,
+        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_ID,
+                JsonAdaptedPersonTest.VALID_NAME,
                 JsonAdaptedPersonTest.VALID_PHONE, JsonAdaptedPersonTest.VALID_EMAIL,
                 JsonAdaptedPersonTest.INVALID_ADDRESS,
                 JsonAdaptedPersonTest.VALID_TAGS);
@@ -108,7 +117,8 @@ public class JsonAdaptedPersonTest {
 
     @Test
     public void toModelType_nullAddress_throwsIllegalValueException() {
-        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_NAME,
+        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_ID,
+                JsonAdaptedPersonTest.VALID_NAME,
                 JsonAdaptedPersonTest.VALID_PHONE, JsonAdaptedPersonTest.VALID_EMAIL, null,
                 JsonAdaptedPersonTest.VALID_TAGS);
         String expectedMessage = String.format(JsonAdaptedPerson.MISSING_FIELD_MESSAGE_FORMAT,
@@ -120,7 +130,8 @@ public class JsonAdaptedPersonTest {
     public void toModelType_invalidTags_throwsIllegalValueException() {
         List<JsonAdaptedTag> invalidTags = new ArrayList<>(JsonAdaptedPersonTest.VALID_TAGS);
         invalidTags.add(new JsonAdaptedTag(JsonAdaptedPersonTest.INVALID_TAG));
-        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_NAME,
+        JsonAdaptedPerson person = new JsonAdaptedPerson(JsonAdaptedPersonTest.VALID_ID,
+                JsonAdaptedPersonTest.VALID_NAME,
                 JsonAdaptedPersonTest.VALID_PHONE, JsonAdaptedPersonTest.VALID_EMAIL,
                 JsonAdaptedPersonTest.VALID_ADDRESS,
                 invalidTags);

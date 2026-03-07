@@ -1,88 +1,89 @@
 {
-  "editor.defaultFormatter": "redhat.java",
-  "files.autoSave": "onFocusChange",
-  "git.autofetch": true,
-  "terminal.integrated.scrollback": 5000,
-  "security.workspace.trust.untrustedFiles": "open",
-  "editor.formatOnType": false,
-  "editor.formatOnPaste": true,
-  "editor.formatOnSave": true,
-  "editor.formatOnSaveMode": "file",
-  "workbench.settings.applyToAllProfiles": [
-    "editor.formatOnSave",
-    "editor.formatOnPaste"
-  ],
-  "git.pruneOnFetch": true,
-  "workbench.editor.empty.hint": "hidden",
-  "notebook.editorOptionsCustomizations": {
-    "editor.tabSize": 4,
-    "editor.indentSize": 4,
-    "editor.insertSpaces": true
-  },
-  "editor.tabSize": 4,
-  "editor.insertSpaces": true,
-  "editor.detectIndentation": false,
-  "redhat.telemetry.enabled": true,
-  "editor.rulers": [
-    120
-  ],
-  "[java]": {
-    "editor.defaultFormatter": "redhat.java"
-  },
-  "files.insertFinalNewline": true,
-  "java.cleanup.actions": [
-    "qualifyMembers",
-    "qualifyStaticMembers",
-    "addOverride",
-    "stringConcatToTextBlock",
-    "organizeImports"
-  ],
-  "java.codeGeneration.toString.codeStyle": "STRING_FORMAT",
-  "java.format.settings.url": ".settings/org.eclipse.jdt.core.prefs",
-  "java.saveActions.organizeImports": true,
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": "always"
-  },
-  "[gradle]": {},
-  "[markdown]": {
-    "editor.defaultFormatter": "yzhang.markdown-all-in-one",
+    "editor.defaultFormatter": "redhat.java",
+    "files.autoSave": "onFocusChange",
+    "git.autofetch": true,
+    "terminal.integrated.scrollback": 5000,
+    "security.workspace.trust.untrustedFiles": "open",
+    "editor.formatOnType": false,
+    "editor.formatOnPaste": true,
     "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+    "workbench.settings.applyToAllProfiles": [
+        "editor.formatOnSave",
+        "editor.formatOnPaste"
+    ],
+    "git.pruneOnFetch": true,
+    "workbench.editor.empty.hint": "hidden",
+    "notebook.editorOptionsCustomizations": {
+        "editor.tabSize": 4,
+        "editor.indentSize": 4,
+        "editor.insertSpaces": true
+    },
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "redhat.telemetry.enabled": true,
+    "editor.rulers": [
+        120
+    ],
+    "[java]": {
+        "editor.defaultFormatter": "redhat.java"
+    },
+    "files.insertFinalNewline": true,
+    "java.cleanup.actions": [
+        "qualifyMembers",
+        "qualifyStaticMembers",
+        "addOverride",
+        "stringConcatToTextBlock",
+        "organizeImports"
+    ],
+    "java.codeGeneration.toString.codeStyle": "STRING_FORMAT",
+    "java.format.settings.url": ".settings/org.eclipse.jdt.core.prefs",
+    "java.saveActions.organizeImports": true,
     "editor.codeActionsOnSave": {
-      "source.fixAll.markdownlint": "always"
-    }
-  },
-  "markdown.extension.tableFormatter.enabled": true,
-  "markdown.extension.italic.indicator": "_",
-  "markdown.extension.bold.indicator": "**",
-  "markdown.extension.orderedList.autoRenumber": true,
-  "markdown.extension.orderedList.marker": "one",
-  "markdown.extension.toc.orderedList": false,
-  "markdown.extension.toc.unorderedList.marker": "*",
-  "diffEditor.ignoreTrimWhitespace": false,
-  "markdownlint.run": "onSave",
-  "markdownlint.config": {
-    "default": true,
-    "ul-style": {
-      "style": "asterisk"
+        "source.organizeImports": "always"
     },
-    "strong-style": {
-      "style": "asterisk"
+    "[gradle]": {},
+    "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll.markdownlint": "always"
+        }
     },
-    "emphasis-style": {
-      "style": "underscore"
+    "markdown.extension.tableFormatter.enabled": true,
+    "markdown.extension.italic.indicator": "_",
+    "markdown.extension.bold.indicator": "**",
+    "markdown.extension.orderedList.autoRenumber": true,
+    "markdown.extension.orderedList.marker": "one",
+    "markdown.extension.toc.orderedList": false,
+    "markdown.extension.toc.unorderedList.marker": "*",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "markdownlint.run": "onSave",
+    "markdownlint.config": {
+        "default": true,
+        "ul-style": {
+            "style": "asterisk"
+        },
+        "strong-style": {
+            "style": "asterisk"
+        },
+        "emphasis-style": {
+            "style": "underscore"
+        },
+        "table-column-style": {
+            "style": "aligned"
+        },
+        "table-pipe-style": {
+            "style": "leading_and_trailing"
+        },
+        "ol-prefix": {
+            "style": "one"
+        },
+        "md033": false,
+        "md045": false,
+        "md025": false,
+        "md036": false
     },
-    "table-column-style": {
-      "style": "aligned"
-    },
-    "table-pipe-style": {
-      "style": "leading_and_trailing"
-    },
-    "ol-prefix": {
-      "style": "one"
-    },
-    "md033": false,
-    "md045": false,
-    "md025": false,
-    "md036": false
-  }
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

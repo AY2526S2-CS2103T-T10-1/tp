@@ -16,11 +16,13 @@ import cpp.model.util.SampleDataUtil;
  */
 public class PersonBuilder {
 
+    public static final String DEFAULT_ID = "683f92b5-9e96-47bb-94cd-e8ede5523d95";
     public static final String DEFAULT_NAME = "Amy Bee";
     public static final String DEFAULT_PHONE = "85355255";
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
 
+    private String id;
     private Name name;
     private Phone phone;
     private Email email;
@@ -31,6 +33,7 @@ public class PersonBuilder {
      * Creates a {@code PersonBuilder} with the default details.
      */
     public PersonBuilder() {
+        this.id = PersonBuilder.DEFAULT_ID;
         this.name = new Name(PersonBuilder.DEFAULT_NAME);
         this.phone = new Phone(PersonBuilder.DEFAULT_PHONE);
         this.email = new Email(PersonBuilder.DEFAULT_EMAIL);
@@ -42,11 +45,20 @@ public class PersonBuilder {
      * Initializes the PersonBuilder with the data of {@code personToCopy}.
      */
     public PersonBuilder(Person personToCopy) {
+        this.id = personToCopy.getId();
         this.name = personToCopy.getName();
         this.phone = personToCopy.getPhone();
         this.email = personToCopy.getEmail();
         this.address = personToCopy.getAddress();
         this.tags = new HashSet<>(personToCopy.getTags());
+    }
+
+    /**
+     * Sets the {@code id} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withId(String id) {
+        this.id = id;
+        return this;
     }
 
     /**
@@ -91,7 +103,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(this.name, this.phone, this.email, this.address, this.tags);
+        return new Person(this.id, this.name, this.phone, this.email, this.address, this.tags);
     }
 
 }
