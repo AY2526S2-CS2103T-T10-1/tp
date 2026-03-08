@@ -22,7 +22,7 @@ public class DeleteCommandParserTest {
     @Test
     public void parse_validArgs_returnsDeleteCommand() {
         CommandParserTestUtil.assertParseSuccess(this.parser, "1",
-                new DeleteCommand(TypicalIndexes.INDEX_FIRST_PERSON));
+                new DeleteCommand(TypicalIndexes.INDEX_FIRST_CONTACT));
     }
 
     @Test

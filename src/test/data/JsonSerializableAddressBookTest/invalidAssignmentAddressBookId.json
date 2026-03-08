@@ -1,6 +1,6 @@
 {
     "_comment": "AddressBook save file which contains an invalid Assignment (invalid id)",
-    "persons": [],
+    "contacts": [],
     "assignments": [
         {
             "id": null,

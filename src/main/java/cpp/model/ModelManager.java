@@ -9,7 +9,7 @@ import cpp.commons.core.GuiSettings;
 import cpp.commons.core.LogsCenter;
 import cpp.commons.util.CollectionUtil;
 import cpp.model.assignment.Assignment;
-import cpp.model.person.Person;
+import cpp.model.contact.Contact;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 
@@ -21,7 +21,7 @@ public class ModelManager implements Model {
 
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
-    private final FilteredList<Person> filteredPersons;
+    private final FilteredList<Contact> filteredContacts;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -33,7 +33,7 @@ public class ModelManager implements Model {
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        this.filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        this.filteredContacts = new FilteredList<>(this.addressBook.getContactList());
     }
 
     public ModelManager() {
@@ -90,27 +90,27 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public boolean hasPerson(Person person) {
-        Objects.requireNonNull(person);
-        return this.addressBook.hasPerson(person);
+    public boolean hasContact(Contact contact) {
+        Objects.requireNonNull(contact);
+        return this.addressBook.hasContact(contact);
     }
 
     @Override
-    public void deletePerson(Person target) {
-        this.addressBook.removePerson(target);
+    public void deleteContact(Contact target) {
+        this.addressBook.removeContact(target);
     }
 
     @Override
-    public void addPerson(Person person) {
-        this.addressBook.addPerson(person);
-        this.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
+    public void addContact(Contact contact) {
+        this.addressBook.addContact(contact);
+        this.updateFilteredContactList(Model.PREDICATE_SHOW_ALL_CONTACTS);
     }
 
     @Override
-    public void setPerson(Person target, Person editedPerson) {
-        CollectionUtil.requireAllNonNull(target, editedPerson);
+    public void setContact(Contact target, Contact editedContact) {
+        CollectionUtil.requireAllNonNull(target, editedContact);
 
-        this.addressBook.setPerson(target, editedPerson);
+        this.addressBook.setContact(target, editedContact);
     }
 
     @Override
@@ -125,23 +125,23 @@ public class ModelManager implements Model {
         this.addressBook.addAssignment(assignment);
     }
 
-    // =========== Filtered Person List Accessors
+    // =========== Filtered Contact List Accessors
     // =============================================================
 
     /**
-     * Returns an unmodifiable view of the list of {@code Person} backed by the
+     * Returns an unmodifiable view of the list of {@code Contact} backed by the
      * internal list of
      * {@code versionedAddressBook}
      */
     @Override
-    public ObservableList<Person> getFilteredPersonList() {
-        return this.filteredPersons;
+    public ObservableList<Contact> getFilteredContactList() {
+        return this.filteredContacts;
     }
 
     @Override
-    public void updateFilteredPersonList(Predicate<Person> predicate) {
+    public void updateFilteredContactList(Predicate<Contact> predicate) {
         Objects.requireNonNull(predicate);
-        this.filteredPersons.setPredicate(predicate);
+        this.filteredContacts.setPredicate(predicate);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class ModelManager implements Model {
         ModelManager otherModelManager = (ModelManager) other;
         return this.addressBook.equals(otherModelManager.addressBook)
                 && this.userPrefs.equals(otherModelManager.userPrefs)
-                && this.filteredPersons.equals(otherModelManager.filteredPersons);
+                && this.filteredContacts.equals(otherModelManager.filteredContacts);
     }
 
 }

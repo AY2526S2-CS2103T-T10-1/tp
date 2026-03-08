@@ -14,7 +14,7 @@ import cpp.logic.parser.AddressBookParser;
 import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.Model;
 import cpp.model.ReadOnlyAddressBook;
-import cpp.model.person.Person;
+import cpp.model.contact.Contact;
 import cpp.storage.Storage;
 import javafx.collections.ObservableList;
 
@@ -68,8 +68,8 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public ObservableList<Person> getFilteredPersonList() {
-        return this.model.getFilteredPersonList();
+    public ObservableList<Contact> getFilteredContactList() {
+        return this.model.getFilteredContactList();
     }
 
     @Override

@@ -12,7 +12,7 @@ import cpp.logic.commands.AddCommand;
 import cpp.logic.commands.ClearCommand;
 import cpp.logic.commands.DeleteCommand;
 import cpp.logic.commands.EditCommand;
-import cpp.logic.commands.EditCommand.EditPersonDescriptor;
+import cpp.logic.commands.EditCommand.EditContactDescriptor;
 import cpp.logic.commands.ExitCommand;
 import cpp.logic.commands.FindCommand;
 import cpp.logic.commands.HelpCommand;
@@ -20,14 +20,14 @@ import cpp.logic.commands.ListCommand;
 import cpp.logic.commands.assignment.AddAssignmentCommand;
 import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.assignment.Assignment;
-import cpp.model.person.NameContainsKeywordsPredicate;
-import cpp.model.person.Person;
+import cpp.model.contact.Contact;
+import cpp.model.contact.ContactNameContainsKeywordsPredicate;
 import cpp.testutil.Assert;
 import cpp.testutil.AssignmentBuilder;
 import cpp.testutil.AssignmentUtil;
-import cpp.testutil.EditPersonDescriptorBuilder;
-import cpp.testutil.PersonBuilder;
-import cpp.testutil.PersonUtil;
+import cpp.testutil.ContactBuilder;
+import cpp.testutil.ContactUtil;
+import cpp.testutil.EditContactDescriptorBuilder;
 import cpp.testutil.TypicalAssignments;
 import cpp.testutil.TypicalIndexes;
 
@@ -37,9 +37,9 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_add() throws Exception {
-        Person person = new PersonBuilder().build();
-        AddCommand command = (AddCommand) this.parser.parseCommand(PersonUtil.getAddCommand(person));
-        Assertions.assertEquals(new AddCommand(person), command);
+        Contact contact = new ContactBuilder().build();
+        AddCommand command = (AddCommand) this.parser.parseCommand(ContactUtil.getAddCommand(contact));
+        Assertions.assertEquals(new AddCommand(contact), command);
     }
 
     @Test
@@ -51,18 +51,18 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_delete() throws Exception {
         DeleteCommand command = (DeleteCommand) this.parser.parseCommand(
-                DeleteCommand.COMMAND_WORD + " " + TypicalIndexes.INDEX_FIRST_PERSON.getOneBased());
-        Assertions.assertEquals(new DeleteCommand(TypicalIndexes.INDEX_FIRST_PERSON), command);
+                DeleteCommand.COMMAND_WORD + " " + TypicalIndexes.INDEX_FIRST_CONTACT.getOneBased());
+        Assertions.assertEquals(new DeleteCommand(TypicalIndexes.INDEX_FIRST_CONTACT), command);
     }
 
     @Test
     public void parseCommand_edit() throws Exception {
-        Person person = new PersonBuilder().build();
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
+        Contact contact = new ContactBuilder().build();
+        EditContactDescriptor descriptor = new EditContactDescriptorBuilder(contact).build();
         EditCommand command = (EditCommand) this.parser.parseCommand(EditCommand.COMMAND_WORD + " "
-                + TypicalIndexes.INDEX_FIRST_PERSON.getOneBased() + " "
-                + PersonUtil.getEditPersonDescriptorDetails(descriptor));
-        Assertions.assertEquals(new EditCommand(TypicalIndexes.INDEX_FIRST_PERSON, descriptor), command);
+                + TypicalIndexes.INDEX_FIRST_CONTACT.getOneBased() + " "
+                + ContactUtil.getEditContactDescriptorDetails(descriptor));
+        Assertions.assertEquals(new EditCommand(TypicalIndexes.INDEX_FIRST_CONTACT, descriptor), command);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class AddressBookParserTest {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
         FindCommand command = (FindCommand) this.parser.parseCommand(
                 FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
-        Assertions.assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
+        Assertions.assertEquals(new FindCommand(new ContactNameContainsKeywordsPredicate(keywords)), command);
     }
 
     @Test

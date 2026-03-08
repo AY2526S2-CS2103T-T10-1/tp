@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 import cpp.logic.commands.CommandTestUtil;
 import cpp.model.assignment.Assignment;
 import cpp.model.assignment.Name;
-import cpp.model.person.Person;
-import cpp.model.person.exceptions.DuplicatePersonException;
+import cpp.model.contact.Contact;
+import cpp.model.contact.exceptions.DuplicateContactException;
 import cpp.testutil.Assert;
-import cpp.testutil.PersonBuilder;
-import cpp.testutil.TypicalPersons;
+import cpp.testutil.ContactBuilder;
+import cpp.testutil.TypicalContacts;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -26,7 +26,7 @@ public class AddressBookTest {
 
     @Test
     public void constructor() {
-        Assertions.assertEquals(Collections.emptyList(), this.addressBook.getPersonList());
+        Assertions.assertEquals(Collections.emptyList(), this.addressBook.getContactList());
     }
 
     @Test
@@ -36,57 +36,57 @@ public class AddressBookTest {
 
     @Test
     public void resetData_withValidReadOnlyAddressBook_replacesData() {
-        AddressBook newData = TypicalPersons.getTypicalAddressBook();
+        AddressBook newData = TypicalContacts.getTypicalAddressBook();
         this.addressBook.resetData(newData);
         Assertions.assertEquals(newData, this.addressBook);
     }
 
     @Test
-    public void resetData_withDuplicatePersons_throwsDuplicatePersonException() {
-        // Two persons with the same identity fields
-        Person editedAlice = new PersonBuilder(TypicalPersons.ALICE).withAddress(CommandTestUtil.VALID_ADDRESS_BOB)
+    public void resetData_withDuplicateContacts_throwsDuplicateContactException() {
+        // Two contacts with the same identity fields
+        Contact editedAlice = new ContactBuilder(TypicalContacts.ALICE).withAddress(CommandTestUtil.VALID_ADDRESS_BOB)
                 .withTags(CommandTestUtil.VALID_TAG_HUSBAND)
                 .build();
-        List<Person> newPersons = Arrays.asList(TypicalPersons.ALICE, editedAlice);
-        AddressBookStub newData = new AddressBookStub(newPersons);
+        List<Contact> newContacts = Arrays.asList(TypicalContacts.ALICE, editedAlice);
+        AddressBookStub newData = new AddressBookStub(newContacts);
 
-        Assert.assertThrows(DuplicatePersonException.class, () -> this.addressBook.resetData(newData));
+        Assert.assertThrows(DuplicateContactException.class, () -> this.addressBook.resetData(newData));
     }
 
     @Test
-    public void hasPerson_nullPerson_throwsNullPointerException() {
-        Assert.assertThrows(NullPointerException.class, () -> this.addressBook.hasPerson(null));
+    public void hasContact_nullContact_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class, () -> this.addressBook.hasContact(null));
     }
 
     @Test
-    public void hasPerson_personNotInAddressBook_returnsFalse() {
-        Assertions.assertFalse(this.addressBook.hasPerson(TypicalPersons.ALICE));
+    public void hasContact_contactNotInAddressBook_returnsFalse() {
+        Assertions.assertFalse(this.addressBook.hasContact(TypicalContacts.ALICE));
     }
 
     @Test
-    public void hasPerson_personInAddressBook_returnsTrue() {
-        this.addressBook.addPerson(TypicalPersons.ALICE);
-        Assertions.assertTrue(this.addressBook.hasPerson(TypicalPersons.ALICE));
+    public void hasContact_contactInAddressBook_returnsTrue() {
+        this.addressBook.addContact(TypicalContacts.ALICE);
+        Assertions.assertTrue(this.addressBook.hasContact(TypicalContacts.ALICE));
     }
 
     @Test
-    public void hasPerson_personWithSameIdentityFieldsInAddressBook_returnsTrue() {
-        this.addressBook.addPerson(TypicalPersons.ALICE);
-        Person editedAlice = new PersonBuilder(TypicalPersons.ALICE).withAddress(CommandTestUtil.VALID_ADDRESS_BOB)
+    public void hasContact_contactWithSameIdentityFieldsInAddressBook_returnsTrue() {
+        this.addressBook.addContact(TypicalContacts.ALICE);
+        Contact editedAlice = new ContactBuilder(TypicalContacts.ALICE).withAddress(CommandTestUtil.VALID_ADDRESS_BOB)
                 .withTags(CommandTestUtil.VALID_TAG_HUSBAND)
                 .build();
-        Assertions.assertTrue(this.addressBook.hasPerson(editedAlice));
+        Assertions.assertTrue(this.addressBook.hasContact(editedAlice));
     }
 
     @Test
-    public void getPersonList_modifyList_throwsUnsupportedOperationException() {
+    public void getContactList_modifyList_throwsUnsupportedOperationException() {
         Assert.assertThrows(UnsupportedOperationException.class,
-                () -> this.addressBook.getPersonList().remove(0));
+                () -> this.addressBook.getContactList().remove(0));
     }
 
     @Test
     public void toStringMethod() {
-        String expected = AddressBook.class.getCanonicalName() + "{persons=" + this.addressBook.getPersonList()
+        String expected = AddressBook.class.getCanonicalName() + "{contacts=" + this.addressBook.getContactList()
                 + ", assignments=" + this.addressBook.getAssignmentList() + "}";
         Assertions.assertEquals(expected, this.addressBook.toString());
     }
@@ -141,7 +141,7 @@ public class AddressBookTest {
     public void equals_sameAddressBooks_returnsTrue() {
         AddressBook addressBook1 = new AddressBook();
         Assertions.assertEquals(addressBook1, addressBook1);
-        addressBook1.addPerson(TypicalPersons.ALICE);
+        addressBook1.addContact(TypicalContacts.ALICE);
         Assertions.assertEquals(addressBook1, addressBook1);
     }
 
@@ -150,8 +150,8 @@ public class AddressBookTest {
         AddressBook addressBook1 = new AddressBook();
         AddressBook addressBook2 = new AddressBook();
         Assertions.assertEquals(addressBook1.hashCode(), addressBook2.hashCode());
-        addressBook1.addPerson(TypicalPersons.ALICE);
-        addressBook2.addPerson(TypicalPersons.ALICE);
+        addressBook1.addContact(TypicalContacts.ALICE);
+        addressBook2.addContact(TypicalContacts.ALICE);
         Assertions.assertEquals(addressBook1.hashCode(), addressBook2.hashCode());
     }
 
@@ -160,27 +160,27 @@ public class AddressBookTest {
         AddressBook addressBook1 = new AddressBook();
         AddressBook addressBook2 = new AddressBook();
 
-        addressBook1.addPerson(TypicalPersons.ALICE);
+        addressBook1.addContact(TypicalContacts.ALICE);
         Assertions.assertNotEquals(addressBook1.hashCode(), addressBook2.hashCode());
 
-        addressBook2.addPerson(TypicalPersons.BOB);
+        addressBook2.addContact(TypicalContacts.BOB);
         Assertions.assertNotEquals(addressBook1.hashCode(), addressBook2.hashCode());
     }
 
     /**
-     * A stub ReadOnlyAddressBook whose persons list can violate interface
+     * A stub ReadOnlyAddressBook whose contacts list can violate interface
      * constraints.
      */
     private static class AddressBookStub implements ReadOnlyAddressBook {
-        private final ObservableList<Person> persons = FXCollections.observableArrayList();
+        private final ObservableList<Contact> contacts = FXCollections.observableArrayList();
 
-        AddressBookStub(Collection<Person> persons) {
-            this.persons.setAll(persons);
+        AddressBookStub(Collection<Contact> contacts) {
+            this.contacts.setAll(contacts);
         }
 
         @Override
-        public ObservableList<Person> getPersonList() {
-            return this.persons;
+        public ObservableList<Contact> getContactList() {
+            return this.contacts;
         }
 
         @Override

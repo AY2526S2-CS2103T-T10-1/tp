@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import cpp.commons.core.GuiSettings;
-import cpp.model.person.NameContainsKeywordsPredicate;
+import cpp.model.contact.ContactNameContainsKeywordsPredicate;
 import cpp.testutil.AddressBookBuilder;
 import cpp.testutil.Assert;
 import cpp.testutil.TypicalAssignments;
-import cpp.testutil.TypicalPersons;
+import cpp.testutil.TypicalContacts;
 
 public class ModelManagerTest {
 
@@ -72,19 +72,19 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void hasPerson_nullPerson_throwsNullPointerException() {
-        Assert.assertThrows(NullPointerException.class, () -> this.modelManager.hasPerson(null));
+    public void hasContact_nullContact_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class, () -> this.modelManager.hasContact(null));
     }
 
     @Test
-    public void hasPerson_personNotInAddressBook_returnsFalse() {
-        Assertions.assertFalse(this.modelManager.hasPerson(TypicalPersons.ALICE));
+    public void hasContact_contactNotInAddressBook_returnsFalse() {
+        Assertions.assertFalse(this.modelManager.hasContact(TypicalContacts.ALICE));
     }
 
     @Test
-    public void hasPerson_personInAddressBook_returnsTrue() {
-        this.modelManager.addPerson(TypicalPersons.ALICE);
-        Assertions.assertTrue(this.modelManager.hasPerson(TypicalPersons.ALICE));
+    public void hasContact_contactInAddressBook_returnsTrue() {
+        this.modelManager.addContact(TypicalContacts.ALICE);
+        Assertions.assertTrue(this.modelManager.hasContact(TypicalContacts.ALICE));
     }
 
     @Test
@@ -117,17 +117,17 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
+    public void getFilteredContactList_modifyList_throwsUnsupportedOperationException() {
         Assert.assertThrows(UnsupportedOperationException.class,
-                () -> this.modelManager.getFilteredPersonList().remove(0));
+                () -> this.modelManager.getFilteredContactList().remove(0));
     }
 
     @Test
     public void equals() {
-        AddressBook addressBook = new AddressBookBuilder().withPerson(TypicalPersons.ALICE)
-                .withPerson(TypicalPersons.BENSON).withAssignment(TypicalAssignments.ASSIGNMENT_ONE).build();
-        AddressBook differentAddressBook1 = new AddressBookBuilder().withPerson(TypicalPersons.ALICE)
-                .withPerson(TypicalPersons.BENSON).build();
+        AddressBook addressBook = new AddressBookBuilder().withContact(TypicalContacts.ALICE)
+                .withContact(TypicalContacts.BENSON).withAssignment(TypicalAssignments.ASSIGNMENT_ONE).build();
+        AddressBook differentAddressBook1 = new AddressBookBuilder().withContact(TypicalContacts.ALICE)
+                .withContact(TypicalContacts.BENSON).build();
         AddressBook differentAddressBook2 = new AddressBookBuilder().withAssignment(TypicalAssignments.ASSIGNMENT_ONE)
                 .build();
         UserPrefs userPrefs = new UserPrefs();
@@ -151,12 +151,12 @@ public class ModelManagerTest {
         Assertions.assertFalse(this.modelManager.equals(new ModelManager(differentAddressBook2, userPrefs)));
 
         // different filteredList -> returns false
-        String[] keywords = TypicalPersons.ALICE.getName().fullName.split("\\s+");
-        this.modelManager.updateFilteredPersonList(new NameContainsKeywordsPredicate(Arrays.asList(keywords)));
+        String[] keywords = TypicalContacts.ALICE.getName().fullName.split("\\s+");
+        this.modelManager.updateFilteredContactList(new ContactNameContainsKeywordsPredicate(Arrays.asList(keywords)));
         Assertions.assertFalse(this.modelManager.equals(new ModelManager(addressBook, userPrefs)));
 
         // resets modelManager to initial state for upcoming tests
-        this.modelManager.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
+        this.modelManager.updateFilteredContactList(Model.PREDICATE_SHOW_ALL_CONTACTS);
 
         // different userPrefs -> returns false
         UserPrefs differentUserPrefs = new UserPrefs();

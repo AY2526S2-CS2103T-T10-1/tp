@@ -126,7 +126,7 @@ public class AddAssignmentCommandTest {
         }
 
         @Override
-        public void addPerson(cpp.model.person.Person person) {
+        public void addContact(cpp.model.contact.Contact contact) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -141,27 +141,27 @@ public class AddAssignmentCommandTest {
         }
 
         @Override
-        public boolean hasPerson(cpp.model.person.Person person) {
+        public boolean hasContact(cpp.model.contact.Contact contact) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void deletePerson(cpp.model.person.Person target) {
+        public void deleteContact(cpp.model.contact.Contact target) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void setPerson(cpp.model.person.Person target, cpp.model.person.Person editedPerson) {
+        public void setContact(cpp.model.contact.Contact target, cpp.model.contact.Contact editedContact) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public ObservableList<cpp.model.person.Person> getFilteredPersonList() {
+        public ObservableList<cpp.model.contact.Contact> getFilteredContactList() {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void updateFilteredPersonList(Predicate<cpp.model.person.Person> predicate) {
+        public void updateFilteredContactList(Predicate<cpp.model.contact.Contact> predicate) {
             throw new AssertionError("This method should not be called.");
         }
 

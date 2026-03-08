@@ -6,11 +6,11 @@ import java.util.stream.Stream;
 import cpp.logic.Messages;
 import cpp.logic.commands.AddCommand;
 import cpp.logic.parser.exceptions.ParseException;
-import cpp.model.person.Address;
-import cpp.model.person.Email;
-import cpp.model.person.Name;
-import cpp.model.person.Person;
-import cpp.model.person.Phone;
+import cpp.model.contact.Address;
+import cpp.model.contact.Contact;
+import cpp.model.contact.ContactName;
+import cpp.model.contact.Email;
+import cpp.model.contact.Phone;
 import cpp.model.tag.Tag;
 
 /**
@@ -38,15 +38,15 @@ public class AddCommandParser implements Parser<AddCommand> {
 
         argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_PHONE, CliSyntax.PREFIX_EMAIL,
                 CliSyntax.PREFIX_ADDRESS);
-        Name name = ParserUtil.parseName(argMultimap.getValue(CliSyntax.PREFIX_NAME).get());
+        ContactName name = ParserUtil.parseName(argMultimap.getValue(CliSyntax.PREFIX_NAME).get());
         Phone phone = ParserUtil.parsePhone(argMultimap.getValue(CliSyntax.PREFIX_PHONE).get());
         Email email = ParserUtil.parseEmail(argMultimap.getValue(CliSyntax.PREFIX_EMAIL).get());
         Address address = ParserUtil.parseAddress(argMultimap.getValue(CliSyntax.PREFIX_ADDRESS).get());
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(CliSyntax.PREFIX_TAG));
 
-        Person person = new Person(name, phone, email, address, tagList);
+        Contact contact = new Contact(name, phone, email, address, tagList);
 
-        return new AddCommand(person);
+        return new AddCommand(contact);
     }
 
     /**

@@ -5,7 +5,7 @@ import java.util.Arrays;
 import cpp.logic.Messages;
 import cpp.logic.commands.FindCommand;
 import cpp.logic.parser.exceptions.ParseException;
-import cpp.model.person.NameContainsKeywordsPredicate;
+import cpp.model.contact.ContactNameContainsKeywordsPredicate;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -29,7 +29,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         String[] nameKeywords = trimmedArgs.split("\\s+");
 
-        return new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
+        return new FindCommand(new ContactNameContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
     }
 
 }

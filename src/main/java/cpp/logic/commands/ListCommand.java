@@ -5,18 +5,18 @@ import java.util.Objects;
 import cpp.model.Model;
 
 /**
- * Lists all persons in the address book to the user.
+ * Lists all contacts in the address book to the user.
  */
 public class ListCommand extends Command {
 
     public static final String COMMAND_WORD = "list";
 
-    public static final String MESSAGE_SUCCESS = "Listed all persons";
+    public static final String MESSAGE_SUCCESS = "Listed all contacts";
 
     @Override
     public CommandResult execute(Model model) {
         Objects.requireNonNull(model);
-        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
+        model.updateFilteredContactList(Model.PREDICATE_SHOW_ALL_CONTACTS);
         return new CommandResult(ListCommand.MESSAGE_SUCCESS);
     }
 }

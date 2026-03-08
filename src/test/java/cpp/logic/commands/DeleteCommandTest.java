@@ -8,9 +8,9 @@ import cpp.logic.Messages;
 import cpp.model.Model;
 import cpp.model.ModelManager;
 import cpp.model.UserPrefs;
-import cpp.model.person.Person;
+import cpp.model.contact.Contact;
+import cpp.testutil.TypicalContacts;
 import cpp.testutil.TypicalIndexes;
-import cpp.testutil.TypicalPersons;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -18,74 +18,74 @@ import cpp.testutil.TypicalPersons;
  */
 public class DeleteCommandTest {
 
-    private Model model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+    private Model model = new ModelManager(TypicalContacts.getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void execute_validIndexUnfilteredList_success() {
-        Person personToDelete = this.model.getFilteredPersonList()
-                .get(TypicalIndexes.INDEX_FIRST_PERSON.getZeroBased());
-        DeleteCommand deleteCommand = new DeleteCommand(TypicalIndexes.INDEX_FIRST_PERSON);
+        Contact contactToDelete = this.model.getFilteredContactList()
+                .get(TypicalIndexes.INDEX_FIRST_CONTACT.getZeroBased());
+        DeleteCommand deleteCommand = new DeleteCommand(TypicalIndexes.INDEX_FIRST_CONTACT);
 
-        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
-                Messages.format(personToDelete));
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_CONTACT_SUCCESS,
+                Messages.format(contactToDelete));
 
         ModelManager expectedModel = new ModelManager(this.model.getAddressBook(), new UserPrefs());
-        expectedModel.deletePerson(personToDelete);
+        expectedModel.deleteContact(contactToDelete);
 
         CommandTestUtil.assertCommandSuccess(deleteCommand, this.model, expectedMessage, expectedModel);
     }
 
     @Test
     public void execute_invalidIndexUnfilteredList_throwsCommandException() {
-        Index outOfBoundIndex = Index.fromOneBased(this.model.getFilteredPersonList().size() + 1);
+        Index outOfBoundIndex = Index.fromOneBased(this.model.getFilteredContactList().size() + 1);
         DeleteCommand deleteCommand = new DeleteCommand(outOfBoundIndex);
 
         CommandTestUtil.assertCommandFailure(deleteCommand, this.model,
-                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+                Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX);
     }
 
     @Test
     public void execute_validIndexFilteredList_success() {
-        CommandTestUtil.showPersonAtIndex(this.model, TypicalIndexes.INDEX_FIRST_PERSON);
+        CommandTestUtil.showContactAtIndex(this.model, TypicalIndexes.INDEX_FIRST_CONTACT);
 
-        Person personToDelete = this.model.getFilteredPersonList()
-                .get(TypicalIndexes.INDEX_FIRST_PERSON.getZeroBased());
-        DeleteCommand deleteCommand = new DeleteCommand(TypicalIndexes.INDEX_FIRST_PERSON);
+        Contact contactToDelete = this.model.getFilteredContactList()
+                .get(TypicalIndexes.INDEX_FIRST_CONTACT.getZeroBased());
+        DeleteCommand deleteCommand = new DeleteCommand(TypicalIndexes.INDEX_FIRST_CONTACT);
 
-        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
-                Messages.format(personToDelete));
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_CONTACT_SUCCESS,
+                Messages.format(contactToDelete));
 
         Model expectedModel = new ModelManager(this.model.getAddressBook(), new UserPrefs());
-        expectedModel.deletePerson(personToDelete);
-        this.showNoPerson(expectedModel);
+        expectedModel.deleteContact(contactToDelete);
+        this.showNoContact(expectedModel);
 
         CommandTestUtil.assertCommandSuccess(deleteCommand, this.model, expectedMessage, expectedModel);
     }
 
     @Test
     public void execute_invalidIndexFilteredList_throwsCommandException() {
-        CommandTestUtil.showPersonAtIndex(this.model, TypicalIndexes.INDEX_FIRST_PERSON);
+        CommandTestUtil.showContactAtIndex(this.model, TypicalIndexes.INDEX_FIRST_CONTACT);
 
-        Index outOfBoundIndex = TypicalIndexes.INDEX_SECOND_PERSON;
+        Index outOfBoundIndex = TypicalIndexes.INDEX_SECOND_CONTACT;
         // ensures that outOfBoundIndex is still in bounds of address book list
-        Assertions.assertTrue(outOfBoundIndex.getZeroBased() < this.model.getAddressBook().getPersonList().size());
+        Assertions.assertTrue(outOfBoundIndex.getZeroBased() < this.model.getAddressBook().getContactList().size());
 
         DeleteCommand deleteCommand = new DeleteCommand(outOfBoundIndex);
 
         CommandTestUtil.assertCommandFailure(deleteCommand, this.model,
-                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+                Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX);
     }
 
     @Test
     public void equals() {
-        DeleteCommand deleteFirstCommand = new DeleteCommand(TypicalIndexes.INDEX_FIRST_PERSON);
-        DeleteCommand deleteSecondCommand = new DeleteCommand(TypicalIndexes.INDEX_SECOND_PERSON);
+        DeleteCommand deleteFirstCommand = new DeleteCommand(TypicalIndexes.INDEX_FIRST_CONTACT);
+        DeleteCommand deleteSecondCommand = new DeleteCommand(TypicalIndexes.INDEX_SECOND_CONTACT);
 
         // same object -> returns true
         Assertions.assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
 
         // same values -> returns true
-        DeleteCommand deleteFirstCommandCopy = new DeleteCommand(TypicalIndexes.INDEX_FIRST_PERSON);
+        DeleteCommand deleteFirstCommandCopy = new DeleteCommand(TypicalIndexes.INDEX_FIRST_CONTACT);
         Assertions.assertTrue(deleteFirstCommand.equals(deleteFirstCommandCopy));
 
         // different types -> returns false
@@ -94,7 +94,7 @@ public class DeleteCommandTest {
         // null -> returns false
         Assertions.assertFalse(deleteFirstCommand.equals(null));
 
-        // different person -> returns false
+        // different contact -> returns false
         Assertions.assertFalse(deleteFirstCommand.equals(deleteSecondCommand));
     }
 
@@ -109,9 +109,9 @@ public class DeleteCommandTest {
     /**
      * Updates {@code model}'s filtered list to show no one.
      */
-    private void showNoPerson(Model model) {
-        model.updateFilteredPersonList(p -> false);
+    private void showNoContact(Model model) {
+        model.updateFilteredContactList(p -> false);
 
-        Assertions.assertTrue(model.getFilteredPersonList().isEmpty());
+        Assertions.assertTrue(model.getFilteredContactList().isEmpty());
     }
 }

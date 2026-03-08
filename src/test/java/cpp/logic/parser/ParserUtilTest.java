@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import cpp.logic.parser.exceptions.ParseException;
-import cpp.model.person.Address;
-import cpp.model.person.Email;
-import cpp.model.person.Name;
-import cpp.model.person.Phone;
+import cpp.model.contact.Address;
+import cpp.model.contact.ContactName;
+import cpp.model.contact.Email;
+import cpp.model.contact.Phone;
 import cpp.model.tag.Tag;
 import cpp.testutil.Assert;
 import cpp.testutil.TypicalIndexes;
@@ -53,10 +53,10 @@ public class ParserUtilTest {
     @Test
     public void parseIndex_validInput_success() throws Exception {
         // No whitespaces
-        Assertions.assertEquals(TypicalIndexes.INDEX_FIRST_PERSON, ParserUtil.parseIndex("1"));
+        Assertions.assertEquals(TypicalIndexes.INDEX_FIRST_CONTACT, ParserUtil.parseIndex("1"));
 
         // Leading and trailing whitespaces
-        Assertions.assertEquals(TypicalIndexes.INDEX_FIRST_PERSON, ParserUtil.parseIndex("  1  "));
+        Assertions.assertEquals(TypicalIndexes.INDEX_FIRST_CONTACT, ParserUtil.parseIndex("  1  "));
     }
 
     @Test
@@ -71,14 +71,14 @@ public class ParserUtilTest {
 
     @Test
     public void parseName_validValueWithoutWhitespace_returnsName() throws Exception {
-        Name expectedName = new Name(ParserUtilTest.VALID_NAME);
+        ContactName expectedName = new ContactName(ParserUtilTest.VALID_NAME);
         Assertions.assertEquals(expectedName, ParserUtil.parseName(ParserUtilTest.VALID_NAME));
     }
 
     @Test
     public void parseName_validValueWithWhitespace_returnsTrimmedName() throws Exception {
         String nameWithWhitespace = ParserUtilTest.WHITESPACE + ParserUtilTest.VALID_NAME + ParserUtilTest.WHITESPACE;
-        Name expectedName = new Name(ParserUtilTest.VALID_NAME);
+        ContactName expectedName = new ContactName(ParserUtilTest.VALID_NAME);
         Assertions.assertEquals(expectedName, ParserUtil.parseName(nameWithWhitespace));
     }
 

@@ -13,7 +13,7 @@ import cpp.model.AddressBook;
 import cpp.model.ReadOnlyAddressBook;
 import cpp.testutil.Assert;
 import cpp.testutil.TypicalAssignments;
-import cpp.testutil.TypicalPersons;
+import cpp.testutil.TypicalContacts;
 
 public class JsonAddressBookStorageTest {
     private static final Path TEST_DATA_FOLDER = Paths.get("src", "test", "data", "JsonAddressBookStorageTest");
@@ -48,15 +48,15 @@ public class JsonAddressBookStorageTest {
     }
 
     @Test
-    public void readAddressBook_invalidPersonAddressBook_throwDataLoadingException() {
+    public void readAddressBook_invalidContactAddressBook_throwDataLoadingException() {
         Assert.assertThrows(DataLoadingException.class,
-                () -> this.readAddressBook("invalidPersonAddressBookName.json"));
+                () -> this.readAddressBook("invalidContactAddressBookName.json"));
         Assert.assertThrows(DataLoadingException.class,
-                () -> this.readAddressBook("invalidPersonAddressBookPhone.json"));
+                () -> this.readAddressBook("invalidContactAddressBookPhone.json"));
         Assert.assertThrows(DataLoadingException.class,
-                () -> this.readAddressBook("invalidPersonAddressBookEmail.json"));
+                () -> this.readAddressBook("invalidContactAddressBookEmail.json"));
         Assert.assertThrows(DataLoadingException.class,
-                () -> this.readAddressBook("invalidPersonAddressBookAddress.json"));
+                () -> this.readAddressBook("invalidContactAddressBookAddress.json"));
     }
 
     @Test
@@ -70,15 +70,15 @@ public class JsonAddressBookStorageTest {
     }
 
     @Test
-    public void readAddressBook_invalidAndValidPersonAddressBook_throwDataLoadingException() {
+    public void readAddressBook_invalidAndValidContactAddressBook_throwDataLoadingException() {
         Assert.assertThrows(DataLoadingException.class,
-                () -> this.readAddressBook("invalidAndValidPersonAddressBook.json"));
+                () -> this.readAddressBook("invalidAndValidContactAddressBook.json"));
     }
 
     @Test
     public void readAndSaveAddressBook_allInOrder_success() throws Exception {
         Path filePath = this.testFolder.resolve("TempAddressBook.json");
-        AddressBook original = TypicalPersons.getTypicalAddressBook();
+        AddressBook original = TypicalContacts.getTypicalAddressBook();
         JsonAddressBookStorage jsonAddressBookStorage = new JsonAddressBookStorage(filePath);
 
         // Save in new file and read back
@@ -87,14 +87,14 @@ public class JsonAddressBookStorageTest {
         Assertions.assertEquals(original, new AddressBook(readBack));
 
         // Modify data, overwrite exiting file, and read back
-        original.addPerson(TypicalPersons.HOON);
-        original.removePerson(TypicalPersons.ALICE);
+        original.addContact(TypicalContacts.HOON);
+        original.removeContact(TypicalContacts.ALICE);
         jsonAddressBookStorage.saveAddressBook(original, filePath);
         readBack = jsonAddressBookStorage.readAddressBook(filePath).get();
         Assertions.assertEquals(original, new AddressBook(readBack));
 
         // Save and read without specifying file path
-        original.addPerson(TypicalPersons.IDA);
+        original.addContact(TypicalContacts.IDA);
         jsonAddressBookStorage.saveAddressBook(original); // file path not specified
         readBack = jsonAddressBookStorage.readAddressBook().get(); // file path not specified
         Assertions.assertEquals(original, new AddressBook(readBack));

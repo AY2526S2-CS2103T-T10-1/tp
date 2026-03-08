@@ -11,10 +11,10 @@ import java.util.Set;
 import cpp.commons.core.index.Index;
 import cpp.commons.util.StringUtil;
 import cpp.logic.parser.exceptions.ParseException;
-import cpp.model.person.Address;
-import cpp.model.person.Email;
-import cpp.model.person.Name;
-import cpp.model.person.Phone;
+import cpp.model.contact.Address;
+import cpp.model.contact.ContactName;
+import cpp.model.contact.Email;
+import cpp.model.contact.Phone;
 import cpp.model.tag.Tag;
 
 /**
@@ -48,13 +48,13 @@ public class ParserUtil {
      *
      * @throws ParseException if the given {@code name} is invalid.
      */
-    public static Name parseName(String name) throws ParseException {
+    public static ContactName parseName(String name) throws ParseException {
         Objects.requireNonNull(name);
         String trimmedName = name.trim();
-        if (!Name.isValidName(trimmedName)) {
-            throw new ParseException(Name.MESSAGE_CONSTRAINTS);
+        if (!ContactName.isValidName(trimmedName)) {
+            throw new ParseException(ContactName.MESSAGE_CONSTRAINTS);
         }
-        return new Name(trimmedName);
+        return new ContactName(trimmedName);
     }
 
     /**

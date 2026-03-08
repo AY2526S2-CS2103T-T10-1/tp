@@ -9,7 +9,7 @@ import java.util.Set;
 import cpp.commons.core.index.Index;
 import cpp.logic.Messages;
 import cpp.logic.commands.EditCommand;
-import cpp.logic.commands.EditCommand.EditPersonDescriptor;
+import cpp.logic.commands.EditCommand.EditContactDescriptor;
 import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.tag.Tag;
 
@@ -44,28 +44,28 @@ public class EditCommandParser implements Parser<EditCommand> {
         argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_PHONE, CliSyntax.PREFIX_EMAIL,
                 CliSyntax.PREFIX_ADDRESS);
 
-        EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
+        EditContactDescriptor editContactDescriptor = new EditContactDescriptor();
 
         if (argMultimap.getValue(CliSyntax.PREFIX_NAME).isPresent()) {
-            editPersonDescriptor.setName(ParserUtil.parseName(argMultimap.getValue(CliSyntax.PREFIX_NAME).get()));
+            editContactDescriptor.setName(ParserUtil.parseName(argMultimap.getValue(CliSyntax.PREFIX_NAME).get()));
         }
         if (argMultimap.getValue(CliSyntax.PREFIX_PHONE).isPresent()) {
-            editPersonDescriptor.setPhone(ParserUtil.parsePhone(argMultimap.getValue(CliSyntax.PREFIX_PHONE).get()));
+            editContactDescriptor.setPhone(ParserUtil.parsePhone(argMultimap.getValue(CliSyntax.PREFIX_PHONE).get()));
         }
         if (argMultimap.getValue(CliSyntax.PREFIX_EMAIL).isPresent()) {
-            editPersonDescriptor.setEmail(ParserUtil.parseEmail(argMultimap.getValue(CliSyntax.PREFIX_EMAIL).get()));
+            editContactDescriptor.setEmail(ParserUtil.parseEmail(argMultimap.getValue(CliSyntax.PREFIX_EMAIL).get()));
         }
         if (argMultimap.getValue(CliSyntax.PREFIX_ADDRESS).isPresent()) {
-            editPersonDescriptor
+            editContactDescriptor
                     .setAddress(ParserUtil.parseAddress(argMultimap.getValue(CliSyntax.PREFIX_ADDRESS).get()));
         }
-        this.parseTagsForEdit(argMultimap.getAllValues(CliSyntax.PREFIX_TAG)).ifPresent(editPersonDescriptor::setTags);
+        this.parseTagsForEdit(argMultimap.getAllValues(CliSyntax.PREFIX_TAG)).ifPresent(editContactDescriptor::setTags);
 
-        if (!editPersonDescriptor.isAnyFieldEdited()) {
+        if (!editContactDescriptor.isAnyFieldEdited()) {
             throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
         }
 
-        return new EditCommand(index, editPersonDescriptor);
+        return new EditCommand(index, editContactDescriptor);
     }
 
     /**

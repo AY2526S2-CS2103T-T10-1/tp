@@ -10,22 +10,22 @@ import cpp.logic.Messages;
 import cpp.model.Model;
 import cpp.model.ModelManager;
 import cpp.model.UserPrefs;
-import cpp.model.person.NameContainsKeywordsPredicate;
-import cpp.testutil.TypicalPersons;
+import cpp.model.contact.ContactNameContainsKeywordsPredicate;
+import cpp.testutil.TypicalContacts;
 
 /**
  * Contains integration tests (interaction with the Model) for
  * {@code FindCommand}.
  */
 public class FindCommandTest {
-    private Model model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
-    private Model expectedModel = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+    private Model model = new ModelManager(TypicalContacts.getTypicalAddressBook(), new UserPrefs());
+    private Model expectedModel = new ModelManager(TypicalContacts.getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void equals() {
-        NameContainsKeywordsPredicate firstPredicate = new NameContainsKeywordsPredicate(
+        ContactNameContainsKeywordsPredicate firstPredicate = new ContactNameContainsKeywordsPredicate(
                 Collections.singletonList("first"));
-        NameContainsKeywordsPredicate secondPredicate = new NameContainsKeywordsPredicate(
+        ContactNameContainsKeywordsPredicate secondPredicate = new ContactNameContainsKeywordsPredicate(
                 Collections.singletonList("second"));
 
         FindCommand findFirstCommand = new FindCommand(firstPredicate);
@@ -44,34 +44,35 @@ public class FindCommandTest {
         // null -> returns false
         Assertions.assertFalse(findFirstCommand.equals(null));
 
-        // different person -> returns false
+        // different contact -> returns false
         Assertions.assertFalse(findFirstCommand.equals(findSecondCommand));
     }
 
     @Test
-    public void execute_zeroKeywords_noPersonFound() {
-        String expectedMessage = String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
-        NameContainsKeywordsPredicate predicate = this.preparePredicate(" ");
+    public void execute_zeroKeywords_noContactFound() {
+        String expectedMessage = String.format(Messages.MESSAGE_CONTACTS_LISTED_OVERVIEW, 0);
+        ContactNameContainsKeywordsPredicate predicate = this.preparePredicate(" ");
         FindCommand command = new FindCommand(predicate);
-        this.expectedModel.updateFilteredPersonList(predicate);
+        this.expectedModel.updateFilteredContactList(predicate);
         CommandTestUtil.assertCommandSuccess(command, this.model, expectedMessage, this.expectedModel);
-        Assertions.assertEquals(Collections.emptyList(), this.model.getFilteredPersonList());
+        Assertions.assertEquals(Collections.emptyList(), this.model.getFilteredContactList());
     }
 
     @Test
-    public void execute_multipleKeywords_multiplePersonsFound() {
-        String expectedMessage = String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
-        NameContainsKeywordsPredicate predicate = this.preparePredicate("Kurz Elle Kunz");
+    public void execute_multipleKeywords_multipleContactsFound() {
+        String expectedMessage = String.format(Messages.MESSAGE_CONTACTS_LISTED_OVERVIEW, 3);
+        ContactNameContainsKeywordsPredicate predicate = this.preparePredicate("Kurz Elle Kunz");
         FindCommand command = new FindCommand(predicate);
-        this.expectedModel.updateFilteredPersonList(predicate);
+        this.expectedModel.updateFilteredContactList(predicate);
         CommandTestUtil.assertCommandSuccess(command, this.model, expectedMessage, this.expectedModel);
-        Assertions.assertEquals(Arrays.asList(TypicalPersons.CARL, TypicalPersons.ELLE, TypicalPersons.FIONA),
-                this.model.getFilteredPersonList());
+        Assertions.assertEquals(Arrays.asList(TypicalContacts.CARL, TypicalContacts.ELLE, TypicalContacts.FIONA),
+                this.model.getFilteredContactList());
     }
 
     @Test
     public void toStringMethod() {
-        NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(Arrays.asList("keyword"));
+        ContactNameContainsKeywordsPredicate predicate = new ContactNameContainsKeywordsPredicate(
+                Arrays.asList("keyword"));
         FindCommand findCommand = new FindCommand(predicate);
         String expected = FindCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         Assertions.assertEquals(expected, findCommand.toString());
@@ -80,7 +81,7 @@ public class FindCommandTest {
     /**
      * Parses {@code userInput} into a {@code NameContainsKeywordsPredicate}.
      */
-    private NameContainsKeywordsPredicate preparePredicate(String userInput) {
-        return new NameContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")));
+    private ContactNameContainsKeywordsPredicate preparePredicate(String userInput) {
+        return new ContactNameContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")));
     }
 }

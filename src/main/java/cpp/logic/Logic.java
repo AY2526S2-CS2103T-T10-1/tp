@@ -7,7 +7,7 @@ import cpp.logic.commands.CommandResult;
 import cpp.logic.commands.exceptions.CommandException;
 import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.ReadOnlyAddressBook;
-import cpp.model.person.Person;
+import cpp.model.contact.Contact;
 import javafx.collections.ObservableList;
 
 /**
@@ -31,8 +31,8 @@ public interface Logic {
      */
     ReadOnlyAddressBook getAddressBook();
 
-    /** Returns an unmodifiable view of the filtered list of persons */
-    ObservableList<Person> getFilteredPersonList();
+    /** Returns an unmodifiable view of the filtered list of contacts */
+    ObservableList<Contact> getFilteredContactList();
 
     /**
      * Returns the user prefs' address book file path.

@@ -7,16 +7,16 @@ import cpp.logic.Messages;
 import cpp.logic.commands.exceptions.CommandException;
 import cpp.logic.parser.CliSyntax;
 import cpp.model.Model;
-import cpp.model.person.Person;
+import cpp.model.contact.Contact;
 
 /**
- * Adds a person to the address book.
+ * Adds a contact to the address book.
  */
 public class AddCommand extends Command {
 
     public static final String COMMAND_WORD = "add";
 
-    public static final String MESSAGE_USAGE = AddCommand.COMMAND_WORD + ": Adds a person to the address book. "
+    public static final String MESSAGE_USAGE = AddCommand.COMMAND_WORD + ": Adds a contact to the address book. "
             + "Parameters: "
             + CliSyntax.PREFIX_NAME + "NAME "
             + CliSyntax.PREFIX_PHONE + "PHONE "
@@ -31,28 +31,28 @@ public class AddCommand extends Command {
             + CliSyntax.PREFIX_TAG + "friends "
             + CliSyntax.PREFIX_TAG + "owesMoney";
 
-    public static final String MESSAGE_SUCCESS = "New person added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";
+    public static final String MESSAGE_SUCCESS = "New contact added: %1$s";
+    public static final String MESSAGE_DUPLICATE_CONTACT = "This contact already exists in the address book";
 
-    private final Person toAdd;
+    private final Contact toAdd;
 
     /**
-     * Creates an AddCommand to add the specified {@code Person}
+     * Creates an AddCommand to add the specified {@code Contact}
      */
-    public AddCommand(Person person) {
-        Objects.requireNonNull(person);
-        this.toAdd = person;
+    public AddCommand(Contact contact) {
+        Objects.requireNonNull(contact);
+        this.toAdd = contact;
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         Objects.requireNonNull(model);
 
-        if (model.hasPerson(this.toAdd)) {
-            throw new CommandException(AddCommand.MESSAGE_DUPLICATE_PERSON);
+        if (model.hasContact(this.toAdd)) {
+            throw new CommandException(AddCommand.MESSAGE_DUPLICATE_CONTACT);
         }
 
-        model.addPerson(this.toAdd);
+        model.addContact(this.toAdd);
         return new CommandResult(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(this.toAdd)));
     }
 

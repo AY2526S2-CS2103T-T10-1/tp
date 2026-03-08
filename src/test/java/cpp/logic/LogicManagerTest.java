@@ -19,13 +19,13 @@ import cpp.model.Model;
 import cpp.model.ModelManager;
 import cpp.model.ReadOnlyAddressBook;
 import cpp.model.UserPrefs;
-import cpp.model.person.Person;
+import cpp.model.contact.Contact;
 import cpp.storage.JsonAddressBookStorage;
 import cpp.storage.JsonUserPrefsStorage;
 import cpp.storage.StorageManager;
 import cpp.testutil.Assert;
-import cpp.testutil.PersonBuilder;
-import cpp.testutil.TypicalPersons;
+import cpp.testutil.ContactBuilder;
+import cpp.testutil.TypicalContacts;
 
 public class LogicManagerTest {
     private static final IOException DUMMY_IO_EXCEPTION = new IOException("dummy IO exception");
@@ -56,7 +56,7 @@ public class LogicManagerTest {
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
         String deleteCommand = "delete 9";
-        this.assertCommandException(deleteCommand, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        this.assertCommandException(deleteCommand, Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX);
     }
 
     @Test
@@ -78,8 +78,8 @@ public class LogicManagerTest {
     }
 
     @Test
-    public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
-        Assert.assertThrows(UnsupportedOperationException.class, () -> this.logic.getFilteredPersonList().remove(0));
+    public void getFilteredContactList_modifyList_throwsUnsupportedOperationException() {
+        Assert.assertThrows(UnsupportedOperationException.class, () -> this.logic.getFilteredContactList().remove(0));
     }
 
     /**
@@ -175,9 +175,9 @@ public class LogicManagerTest {
         // Triggers the saveAddressBook method by executing an add command
         String addCommand = AddCommand.COMMAND_WORD + CommandTestUtil.NAME_DESC_AMY + CommandTestUtil.PHONE_DESC_AMY
                 + CommandTestUtil.EMAIL_DESC_AMY + CommandTestUtil.ADDRESS_DESC_AMY;
-        Person expectedPerson = new PersonBuilder(TypicalPersons.AMY).withTags().build();
+        Contact expectedContact = new ContactBuilder(TypicalContacts.AMY).withTags().build();
         ModelManager expectedModel = new ModelManager();
-        expectedModel.addPerson(expectedPerson);
+        expectedModel.addContact(expectedContact);
         this.assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
     }
 }

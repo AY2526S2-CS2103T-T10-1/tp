@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import cpp.model.Model;
 import cpp.model.ModelManager;
 import cpp.model.UserPrefs;
+import cpp.testutil.TypicalContacts;
 import cpp.testutil.TypicalIndexes;
-import cpp.testutil.TypicalPersons;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -20,7 +20,7 @@ public class ListCommandTest {
 
     @BeforeEach
     public void setUp() {
-        this.model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+        this.model = new ModelManager(TypicalContacts.getTypicalAddressBook(), new UserPrefs());
         this.expectedModel = new ModelManager(this.model.getAddressBook(), new UserPrefs());
     }
 
@@ -32,7 +32,7 @@ public class ListCommandTest {
 
     @Test
     public void execute_listIsFiltered_showsEverything() {
-        CommandTestUtil.showPersonAtIndex(this.model, TypicalIndexes.INDEX_FIRST_PERSON);
+        CommandTestUtil.showContactAtIndex(this.model, TypicalIndexes.INDEX_FIRST_CONTACT);
         CommandTestUtil.assertCommandSuccess(new ListCommand(), this.model, ListCommand.MESSAGE_SUCCESS,
                 this.expectedModel);
     }

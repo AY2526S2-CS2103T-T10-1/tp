@@ -6,17 +6,17 @@ import java.util.Objects;
 import cpp.commons.util.ToStringBuilder;
 import cpp.model.assignment.Assignment;
 import cpp.model.assignment.UniqueAssignmentList;
-import cpp.model.person.Person;
-import cpp.model.person.UniquePersonList;
+import cpp.model.contact.Contact;
+import cpp.model.contact.UniqueContactList;
 import javafx.collections.ObservableList;
 
 /**
  * Wraps all data at the address-book level
- * Duplicates are not allowed (by .isSamePerson comparison)
+ * Duplicates are not allowed (by .isSameContact comparison)
  */
 public class AddressBook implements ReadOnlyAddressBook {
 
-    private final UniquePersonList persons;
+    private final UniqueContactList contacts;
     private final UniqueAssignmentList assignments;
 
     /*
@@ -29,7 +29,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      * ways to avoid duplication among constructors.
      */
     {
-        this.persons = new UniquePersonList();
+        this.contacts = new UniqueContactList();
         this.assignments = new UniqueAssignmentList();
     }
 
@@ -37,7 +37,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
-     * Creates an AddressBook using the Persons in the {@code toBeCopied}
+     * Creates an AddressBook using the Contacts in the {@code toBeCopied}
      */
     public AddressBook(ReadOnlyAddressBook toBeCopied) {
         this();
@@ -47,11 +47,11 @@ public class AddressBook implements ReadOnlyAddressBook {
     //// list overwrite operations
 
     /**
-     * Replaces the contents of the person list with {@code persons}.
-     * {@code persons} must not contain duplicate persons.
+     * Replaces the contents of the contact list with {@code contacts}.
+     * {@code contacts} must not contain duplicate contacts.
      */
-    public void setPersons(List<Person> persons) {
-        this.persons.setPersons(persons);
+    public void setContacts(List<Contact> contacts) {
+        this.contacts.setContacts(contacts);
     }
 
     /**
@@ -68,48 +68,48 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void resetData(ReadOnlyAddressBook newData) {
         Objects.requireNonNull(newData);
 
-        this.setPersons(newData.getPersonList());
+        this.setContacts(newData.getContactList());
         this.setAssignments(newData.getAssignmentList());
     }
 
-    //// person-level operations
+    //// contact-level operations
 
     /**
-     * Returns true if a person with the same identity as {@code person} exists in
+     * Returns true if a contact with the same identity as {@code contact} exists in
      * the address book.
      */
-    public boolean hasPerson(Person person) {
-        Objects.requireNonNull(person);
-        return this.persons.contains(person);
+    public boolean hasContact(Contact contact) {
+        Objects.requireNonNull(contact);
+        return this.contacts.contains(contact);
     }
 
     /**
-     * Adds a person to the address book.
-     * The person must not already exist in the address book.
+     * Adds a contact to the address book.
+     * The contact must not already exist in the address book.
      */
-    public void addPerson(Person p) {
-        this.persons.add(p);
+    public void addContact(Contact p) {
+        this.contacts.add(p);
     }
 
     /**
-     * Replaces the given person {@code target} in the list with
-     * {@code editedPerson}.
+     * Replaces the given contact {@code target} in the list with
+     * {@code editedContact}.
      * {@code target} must exist in the address book.
-     * The person identity of {@code editedPerson} must not be the same as another
-     * existing person in the address book.
+     * The contact identity of {@code editedContact} must not be the same as another
+     * existing contact in the address book.
      */
-    public void setPerson(Person target, Person editedPerson) {
-        Objects.requireNonNull(editedPerson);
+    public void setContact(Contact target, Contact editedContact) {
+        Objects.requireNonNull(editedContact);
 
-        this.persons.setPerson(target, editedPerson);
+        this.contacts.setContact(target, editedContact);
     }
 
     /**
      * Removes {@code key} from this {@code AddressBook}.
      * {@code key} must exist in the address book.
      */
-    public void removePerson(Person key) {
-        this.persons.remove(key);
+    public void removeContact(Contact key) {
+        this.contacts.remove(key);
     }
 
     //// assignment level operations
@@ -136,14 +136,14 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("persons", this.persons)
+                .add("contacts", this.contacts)
                 .add("assignments", this.assignments)
                 .toString();
     }
 
     @Override
-    public ObservableList<Person> getPersonList() {
-        return this.persons.asUnmodifiableObservableList();
+    public ObservableList<Contact> getContactList() {
+        return this.contacts.asUnmodifiableObservableList();
     }
 
     @Override
@@ -163,11 +163,11 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
 
         AddressBook otherAddressBook = (AddressBook) other;
-        return this.persons.equals(otherAddressBook.persons) && this.assignments.equals(otherAddressBook.assignments);
+        return this.contacts.equals(otherAddressBook.contacts) && this.assignments.equals(otherAddressBook.assignments);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.persons, this.assignments);
+        return Objects.hash(this.contacts, this.assignments);
     }
 }

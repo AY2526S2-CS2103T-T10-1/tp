@@ -1,6 +1,6 @@
 {
     "_comment": "AddressBook save file which contains typical Assignment values",
-    "persons": [],
+    "contacts": [],
     "assignments": [
         {
             "id": "793f92b5-9e96-47bb-94cd-e8ede5523d7a",

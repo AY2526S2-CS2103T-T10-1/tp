@@ -14,23 +14,23 @@ import cpp.logic.Messages;
 import cpp.logic.commands.exceptions.CommandException;
 import cpp.logic.parser.CliSyntax;
 import cpp.model.Model;
-import cpp.model.person.Address;
-import cpp.model.person.Email;
-import cpp.model.person.Name;
-import cpp.model.person.Person;
-import cpp.model.person.Phone;
+import cpp.model.contact.Address;
+import cpp.model.contact.Contact;
+import cpp.model.contact.ContactName;
+import cpp.model.contact.Email;
+import cpp.model.contact.Phone;
 import cpp.model.tag.Tag;
 
 /**
- * Edits the details of an existing person in the address book.
+ * Edits the details of an existing contact in the address book.
  */
 public class EditCommand extends Command {
 
     public static final String COMMAND_WORD = "edit";
 
     public static final String MESSAGE_USAGE = EditCommand.COMMAND_WORD
-            + ": Edits the details of the person identified "
-            + "by the index number used in the displayed person list. "
+            + ": Edits the details of the contact identified "
+            + "by the index number used in the displayed contact list. "
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + CliSyntax.PREFIX_NAME + "NAME] "
@@ -42,60 +42,63 @@ public class EditCommand extends Command {
             + CliSyntax.PREFIX_PHONE + "91234567 "
             + CliSyntax.PREFIX_EMAIL + "johndoe@example.com";
 
-    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
+    public static final String MESSAGE_EDIT_CONTACT_SUCCESS = "Edited Contact: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
+    public static final String MESSAGE_DUPLICATE_CONTACT = "This contact already exists in the address book.";
 
     private final Index index;
-    private final EditPersonDescriptor editPersonDescriptor;
+    private final EditContactDescriptor editContactDescriptor;
 
     /**
-     * @param index                of the person in the filtered person list to edit
-     * @param editPersonDescriptor details to edit the person with
+     * @param index                 of the contact in the filtered contact list to
+     *                              edit
+     * @param editContactDescriptor details to edit the contact with
      */
-    public EditCommand(Index index, EditPersonDescriptor editPersonDescriptor) {
+    public EditCommand(Index index, EditContactDescriptor editContactDescriptor) {
         Objects.requireNonNull(index);
-        Objects.requireNonNull(editPersonDescriptor);
+        Objects.requireNonNull(editContactDescriptor);
 
         this.index = index;
-        this.editPersonDescriptor = new EditPersonDescriptor(editPersonDescriptor);
+        this.editContactDescriptor = new EditContactDescriptor(editContactDescriptor);
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         Objects.requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
+        List<Contact> lastShownList = model.getFilteredContactList();
 
         if (this.index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX);
         }
 
-        Person personToEdit = lastShownList.get(this.index.getZeroBased());
-        Person editedPerson = EditCommand.createEditedPerson(personToEdit, this.editPersonDescriptor);
+        Contact contactToEdit = lastShownList.get(this.index.getZeroBased());
+        Contact editedContact = EditCommand.createEditedContact(contactToEdit, this.editContactDescriptor);
 
-        if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
-            throw new CommandException(EditCommand.MESSAGE_DUPLICATE_PERSON);
+        if (!contactToEdit.isSameContact(editedContact) && model.hasContact(editedContact)) {
+            throw new CommandException(EditCommand.MESSAGE_DUPLICATE_CONTACT);
         }
 
-        model.setPerson(personToEdit, editedPerson);
-        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson)));
+        model.setContact(contactToEdit, editedContact);
+        model.updateFilteredContactList(Model.PREDICATE_SHOW_ALL_CONTACTS);
+        return new CommandResult(
+                String.format(EditCommand.MESSAGE_EDIT_CONTACT_SUCCESS, Messages.format(editedContact)));
     }
 
     /**
-     * Creates and returns a {@code Person} with the details of {@code personToEdit}
-     * edited with {@code editPersonDescriptor}.
+     * Creates and returns a {@code Contact} with the details of
+     * {@code contactToEdit}
+     * edited with {@code editContactDescriptor}.
      */
-    private static Person createEditedPerson(Person personToEdit, EditPersonDescriptor editPersonDescriptor) {
-        assert personToEdit != null;
+    private static Contact createEditedContact(Contact contactToEdit, EditContactDescriptor editContactDescriptor) {
+        assert contactToEdit != null;
 
-        Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
-        Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
-        Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
-        Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
-        Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
+        ContactName updatedName = editContactDescriptor.getName().orElse(contactToEdit.getName());
+        Phone updatedPhone = editContactDescriptor.getPhone().orElse(contactToEdit.getPhone());
+        Email updatedEmail = editContactDescriptor.getEmail().orElse(contactToEdit.getEmail());
+        Address updatedAddress = editContactDescriptor.getAddress().orElse(contactToEdit.getAddress());
+        Set<Tag> updatedTags = editContactDescriptor.getTags().orElse(contactToEdit.getTags());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
+        return new Contact(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
     }
 
     @Override
@@ -111,37 +114,37 @@ public class EditCommand extends Command {
 
         EditCommand otherEditCommand = (EditCommand) other;
         return this.index.equals(otherEditCommand.index)
-                && this.editPersonDescriptor.equals(otherEditCommand.editPersonDescriptor);
+                && this.editContactDescriptor.equals(otherEditCommand.editContactDescriptor);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("index", this.index)
-                .add("editPersonDescriptor", this.editPersonDescriptor)
+                .add("editContactDescriptor", this.editContactDescriptor)
                 .toString();
     }
 
     /**
-     * Stores the details to edit the person with. Each non-empty field value will
+     * Stores the details to edit the contact with. Each non-empty field value will
      * replace the
-     * corresponding field value of the person.
+     * corresponding field value of the contact.
      */
-    public static class EditPersonDescriptor {
-        private Name name;
+    public static class EditContactDescriptor {
+        private ContactName name;
         private Phone phone;
         private Email email;
         private Address address;
         private Set<Tag> tags;
 
-        public EditPersonDescriptor() {
+        public EditContactDescriptor() {
         }
 
         /**
          * Copy constructor.
          * A defensive copy of {@code tags} is used internally.
          */
-        public EditPersonDescriptor(EditPersonDescriptor toCopy) {
+        public EditContactDescriptor(EditContactDescriptor toCopy) {
             this.setName(toCopy.name);
             this.setPhone(toCopy.phone);
             this.setEmail(toCopy.email);
@@ -156,11 +159,11 @@ public class EditCommand extends Command {
             return CollectionUtil.isAnyNonNull(this.name, this.phone, this.email, this.address, this.tags);
         }
 
-        public void setName(Name name) {
+        public void setName(ContactName name) {
             this.name = name;
         }
 
-        public Optional<Name> getName() {
+        public Optional<ContactName> getName() {
             return Optional.ofNullable(this.name);
         }
 
@@ -213,16 +216,16 @@ public class EditCommand extends Command {
             }
 
             // instanceof handles nulls
-            if (!(other instanceof EditPersonDescriptor)) {
+            if (!(other instanceof EditContactDescriptor)) {
                 return false;
             }
 
-            EditPersonDescriptor otherEditPersonDescriptor = (EditPersonDescriptor) other;
-            return Objects.equals(this.name, otherEditPersonDescriptor.name)
-                    && Objects.equals(this.phone, otherEditPersonDescriptor.phone)
-                    && Objects.equals(this.email, otherEditPersonDescriptor.email)
-                    && Objects.equals(this.address, otherEditPersonDescriptor.address)
-                    && Objects.equals(this.tags, otherEditPersonDescriptor.tags);
+            EditContactDescriptor otherEditContactDescriptor = (EditContactDescriptor) other;
+            return Objects.equals(this.name, otherEditContactDescriptor.name)
+                    && Objects.equals(this.phone, otherEditContactDescriptor.phone)
+                    && Objects.equals(this.email, otherEditContactDescriptor.email)
+                    && Objects.equals(this.address, otherEditContactDescriptor.address)
+                    && Objects.equals(this.tags, otherEditContactDescriptor.tags);
         }
 
         @Override

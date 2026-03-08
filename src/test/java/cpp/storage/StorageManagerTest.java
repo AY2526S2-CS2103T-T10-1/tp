@@ -11,7 +11,7 @@ import cpp.commons.core.GuiSettings;
 import cpp.model.AddressBook;
 import cpp.model.ReadOnlyAddressBook;
 import cpp.model.UserPrefs;
-import cpp.testutil.TypicalPersons;
+import cpp.testutil.TypicalContacts;
 
 public class StorageManagerTest {
 
@@ -56,7 +56,7 @@ public class StorageManagerTest {
          * More extensive testing of UserPref saving/reading is done in {@link
          * JsonAddressBookStorageTest} class.
          */
-        AddressBook original = TypicalPersons.getTypicalAddressBook();
+        AddressBook original = TypicalContacts.getTypicalAddressBook();
         this.storageManager.saveAddressBook(original);
         ReadOnlyAddressBook retrieved = this.storageManager.readAddressBook().get();
         Assertions.assertEquals(original, new AddressBook(retrieved));
