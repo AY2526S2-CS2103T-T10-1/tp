@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+import cpp.commons.util.CollectionUtil;
 import cpp.commons.util.ToStringBuilder;
 
 /**
@@ -24,6 +25,7 @@ public class Assignment {
      * Every field must be present and not null.
      */
     public Assignment(Name name, LocalDateTime deadline) {
+        CollectionUtil.requireAllNonNull(name, deadline);
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.deadline = deadline;
@@ -36,6 +38,7 @@ public class Assignment {
      * available.
      */
     public Assignment(String id, Name name, LocalDateTime deadline) {
+        CollectionUtil.requireAllNonNull(id, name, deadline);
         this.id = id;
         this.name = name;
         this.deadline = deadline;
@@ -78,7 +81,7 @@ public class Assignment {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.name, this.deadline);
+        return Objects.hash(this.id, this.name, this.deadline);
     }
 
     @Override

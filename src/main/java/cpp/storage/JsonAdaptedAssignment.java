@@ -40,7 +40,7 @@ class JsonAdaptedAssignment {
     public JsonAdaptedAssignment(Assignment source) {
         this.id = source.getId();
         this.name = source.getName().fullName;
-        this.deadline = source.getDeadline().format(FORMATTER);
+        this.deadline = source.getDeadline().format(JsonAdaptedAssignment.FORMATTER);
     }
 
     /**
@@ -51,6 +51,9 @@ class JsonAdaptedAssignment {
      *                               in the adapted assignment.
      */
     public Assignment toModelType() throws IllegalValueException {
+        if (this.id == null) {
+            throw new IllegalValueException("An assignment's id field is missing.");
+        }
         if (this.name == null) {
             throw new IllegalValueException(String.format(JsonAdaptedAssignment.MISSING_FIELD_MESSAGE_FORMAT,
                     Name.class.getSimpleName()));
@@ -66,7 +69,7 @@ class JsonAdaptedAssignment {
         }
         final LocalDateTime modelDeadline;
         try {
-            modelDeadline = LocalDateTime.parse(this.deadline, FORMATTER);
+            modelDeadline = LocalDateTime.parse(this.deadline, JsonAdaptedAssignment.FORMATTER);
         } catch (Exception e) {
             throw new IllegalValueException("Invalid date and time format. Please use the format: dd-MM-yyyy HH:mm");
         }
