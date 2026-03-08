@@ -12,6 +12,7 @@ import cpp.commons.util.ToStringBuilder;
  * immutable.
  */
 public class ClassGroup {
+
     private final String id;
     private final String name;
 
