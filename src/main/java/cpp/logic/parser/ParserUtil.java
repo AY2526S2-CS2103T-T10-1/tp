@@ -3,8 +3,10 @@ package cpp.logic.parser;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -154,5 +156,29 @@ public class ParserUtil {
             throw new ParseException(cpp.model.assignment.Name.MESSAGE_CONSTRAINTS);
         }
         return new cpp.model.assignment.Name(trimmedName);
+    }
+
+    /**
+     * Parses the contact indices from the given contact value string.
+     * The contact value string is expected to contain space-separated indices.
+     * Example: "1 2 3" will be parsed into a list of indices [1, 2, 3].
+     * If the contact value string is empty or contains only whitespace, an empty
+     * list will be returned.
+     *
+     * @param contactValue the string containing the contact indices to be parsed
+     * @return a list of indices parsed from the contact value string
+     * @throws ParseException if any of the contact indices are not valid integers
+     *                        or are out of bounds
+     */
+    public static List<Index> parseContactIndices(String contactValue) throws ParseException {
+        String[] parts = contactValue.trim().split("\\s+");
+        List<Index> contactIndices = new ArrayList<>();
+        for (String part : parts) {
+            if (part.isBlank()) {
+                continue;
+            }
+            contactIndices.add(ParserUtil.parseIndex(part));
+        }
+        return contactIndices;
     }
 }

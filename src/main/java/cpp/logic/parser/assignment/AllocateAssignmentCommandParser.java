@@ -1,6 +1,5 @@
 package cpp.logic.parser.assignment;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -42,20 +41,8 @@ public class AllocateAssignmentCommandParser implements Parser<AllocateAssignmen
         Name assignmentName = ParserUtil.parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_NAME).get());
 
         String contactValue = argMultimap.getValue(CliSyntax.PREFIX_CONTACT).orElse("");
-        String[] parts = contactValue.trim().split("\\s+");
 
-        List<Index> contactIndices = new ArrayList<>();
-        try {
-            for (String part : parts) {
-                if (part.isBlank()) {
-                    continue;
-                }
-                contactIndices.add(ParserUtil.parseIndex(part));
-            }
-        } catch (ParseException pe) {
-            throw new ParseException(String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT,
-                    AllocateAssignmentCommand.MESSAGE_USAGE), pe);
-        }
+        List<Index> contactIndices = ParserUtil.parseContactIndices(contactValue);
 
         return new AllocateAssignmentCommand(assignmentName, contactIndices);
     }
