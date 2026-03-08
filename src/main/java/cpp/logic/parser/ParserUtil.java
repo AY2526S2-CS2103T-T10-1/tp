@@ -147,12 +147,12 @@ public class ParserUtil {
     /**
      * Parses a {@code String name} into a {@code AssignmentName}.
      */
-    public static cpp.model.assignment.Name parseAssignmentName(String string) throws ParseException {
+    public static cpp.model.assignment.AssignmentName parseAssignmentName(String string) throws ParseException {
         Objects.requireNonNull(string);
         String trimmedName = string.trim().replaceAll("\\s+", " ");
-        if (!cpp.model.assignment.Name.isValidName(trimmedName)) {
-            throw new ParseException(cpp.model.assignment.Name.MESSAGE_CONSTRAINTS);
+        if (!cpp.model.assignment.AssignmentName.isValidName(trimmedName)) {
+            throw new ParseException(cpp.model.assignment.AssignmentName.MESSAGE_CONSTRAINTS);
         }
-        return new cpp.model.assignment.Name(trimmedName);
+        return new cpp.model.assignment.AssignmentName(trimmedName);
     }
 }

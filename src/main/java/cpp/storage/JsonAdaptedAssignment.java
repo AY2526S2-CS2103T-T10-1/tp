@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import cpp.commons.exceptions.IllegalValueException;
 import cpp.model.assignment.Assignment;
-import cpp.model.assignment.Name;
+import cpp.model.assignment.AssignmentName;
 
 /**
  * Jackson-friendly version of {@link Assignment}.
@@ -56,12 +56,12 @@ class JsonAdaptedAssignment {
         }
         if (this.name == null) {
             throw new IllegalValueException(String.format(JsonAdaptedAssignment.MISSING_FIELD_MESSAGE_FORMAT,
-                    Name.class.getSimpleName()));
+                    AssignmentName.class.getSimpleName()));
         }
-        if (!Name.isValidName(this.name)) {
-            throw new IllegalValueException(Name.MESSAGE_CONSTRAINTS);
+        if (!AssignmentName.isValidName(this.name)) {
+            throw new IllegalValueException(AssignmentName.MESSAGE_CONSTRAINTS);
         }
-        final Name modelName = new Name(this.name);
+        final AssignmentName modelName = new AssignmentName(this.name);
 
         if (this.deadline == null) {
             throw new IllegalValueException(String.format(JsonAdaptedAssignment.MISSING_FIELD_MESSAGE_FORMAT,

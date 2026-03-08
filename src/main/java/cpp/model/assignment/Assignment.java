@@ -16,7 +16,7 @@ public class Assignment {
 
     // Identity fields
     private final String id;
-    private final Name name;
+    private final AssignmentName name;
     private final LocalDateTime deadline;
 
     /**
@@ -24,7 +24,7 @@ public class Assignment {
      * Generates a random id for the assignment.
      * Every field must be present and not null.
      */
-    public Assignment(Name name, LocalDateTime deadline) {
+    public Assignment(AssignmentName name, LocalDateTime deadline) {
         CollectionUtil.requireAllNonNull(name, deadline);
         this.id = UUID.randomUUID().toString();
         this.name = name;
@@ -37,7 +37,7 @@ public class Assignment {
      * This constructor is used for loading from storage, where the id is already
      * available.
      */
-    public Assignment(String id, Name name, LocalDateTime deadline) {
+    public Assignment(String id, AssignmentName name, LocalDateTime deadline) {
         CollectionUtil.requireAllNonNull(id, name, deadline);
         this.id = id;
         this.name = name;
@@ -48,7 +48,7 @@ public class Assignment {
         return this.id;
     }
 
-    public Name getName() {
+    public AssignmentName getName() {
         return this.name;
     }
 

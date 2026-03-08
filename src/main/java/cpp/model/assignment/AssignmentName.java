@@ -7,7 +7,7 @@ import cpp.commons.util.AppUtil;
 /**
  * Represents an Assignment's name in the assignment list.
  */
-public class Name {
+public class AssignmentName {
 
     public static final String MESSAGE_CONSTRAINTS = """
             Names should only contain alphanumeric characters and spaces, and it should not be blank""";
@@ -25,9 +25,9 @@ public class Name {
      *
      * @param name A valid name.
      */
-    public Name(String name) {
+    public AssignmentName(String name) {
         Objects.requireNonNull(name);
-        AppUtil.checkArgument(Name.isValidName(name), Name.MESSAGE_CONSTRAINTS);
+        AppUtil.checkArgument(AssignmentName.isValidName(name), AssignmentName.MESSAGE_CONSTRAINTS);
         this.fullName = name;
     }
 
@@ -35,7 +35,7 @@ public class Name {
      * Returns true if a given string is a valid name.
      */
     public static boolean isValidName(String test) {
-        return test.matches(Name.VALIDATION_REGEX);
+        return test.matches(AssignmentName.VALIDATION_REGEX);
     }
 
     @Override
@@ -50,11 +50,11 @@ public class Name {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof Name)) {
+        if (!(other instanceof AssignmentName)) {
             return false;
         }
 
-        Name otherName = (Name) other;
+        AssignmentName otherName = (AssignmentName) other;
         return this.fullName.toLowerCase().equals(otherName.fullName.toLowerCase());
     }
 

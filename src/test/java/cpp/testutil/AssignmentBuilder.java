@@ -3,7 +3,7 @@ package cpp.testutil;
 import java.time.LocalDateTime;
 
 import cpp.model.assignment.Assignment;
-import cpp.model.assignment.Name;
+import cpp.model.assignment.AssignmentName;
 
 /**
  * A utility class to help with building Assignment objects.
@@ -14,7 +14,7 @@ public class AssignmentBuilder {
     public static final String DEFAULT_DEADLINE = "13-12-2020 10:01";
 
     private String id;
-    private Name name;
+    private AssignmentName name;
     private LocalDateTime deadline;
 
     /**
@@ -22,7 +22,7 @@ public class AssignmentBuilder {
      */
     public AssignmentBuilder() {
         this.id = AssignmentBuilder.DEFAULT_ID;
-        this.name = new Name(AssignmentBuilder.DEFAULT_NAME);
+        this.name = new AssignmentName(AssignmentBuilder.DEFAULT_NAME);
         this.deadline = LocalDateTime.parse(AssignmentBuilder.DEFAULT_DEADLINE,
                 java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
     }
@@ -48,7 +48,7 @@ public class AssignmentBuilder {
      * Sets the {@code name} of the {@code Assignment} that we are building.
      */
     public AssignmentBuilder withName(String name) {
-        this.name = new Name(name);
+        this.name = new AssignmentName(name);
         return this;
     }
 

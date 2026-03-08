@@ -13,7 +13,7 @@ import cpp.logic.parser.ParserUtil;
 import cpp.logic.parser.Prefix;
 import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.assignment.Assignment;
-import cpp.model.assignment.Name;
+import cpp.model.assignment.AssignmentName;
 
 /**
  * Parses input arguments and creates a new AddAssignmentCommand object
@@ -42,7 +42,7 @@ public class AddAssignmentCommandParser implements Parser<AddAssignmentCommand> 
 
         argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_DEADLINE,
                 CliSyntax.PREFIX_CLASS, CliSyntax.PREFIX_CONTACT);
-        Name name = ParserUtil.parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_NAME).get());
+        AssignmentName name = ParserUtil.parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_NAME).get());
         LocalDateTime deadline = ParserUtil.parseDeadline(argMultimap.getValue(CliSyntax.PREFIX_DEADLINE).get());
         // TODO: handle optional class name and contact indices
         // Name className =

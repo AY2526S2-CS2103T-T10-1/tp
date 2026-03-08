@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import cpp.commons.exceptions.IllegalValueException;
-import cpp.model.assignment.Name;
+import cpp.model.assignment.AssignmentName;
 import cpp.testutil.Assert;
 import cpp.testutil.TypicalAssignments;
 
@@ -38,7 +38,7 @@ public class JsonAdaptedAssignmentTest {
         JsonAdaptedAssignment json = new JsonAdaptedAssignment(JsonAdaptedAssignmentTest.VALID_ID,
                 JsonAdaptedAssignmentTest.INVALID_NAME,
                 JsonAdaptedAssignmentTest.VALID_DEADLINE);
-        String expectedMessage = Name.MESSAGE_CONSTRAINTS;
+        String expectedMessage = AssignmentName.MESSAGE_CONSTRAINTS;
         Assert.assertThrows(IllegalValueException.class, expectedMessage, json::toModelType);
     }
 
@@ -47,7 +47,7 @@ public class JsonAdaptedAssignmentTest {
         JsonAdaptedAssignment json = new JsonAdaptedAssignment(JsonAdaptedAssignmentTest.VALID_ID, null,
                 JsonAdaptedAssignmentTest.VALID_DEADLINE);
         String expectedMessage = String.format(JsonAdaptedAssignment.MISSING_FIELD_MESSAGE_FORMAT,
-                Name.class.getSimpleName());
+                AssignmentName.class.getSimpleName());
         Assert.assertThrows(IllegalValueException.class, expectedMessage, json::toModelType);
     }
 

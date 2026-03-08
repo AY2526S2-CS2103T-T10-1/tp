@@ -7,7 +7,7 @@ import cpp.logic.commands.CommandTestUtil;
 import cpp.logic.commands.assignment.AddAssignmentCommand;
 import cpp.logic.parser.CommandParserTestUtil;
 import cpp.model.assignment.Assignment;
-import cpp.model.assignment.Name;
+import cpp.model.assignment.AssignmentName;
 import cpp.testutil.AssignmentBuilder;
 import cpp.testutil.AssignmentUtil;
 import cpp.testutil.TypicalAssignments;
@@ -55,7 +55,7 @@ public class AddAssignmentCommandParserTest {
         // invalid name
         CommandParserTestUtil.assertParseFailure(this.parser,
                 CommandTestUtil.INVALID_NAME_DESC + " " + "d/13-12-2020 10:00",
-                Name.MESSAGE_CONSTRAINTS);
+                AssignmentName.MESSAGE_CONSTRAINTS);
 
         // invalid deadline
         String invalidDeadlineDetails = AssignmentUtil.getAssignmentDetails(TypicalAssignments.ASSIGNMENT_ONE)
@@ -67,7 +67,7 @@ public class AddAssignmentCommandParserTest {
         // two invalid values
         CommandParserTestUtil.assertParseFailure(this.parser,
                 CommandTestUtil.INVALID_NAME_DESC + " " + "d/12-13-2020 10:00",
-                Name.MESSAGE_CONSTRAINTS);
+                AssignmentName.MESSAGE_CONSTRAINTS);
     }
 
 }
