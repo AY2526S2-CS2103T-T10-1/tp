@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import cpp.commons.exceptions.IllegalValueException;
 import cpp.model.classgroup.ClassGroup;
-import cpp.model.person.Name;
+import cpp.model.classgroup.ClassGroupName;
 
 /**
  * Jackson-friendly version of {@link ClassGroup}.
@@ -48,12 +48,12 @@ class JsonAdaptedClassGroup {
         }
         if (this.name == null) {
             throw new IllegalValueException(String.format(JsonAdaptedClassGroup.MISSING_FIELD_MESSAGE_FORMAT,
-                    Name.class.getSimpleName()));
+                    ClassGroupName.class.getSimpleName()));
         }
-        if (!Name.isValidName(this.name)) {
-            throw new IllegalValueException(Name.MESSAGE_CONSTRAINTS);
+        if (!ClassGroupName.isValidName(this.name)) {
+            throw new IllegalValueException(ClassGroupName.MESSAGE_CONSTRAINTS);
         }
-        final Name modelName = new Name(this.name);
+        final ClassGroupName modelName = new ClassGroupName(this.name);
 
         return new ClassGroup(this.id, modelName);
     }

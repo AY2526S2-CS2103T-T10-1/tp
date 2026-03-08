@@ -12,7 +12,7 @@ import cpp.logic.parser.ParserUtil;
 import cpp.logic.parser.Prefix;
 import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.classgroup.ClassGroup;
-import cpp.model.person.Name;
+import cpp.model.classgroup.ClassGroupName;
 
 /**
  * Parses input arguments and creates a new AddClassGroupCommand object
@@ -38,8 +38,7 @@ public class AddClassGroupCommandParser implements Parser<AddClassGroupCommand> 
 
         argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_NAME);
 
-        // TODO: Update to use ClassGroupName instead of Name
-        Name name = ParserUtil.parseName(argMultimap.getValue(CliSyntax.PREFIX_NAME).get());
+        ClassGroupName name = ParserUtil.parseClassGroupName(argMultimap.getValue(CliSyntax.PREFIX_NAME).get());
 
         ClassGroup classGroup = new ClassGroup(name);
 

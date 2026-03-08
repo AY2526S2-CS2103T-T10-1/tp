@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import cpp.commons.util.CollectionUtil;
 import cpp.commons.util.ToStringBuilder;
-import cpp.model.person.Name;
 
 /**
  * Represents a Class Grouping in the address book.
@@ -15,13 +14,13 @@ import cpp.model.person.Name;
 public class ClassGroup {
 
     private final String id;
-    private final Name name; // TODO: Update to use ClassGroupName instead of Name
+    private final ClassGroupName name;
 
     /**
      * Creates a class grouping with the given name.
      * Every field must be present and not null.
      */
-    public ClassGroup(Name name) {
+    public ClassGroup(ClassGroupName name) {
         CollectionUtil.requireAllNonNull(name);
         this.id = UUID.randomUUID().toString();
         this.name = name;
@@ -34,7 +33,7 @@ public class ClassGroup {
      * This constructor is used for loading from storage, where the id is already
      * available.
      */
-    public ClassGroup(String id, Name name) {
+    public ClassGroup(String id, ClassGroupName name) {
         CollectionUtil.requireAllNonNull(id, name);
         this.id = id;
         this.name = name;
@@ -44,7 +43,7 @@ public class ClassGroup {
         return this.id;
     }
 
-    public Name getName() {
+    public ClassGroupName getName() {
         return this.name;
     }
 

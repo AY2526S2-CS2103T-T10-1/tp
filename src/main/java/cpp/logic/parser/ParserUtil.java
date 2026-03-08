@@ -11,6 +11,7 @@ import java.util.Set;
 import cpp.commons.core.index.Index;
 import cpp.commons.util.StringUtil;
 import cpp.logic.parser.exceptions.ParseException;
+import cpp.model.classgroup.ClassGroupName;
 import cpp.model.contact.Address;
 import cpp.model.contact.ContactName;
 import cpp.model.contact.Email;
@@ -154,5 +155,17 @@ public class ParserUtil {
             throw new ParseException(cpp.model.assignment.AssignmentName.MESSAGE_CONSTRAINTS);
         }
         return new cpp.model.assignment.AssignmentName(trimmedName);
+    }
+
+    /**
+     * Parses a {@code String name} into a {@code ClassGroupName}.
+     */
+    public static ClassGroupName parseClassGroupName(String string) throws ParseException {
+        Objects.requireNonNull(string);
+        String trimmedName = string.trim().replaceAll("\\s+", " ");
+        if (!ClassGroupName.isValidName(trimmedName)) {
+            throw new ParseException(ClassGroupName.MESSAGE_CONSTRAINTS);
+        }
+        return new ClassGroupName(trimmedName);
     }
 }
