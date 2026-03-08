@@ -56,12 +56,12 @@ public class Name {
         }
 
         Name otherName = (Name) other;
-        return this.fullName.equals(otherName.fullName);
+        return this.fullName.toLowerCase().equals(otherName.fullName.toLowerCase());
     }
 
     @Override
     public int hashCode() {
-        return this.fullName.hashCode();
+        return this.fullName.toLowerCase().hashCode();
     }
 
 }
