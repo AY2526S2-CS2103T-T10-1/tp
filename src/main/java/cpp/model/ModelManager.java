@@ -110,7 +110,6 @@ public class ModelManager implements Model {
     @Override
     public void setContact(Contact target, Contact editedContact) {
         CollectionUtil.requireAllNonNull(target, editedContact);
-
         this.addressBook.setContact(target, editedContact);
     }
 
@@ -136,6 +135,17 @@ public class ModelManager implements Model {
     public void addClassGroup(ClassGroup classGroup) {
         Objects.requireNonNull(classGroup);
         this.addressBook.addClassGroup(classGroup);
+    }
+
+    @Override
+    public void setClassGroup(ClassGroup target, ClassGroup editedClassGroup) {
+        CollectionUtil.requireAllNonNull(target, editedClassGroup);
+        this.addressBook.setClassGroup(target, editedClassGroup);
+    }
+
+    @Override
+    public void deleteClassGroup(ClassGroup target) {
+        this.addressBook.removeClassGroup(target);
     }
 
     // =========== Filtered Contact List Accessors
