@@ -28,4 +28,22 @@ public class DeleteCommandParserTest {
         CommandParserTestUtil.assertParseFailure(this.parser, "1",
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
     }
+
+    @Test
+    public void parse_invalidContactIndex_throwsParseException() {
+        CommandParserTestUtil.assertParseFailure(this.parser, " ct/abc",
+                String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_invalidAssignmentIndex_throwsParseException() {
+        CommandParserTestUtil.assertParseFailure(this.parser, " ass/abc",
+                String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, DeleteAssignmentCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_bothPrefixes_throwsParseException() {
+        CommandParserTestUtil.assertParseFailure(this.parser, " ct/1 ass/1",
+                String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+    }
 }

@@ -140,6 +140,22 @@ public class AddressBookTest {
     }
 
     @Test
+    public void removeContact_contactInAddressBook_removesContact() {
+        this.addressBook.addContact(TypicalContacts.ALICE);
+        this.addressBook.removeContact(TypicalContacts.ALICE);
+        Assertions.assertFalse(this.addressBook.hasContact(TypicalContacts.ALICE));
+    }
+
+    @Test
+    public void removeAssignment_assignmentInAddressBook_removesAssignment() {
+        Assignment assignment = new Assignment(new AssignmentName("Assignment 1"),
+                LocalDateTime.of(2020, 1, 1, 10, 0));
+        this.addressBook.addAssignment(assignment);
+        this.addressBook.removeAssignment(assignment);
+        Assertions.assertFalse(this.addressBook.hasAssignment(assignment));
+    }
+
+    @Test
     public void equals_sameAddressBooks_returnsTrue() {
         AddressBook addressBook1 = new AddressBook();
         Assertions.assertEquals(addressBook1, addressBook1);

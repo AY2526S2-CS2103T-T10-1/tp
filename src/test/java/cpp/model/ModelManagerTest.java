@@ -117,6 +117,20 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void deleteContact_contactInAddressBook_removesContact() {
+        this.modelManager.addContact(TypicalContacts.ALICE);
+        this.modelManager.deleteContact(TypicalContacts.ALICE);
+        Assertions.assertFalse(this.modelManager.hasContact(TypicalContacts.ALICE));
+    }
+
+    @Test
+    public void deleteAssignment_assignmentInAddressBook_removesAssignment() {
+        this.modelManager.addAssignment(TypicalAssignments.ASSIGNMENT_ONE);
+        this.modelManager.deleteAssignment(TypicalAssignments.ASSIGNMENT_ONE);
+        Assertions.assertFalse(this.modelManager.hasAssignment(TypicalAssignments.ASSIGNMENT_ONE));
+    }
+
+    @Test
     public void getFilteredContactList_modifyList_throwsUnsupportedOperationException() {
         Assert.assertThrows(UnsupportedOperationException.class,
                 () -> this.modelManager.getFilteredContactList().remove(0));
