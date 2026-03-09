@@ -29,20 +29,20 @@ public class AddAssignmentCommandParser implements Parser<AddAssignmentCommand> 
      */
     @Override
     public AddAssignmentCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, CliSyntax.PREFIX_NAME,
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, CliSyntax.PREFIX_ASSIGNMENT,
                 CliSyntax.PREFIX_DEADLINE,
                 CliSyntax.PREFIX_CLASS, CliSyntax.PREFIX_CONTACT);
 
-        if (!AddAssignmentCommandParser.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_NAME,
+        if (!AddAssignmentCommandParser.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_ASSIGNMENT,
                 CliSyntax.PREFIX_DEADLINE)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT,
                     AddAssignmentCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_DEADLINE,
+        argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_ASSIGNMENT, CliSyntax.PREFIX_DEADLINE,
                 CliSyntax.PREFIX_CLASS, CliSyntax.PREFIX_CONTACT);
-        AssignmentName name = ParserUtil.parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_NAME).get());
+        AssignmentName name = ParserUtil.parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get());
         LocalDateTime deadline = ParserUtil.parseDeadline(argMultimap.getValue(CliSyntax.PREFIX_DEADLINE).get());
         // TODO: handle optional class name and contact indices
         // Name className =

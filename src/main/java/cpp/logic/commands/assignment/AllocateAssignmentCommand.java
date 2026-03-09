@@ -14,6 +14,7 @@ import cpp.logic.parser.CliSyntax;
 import cpp.model.Model;
 import cpp.model.assignment.Assignment;
 import cpp.model.assignment.AssignmentName;
+import cpp.model.assignment.ContactAssignment;
 import cpp.model.assignment.exceptions.ContactAlreadyAllocatedAssignmentException;
 import cpp.model.contact.Contact;
 
@@ -27,12 +28,12 @@ public class AllocateAssignmentCommand extends Command {
     public static final String MESSAGE_USAGE = AllocateAssignmentCommand.COMMAND_WORD
             + ": Allocates an assignment to a contact. "
             + "Parameters: "
-            + CliSyntax.PREFIX_NAME + "ASSIGNMENT NAME "
+            + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT NAME "
             + "[" + CliSyntax.PREFIX_CLASS + "CLASS NAME] "
             + "[" + CliSyntax.PREFIX_CONTACT + "CONTACT INDICES...]\n"
             + "At least one of " + CliSyntax.PREFIX_CLASS + " or " + CliSyntax.PREFIX_CONTACT + " must be provided.\n"
             + "Example: " + AllocateAssignmentCommand.COMMAND_WORD + " "
-            + CliSyntax.PREFIX_NAME + "Assignment 1 "
+            + CliSyntax.PREFIX_ASSIGNMENT + "Assignment 1 "
             + CliSyntax.PREFIX_CLASS + "CS2103T10 "
             + CliSyntax.PREFIX_CONTACT + "1 2 3";
 
@@ -105,9 +106,10 @@ public class AllocateAssignmentCommand extends Command {
             }
 
             Contact contact = lastShownContactList.get(idx.getZeroBased());
+            ContactAssignment ca = new ContactAssignment(assignmentToAllocate.getId(), contact.getId());
 
             try {
-                model.allocateAssignmentToContact(assignmentToAllocate, contact);
+                model.addContactAssignment(ca);
 
             } catch (ContactAlreadyAllocatedAssignmentException e) {
                 // Skip already allocated contacts without failing the entire command.

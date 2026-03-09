@@ -23,23 +23,23 @@ public class AllocateAssignmentCommandParser implements Parser<AllocateAssignmen
 
     @Override
     public AllocateAssignmentCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, CliSyntax.PREFIX_NAME,
-                CliSyntax.PREFIX_CLASS, CliSyntax.PREFIX_CONTACT);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
+                CliSyntax.PREFIX_ASSIGNMENT, CliSyntax.PREFIX_CLASS, CliSyntax.PREFIX_CONTACT);
 
-        if ((!AllocateAssignmentCommandParser.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_NAME,
+        if ((!AllocateAssignmentCommandParser.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_ASSIGNMENT,
                 CliSyntax.PREFIX_CONTACT)
-                && !AllocateAssignmentCommandParser.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_NAME,
+                && !AllocateAssignmentCommandParser.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_ASSIGNMENT,
                         CliSyntax.PREFIX_CLASS))
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT,
                     AllocateAssignmentCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_CLASS,
+        argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_ASSIGNMENT, CliSyntax.PREFIX_CLASS,
                 CliSyntax.PREFIX_CONTACT);
 
         AssignmentName assignmentName = ParserUtil
-                .parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_NAME).get());
+                .parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get());
 
         String contactValue = argMultimap.getValue(CliSyntax.PREFIX_CONTACT).orElse("");
 
