@@ -175,12 +175,12 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasClassGroup(ClassGroup classGroup) {
+        public void removeContactAssignment(ContactAssignment ca) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void removeContactAssignment(ContactAssignment ca) {
+        public boolean hasClassGroup(ClassGroup classGroup) {
             throw new AssertionError("This method should not be called.");
         }
 

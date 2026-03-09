@@ -12,6 +12,7 @@ import cpp.commons.exceptions.IllegalValueException;
 import cpp.model.AddressBook;
 import cpp.model.ReadOnlyAddressBook;
 import cpp.model.assignment.Assignment;
+import cpp.model.assignment.ContactAssignment;
 import cpp.model.classgroup.ClassGroup;
 import cpp.model.contact.Contact;
 
@@ -98,7 +99,7 @@ class JsonSerializableAddressBook {
         }
 
         for (JsonAdaptedContactAssignment jsonAdaptedContactAssignment : this.contactAssignments) {
-            cpp.model.assignment.ContactAssignment contactAssignment = jsonAdaptedContactAssignment.toModelType();
+            ContactAssignment contactAssignment = jsonAdaptedContactAssignment.toModelType();
             if (addressBook.hasContactAssignment(contactAssignment)) {
                 throw new IllegalValueException(JsonSerializableAddressBook.MESSAGE_DUPLICATE_CONTACT_ASSIGNMENT);
             }
