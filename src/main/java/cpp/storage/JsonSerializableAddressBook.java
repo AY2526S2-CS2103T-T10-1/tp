@@ -25,7 +25,7 @@ class JsonSerializableAddressBook {
     public static final String MESSAGE_DUPLICATE_ASSIGNMENT = "Assignments list contains duplicate assignment(s).";
     public static final String MESSAGE_DUPLICATE_CONTACT_ASSIGNMENT = """
             Contact assignments list contains duplicate contact assignment(s).
-            """;;
+            """;
     public static final String MESSAGE_DUPLICATE_CLASS_GROUP = "Class groups list contains duplicate class group(s).";
 
     private final List<JsonAdaptedContact> contacts = new ArrayList<>();
@@ -48,8 +48,8 @@ class JsonSerializableAddressBook {
         if (assignments != null) {
             this.assignments.addAll(assignments);
         }
-        if (this.contactAssignments != null) {
-            this.contactAssignments.addAll(this.contactAssignments);
+        if (contactAssignments != null) {
+            this.contactAssignments.addAll(contactAssignments);
         }
 
         if (classGroups != null) {
