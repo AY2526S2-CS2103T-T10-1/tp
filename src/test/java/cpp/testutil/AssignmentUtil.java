@@ -23,7 +23,7 @@ public class AssignmentUtil {
      */
     public static String getAssignmentDetails(Assignment assignment) {
         StringBuilder sb = new StringBuilder();
-        sb.append(" ").append(CliSyntax.PREFIX_NAME).append(assignment.getName().fullName).append(" ");
+        sb.append(" ").append(CliSyntax.PREFIX_ASSIGNMENT).append(assignment.getName().fullName).append(" ");
         sb.append(" ").append(CliSyntax.PREFIX_DEADLINE)
                 .append(assignment.getDeadline().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))
                         .toString())

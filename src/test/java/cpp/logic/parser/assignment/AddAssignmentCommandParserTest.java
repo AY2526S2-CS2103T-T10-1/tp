@@ -54,7 +54,7 @@ public class AddAssignmentCommandParserTest {
     public void parse_invalidValue_failure() {
         // invalid name
         CommandParserTestUtil.assertParseFailure(this.parser,
-                CommandTestUtil.INVALID_NAME_DESC + " " + "d/13-12-2020 10:00",
+                " ass/@ssignment 1 d/13-12-2020 10:00",
                 AssignmentName.MESSAGE_CONSTRAINTS);
 
         // invalid deadline
@@ -66,7 +66,7 @@ public class AddAssignmentCommandParserTest {
 
         // two invalid values
         CommandParserTestUtil.assertParseFailure(this.parser,
-                CommandTestUtil.INVALID_NAME_DESC + " " + "d/12-13-2020 10:00",
+                " ass/@ssignment 1 d/12-13-2020 10:00",
                 AssignmentName.MESSAGE_CONSTRAINTS);
     }
 
