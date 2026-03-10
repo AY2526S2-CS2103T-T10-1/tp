@@ -11,7 +11,7 @@ public class CommandResult {
 
     private final String feedbackToUser;
 
-    /** The tab to be shown to the user. */
+    /** The tab to be shown to the user: contacts, classes, assignments */
     private final String tab;
 
     /** Help information should be shown to the user. */
