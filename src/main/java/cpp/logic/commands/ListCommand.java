@@ -17,6 +17,10 @@ public class ListCommand extends Command {
     public static final String MESSAGE_TAB_INVALID = "Tab must be one of the following: contacts, classes, assignments";
     private String tab;
 
+    public ListCommand(String tab) {
+        this.tab = tab;
+    }
+
     @Override
     public CommandResult execute(Model model) {
         Objects.requireNonNull(model);
@@ -30,10 +34,6 @@ public class ListCommand extends Command {
             return new CommandResult(ListCommand.MESSAGE_CLASSES, "classes");
         }
         return new CommandResult(ListCommand.MESSAGE_SUCCESS);
-    }
-
-    public ListCommand(String tab) {
-        this.tab = tab;
     }
 
     @Override
