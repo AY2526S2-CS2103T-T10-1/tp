@@ -2,7 +2,10 @@ package cpp.logic.parser;
 
 import org.junit.jupiter.api.Test;
 
+import cpp.logic.commands.ListAssignmentCommand;
+import cpp.logic.commands.ListClassCommand;
 import cpp.logic.commands.ListCommand;
+import cpp.logic.commands.ListContactCommand;
 
 public class ListCommandParserTest {
     private ListCommandParser parser = new ListCommandParser();
@@ -15,7 +18,7 @@ public class ListCommandParserTest {
     @Test
     public void parse_validArgs_returnsListCommand() {
         // no leading and trailing whitespaces
-        ListCommand expectedListCommand = new ListCommand("contacts");
+        ListCommand expectedListCommand = new ListContactCommand();
         CommandParserTestUtil.assertParseSuccess(this.parser, "contacts", expectedListCommand);
 
         // multiple whitespaces between keywords
@@ -24,13 +27,13 @@ public class ListCommandParserTest {
 
     @Test
     public void parse_assignmentsArgs_returnsListCommand() {
-        ListCommand expectedListCommand = new ListCommand("assignments");
+        ListCommand expectedListCommand = new ListAssignmentCommand();
         CommandParserTestUtil.assertParseSuccess(this.parser, "assignments", expectedListCommand);
     }
 
     @Test
     public void parse_classesArgs_returnsListCommand() {
-        ListCommand expectedListCommand = new ListCommand("classes");
+        ListCommand expectedListCommand = new ListClassCommand();
         CommandParserTestUtil.assertParseSuccess(this.parser, "classes", expectedListCommand);
     }
 
