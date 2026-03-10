@@ -71,6 +71,10 @@ public class AddCommand extends Command {
 
         List<Assignment> assignmentList = model.getAddressBook().getAssignmentList();
 
+        if (this.assignmentName == null) {
+            return new CommandResult(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(this.toAdd)));
+        }
+
         Assignment assignmentToAllocate = Assignment.findAssignment(assignmentList, this.assignmentName);
 
         if (assignmentToAllocate == null) {

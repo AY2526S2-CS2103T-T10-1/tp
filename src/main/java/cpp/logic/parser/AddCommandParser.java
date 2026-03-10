@@ -34,7 +34,7 @@ public class AddCommandParser implements Parser<AddCommand> {
                 CliSyntax.PREFIX_ADDRESS, CliSyntax.PREFIX_CLASS, CliSyntax.PREFIX_ASSIGNMENT, CliSyntax.PREFIX_TAG);
 
         if (!AddCommandParser.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_ADDRESS,
-                CliSyntax.PREFIX_PHONE, CliSyntax.PREFIX_EMAIL, CliSyntax.PREFIX_CLASS, CliSyntax.PREFIX_ASSIGNMENT)
+                CliSyntax.PREFIX_PHONE, CliSyntax.PREFIX_EMAIL)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
@@ -45,10 +45,13 @@ public class AddCommandParser implements Parser<AddCommand> {
         Phone phone = ParserUtil.parsePhone(argMultimap.getValue(CliSyntax.PREFIX_PHONE).get());
         Email email = ParserUtil.parseEmail(argMultimap.getValue(CliSyntax.PREFIX_EMAIL).get());
         Address address = ParserUtil.parseAddress(argMultimap.getValue(CliSyntax.PREFIX_ADDRESS).get());
-        ClassGroupName className = ParserUtil
-                .parseClassGroupName(argMultimap.getValue(CliSyntax.PREFIX_CLASS).get());
-        AssignmentName assignmentName = ParserUtil
-                .parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get());
+
+        // String classGroupNameValue = argMultimap.getValue(CliSyntax.PREFIX_CLASS).orElse("");
+        // ClassGroupName classGroupName = classGroupName != "" ? ParserUtil.parseAssignmentName(classGroupNameValue) : null;
+
+        String assignmentNameValue = argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).orElse("");
+        AssignmentName assignmentName = assignmentNameValue != "" ? ParserUtil.parseAssignmentName(assignmentNameValue) : null;
+
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(CliSyntax.PREFIX_TAG));
 
         Contact contact = new Contact(name, phone, email, address, tagList);
