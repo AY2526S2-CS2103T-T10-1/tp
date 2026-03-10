@@ -94,8 +94,12 @@ public class AddClassGroupCommand extends Command {
 
     private void allocateContactsToClassGroup(Model model, List<Contact> lastShownContactList) {
         for (Index index : this.contactIndices) {
-            Contact contact = lastShownContactList.get(index.getZeroBased());
-            // TODO: Handle allocation to class group
+            String contactId = lastShownContactList.get(index.getZeroBased()).getId();
+
+            // Assumption: No catching of ContactAlreadyAllocatedClassGroupException is
+            // necessary, as the ClassGroup is newly created and thus cannot have any
+            // contacts allocated to it yet.
+            this.toAdd.allocateContact(contactId);
         }
     }
 }

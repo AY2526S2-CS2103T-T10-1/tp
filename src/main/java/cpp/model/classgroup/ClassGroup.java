@@ -1,10 +1,12 @@
 package cpp.model.classgroup;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.UUID;
 
 import cpp.commons.util.CollectionUtil;
 import cpp.commons.util.ToStringBuilder;
+import cpp.model.classgroup.exceptions.ContactAlreadyAllocatedClassGroupException;
 
 /**
  * Represents a Class Grouping in the address book.
@@ -15,6 +17,7 @@ public class ClassGroup {
 
     private final String id;
     private final ClassGroupName name;
+    private final HashSet<String> contactIdSet;
 
     /**
      * Creates a class grouping with the given name.
@@ -24,6 +27,7 @@ public class ClassGroup {
         CollectionUtil.requireAllNonNull(name);
         this.id = UUID.randomUUID().toString();
         this.name = name;
+        this.contactIdSet = new HashSet<>();
     }
 
     /**
@@ -37,6 +41,7 @@ public class ClassGroup {
         CollectionUtil.requireAllNonNull(id, name);
         this.id = id;
         this.name = name;
+        this.contactIdSet = new HashSet<>(); // TODO: load contact IDs from storage when that feature is implemented
     }
 
     public String getId() {
@@ -45,6 +50,17 @@ public class ClassGroup {
 
     public ClassGroupName getName() {
         return this.name;
+    }
+
+    /**
+     * Allocates a contact to this class group. If the contact is already allocated
+     * to this class group, a ContactAlreadyAllocatedClassGroupException is thrown.
+     */
+    public void allocateContact(String contactId) throws ContactAlreadyAllocatedClassGroupException {
+        if (this.contactIdSet.contains(contactId)) {
+            throw new ContactAlreadyAllocatedClassGroupException();
+        }
+        this.contactIdSet.add(contactId);
     }
 
     @Override
@@ -71,6 +87,7 @@ public class ClassGroup {
     public String toString() {
         return new ToStringBuilder(this)
                 .add("name", this.name)
+                .add("contactIdSet", this.contactIdSet)
                 .toString();
     }
 }
