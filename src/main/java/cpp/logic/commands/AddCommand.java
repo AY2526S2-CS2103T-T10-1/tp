@@ -69,25 +69,22 @@ public class AddCommand extends Command {
             throw new CommandException(AddCommand.MESSAGE_DUPLICATE_CONTACT);
         }
 
-        List<Assignment> assignmentList = model.getAddressBook().getAssignmentList();
-
-        if (this.assignmentName == null) {
-            return new CommandResult(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(this.toAdd)));
-        }
-
-        Assignment assignmentToAllocate = Assignment.findAssignment(assignmentList, this.assignmentName);
-
-        if (assignmentToAllocate == null) {
-            throw new CommandException(AddCommand.MESSAGE_INVALID_ASSIGNMENT_NAME);
-        }
-
         model.addContact(this.toAdd);
 
-        ContactAssignment ca = new ContactAssignment(assignmentToAllocate.getId(), this.toAdd.getId());
-        try {
-            model.addContactAssignment(ca);
-        } catch (ContactAlreadyAllocatedAssignmentException e) {
-            // Should not be reachable
+        if (this.assignmentName != null) {
+            List<Assignment> assignmentList = model.getAddressBook().getAssignmentList();
+            Assignment assignmentToAllocate = Assignment.findAssignment(assignmentList, this.assignmentName);
+
+            if (assignmentToAllocate == null) {
+                throw new CommandException(AddCommand.MESSAGE_INVALID_ASSIGNMENT_NAME);
+            }
+
+            ContactAssignment ca = new ContactAssignment(assignmentToAllocate.getId(), this.toAdd.getId());
+            try {
+                model.addContactAssignment(ca);
+            } catch (ContactAlreadyAllocatedAssignmentException e) {
+                // Should not be reachable
+            }
         }
         
         return new CommandResult(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(this.toAdd)));
