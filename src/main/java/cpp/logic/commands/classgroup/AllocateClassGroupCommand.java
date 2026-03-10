@@ -13,7 +13,9 @@ import cpp.logic.commands.assignment.AllocateAssignmentCommand;
 import cpp.logic.commands.exceptions.CommandException;
 import cpp.logic.parser.CliSyntax;
 import cpp.model.Model;
+import cpp.model.classgroup.ClassGroup;
 import cpp.model.classgroup.ClassGroupName;
+import cpp.model.classgroup.exceptions.ContactAlreadyAllocatedClassGroupException;
 import cpp.model.contact.Contact;
 
 /**
@@ -36,10 +38,13 @@ public class AllocateClassGroupCommand extends Command {
             Allocated class group: %1$s contacts to %2$s.\nContacts allocated: %3$s
             """;
     public static final String MESSAGE_INVALID_CLASS_GROUP_NAME = "The class group name provided is invalid";
-    public static final String MESSAGE_ALLOCATION_FAILED = "No contacts were allocated the class group.";
+    public static final String MESSAGE_ALLOCATION_FAILED = "No new contacts were allocated the class group.";
 
     private final ClassGroupName classGroupName;
     private final List<Index> contactIndices;
+
+    private int successfulAllocations = 0;
+    private StringBuilder successfullyAllocatedNames = new StringBuilder();
 
     /**
      * Creates an AllocateClassGroupCommand with the specified class group name and
@@ -54,8 +59,18 @@ public class AllocateClassGroupCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        // TODO: Implement
-        throw new CommandException("Command not implemented yet");
+        Objects.requireNonNull(model);
+
+        List<ClassGroup> classGroupList = model.getAddressBook().getClassGroupList();
+        ClassGroup classGroupToAllocate = this.findClassGroupToAllocate(classGroupList);
+
+        List<Contact> lastShownContactList = model.getFilteredContactList();
+        this.checkContactIndicesInRange(lastShownContactList, this.contactIndices);
+        this.allocateContactsToClassGroup(model, lastShownContactList, classGroupToAllocate);
+
+        return new CommandResult(
+                String.format(AllocateClassGroupCommand.MESSAGE_SUCCESS, this.successfulAllocations,
+                        classGroupToAllocate.getName(), this.successfullyAllocatedNames.toString()));
     }
 
     @Override
@@ -90,10 +105,40 @@ public class AllocateClassGroupCommand extends Command {
         }
     }
 
-    private void allocateContactsToClassGroup(Model model, List<Contact> lastShownContactList) {
+    private void allocateContactsToClassGroup(Model model, List<Contact> lastShownContactList,
+            ClassGroup classGroupToAllocate) throws CommandException {
+        boolean anySuccessfulAllocation = false;
         for (Index index : this.contactIndices) {
             String contactId = lastShownContactList.get(index.getZeroBased()).getId();
-            // TODO: Implement allocation logic
+            try {
+                classGroupToAllocate.allocateContact(contactId);
+                anySuccessfulAllocation = true;
+                this.successfulAllocations++;
+                this.buildSuccessfulAllocationString(lastShownContactList.get(index.getZeroBased()).getName().fullName);
+            } catch (ContactAlreadyAllocatedClassGroupException e) {
+                // Contact is already allocated to this class group, skip and continue
+                // allocating the rest of the contacts
+            }
         }
+
+        if (!anySuccessfulAllocation) {
+            throw new CommandException(AllocateClassGroupCommand.MESSAGE_ALLOCATION_FAILED);
+        }
+    }
+
+    private ClassGroup findClassGroupToAllocate(List<ClassGroup> classGroupList) throws CommandException {
+        for (ClassGroup classGroup : classGroupList) {
+            if (classGroup.getName().equals(this.classGroupName)) {
+                return classGroup;
+            }
+        }
+        throw new CommandException(AllocateClassGroupCommand.MESSAGE_INVALID_CLASS_GROUP_NAME);
+    }
+
+    private void buildSuccessfulAllocationString(String contactName) {
+        if (this.successfullyAllocatedNames.length() > 0) {
+            this.successfullyAllocatedNames.append("; ");
+        }
+        this.successfullyAllocatedNames.append(contactName);
     }
 }
