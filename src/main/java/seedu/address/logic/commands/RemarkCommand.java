@@ -1,10 +1,14 @@
 package seedu.address.logic.commands;
 
+import java.util.List;
+
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.CollectionUtil;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.CliSyntax;
 import seedu.address.model.Model;
+import seedu.address.model.person.Person;
 import seedu.address.model.person.Remark;
 
 /**
@@ -23,7 +27,8 @@ public class RemarkCommand extends Command {
             + "Example: " + RemarkCommand.COMMAND_WORD + " 1 "
             + CliSyntax.PREFIX_REMARK + "Likes to swim.";
 
-    public static final String MESSAGE_ARGUMENTS = "Index: %1$d, Remark: %2$s";
+    public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added remark to Person: %1$s";
+    public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed remark from Person: %1$s";
 
     private final Index index;
     private final Remark remark;
@@ -41,8 +46,31 @@ public class RemarkCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        throw new CommandException(
-                String.format(RemarkCommand.MESSAGE_ARGUMENTS, this.index.getOneBased(), this.remark));
+        List<Person> lastShownList = model.getFilteredPersonList();
+
+        if (this.index.getZeroBased() >= lastShownList.size()) {
+            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        }
+
+        Person personToEdit = lastShownList.get(this.index.getZeroBased());
+        Person editedPerson = new Person(personToEdit.getName(), personToEdit.getPhone(),
+                personToEdit.getEmail(), personToEdit.getAddress(), this.remark, personToEdit.getTags());
+
+        model.setPerson(personToEdit, editedPerson);
+        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
+
+        return new CommandResult(this.generateSuccessMessage(editedPerson));
+    }
+
+    /**
+     * Generates a command execution success message based on whether
+     * the remark is added to or removed from
+     * {@code personToEdit}.
+     */
+    private String generateSuccessMessage(Person personToEdit) {
+        String message = !this.remark.value.isEmpty() ? RemarkCommand.MESSAGE_ADD_REMARK_SUCCESS
+                : RemarkCommand.MESSAGE_DELETE_REMARK_SUCCESS;
+        return String.format(message, Messages.format(personToEdit));
     }
 
     @Override
