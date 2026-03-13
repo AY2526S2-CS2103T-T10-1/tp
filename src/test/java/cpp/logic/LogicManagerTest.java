@@ -62,7 +62,7 @@ public class LogicManagerTest {
     @Test
     public void execute_validCommand_success() throws Exception {
         String listCommand = ListCommand.COMMAND_WORD + " contacts";
-        this.assertCommandSuccess(listCommand, ListCommand.MESSAGE_SUCCESS, this.model);
+        this.assertCommandSuccess(listCommand, ListCommand.MESSAGE_CONTACTS, this.model);
     }
 
     @Test

@@ -50,6 +50,12 @@ public class MainWindow extends UiPart<Stage> {
     private StackPane contactListPanelPlaceholder;
 
     @FXML
+    private StackPane assignmentListPanelPlaceholder;
+
+    @FXML
+    private StackPane classListPanelPlaceholder;
+
+    @FXML
     private StackPane resultDisplayPlaceholder;
 
     @FXML
@@ -131,10 +137,10 @@ public class MainWindow extends UiPart<Stage> {
         this.contactListPanel = new ContactListPanel(this.logic.getFilteredContactList());
         this.assignmentListPanel = new AssignmentListPanel(this.logic.getFilteredAssignmentList());
         this.classGroupListPanel = new ClassGroupListPanel(this.logic.getFilteredClassGroupList());
-        this.contactListPanelPlaceholder.getChildren().addAll(
-                this.contactListPanel.getRoot(),
-                this.assignmentListPanel.getRoot(),
-                this.classGroupListPanel.getRoot());
+        
+        this.contactListPanelPlaceholder.getChildren().add(this.contactListPanel.getRoot());
+        this.assignmentListPanelPlaceholder.getChildren().add(this.assignmentListPanel.getRoot());
+        this.classListPanelPlaceholder.getChildren().add(this.classGroupListPanel.getRoot());
 
         this.resultDisplay = new ResultDisplay();
         this.resultDisplayPlaceholder.getChildren().add(this.resultDisplay.getRoot());

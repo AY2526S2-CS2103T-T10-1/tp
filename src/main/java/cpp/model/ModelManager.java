@@ -244,7 +244,9 @@ public class ModelManager implements Model {
         ModelManager otherModelManager = (ModelManager) other;
         return this.addressBook.equals(otherModelManager.addressBook)
                 && this.userPrefs.equals(otherModelManager.userPrefs)
-                && this.filteredContacts.equals(otherModelManager.filteredContacts);
+                && this.filteredContacts.equals(otherModelManager.filteredContacts)
+                && this.filteredAssignments.equals(otherModelManager.filteredAssignments)
+                && this.filteredClassGroups.equals(otherModelManager.filteredClassGroups);
     }
 
 }

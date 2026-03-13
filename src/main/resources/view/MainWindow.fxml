@@ -48,7 +48,6 @@
           </padding>
         </StackPane>
 
-        <VBox>
         <StackPane fx:id="listPanelPlaceholder" VBox.vgrow="ALWAYS">
             <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
             <tabs>
@@ -70,7 +69,6 @@
             </tabs>
             </TabPane>
         </StackPane>
-        </VBox>
 
         <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
       </VBox>

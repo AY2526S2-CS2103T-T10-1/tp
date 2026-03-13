@@ -2,6 +2,7 @@ package cpp.logic.parser;
 
 import org.junit.jupiter.api.Test;
 
+import cpp.logic.Messages;
 import cpp.logic.commands.ListAssignmentCommand;
 import cpp.logic.commands.ListClassCommand;
 import cpp.logic.commands.ListCommand;
@@ -12,7 +13,8 @@ public class ListCommandParserTest {
 
     @Test
     public void parse_emptyArgs_throwsParseException() {
-        CommandParserTestUtil.assertParseFailure(this.parser, "     ", ListCommand.MESSAGE_TAB_EMPTY);
+        CommandParserTestUtil.assertParseFailure(this.parser, "     ",
+                String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
     }
 
     @Test
@@ -39,6 +41,28 @@ public class ListCommandParserTest {
 
     @Test
     public void parse_invalidArgs_throwsParseException() {
-        CommandParserTestUtil.assertParseFailure(this.parser, "invalid", ListCommand.MESSAGE_TAB_INVALID);
+        CommandParserTestUtil.assertParseFailure(this.parser, "invalid",
+                String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_caseInsensitive_contacts() {
+        ListCommand expectedListCommand = new ListContactCommand();
+        CommandParserTestUtil.assertParseSuccess(this.parser, "CONTACTS", expectedListCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, "Contacts", expectedListCommand);
+    }
+
+    @Test
+    public void parse_caseInsensitive_assignments() {
+        ListCommand expectedListCommand = new ListAssignmentCommand();
+        CommandParserTestUtil.assertParseSuccess(this.parser, "ASSIGNMENTS", expectedListCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, "Assignments", expectedListCommand);
+    }
+
+    @Test
+    public void parse_caseInsensitive_classes() {
+        ListCommand expectedListCommand = new ListClassCommand();
+        CommandParserTestUtil.assertParseSuccess(this.parser, "CLASSES", expectedListCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, "Classes", expectedListCommand);
     }
 }

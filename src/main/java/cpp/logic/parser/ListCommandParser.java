@@ -5,6 +5,7 @@ import cpp.logic.commands.ListClassCommand;
 import cpp.logic.commands.ListCommand;
 import cpp.logic.commands.ListContactCommand;
 import cpp.logic.parser.exceptions.ParseException;
+import cpp.logic.Messages;
 
 /**
  * Parses input arguments and creates an appropriate ListCommand subclass object
@@ -13,7 +14,7 @@ public class ListCommandParser implements Parser<ListCommand> {
 
     @Override
     public ListCommand parse(String args) throws ParseException {
-        String trimmedArgs = args.trim();
+        String trimmedArgs = args.trim().toLowerCase();
         if (trimmedArgs.equals("contacts")) {
             return new ListContactCommand();
         } else if (trimmedArgs.equals("assignments")) {
@@ -21,9 +22,11 @@ public class ListCommandParser implements Parser<ListCommand> {
         } else if (trimmedArgs.equals("classes")) {
             return new ListClassCommand();
         } else if (trimmedArgs.isEmpty()) {
-            throw new ParseException(ListCommand.MESSAGE_TAB_EMPTY);
+            throw new ParseException(String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT,
+                    ListCommand.MESSAGE_USAGE));
         } else {
-            throw new ParseException(ListCommand.MESSAGE_TAB_INVALID);
+            throw new ParseException(String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT,
+                    ListCommand.MESSAGE_USAGE));
         }
     }
 }

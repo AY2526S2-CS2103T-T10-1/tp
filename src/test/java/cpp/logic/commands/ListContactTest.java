@@ -28,7 +28,7 @@ public class ListContactTest {
 
     @Test
     public void execute_listIsNotFiltered_showsSameList() {
-        CommandResult expectedResult = new CommandResult(ListCommand.MESSAGE_SUCCESS,
+        CommandResult expectedResult = new CommandResult(ListCommand.MESSAGE_CONTACTS,
                 CommandResult.ListView.CONTACTS);
         CommandTestUtil.assertCommandSuccess(new ListContactCommand(), this.model, expectedResult,
                 this.expectedModel);
@@ -37,7 +37,7 @@ public class ListContactTest {
     @Test
     public void execute_listIsFiltered_showsEverything() {
         CommandTestUtil.showContactAtIndex(this.model, TypicalIndexes.INDEX_FIRST_CONTACT);
-        CommandResult expectedResult = new CommandResult(ListCommand.MESSAGE_SUCCESS,
+        CommandResult expectedResult = new CommandResult(ListCommand.MESSAGE_CONTACTS,
                 CommandResult.ListView.CONTACTS);
         CommandTestUtil.assertCommandSuccess(new ListContactCommand(), this.model, expectedResult,
                 this.expectedModel);
@@ -70,7 +70,7 @@ public class ListContactTest {
     @Test
     public void execute_noFilters_displaysAllContacts() {
         Assertions.assertEquals(this.model.getFilteredContactList(), this.expectedModel.getFilteredContactList());
-        CommandResult expectedResult = new CommandResult(ListCommand.MESSAGE_SUCCESS,
+        CommandResult expectedResult = new CommandResult(ListCommand.MESSAGE_CONTACTS,
                 CommandResult.ListView.CONTACTS);
         CommandTestUtil.assertCommandSuccess(new ListContactCommand(), this.model, expectedResult,
                 this.expectedModel);
