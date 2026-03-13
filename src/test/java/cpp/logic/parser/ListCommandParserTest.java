@@ -101,21 +101,21 @@ public class ListCommandParserTest {
     }
 
     @Test
-    public void parse_caseInsensitive_withWhitespace_contacts() {
+    public void parse_caseInsensitiveWithWhitespace_contacts() {
         ListCommand expectedListCommand = new ListContactCommand();
         CommandParserTestUtil.assertParseSuccess(this.parser, "  CONTACTS  ", expectedListCommand);
         CommandParserTestUtil.assertParseSuccess(this.parser, "\t Contacts \n", expectedListCommand);
     }
 
     @Test
-    public void parse_caseInsensitive_withWhitespace_assignments() {
+    public void parse_caseInsensitiveWithWhitespace_assignments() {
         ListCommand expectedListCommand = new ListAssignmentCommand();
         CommandParserTestUtil.assertParseSuccess(this.parser, "  ASSIGNMENTS  ", expectedListCommand);
         CommandParserTestUtil.assertParseSuccess(this.parser, "\t Assignments \n", expectedListCommand);
     }
 
     @Test
-    public void parse_caseInsensitive_withWhitespace_classes() {
+    public void parse_caseInsensitiveWithWhitespace_classes() {
         ListCommand expectedListCommand = new ListClassCommand();
         CommandParserTestUtil.assertParseSuccess(this.parser, "  CLASSES  ", expectedListCommand);
         CommandParserTestUtil.assertParseSuccess(this.parser, "\t Classes \n", expectedListCommand);
