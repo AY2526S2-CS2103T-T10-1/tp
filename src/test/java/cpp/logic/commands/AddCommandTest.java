@@ -170,6 +170,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public void deleteAssignment(Assignment target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void addContactAssignment(ContactAssignment ca) {
             throw new AssertionError("This method should not be called.");
         }

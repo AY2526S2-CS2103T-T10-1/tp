@@ -6,6 +6,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -28,6 +29,7 @@ import cpp.model.tag.Tag;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    public static final String MESSAGE_EMPTY_INDICES = "Contact indices should not be blank.";
     public static final DateTimeFormatter DEADLINE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     /**
@@ -188,7 +190,7 @@ public class ParserUtil {
      */
     public static List<Index> parseContactIndices(String contactValue) throws ParseException {
         String[] parts = contactValue.trim().split("\\s+");
-        Set<Index> contactIndices = new HashSet<>();
+        Set<Index> contactIndices = new LinkedHashSet<>();
         for (String part : parts) {
             if (part.isBlank()) {
                 continue;

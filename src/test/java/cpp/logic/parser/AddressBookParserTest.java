@@ -12,6 +12,7 @@ import cpp.logic.Messages;
 import cpp.logic.commands.AddCommand;
 import cpp.logic.commands.ClearCommand;
 import cpp.logic.commands.DeleteCommand;
+import cpp.logic.commands.DeleteContactCommand;
 import cpp.logic.commands.EditCommand;
 import cpp.logic.commands.EditCommand.EditContactDescriptor;
 import cpp.logic.commands.ExitCommand;
@@ -55,9 +56,9 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_delete() throws Exception {
-        DeleteCommand command = (DeleteCommand) this.parser.parseCommand(
-                DeleteCommand.COMMAND_WORD + " " + TypicalIndexes.INDEX_FIRST_CONTACT.getOneBased());
-        Assertions.assertEquals(new DeleteCommand(TypicalIndexes.INDEX_FIRST_CONTACT), command);
+        DeleteContactCommand command = (DeleteContactCommand) this.parser.parseCommand(
+                DeleteCommand.COMMAND_WORD + " ct/" + TypicalIndexes.INDEX_FIRST_CONTACT.getOneBased());
+        Assertions.assertEquals(new DeleteContactCommand(List.of(TypicalIndexes.INDEX_FIRST_CONTACT)), command);
     }
 
     @Test

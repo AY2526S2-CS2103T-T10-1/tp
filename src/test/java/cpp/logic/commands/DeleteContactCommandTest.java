@@ -1,5 +1,7 @@
 package cpp.logic.commands;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,9 +16,9 @@ import cpp.testutil.TypicalIndexes;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
- * {@code DeleteCommand}.
+ * {@code DeleteContactCommand}.
  */
-public class DeleteCommandTest {
+public class DeleteContactCommandTest {
 
     private Model model = new ModelManager(TypicalContacts.getTypicalAddressBook(), new UserPrefs());
 
@@ -24,9 +26,10 @@ public class DeleteCommandTest {
     public void execute_validIndexUnfilteredList_success() {
         Contact contactToDelete = this.model.getFilteredContactList()
                 .get(TypicalIndexes.INDEX_FIRST_CONTACT.getZeroBased());
-        DeleteCommand deleteCommand = new DeleteCommand(TypicalIndexes.INDEX_FIRST_CONTACT);
+        DeleteContactCommand deleteCommand = new DeleteContactCommand(
+                List.of(TypicalIndexes.INDEX_FIRST_CONTACT));
 
-        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_CONTACT_SUCCESS,
+        String expectedMessage = String.format(DeleteContactCommand.MESSAGE_DELETE_CONTACT_SUCCESS,
                 Messages.format(contactToDelete));
 
         ModelManager expectedModel = new ModelManager(this.model.getAddressBook(), new UserPrefs());
@@ -38,7 +41,7 @@ public class DeleteCommandTest {
     @Test
     public void execute_invalidIndexUnfilteredList_throwsCommandException() {
         Index outOfBoundIndex = Index.fromOneBased(this.model.getFilteredContactList().size() + 1);
-        DeleteCommand deleteCommand = new DeleteCommand(outOfBoundIndex);
+        DeleteContactCommand deleteCommand = new DeleteContactCommand(List.of(outOfBoundIndex));
 
         CommandTestUtil.assertCommandFailure(deleteCommand, this.model,
                 Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX);
@@ -50,9 +53,10 @@ public class DeleteCommandTest {
 
         Contact contactToDelete = this.model.getFilteredContactList()
                 .get(TypicalIndexes.INDEX_FIRST_CONTACT.getZeroBased());
-        DeleteCommand deleteCommand = new DeleteCommand(TypicalIndexes.INDEX_FIRST_CONTACT);
+        DeleteContactCommand deleteCommand = new DeleteContactCommand(
+                List.of(TypicalIndexes.INDEX_FIRST_CONTACT));
 
-        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_CONTACT_SUCCESS,
+        String expectedMessage = String.format(DeleteContactCommand.MESSAGE_DELETE_CONTACT_SUCCESS,
                 Messages.format(contactToDelete));
 
         Model expectedModel = new ModelManager(this.model.getAddressBook(), new UserPrefs());
@@ -70,22 +74,47 @@ public class DeleteCommandTest {
         // ensures that outOfBoundIndex is still in bounds of address book list
         Assertions.assertTrue(outOfBoundIndex.getZeroBased() < this.model.getAddressBook().getContactList().size());
 
-        DeleteCommand deleteCommand = new DeleteCommand(outOfBoundIndex);
+        DeleteContactCommand deleteCommand = new DeleteContactCommand(List.of(outOfBoundIndex));
 
         CommandTestUtil.assertCommandFailure(deleteCommand, this.model,
                 Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX);
     }
 
     @Test
+    public void execute_multipleValidIndices_success() {
+        Contact firstContact = this.model.getFilteredContactList()
+                .get(TypicalIndexes.INDEX_FIRST_CONTACT.getZeroBased());
+        Contact secondContact = this.model.getFilteredContactList()
+                .get(TypicalIndexes.INDEX_SECOND_CONTACT.getZeroBased());
+        DeleteContactCommand deleteCommand = new DeleteContactCommand(
+                List.of(TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT));
+
+        String expectedMessage = String.format(DeleteContactCommand.MESSAGE_DELETE_CONTACT_SUCCESS,
+                Messages.format(firstContact))
+                + "\n"
+                + String.format(DeleteContactCommand.MESSAGE_DELETE_CONTACT_SUCCESS,
+                Messages.format(secondContact));
+
+        ModelManager expectedModel = new ModelManager(this.model.getAddressBook(), new UserPrefs());
+        expectedModel.deleteContact(firstContact);
+        expectedModel.deleteContact(secondContact);
+
+        CommandTestUtil.assertCommandSuccess(deleteCommand, this.model, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void equals() {
-        DeleteCommand deleteFirstCommand = new DeleteCommand(TypicalIndexes.INDEX_FIRST_CONTACT);
-        DeleteCommand deleteSecondCommand = new DeleteCommand(TypicalIndexes.INDEX_SECOND_CONTACT);
+        DeleteContactCommand deleteFirstCommand = new DeleteContactCommand(
+                List.of(TypicalIndexes.INDEX_FIRST_CONTACT));
+        DeleteContactCommand deleteSecondCommand = new DeleteContactCommand(
+                List.of(TypicalIndexes.INDEX_SECOND_CONTACT));
 
         // same object -> returns true
         Assertions.assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
 
         // same values -> returns true
-        DeleteCommand deleteFirstCommandCopy = new DeleteCommand(TypicalIndexes.INDEX_FIRST_CONTACT);
+        DeleteContactCommand deleteFirstCommandCopy = new DeleteContactCommand(
+                List.of(TypicalIndexes.INDEX_FIRST_CONTACT));
         Assertions.assertTrue(deleteFirstCommand.equals(deleteFirstCommandCopy));
 
         // different types -> returns false
@@ -100,9 +129,9 @@ public class DeleteCommandTest {
 
     @Test
     public void toStringMethod() {
-        Index targetIndex = Index.fromOneBased(1);
-        DeleteCommand deleteCommand = new DeleteCommand(targetIndex);
-        String expected = DeleteCommand.class.getCanonicalName() + "{targetIndex=" + targetIndex + "}";
+        List<Index> targetIndices = List.of(Index.fromOneBased(1));
+        DeleteContactCommand deleteCommand = new DeleteContactCommand(targetIndices);
+        String expected = DeleteContactCommand.class.getCanonicalName() + "{targetIndices=" + targetIndices + "}";
         Assertions.assertEquals(expected, deleteCommand.toString());
     }
 

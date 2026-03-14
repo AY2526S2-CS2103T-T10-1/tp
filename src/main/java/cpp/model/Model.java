@@ -14,7 +14,9 @@ import javafx.collections.ObservableList;
  * The API of the Model component.
  */
 public interface Model {
-    /** {@code Predicate} that always evaluate to true */
+    /**
+     * {@code Predicate} that always evaluate to true.
+     */
     Predicate<Contact> PREDICATE_SHOW_ALL_CONTACTS = unused -> true;
 
     /**
@@ -52,7 +54,9 @@ public interface Model {
      */
     void setAddressBook(ReadOnlyAddressBook addressBook);
 
-    /** Returns the AddressBook */
+    /**
+     * Returns the AddressBook.
+     */
     ReadOnlyAddressBook getAddressBook();
 
     /**
@@ -81,7 +85,9 @@ public interface Model {
      */
     void setContact(Contact target, Contact editedContact);
 
-    /** Returns an unmodifiable view of the filtered contact list */
+    /**
+     * Returns an unmodifiable view of the filtered contact list.
+     */
     ObservableList<Contact> getFilteredContactList();
 
     /**
@@ -102,6 +108,12 @@ public interface Model {
      * Adds the given assignment.
      */
     void addAssignment(Assignment assignment);
+
+    /**
+     * Deletes the given assignment.
+     * The assignment must exist in the address book.
+     */
+    void deleteAssignment(Assignment target);
 
     /**
      * Registers and persists the {@code ContactAssignment} allocation.
