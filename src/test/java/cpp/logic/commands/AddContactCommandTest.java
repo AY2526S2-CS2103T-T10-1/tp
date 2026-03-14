@@ -25,11 +25,11 @@ import cpp.testutil.ContactBuilder;
 import cpp.testutil.TypicalContacts;
 import javafx.collections.ObservableList;
 
-public class AddCommandTest {
+public class AddContactCommandTest {
 
     @Test
     public void constructor_nullContact_throwsNullPointerException() {
-        Assert.assertThrows(NullPointerException.class, () -> new AddCommand(null));
+        Assert.assertThrows(NullPointerException.class, () -> new AddContactCommand(null));
     }
 
     @Test
@@ -37,9 +37,9 @@ public class AddCommandTest {
         ModelStubAcceptingContactAdded modelStub = new ModelStubAcceptingContactAdded();
         Contact validContact = new ContactBuilder().build();
 
-        CommandResult commandResult = new AddCommand(validContact).execute(modelStub);
+        CommandResult commandResult = new AddContactCommand(validContact).execute(modelStub);
 
-        Assertions.assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validContact)),
+        Assertions.assertEquals(String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(validContact)),
                 commandResult.getFeedbackToUser());
         Assertions.assertEquals(Arrays.asList(validContact), modelStub.contactsAdded);
     }
@@ -47,25 +47,25 @@ public class AddCommandTest {
     @Test
     public void execute_duplicateContact_throwsCommandException() {
         Contact validContact = new ContactBuilder().build();
-        AddCommand addCommand = new AddCommand(validContact);
+        AddContactCommand addContactCommand = new AddContactCommand(validContact);
         ModelStub modelStub = new ModelStubWithContact(validContact);
 
-        Assert.assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_CONTACT,
-                () -> addCommand.execute(modelStub));
+        Assert.assertThrows(CommandException.class, AddContactCommand.MESSAGE_DUPLICATE_CONTACT,
+                () -> addContactCommand.execute(modelStub));
     }
 
     @Test
     public void equals() {
         Contact alice = new ContactBuilder().withName("Alice").build();
         Contact bob = new ContactBuilder().withName("Bob").build();
-        AddCommand addAliceCommand = new AddCommand(alice);
-        AddCommand addBobCommand = new AddCommand(bob);
+        AddContactCommand addAliceCommand = new AddContactCommand(alice);
+        AddContactCommand addBobCommand = new AddContactCommand(bob);
 
         // same object -> returns true
         Assertions.assertTrue(addAliceCommand.equals(addAliceCommand));
 
         // same values -> returns true
-        AddCommand addAliceCommandCopy = new AddCommand(alice);
+        AddContactCommand addAliceCommandCopy = new AddContactCommand(alice);
         Assertions.assertTrue(addAliceCommand.equals(addAliceCommandCopy));
 
         // different types -> returns false
@@ -80,9 +80,9 @@ public class AddCommandTest {
 
     @Test
     public void toStringMethod() {
-        AddCommand addCommand = new AddCommand(TypicalContacts.ALICE);
-        String expected = AddCommand.class.getCanonicalName() + "{toAdd=" + TypicalContacts.ALICE + "}";
-        Assertions.assertEquals(expected, addCommand.toString());
+        AddContactCommand addContactCommand = new AddContactCommand(TypicalContacts.ALICE);
+        String expected = AddContactCommand.class.getCanonicalName() + "{toAdd=" + TypicalContacts.ALICE + "}";
+        Assertions.assertEquals(expected, addContactCommand.toString());
     }
 
     /**

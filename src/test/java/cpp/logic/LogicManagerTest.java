@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import cpp.logic.commands.AddCommand;
+import cpp.logic.commands.AddContactCommand;
 import cpp.logic.commands.CommandResult;
 import cpp.logic.commands.CommandTestUtil;
 import cpp.logic.commands.ListCommand;
@@ -239,11 +239,12 @@ public class LogicManagerTest {
         this.logic = new LogicManager(this.model, storage);
 
         // Triggers the saveAddressBook method by executing an add command
-        String addCommand = AddCommand.COMMAND_WORD + CommandTestUtil.NAME_DESC_AMY + CommandTestUtil.PHONE_DESC_AMY
+        String addContactCommand = AddContactCommand.COMMAND_WORD + CommandTestUtil.NAME_DESC_AMY
+                + CommandTestUtil.PHONE_DESC_AMY
                 + CommandTestUtil.EMAIL_DESC_AMY + CommandTestUtil.ADDRESS_DESC_AMY;
         Contact expectedContact = new ContactBuilder(TypicalContacts.AMY).withTags().build();
         ModelManager expectedModel = new ModelManager();
         expectedModel.addContact(expectedContact);
-        this.assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
+        this.assertCommandFailure(addContactCommand, CommandException.class, expectedMessage, expectedModel);
     }
 }

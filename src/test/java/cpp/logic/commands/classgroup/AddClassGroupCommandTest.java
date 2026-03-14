@@ -49,50 +49,50 @@ public class AddClassGroupCommandTest {
     @Test
     public void execute_duplicateClassGroup_throwsCommandException() {
         ClassGroup validClassGroup = TypicalClassGroups.CLASS_GROUP_ONE;
-        AddClassGroupCommand addCommand = new AddClassGroupCommand(validClassGroup, new ArrayList<>());
+        AddClassGroupCommand addContactCommand = new AddClassGroupCommand(validClassGroup, new ArrayList<>());
         ModelStub modelStub = new ModelStubWithClassGroup(validClassGroup);
 
         Assert.assertThrows(CommandException.class, AddClassGroupCommand.MESSAGE_DUPLICATE_CLASS_GROUP,
-                () -> addCommand.execute(modelStub));
+                () -> addContactCommand.execute(modelStub));
     }
 
     @Test
     public void equals_sameValues_returnsTrue() {
         ClassGroup classGroup = TypicalClassGroups.CLASS_GROUP_ONE;
-        AddClassGroupCommand addCommand = new AddClassGroupCommand(classGroup, new ArrayList<>());
-        AddClassGroupCommand addCommandCopy = new AddClassGroupCommand(classGroup, new ArrayList<>());
+        AddClassGroupCommand addContactCommand = new AddClassGroupCommand(classGroup, new ArrayList<>());
+        AddClassGroupCommand addContactCommandCopy = new AddClassGroupCommand(classGroup, new ArrayList<>());
 
         // same object -> true
-        Assertions.assertTrue(addCommand.equals(addCommand));
+        Assertions.assertTrue(addContactCommand.equals(addContactCommand));
 
         // same values -> true
-        Assertions.assertTrue(addCommand.equals(addCommandCopy));
+        Assertions.assertTrue(addContactCommand.equals(addContactCommandCopy));
     }
 
     @Test
     public void equals_differentValues_returnsFalse() {
         ClassGroup classGroup = TypicalClassGroups.CLASS_GROUP_ONE;
-        AddClassGroupCommand addCommand = new AddClassGroupCommand(classGroup, new ArrayList<>());
+        AddClassGroupCommand addContactCommand = new AddClassGroupCommand(classGroup, new ArrayList<>());
 
         // different types -> false
-        Assertions.assertFalse(addCommand.equals(1));
+        Assertions.assertFalse(addContactCommand.equals(1));
 
         // null -> false
-        Assertions.assertFalse(addCommand.equals(null));
+        Assertions.assertFalse(addContactCommand.equals(null));
 
         // different class group -> false
         ClassGroup different = new ClassGroupBuilder(classGroup).withName("CS2101T10").build();
         AddClassGroupCommand differentCommand = new AddClassGroupCommand(different, new ArrayList<>());
-        Assertions.assertFalse(addCommand.equals(differentCommand));
+        Assertions.assertFalse(addContactCommand.equals(differentCommand));
     }
 
     @Test
     public void toString_typicalValue_correctOutput() {
-        AddClassGroupCommand addCommand = new AddClassGroupCommand(TypicalClassGroups.CLASS_GROUP_ONE,
+        AddClassGroupCommand addContactCommand = new AddClassGroupCommand(TypicalClassGroups.CLASS_GROUP_ONE,
                 new ArrayList<>());
         String expected = AddClassGroupCommand.class.getCanonicalName() + "{toAdd="
                 + TypicalClassGroups.CLASS_GROUP_ONE + ", contactIndices=" + new ArrayList<>() + "}";
-        Assertions.assertEquals(expected, addCommand.toString());
+        Assertions.assertEquals(expected, addContactCommand.toString());
     }
 
     /**

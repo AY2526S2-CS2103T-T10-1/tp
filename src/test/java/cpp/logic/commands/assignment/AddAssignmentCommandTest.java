@@ -49,50 +49,50 @@ public class AddAssignmentCommandTest {
     @Test
     public void execute_duplicateAssignment_throwsCommandException() {
         Assignment validAssignment = TypicalAssignments.ASSIGNMENT_ONE;
-        AddAssignmentCommand addCommand = new AddAssignmentCommand(validAssignment);
+        AddAssignmentCommand addContactCommand = new AddAssignmentCommand(validAssignment);
         ModelStub modelStub = new ModelStubWithAssignment(validAssignment);
 
         Assert.assertThrows(CommandException.class, AddAssignmentCommand.MESSAGE_DUPLICATE_ASSIGNMENT,
-                () -> addCommand.execute(modelStub));
+                () -> addContactCommand.execute(modelStub));
     }
 
     @Test
     public void equals_sameValues_returnsTrue() {
         Assignment assignment = TypicalAssignments.ASSIGNMENT_ONE;
-        AddAssignmentCommand addCommand = new AddAssignmentCommand(assignment);
-        AddAssignmentCommand addCommandCopy = new AddAssignmentCommand(assignment);
+        AddAssignmentCommand addContactCommand = new AddAssignmentCommand(assignment);
+        AddAssignmentCommand addContactCommandCopy = new AddAssignmentCommand(assignment);
 
         // same object -> true
-        Assertions.assertTrue(addCommand.equals(addCommand));
+        Assertions.assertTrue(addContactCommand.equals(addContactCommand));
 
         // same values -> true
-        Assertions.assertTrue(addCommand.equals(addCommandCopy));
+        Assertions.assertTrue(addContactCommand.equals(addContactCommandCopy));
     }
 
     @Test
     public void equals_differentValues_returnsFalse() {
         Assignment assignment = TypicalAssignments.ASSIGNMENT_ONE;
-        AddAssignmentCommand addCommand = new AddAssignmentCommand(assignment);
+        AddAssignmentCommand addContactCommand = new AddAssignmentCommand(assignment);
 
         // different types -> false
-        Assertions.assertFalse(addCommand.equals(1));
+        Assertions.assertFalse(addContactCommand.equals(1));
 
         // null -> false
-        Assertions.assertFalse(addCommand.equals(null));
+        Assertions.assertFalse(addContactCommand.equals(null));
 
         // different assignment -> false
         Assignment different = new AssignmentBuilder(TypicalAssignments.ASSIGNMENT_ONE)
                 .withName("Different").build();
         AddAssignmentCommand differentCommand = new AddAssignmentCommand(different);
-        Assertions.assertFalse(addCommand.equals(differentCommand));
+        Assertions.assertFalse(addContactCommand.equals(differentCommand));
     }
 
     @Test
     public void toString_typicalValue_correctOutput() {
-        AddAssignmentCommand addCommand = new AddAssignmentCommand(TypicalAssignments.ASSIGNMENT_ONE);
+        AddAssignmentCommand addContactCommand = new AddAssignmentCommand(TypicalAssignments.ASSIGNMENT_ONE);
         String expected = AddAssignmentCommand.class.getCanonicalName() + "{toAddAssignment="
                 + TypicalAssignments.ASSIGNMENT_ONE + "}";
-        Assertions.assertEquals(expected, addCommand.toString());
+        Assertions.assertEquals(expected, addContactCommand.toString());
     }
 
     /**

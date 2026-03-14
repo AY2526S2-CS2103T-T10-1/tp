@@ -13,9 +13,9 @@ import cpp.testutil.TypicalContacts;
 
 /**
  * Contains integration tests (interaction with the Model) for
- * {@code AddCommand}.
+ * {@code AddContactCommand}.
  */
-public class AddCommandIntegrationTest {
+public class AddContactCommandIntegrationTest {
 
     private Model model;
 
@@ -31,16 +31,16 @@ public class AddCommandIntegrationTest {
         Model expectedModel = new ModelManager(this.model.getAddressBook(), new UserPrefs());
         expectedModel.addContact(validContact);
 
-        CommandTestUtil.assertCommandSuccess(new AddCommand(validContact), this.model,
-                String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validContact)),
+        CommandTestUtil.assertCommandSuccess(new AddContactCommand(validContact), this.model,
+                String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(validContact)),
                 expectedModel);
     }
 
     @Test
     public void execute_duplicateContact_throwsCommandException() {
         Contact contactInList = this.model.getAddressBook().getContactList().get(0);
-        CommandTestUtil.assertCommandFailure(new AddCommand(contactInList), this.model,
-                AddCommand.MESSAGE_DUPLICATE_CONTACT);
+        CommandTestUtil.assertCommandFailure(new AddContactCommand(contactInList), this.model,
+                AddContactCommand.MESSAGE_DUPLICATE_CONTACT);
     }
 
 }

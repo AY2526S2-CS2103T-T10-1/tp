@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import cpp.logic.Messages;
-import cpp.logic.commands.AddCommand;
+import cpp.logic.commands.AddContactCommand;
 import cpp.logic.commands.ClearCommand;
 import cpp.logic.commands.DeleteCommand;
 import cpp.logic.commands.DeleteContactCommand;
@@ -44,8 +44,9 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_add() throws Exception {
         Contact contact = new ContactBuilder().build();
-        AddCommand command = (AddCommand) this.parser.parseCommand(ContactUtil.getAddCommand(contact));
-        Assertions.assertEquals(new AddCommand(contact), command);
+        AddContactCommand command = (AddContactCommand) this.parser
+                .parseCommand(ContactUtil.getAddContactCommand(contact));
+        Assertions.assertEquals(new AddContactCommand(contact), command);
     }
 
     @Test

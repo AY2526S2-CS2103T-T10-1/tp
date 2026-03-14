@@ -11,19 +11,19 @@ import cpp.model.Model;
 import cpp.model.assignment.Assignment;
 import cpp.model.assignment.AssignmentName;
 import cpp.model.assignment.ContactAssignment;
-//import cpp.model.classgroup.ClassGroup;
-//import cpp.model.classgroup.ClassGroupName;
+// import cpp.model.classgroup.ClassGroup;
+// import cpp.model.classgroup.ClassGroupName;
 import cpp.model.contact.Contact;
 import cpp.model.util.AssignmentUtil;
 
 /**
  * Adds a contact to the address book.
  */
-public class AddCommand extends Command {
+public class AddContactCommand extends Command {
 
     public static final String COMMAND_WORD = "addcontact";
 
-    public static final String MESSAGE_USAGE = AddCommand.COMMAND_WORD + ": Adds a contact to the address book. "
+    public static final String MESSAGE_USAGE = AddContactCommand.COMMAND_WORD + ": Adds a contact to the address book. "
             + "Parameters: "
             + CliSyntax.PREFIX_NAME + "NAME "
             + CliSyntax.PREFIX_PHONE + "PHONE "
@@ -31,7 +31,7 @@ public class AddCommand extends Command {
             + CliSyntax.PREFIX_ADDRESS + "ADDRESS "
             + "[" + CliSyntax.PREFIX_CLASS + "CLASS_NAME] "
             + "[" + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT_NAME]\n"
-            + "Example: " + AddCommand.COMMAND_WORD + " "
+            + "Example: " + AddContactCommand.COMMAND_WORD + " "
             + CliSyntax.PREFIX_NAME + "John Doe "
             + CliSyntax.PREFIX_PHONE + "98765432 "
             + CliSyntax.PREFIX_EMAIL + "johnd@example.com "
@@ -47,14 +47,14 @@ public class AddCommand extends Command {
     // private final ClassGroupName classGroupName;
     private final AssignmentName assignmentName;
 
-    public AddCommand(Contact contact) {
+    public AddContactCommand(Contact contact) {
         this(contact, null);
     }
 
     /**
-     * Creates an AddCommand to add the specified {@code Contact}
+     * Creates an AddContactCommand to add the specified {@code Contact}
      */
-    public AddCommand(Contact contact, AssignmentName assignmentName) {
+    public AddContactCommand(Contact contact, AssignmentName assignmentName) {
         Objects.requireNonNull(contact);
         this.toAdd = contact;
         this.assignmentName = assignmentName;
@@ -65,7 +65,7 @@ public class AddCommand extends Command {
         Objects.requireNonNull(model);
 
         if (model.hasContact(this.toAdd)) {
-            throw new CommandException(AddCommand.MESSAGE_DUPLICATE_CONTACT);
+            throw new CommandException(AddContactCommand.MESSAGE_DUPLICATE_CONTACT);
         }
 
         // TODO: add classGroup allocation
@@ -77,7 +77,7 @@ public class AddCommand extends Command {
             assignmentToAllocate = AssignmentUtil.findAssignment(assignmentList, this.assignmentName);
 
             if (assignmentToAllocate == null) {
-                throw new CommandException(AddCommand.MESSAGE_INVALID_ASSIGNMENT_NAME);
+                throw new CommandException(AddContactCommand.MESSAGE_INVALID_ASSIGNMENT_NAME);
             }
         }
 
@@ -92,7 +92,7 @@ public class AddCommand extends Command {
 
         model.addContact(this.toAdd);
 
-        return new CommandResult(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(this.toAdd)));
+        return new CommandResult(String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(this.toAdd)));
     }
 
     @Override
@@ -102,12 +102,12 @@ public class AddCommand extends Command {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof AddCommand)) {
+        if (!(other instanceof AddContactCommand)) {
             return false;
         }
 
-        AddCommand otherAddCommand = (AddCommand) other;
-        return this.toAdd.equals(otherAddCommand.toAdd);
+        AddContactCommand otherAddContactCommand = (AddContactCommand) other;
+        return this.toAdd.equals(otherAddContactCommand.toAdd);
     }
 
     @Override

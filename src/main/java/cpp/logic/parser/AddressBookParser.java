@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 import cpp.commons.core.LogsCenter;
 import cpp.logic.Messages;
-import cpp.logic.commands.AddCommand;
+import cpp.logic.commands.AddContactCommand;
 import cpp.logic.commands.ClearCommand;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.DeleteCommand;
@@ -60,8 +60,8 @@ public class AddressBookParser {
 
         switch (commandWord) {
 
-        case AddCommand.COMMAND_WORD:
-            return new AddCommandParser().parse(arguments);
+        case AddContactCommand.COMMAND_WORD:
+            return new AddContactCommandParser().parse(arguments);
 
         case EditCommand.COMMAND_WORD:
             return new EditCommandParser().parse(arguments);

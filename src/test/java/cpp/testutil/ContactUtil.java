@@ -2,7 +2,7 @@ package cpp.testutil;
 
 import java.util.Set;
 
-import cpp.logic.commands.AddCommand;
+import cpp.logic.commands.AddContactCommand;
 import cpp.logic.commands.EditCommand.EditContactDescriptor;
 import cpp.logic.parser.CliSyntax;
 import cpp.model.contact.Contact;
@@ -16,8 +16,8 @@ public class ContactUtil {
     /**
      * Returns an add command string for adding the {@code contact}.
      */
-    public static String getAddCommand(Contact contact) {
-        return AddCommand.COMMAND_WORD + " " + ContactUtil.getContactDetails(contact);
+    public static String getAddContactCommand(Contact contact) {
+        return AddContactCommand.COMMAND_WORD + " " + ContactUtil.getContactDetails(contact);
     }
 
     /**

@@ -3,7 +3,7 @@ package cpp.logic.parser;
 import org.junit.jupiter.api.Test;
 
 import cpp.logic.Messages;
-import cpp.logic.commands.AddCommand;
+import cpp.logic.commands.AddContactCommand;
 import cpp.logic.commands.CommandTestUtil;
 import cpp.model.contact.Address;
 import cpp.model.contact.Contact;
@@ -14,8 +14,8 @@ import cpp.model.tag.Tag;
 import cpp.testutil.ContactBuilder;
 import cpp.testutil.TypicalContacts;
 
-public class AddCommandParserTest {
-    private AddCommandParser parser = new AddCommandParser();
+public class AddContactCommandParserTest {
+    private AddContactCommandParser parser = new AddContactCommandParser();
 
     @Test
     public void parse_allFieldsPresent_success() {
@@ -27,7 +27,7 @@ public class AddCommandParserTest {
                 CommandTestUtil.PREAMBLE_WHITESPACE + CommandTestUtil.NAME_DESC_BOB
                         + CommandTestUtil.PHONE_DESC_BOB + CommandTestUtil.EMAIL_DESC_BOB
                         + CommandTestUtil.ADDRESS_DESC_BOB + CommandTestUtil.TAG_DESC_FRIEND,
-                new AddCommand(expectedContact));
+                new AddContactCommand(expectedContact));
 
         // multiple tags - all accepted
         Contact expectedContactMultipleTags = new ContactBuilder(TypicalContacts.BOB)
@@ -38,7 +38,7 @@ public class AddCommandParserTest {
                         + CommandTestUtil.EMAIL_DESC_BOB + CommandTestUtil.ADDRESS_DESC_BOB
                         + CommandTestUtil.TAG_DESC_HUSBAND
                         + CommandTestUtil.TAG_DESC_FRIEND,
-                new AddCommand(expectedContactMultipleTags));
+                new AddContactCommand(expectedContactMultipleTags));
     }
 
     @Test
@@ -129,13 +129,13 @@ public class AddCommandParserTest {
         CommandParserTestUtil.assertParseSuccess(this.parser,
                 CommandTestUtil.NAME_DESC_AMY + CommandTestUtil.PHONE_DESC_AMY
                         + CommandTestUtil.EMAIL_DESC_AMY + CommandTestUtil.ADDRESS_DESC_AMY,
-                new AddCommand(expectedContact));
+                new AddContactCommand(expectedContact));
     }
 
     @Test
     public void parse_compulsoryFieldMissing_failure() {
         String expectedMessage = String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT,
-                AddCommand.MESSAGE_USAGE);
+                AddContactCommand.MESSAGE_USAGE);
 
         // missing name prefix
         CommandParserTestUtil.assertParseFailure(this.parser,
@@ -217,6 +217,6 @@ public class AddCommandParserTest {
                         + CommandTestUtil.PHONE_DESC_BOB + CommandTestUtil.EMAIL_DESC_BOB
                         + CommandTestUtil.ADDRESS_DESC_BOB + CommandTestUtil.TAG_DESC_HUSBAND
                         + CommandTestUtil.TAG_DESC_FRIEND,
-                String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, AddContactCommand.MESSAGE_USAGE));
     }
 }

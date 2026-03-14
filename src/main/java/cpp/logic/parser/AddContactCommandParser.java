@@ -3,7 +3,7 @@ package cpp.logic.parser;
 import java.util.Set;
 
 import cpp.logic.Messages;
-import cpp.logic.commands.AddCommand;
+import cpp.logic.commands.AddContactCommand;
 import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.assignment.AssignmentName;
 // import cpp.model.classgroup.ClassGroupName;
@@ -15,18 +15,19 @@ import cpp.model.contact.Phone;
 import cpp.model.tag.Tag;
 
 /**
- * Parses input arguments and creates a new AddCommand object
+ * Parses input arguments and creates a new AddContactCommand object
  */
-public class AddCommandParser implements Parser<AddCommand> {
+public class AddContactCommandParser implements Parser<AddContactCommand> {
 
     /**
-     * Parses the given {@code String} of arguments in the context of the AddCommand
-     * and returns an AddCommand object for execution.
+     * Parses the given {@code String} of arguments in the context of the
+     * AddContactCommand
+     * and returns an AddContactCommand object for execution.
      *
      * @throws ParseException if the user input does not conform the expected format
      */
     @Override
-    public AddCommand parse(String args) throws ParseException {
+    public AddContactCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_PHONE,
                 CliSyntax.PREFIX_EMAIL,
                 CliSyntax.PREFIX_ADDRESS, CliSyntax.PREFIX_CLASS, CliSyntax.PREFIX_ASSIGNMENT, CliSyntax.PREFIX_TAG);
@@ -34,7 +35,8 @@ public class AddCommandParser implements Parser<AddCommand> {
         if (!ParserUtil.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_ADDRESS,
                 CliSyntax.PREFIX_PHONE, CliSyntax.PREFIX_EMAIL)
                 || !argMultimap.getPreamble().isEmpty()) {
-            throw new ParseException(String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+            throw new ParseException(
+                    String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, AddContactCommand.MESSAGE_USAGE));
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_PHONE, CliSyntax.PREFIX_EMAIL,
@@ -54,7 +56,7 @@ public class AddCommandParser implements Parser<AddCommand> {
 
         Contact contact = new Contact(name, phone, email, address, tagList);
 
-        return new AddCommand(contact, assignmentName);
+        return new AddContactCommand(contact, assignmentName);
     }
 
 }
