@@ -195,19 +195,13 @@ public class MainWindow extends UiPart<Stage> {
         CommandResult.ListView listView = commandResult.getListView();
         switch (listView) {
         case CONTACTS:
-            this.contactListPanel.getRoot().setVisible(true);
-            this.assignmentListPanel.getRoot().setVisible(false);
-            this.classGroupListPanel.getRoot().setVisible(false);
+            this.mainTabPane.getSelectionModel().select(this.contactsTab);
             break;
         case ASSIGNMENTS:
-            this.contactListPanel.getRoot().setVisible(false);
-            this.assignmentListPanel.getRoot().setVisible(true);
-            this.classGroupListPanel.getRoot().setVisible(false);
+            this.mainTabPane.getSelectionModel().select(this.assignmentsTab);
             break;
         case CLASSGROUPS:
-            this.contactListPanel.getRoot().setVisible(false);
-            this.assignmentListPanel.getRoot().setVisible(false);
-            this.classGroupListPanel.getRoot().setVisible(true);
+            this.mainTabPane.getSelectionModel().select(this.classesTab);
             break;
         case NONE:
         default:

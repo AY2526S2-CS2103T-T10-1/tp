@@ -22,7 +22,6 @@ import cpp.model.classgroup.ClassGroup;
 import cpp.testutil.Assert;
 import cpp.testutil.ClassGroupBuilder;
 import cpp.testutil.TypicalClassGroups;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class AddClassGroupCommandTest {
@@ -210,7 +209,7 @@ public class AddClassGroupCommandTest {
 
         @Override
         public ObservableList<Assignment> getFilteredAssignmentList() {
-            return FXCollections.observableArrayList();
+            throw new AssertionError("This method should not be called.");
         }
 
         @Override
@@ -220,7 +219,7 @@ public class AddClassGroupCommandTest {
 
         @Override
         public ObservableList<ClassGroup> getFilteredClassGroupList() {
-            return FXCollections.observableArrayList();
+            throw new AssertionError("This method should not be called.");
         }
 
         @Override

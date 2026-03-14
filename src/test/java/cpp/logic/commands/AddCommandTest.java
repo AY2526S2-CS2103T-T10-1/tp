@@ -23,7 +23,6 @@ import cpp.model.contact.Contact;
 import cpp.testutil.Assert;
 import cpp.testutil.ContactBuilder;
 import cpp.testutil.TypicalContacts;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class AddCommandTest {
@@ -202,7 +201,7 @@ public class AddCommandTest {
 
         @Override
         public ObservableList<Assignment> getFilteredAssignmentList() {
-            return FXCollections.observableArrayList();
+            throw new AssertionError("This method should not be called.");
         }
 
         @Override
@@ -212,7 +211,7 @@ public class AddCommandTest {
 
         @Override
         public ObservableList<ClassGroup> getFilteredClassGroupList() {
-            return FXCollections.observableArrayList();
+            throw new AssertionError("This method should not be called.");
         }
 
         @Override
