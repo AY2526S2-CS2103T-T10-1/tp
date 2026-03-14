@@ -178,6 +178,8 @@ public class ParserUtil {
      * Example: "1 2 3" will be parsed into a list of indices [1, 2, 3].
      * If the contact value string is empty or contains only whitespace, an empty
      * list will be returned.
+     * If the contact value string contains duplicate indices, it will only return
+     * the unique indices.
      *
      * @param contactValue the string containing the contact indices to be parsed
      * @return a list of indices parsed from the contact value string
@@ -186,13 +188,13 @@ public class ParserUtil {
      */
     public static List<Index> parseContactIndices(String contactValue) throws ParseException {
         String[] parts = contactValue.trim().split("\\s+");
-        List<Index> contactIndices = new ArrayList<>();
+        Set<Index> contactIndices = new HashSet<>();
         for (String part : parts) {
             if (part.isBlank()) {
                 continue;
             }
             contactIndices.add(ParserUtil.parseIndex(part));
         }
-        return contactIndices;
+        return new ArrayList<>(contactIndices);
     }
 }
