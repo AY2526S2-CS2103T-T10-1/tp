@@ -58,10 +58,7 @@ public class JsonAdaptedClassGroupTest {
 
     @Test
     public void toModelType_duplicateContactIds_throwsIllegalValueException() {
-        String[] duplicateContactIds = new String[] {
-                JsonAdaptedClassGroupTest.VALID_ID,
-                JsonAdaptedClassGroupTest.VALID_ID
-        };
+        String[] duplicateContactIds = new String[] { "Contact1", "Contact1" };
         JsonAdaptedClassGroup json = new JsonAdaptedClassGroup(JsonAdaptedClassGroupTest.VALID_ID,
                 JsonAdaptedClassGroupTest.VALID_NAME, duplicateContactIds);
         String expectedMessage = "Duplicate contactId found during allocation.";

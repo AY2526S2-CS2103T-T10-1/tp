@@ -159,10 +159,11 @@ public class AllocateClassGroupCommandTest {
                 new ArrayList<>(Arrays.asList(TypicalIndexes.INDEX_FIRST_CONTACT,
                         TypicalIndexes.INDEX_SECOND_CONTACT)));
 
-        String expectedString = AllocateClassGroupCommand.class.getCanonicalName() + "{" +
-                "classGroupName=" + new ClassGroupName(ClassGroupBuilder.DEFAULT_NAME) +
-                ", contactIndices=" + new ArrayList<>(Arrays.asList(TypicalIndexes.INDEX_FIRST_CONTACT,
-                        TypicalIndexes.INDEX_SECOND_CONTACT))
+        String expectedString = AllocateClassGroupCommand.class.getCanonicalName() + "{"
+                + "classGroupName=" + new ClassGroupName(ClassGroupBuilder.DEFAULT_NAME)
+                + ", contactIndices="
+                + new ArrayList<>(
+                        Arrays.asList(TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT))
                 + "}";
 
         Assertions.assertEquals(expectedString, allocateClassGroupCommand.toString());
