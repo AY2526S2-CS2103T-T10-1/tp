@@ -16,6 +16,7 @@ import cpp.model.classgroup.ClassGroup;
 import cpp.model.classgroup.ClassGroupName;
 import cpp.model.classgroup.exceptions.ContactAlreadyAllocatedClassGroupException;
 import cpp.model.contact.Contact;
+import cpp.model.util.ClassGroupUtil;
 
 /**
  * Allocates a contact to a class group by their displayed indices.
@@ -60,14 +61,18 @@ public class AllocateClassGroupCommand extends Command {
         Objects.requireNonNull(model);
 
         List<ClassGroup> classGroupList = model.getAddressBook().getClassGroupList();
-        ClassGroup classGroupToAllocate = this.findClassGroupToAllocate(classGroupList);
+        ClassGroup classGroupToAllocate = ClassGroupUtil.findClassGroup(classGroupList, this.classGroupName);
+
+        if (classGroupToAllocate == null) {
+            throw new CommandException(AllocateClassGroupCommand.MESSAGE_INVALID_CLASS_GROUP_NAME);
+        }
 
         List<Contact> lastShownContactList = model.getFilteredContactList();
         CommandUtil.checkContactIndices(lastShownContactList, this.contactIndices);
-        this.allocateContactsToClassGroup(model, lastShownContactList, classGroupToAllocate);
+        this.allocateContactsToClassGroup(classGroupToAllocate, lastShownContactList);
 
         return new CommandResult(
-                String.format(AllocateClassGroupCommand.MESSAGE_SUCCESS, classGroupToAllocate.getName(),
+                String.format(AllocateClassGroupCommand.MESSAGE_SUCCESS, this.classGroupName.fullName,
                         this.successfulAllocations, this.successfullyAllocatedNames.toString()));
     }
 
@@ -94,8 +99,8 @@ public class AllocateClassGroupCommand extends Command {
                 .toString();
     }
 
-    private void allocateContactsToClassGroup(Model model, List<Contact> lastShownContactList,
-            ClassGroup classGroupToAllocate) throws CommandException {
+    private void allocateContactsToClassGroup(ClassGroup classGroupToAllocate, List<Contact> lastShownContactList)
+            throws CommandException {
         boolean anySuccessfulAllocation = false;
         for (Index index : this.contactIndices) {
             String contactId = lastShownContactList.get(index.getZeroBased()).getId();
@@ -113,15 +118,6 @@ public class AllocateClassGroupCommand extends Command {
         if (!anySuccessfulAllocation) {
             throw new CommandException(AllocateClassGroupCommand.MESSAGE_ALLOCATION_FAILED);
         }
-    }
-
-    private ClassGroup findClassGroupToAllocate(List<ClassGroup> classGroupList) throws CommandException {
-        for (ClassGroup classGroup : classGroupList) {
-            if (classGroup.getName().equals(this.classGroupName)) {
-                return classGroup;
-            }
-        }
-        throw new CommandException(AllocateClassGroupCommand.MESSAGE_INVALID_CLASS_GROUP_NAME);
     }
 
     private void buildSuccessfulAllocationString(String contactName) {

@@ -3,6 +3,8 @@ package cpp.model.classgroup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import cpp.model.classgroup.exceptions.ContactAlreadyAllocatedClassGroupException;
+import cpp.model.classgroup.exceptions.ContactNotAllocatedClassGroupException;
 import cpp.testutil.ClassGroupBuilder;
 
 public class ClassGroupTest {
@@ -56,4 +58,39 @@ public class ClassGroupTest {
         Assertions.assertTrue(s.contains(cg.getName().fullName));
     }
 
+    @Test
+    public void allocateContact_newContact_success() {
+        ClassGroup cg = new ClassGroupBuilder().build();
+        String contactId1 = "contactId1";
+        String contactId2 = "contactId2";
+        cg.allocateContact(contactId1);
+        cg.allocateContact(contactId2);
+        Assertions.assertTrue(cg.getContactIdSet().contains(contactId1));
+        Assertions.assertTrue(cg.getContactIdSet().contains(contactId2));
+    }
+
+    @Test
+    public void allocateContact_duplicateAllocation_throwsException() {
+        ClassGroup cg = new ClassGroupBuilder().build();
+        String contactId = "contactId";
+        cg.allocateContact(contactId);
+        Assertions.assertThrows(ContactAlreadyAllocatedClassGroupException.class, () -> cg.allocateContact(contactId));
+    }
+
+    @Test
+    public void unallocateContact_allocatedContact_success() {
+        ClassGroup cg = new ClassGroupBuilder().build();
+        String contactId = "contactId";
+        cg.allocateContact(contactId);
+        Assertions.assertTrue(cg.getContactIdSet().contains(contactId));
+        cg.unallocateContact(contactId);
+        Assertions.assertFalse(cg.getContactIdSet().contains(contactId));
+    }
+
+    @Test
+    public void unallocateContact_notAllocatedContact_throwsException() {
+        ClassGroup cg = new ClassGroupBuilder().build();
+        String contactId = "contactId";
+        Assertions.assertThrows(ContactNotAllocatedClassGroupException.class, () -> cg.unallocateContact(contactId));
+    }
 }
