@@ -12,6 +12,7 @@ import cpp.logic.parser.Parser;
 import cpp.logic.parser.ParserUtil;
 import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.assignment.AssignmentName;
+import cpp.model.classgroup.ClassGroupName;
 
 /**
  * Parses input arguments and creates a new AllocateAssignmentCommand object.
@@ -43,6 +44,12 @@ public class AllocateAssignmentCommandParser implements Parser<AllocateAssignmen
         if (ParserUtil.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_CONTACT)) {
             String contactString = argMultimap.getValue(CliSyntax.PREFIX_CONTACT).orElse("");
             contactIndices = ParserUtil.parseContactIndices(contactString);
+        }
+
+        if (ParserUtil.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_CLASS)) {
+            String classGroupString = argMultimap.getValue(CliSyntax.PREFIX_CLASS).orElse("");
+            ClassGroupName classGroupName = ParserUtil.parseClassGroupName(classGroupString);
+            return new AllocateAssignmentCommand(assignmentName, contactIndices, classGroupName);
         }
 
         return new AllocateAssignmentCommand(assignmentName, contactIndices);
