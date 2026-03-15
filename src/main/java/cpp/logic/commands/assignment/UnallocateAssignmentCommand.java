@@ -10,6 +10,7 @@ import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
 import cpp.logic.commands.CommandUtil;
+import cpp.logic.commands.classgroup.AllocateClassGroupCommand;
 import cpp.logic.commands.exceptions.CommandException;
 import cpp.logic.parser.CliSyntax;
 import cpp.model.Model;
@@ -46,9 +47,7 @@ public class UnallocateAssignmentCommand extends Command {
     public static final String MESSAGE_SUCCESS = """
             Unallocated assignment: %1$s from %2$s contacts.\nContacts unallocated: %3$s
             """;
-    public static final String MESSAGE_INVALID_ASSIGNMENT_NAME = "The assignment name provided is invalid";
     public static final String MESSAGE_UNALLOCATION_FAILED = "No contacts were unallocated the assignment.";
-    public static final String MESSAGE_INVALID_CLASS_GROUP_NAME = "The class group name provided is invalid";
 
     private final AssignmentName assignmentName;
     private final List<Index> contactIndices;
@@ -95,7 +94,7 @@ public class UnallocateAssignmentCommand extends Command {
         Assignment assignmentToUnallocate = AssignmentUtil.findAssignment(assignmentList, this.assignmentName);
 
         if (assignmentToUnallocate == null) {
-            throw new CommandException(UnallocateAssignmentCommand.MESSAGE_INVALID_ASSIGNMENT_NAME);
+            throw new CommandException(AllocateAssignmentCommand.MESSAGE_INVALID_ASSIGNMENT_NAME);
         }
 
         List<Contact> lastShownContactList = model.getFilteredContactList();
@@ -105,7 +104,7 @@ public class UnallocateAssignmentCommand extends Command {
         ClassGroup classGroupToUnallocate = ClassGroupUtil.findClassGroup(model.getAddressBook().getClassGroupList(),
                 this.classGroupName);
         if (this.classGroupName != null && classGroupToUnallocate == null) {
-            throw new CommandException(UnallocateAssignmentCommand.MESSAGE_INVALID_CLASS_GROUP_NAME);
+            throw new CommandException(AllocateClassGroupCommand.MESSAGE_INVALID_CLASS_GROUP_NAME);
         }
 
         this.unallocateFromContactsByContactIndices(model, assignmentToUnallocate, lastShownContactList);
