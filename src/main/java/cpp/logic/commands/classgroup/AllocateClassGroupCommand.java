@@ -6,9 +6,9 @@ import java.util.Objects;
 
 import cpp.commons.core.index.Index;
 import cpp.commons.util.ToStringBuilder;
-import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
+import cpp.logic.commands.CommandUtil;
 import cpp.logic.commands.exceptions.CommandException;
 import cpp.logic.parser.CliSyntax;
 import cpp.model.Model;
@@ -64,7 +64,7 @@ public class AllocateClassGroupCommand extends Command {
         ClassGroup classGroupToAllocate = this.findClassGroupToAllocate(classGroupList);
 
         List<Contact> lastShownContactList = model.getFilteredContactList();
-        this.checkContactIndicesInRange(lastShownContactList, this.contactIndices);
+        CommandUtil.checkContactIndices(lastShownContactList, this.contactIndices);
         this.allocateContactsToClassGroup(model, lastShownContactList, classGroupToAllocate);
 
         return new CommandResult(
@@ -93,15 +93,6 @@ public class AllocateClassGroupCommand extends Command {
                 .add("classGroupName", this.classGroupName)
                 .add("contactIndices", this.contactIndices)
                 .toString();
-    }
-
-    private void checkContactIndicesInRange(List<Contact> lastShownContactList, List<Index> contactIndices)
-            throws CommandException {
-        for (Index index : contactIndices) {
-            if (index.getZeroBased() >= lastShownContactList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX);
-            }
-        }
     }
 
     private void allocateContactsToClassGroup(Model model, List<Contact> lastShownContactList,

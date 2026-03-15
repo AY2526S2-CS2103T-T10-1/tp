@@ -9,6 +9,7 @@ import cpp.commons.util.ToStringBuilder;
 import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
+import cpp.logic.commands.CommandUtil;
 import cpp.logic.commands.exceptions.CommandException;
 import cpp.logic.parser.CliSyntax;
 import cpp.model.Model;
@@ -20,7 +21,8 @@ import cpp.model.contact.Contact;
 import cpp.model.util.AssignmentUtil;
 
 /**
- * Allocates an existing assignment to a contact by their displayed indices.
+ * Allocates an existing assignment to a contact by their displayed indices or
+ * class group.
  */
 public class AllocateAssignmentCommand extends Command {
 
@@ -72,7 +74,7 @@ public class AllocateAssignmentCommand extends Command {
 
         List<Contact> lastShownContactList = model.getFilteredContactList();
 
-        this.checkContactIndices(lastShownContactList);
+        CommandUtil.checkContactIndices(lastShownContactList, this.contactIndices);
 
         return this.allocateToContacts(model, assignmentToAllocate, lastShownContactList);
     }
@@ -95,14 +97,6 @@ public class AllocateAssignmentCommand extends Command {
                 .add("assignmentName", this.assignmentName)
                 .add("contactIndices", this.contactIndices)
                 .toString();
-    }
-
-    private void checkContactIndices(List<Contact> lastShownContactList) throws CommandException {
-        for (Index idx : this.contactIndices) {
-            if (idx.getZeroBased() >= lastShownContactList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX);
-            }
-        }
     }
 
     private CommandResult allocateToContacts(Model model, Assignment assignmentToAllocate,

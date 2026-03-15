@@ -8,6 +8,7 @@ import cpp.commons.util.ToStringBuilder;
 import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
+import cpp.logic.commands.CommandUtil;
 import cpp.logic.commands.exceptions.CommandException;
 import cpp.logic.parser.CliSyntax;
 import cpp.model.Model;
@@ -54,7 +55,7 @@ public class AddClassGroupCommand extends Command {
         }
 
         List<Contact> lastShownContactList = model.getFilteredContactList();
-        this.checkContactIndicesInRange(lastShownContactList, this.contactIndices);
+        CommandUtil.checkContactIndices(lastShownContactList, this.contactIndices);
         this.allocateContactsToClassGroup(model, lastShownContactList);
 
         model.addClassGroup(this.toAdd);
@@ -81,15 +82,6 @@ public class AddClassGroupCommand extends Command {
                 .add("toAdd", this.toAdd)
                 .add("contactIndices", this.contactIndices)
                 .toString();
-    }
-
-    private void checkContactIndicesInRange(List<Contact> lastShownContactList, List<Index> contactIndices)
-            throws CommandException {
-        for (Index index : contactIndices) {
-            if (index.getZeroBased() >= lastShownContactList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX);
-            }
-        }
     }
 
     private void allocateContactsToClassGroup(Model model, List<Contact> lastShownContactList) {
