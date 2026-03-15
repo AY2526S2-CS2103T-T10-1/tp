@@ -41,7 +41,7 @@ public class ClassGroup {
         CollectionUtil.requireAllNonNull(id, name);
         this.id = id;
         this.name = name;
-        this.contactIdSet = new HashSet<>(); // TODO: load contact IDs from storage when that feature is implemented
+        this.contactIdSet = new HashSet<>();
     }
 
     public String getId() {
