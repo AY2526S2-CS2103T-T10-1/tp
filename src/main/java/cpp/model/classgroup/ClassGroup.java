@@ -7,6 +7,7 @@ import java.util.UUID;
 import cpp.commons.util.CollectionUtil;
 import cpp.commons.util.ToStringBuilder;
 import cpp.model.classgroup.exceptions.ContactAlreadyAllocatedClassGroupException;
+import cpp.model.classgroup.exceptions.ContactNotAllocatedClassGroupException;
 
 /**
  * Represents a Class Grouping in the address book.
@@ -65,6 +66,17 @@ public class ClassGroup {
             throw new ContactAlreadyAllocatedClassGroupException();
         }
         this.contactIdSet.add(contactId);
+    }
+
+    /**
+     * Unallocates a contact from this class group. If the contact is not allocated
+     * to this class group, a ContactNotAllocatedClassGroupException is thrown.
+     */
+    public void unallocateContact(String contactId) throws ContactNotAllocatedClassGroupException {
+        if (!this.contactIdSet.contains(contactId)) {
+            throw new ContactNotAllocatedClassGroupException();
+        }
+        this.contactIdSet.remove(contactId);
     }
 
     @Override
