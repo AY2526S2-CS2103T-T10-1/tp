@@ -5,6 +5,7 @@ import java.util.List;
 import cpp.commons.core.index.Index;
 import cpp.logic.commands.classgroup.AddClassGroupCommand;
 import cpp.logic.commands.classgroup.AllocateClassGroupCommand;
+import cpp.logic.commands.classgroup.UnallocateClassGroupCommand;
 import cpp.logic.parser.CliSyntax;
 import cpp.model.classgroup.ClassGroup;
 
@@ -26,6 +27,15 @@ public class ClassGroupUtil {
      */
     public static String getAllocateClassGroupCommand(ClassGroup classGroup, List<Index> contactIndices) {
         return AllocateClassGroupCommand.COMMAND_WORD + " " + ClassGroupUtil.getClassGroupDetails(classGroup) + " "
+                + CliSyntax.PREFIX_CONTACT + ClassGroupUtil.getContactIndicesString(contactIndices);
+    }
+
+    /**
+     * Returns an unallocate command string for unallocating the {@code classGroup}
+     * from the specified {@code contactIndices}.
+     */
+    public static String getUnallocateClassGroupCommand(ClassGroup classGroup, List<Index> contactIndices) {
+        return UnallocateClassGroupCommand.COMMAND_WORD + " " + ClassGroupUtil.getClassGroupDetails(classGroup) + " "
                 + CliSyntax.PREFIX_CONTACT + ClassGroupUtil.getContactIndicesString(contactIndices);
     }
 
