@@ -13,7 +13,8 @@ import cpp.model.assignment.ContactAssignment;
 class JsonAdaptedContactAssignment {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "ContactAssignment's %s field is missing!";
-    public static final String INVALID_ASSIGNMENT_ID_MESSAGE = "Assignment with id %s does not exist in the address book";
+    public static final String INVALID_ASSIGNMENT_ID_MESSAGE = """
+            Assignment with id %s does not exist in the address book""";
     public static final String INVALID_CONTACT_ID_MESSAGE = "Contact with id %s does not exist in the address book";
 
     private final String assignmentId;
