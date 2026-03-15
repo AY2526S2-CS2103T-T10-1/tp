@@ -128,8 +128,9 @@ public class UnallocateAssignmentCommand extends Command {
             return false;
         }
         UnallocateAssignmentCommand o = (UnallocateAssignmentCommand) other;
-        return this.assignmentName.equals(o.assignmentName) && this.contactIndices.equals(o.contactIndices)
-                && this.classGroupName.equals(o.classGroupName);
+        return this.assignmentName.equals(o.assignmentName)
+                && this.contactIndices.equals(o.contactIndices)
+                && Objects.equals(this.classGroupName, o.classGroupName);
     }
 
     @Override
