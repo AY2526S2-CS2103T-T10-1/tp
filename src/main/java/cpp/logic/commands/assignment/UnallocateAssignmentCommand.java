@@ -70,6 +70,10 @@ public class UnallocateAssignmentCommand extends Command {
         this.unallocatedContacts = new StringBuilder();
     }
 
+    /**
+     * Creates an UnallocateAssignmentCommand with the specified assignment, contact
+     * indices, and class group.
+     */
     public UnallocateAssignmentCommand(AssignmentName assignmentName, List<Index> contactIndices,
             ClassGroupName classGroupName) {
         Objects.requireNonNull(assignmentName);
