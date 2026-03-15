@@ -8,10 +8,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import cpp.commons.core.GuiSettings;
+import cpp.model.classgroup.ClassGroup;
+import cpp.model.classgroup.exceptions.DuplicateClassGroupException;
 import cpp.model.contact.ContactNameContainsKeywordsPredicate;
 import cpp.testutil.AddressBookBuilder;
 import cpp.testutil.Assert;
+import cpp.testutil.ClassGroupBuilder;
 import cpp.testutil.TypicalAssignments;
+import cpp.testutil.TypicalClassGroups;
 import cpp.testutil.TypicalContacts;
 
 public class ModelManagerTest {
@@ -130,6 +134,83 @@ public class ModelManagerTest {
         Assertions.assertTrue(this.modelManager.hasAssignment(TypicalAssignments.ASSIGNMENT_ONE));
         this.modelManager.deleteAssignment(TypicalAssignments.ASSIGNMENT_ONE);
         Assertions.assertFalse(this.modelManager.hasAssignment(TypicalAssignments.ASSIGNMENT_ONE));
+    }
+
+    @Test
+    public void hasClassGroup_nullClassGroup_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class,
+                () -> this.modelManager.hasClassGroup(null));
+    }
+
+    @Test
+    public void hasClassGroup_classGroupNotInAddressBook_returnsFalse() {
+        Assertions.assertFalse(this.modelManager.hasClassGroup(TypicalClassGroups.CLASS_GROUP_ONE));
+    }
+
+    @Test
+    public void hasClassGroup_classGroupInAddressBook_returnsTrue() {
+        this.modelManager.addClassGroup(TypicalClassGroups.CLASS_GROUP_ONE);
+        Assertions.assertTrue(this.modelManager.hasClassGroup(TypicalClassGroups.CLASS_GROUP_ONE));
+    }
+
+    @Test
+    public void addClassGroup_nullClassGroup_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class,
+                () -> this.modelManager.addClassGroup(null));
+    }
+
+    @Test
+    public void addClassGroup_validClassGroup_addSuccessful() {
+        this.modelManager.addClassGroup(TypicalClassGroups.CLASS_GROUP_ONE);
+        Assertions.assertTrue(this.modelManager.hasClassGroup(TypicalClassGroups.CLASS_GROUP_ONE));
+    }
+
+    @Test
+    public void addClassGroup_duplicateName_throwsDuplicateClassGroupException() {
+        this.modelManager.addClassGroup(TypicalClassGroups.CLASS_GROUP_ONE);
+        ClassGroup duplicateNameDifferentId = new ClassGroupBuilder(TypicalClassGroups.CLASS_GROUP_ONE)
+                .withId("aaaaaaaa-1111-2222-3333-bbbbbbbbbbb9")
+                .build();
+        Assert.assertThrows(DuplicateClassGroupException.class,
+                () -> this.modelManager.addClassGroup(duplicateNameDifferentId));
+    }
+
+    @Test
+    public void setClassGroup_nullTarget_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class,
+                () -> this.modelManager.setClassGroup(null, TypicalClassGroups.CLASS_GROUP_ONE));
+    }
+
+    @Test
+    public void setClassGroup_nullEditedClassGroup_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class,
+                () -> this.modelManager.setClassGroup(TypicalClassGroups.CLASS_GROUP_ONE, null));
+    }
+
+    @Test
+    public void setClassGroup_validClassGroup_updatesClassGroup() {
+        this.modelManager.addClassGroup(TypicalClassGroups.CLASS_GROUP_ONE);
+
+        ClassGroup edited = new ClassGroupBuilder(TypicalClassGroups.CLASS_GROUP_ONE)
+                .withId("aaaaaaaa-1111-2222-3333-bbbbbbbbbbb8")
+                .build();
+        this.modelManager.setClassGroup(TypicalClassGroups.CLASS_GROUP_ONE, edited);
+
+        Assertions.assertFalse(this.modelManager.getAddressBook().getClassGroupList()
+                .contains(TypicalClassGroups.CLASS_GROUP_ONE));
+        Assertions.assertTrue(this.modelManager.getAddressBook().getClassGroupList().contains(edited));
+    }
+
+    @Test
+    public void deleteClassGroup_classGroupInAddressBook_removesClassGroup() {
+        this.modelManager.addClassGroup(TypicalClassGroups.CLASS_GROUP_ONE);
+        Assertions.assertTrue(this.modelManager.getAddressBook().getClassGroupList()
+                .contains(TypicalClassGroups.CLASS_GROUP_ONE));
+
+        this.modelManager.deleteClassGroup(TypicalClassGroups.CLASS_GROUP_ONE);
+        Assertions.assertFalse(this.modelManager.getAddressBook().getClassGroupList()
+                .contains(TypicalClassGroups.CLASS_GROUP_ONE));
+        Assertions.assertFalse(this.modelManager.hasClassGroup(TypicalClassGroups.CLASS_GROUP_ONE));
     }
 
     @Test
