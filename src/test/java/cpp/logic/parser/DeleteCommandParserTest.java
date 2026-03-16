@@ -8,7 +8,9 @@ import cpp.logic.Messages;
 import cpp.logic.commands.DeleteCommand;
 import cpp.logic.commands.DeleteContactCommand;
 import cpp.logic.commands.assignment.DeleteAssignmentCommand;
+import cpp.logic.commands.classgroup.DeleteClassGroupCommand;
 import cpp.model.assignment.AssignmentName;
+import cpp.model.classgroup.ClassGroupName;
 import cpp.testutil.TypicalIndexes;
 
 public class DeleteCommandParserTest {
@@ -56,5 +58,17 @@ public class DeleteCommandParserTest {
     public void parse_emptyContactIndices_throwsParseException() {
         CommandParserTestUtil.assertParseFailure(this.parser, " ct/",
                 ParserUtil.MESSAGE_EMPTY_INDICES);
+    }
+
+    @Test
+    public void parse_validClassGroupArgs_returnsDeleteClassGroupCommand() {
+        CommandParserTestUtil.assertParseSuccess(this.parser, " c/CS2103T10",
+                new DeleteClassGroupCommand(new ClassGroupName("CS2103T10")));
+    }
+
+    @Test
+    public void parse_emptyClassGroupName_throwsParseException() {
+        CommandParserTestUtil.assertParseFailure(this.parser, " c/",
+                ParserUtil.MESSAGE_EMPTY_CLASS_GROUP_NAME);
     }
 }
