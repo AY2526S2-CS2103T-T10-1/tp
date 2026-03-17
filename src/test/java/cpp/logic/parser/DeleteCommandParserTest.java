@@ -8,7 +8,9 @@ import cpp.logic.Messages;
 import cpp.logic.commands.DeleteCommand;
 import cpp.logic.commands.DeleteContactCommand;
 import cpp.logic.commands.assignment.DeleteAssignmentCommand;
+import cpp.logic.commands.classgroup.DeleteClassGroupCommand;
 import cpp.model.assignment.AssignmentName;
+import cpp.model.classgroup.ClassGroupName;
 import cpp.testutil.TypicalIndexes;
 
 public class DeleteCommandParserTest {
@@ -47,7 +49,7 @@ public class DeleteCommandParserTest {
     }
 
     @Test
-    public void parse_bothPrefixes_throwsParseException() {
+    public void parse_contactAndAssignmentPrefixes_throwsParseException() {
         CommandParserTestUtil.assertParseFailure(this.parser, " ct/1 ass/Assignment 1",
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
     }
@@ -56,5 +58,35 @@ public class DeleteCommandParserTest {
     public void parse_emptyContactIndices_throwsParseException() {
         CommandParserTestUtil.assertParseFailure(this.parser, " ct/",
                 ParserUtil.MESSAGE_EMPTY_INDICES);
+    }
+
+    @Test
+    public void parse_validClassGroupArgs_returnsDeleteClassGroupCommand() {
+        CommandParserTestUtil.assertParseSuccess(this.parser, " c/CS2103T10",
+                new DeleteClassGroupCommand(new ClassGroupName("CS2103T10")));
+    }
+
+    @Test
+    public void parse_emptyClassGroupName_throwsParseException() {
+        CommandParserTestUtil.assertParseFailure(this.parser, " c/",
+                ClassGroupName.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_contactAndClassPrefixes_throwsParseException() {
+        CommandParserTestUtil.assertParseFailure(this.parser, " ct/1 c/CS2103T10",
+                String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_assignmentAndClassPrefixes_throwsParseException() {
+        CommandParserTestUtil.assertParseFailure(this.parser, " ass/Assignment 1 c/CS2103T10",
+                String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_allThreePrefixes_throwsParseException() {
+        CommandParserTestUtil.assertParseFailure(this.parser, " ct/1 ass/Assignment 1 c/CS2103T10",
+                String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
     }
 }
