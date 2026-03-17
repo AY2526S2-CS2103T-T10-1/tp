@@ -144,7 +144,7 @@ public class AddressBookTest {
     public void removeContact_contactInAddressBook_removesContact() {
         this.addressBook.addContact(TypicalContacts.ALICE);
         Assertions.assertTrue(this.addressBook.hasContact(TypicalContacts.ALICE));
-        this.addressBook.removeContact(TypicalContacts.ALICE);
+        this.addressBook.removeContact(TypicalContacts.ALICE, List.of());
         Assertions.assertFalse(this.addressBook.hasContact(TypicalContacts.ALICE));
     }
 
@@ -154,7 +154,7 @@ public class AddressBookTest {
                 LocalDateTime.of(2020, 1, 1, 10, 0));
         this.addressBook.addAssignment(assignment);
         Assertions.assertTrue(this.addressBook.hasAssignment(assignment));
-        this.addressBook.removeAssignment(assignment);
+        this.addressBook.removeAssignment(assignment, List.of());
         Assertions.assertFalse(this.addressBook.hasAssignment(assignment));
     }
 

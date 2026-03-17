@@ -1,6 +1,7 @@
 package cpp.model;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -115,11 +116,15 @@ public class ModelManager implements Model {
 
     @Override
     public void deleteContact(Contact target) {
-        this.addressBook.removeContact(target);
+        Objects.requireNonNull(target);
+        List<ContactAssignment> caList = this.assignmentManager.getContactAssignmentsForContact(target);
+        this.assignmentManager.deregisterContactAssignmentsForContact(target);
+        this.addressBook.removeContact(target, caList);
     }
 
     @Override
     public void addContact(Contact contact) {
+        Objects.requireNonNull(contact);
         this.addressBook.addContact(contact);
         this.updateFilteredContactList(Model.PREDICATE_SHOW_ALL_CONTACTS);
     }
@@ -146,7 +151,10 @@ public class ModelManager implements Model {
 
     @Override
     public void deleteAssignment(Assignment target) {
-        this.addressBook.removeAssignment(target);
+        Objects.requireNonNull(target);
+        List<ContactAssignment> caList = this.assignmentManager.getContactAssignmentsForAssignment(target);
+        this.assignmentManager.deregisterContactAssignmentsForAssignment(target);
+        this.addressBook.removeAssignment(target, caList);
     }
 
     @Override

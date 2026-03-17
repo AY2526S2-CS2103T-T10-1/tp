@@ -11,6 +11,7 @@ import cpp.logic.commands.exceptions.CommandException;
 import cpp.model.Model;
 import cpp.model.assignment.Assignment;
 import cpp.model.assignment.AssignmentName;
+import cpp.model.util.AssignmentUtil;
 
 /**
  * Deletes an assignment identified using its name from the address book.
@@ -30,10 +31,11 @@ public class DeleteAssignmentCommand extends DeleteCommand {
         Objects.requireNonNull(model);
         List<Assignment> assignmentList = model.getAddressBook().getAssignmentList();
 
-        Assignment assignmentToDelete = assignmentList.stream()
-                .filter(a -> a.getName().equals(this.targetName))
-                .findFirst()
-                .orElseThrow(() -> new CommandException(Messages.MESSAGE_ASSIGNMENT_NOT_FOUND));
+        Assignment assignmentToDelete = AssignmentUtil.findAssignment(assignmentList, this.targetName);
+
+        if (assignmentToDelete == null) {
+            throw new CommandException(Messages.MESSAGE_ASSIGNMENT_NOT_FOUND);
+        }
 
         model.deleteAssignment(assignmentToDelete);
         return new CommandResult(

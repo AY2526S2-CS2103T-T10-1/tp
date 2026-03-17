@@ -9,6 +9,7 @@ import java.util.Objects;
 import cpp.commons.util.CollectionUtil;
 import cpp.model.assignment.exceptions.AssignmentNotSubmittedException;
 import cpp.model.assignment.exceptions.ContactAssignmentNotFoundException;
+import cpp.model.contact.Contact;
 
 /**
  * Manages allocations of assignments to contacts and their per-contact and
@@ -146,5 +147,71 @@ public class AssignmentManager {
     public Map<String, ContactAssignment> getContactAssignmentMappingForContact(String assignmentId) {
         Objects.requireNonNull(assignmentId);
         return Collections.unmodifiableMap(this.byAssignment.getOrDefault(assignmentId, Collections.emptyMap()));
+    }
+
+    /**
+     * Returns a list of contact assignments for the given assignment.
+     */
+    public List<ContactAssignment> getContactAssignmentsForAssignment(Assignment assignment) {
+        Objects.requireNonNull(assignment);
+        return List.copyOf(this.byAssignment.getOrDefault(assignment.getId(), Collections.emptyMap()).values());
+    }
+
+    /**
+     * Returns a list of contact assignments for the given contact.
+     */
+    public List<ContactAssignment> getContactAssignmentsForContact(Contact contact) {
+        Objects.requireNonNull(contact);
+        return List.copyOf(this.byContact.getOrDefault(contact.getId(), Collections.emptyMap()).values());
+    }
+
+    /**
+     * Deregisters all contact assignments for the given assignment ID. Should be
+     * called when an assignment is deleted.
+     */
+    public void deregisterContactAssignmentsForAssignment(Assignment assignment) {
+        Objects.requireNonNull(assignment);
+        String assignmentId = assignment.getId();
+        Map<String, ContactAssignment> assMap = this.byAssignment.remove(assignmentId);
+        if (assMap == null) {
+            return;
+        }
+
+        for (ContactAssignment ca : assMap.values()) {
+            Map<String, ContactAssignment> contactMap = this.byContact.get(ca.getContactId());
+            if (contactMap == null) {
+                continue;
+            }
+
+            contactMap.remove(assignmentId);
+            if (contactMap.isEmpty()) {
+                this.byContact.remove(ca.getContactId());
+            }
+        }
+    }
+
+    /**
+     * Deregisters all contact assignments for the given contact ID. Should be
+     * called when a contact is deleted.
+     */
+    public void deregisterContactAssignmentsForContact(Contact contact) {
+        Objects.requireNonNull(contact);
+        String contactId = contact.getId();
+        Map<String, ContactAssignment> contactMap = this.byContact.remove(contactId);
+        if (contactMap == null) {
+            return;
+        }
+
+        for (ContactAssignment ca : contactMap.values()) {
+            Map<String, ContactAssignment> assMap = this.byAssignment.get(ca.getAssignmentId());
+            if (assMap == null) {
+                continue;
+            }
+
+            assMap.remove(contactId);
+            if (assMap.isEmpty()) {
+                this.byAssignment.remove(ca.getAssignmentId());
+            }
+        }
     }
 }

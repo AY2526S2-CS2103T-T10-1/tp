@@ -3,6 +3,7 @@ package cpp.storage;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -88,7 +89,7 @@ public class JsonAddressBookStorageTest {
 
         // Modify data, overwrite exiting file, and read back
         original.addContact(TypicalContacts.HOON);
-        original.removeContact(TypicalContacts.ALICE);
+        original.removeContact(TypicalContacts.ALICE, List.of());
         jsonAddressBookStorage.saveAddressBook(original, filePath);
         readBack = jsonAddressBookStorage.readAddressBook(filePath).get();
         Assertions.assertEquals(original, new AddressBook(readBack));
