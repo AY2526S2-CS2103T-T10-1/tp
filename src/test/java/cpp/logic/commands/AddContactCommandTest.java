@@ -11,14 +11,18 @@ import org.junit.jupiter.api.Test;
 
 import cpp.commons.core.GuiSettings;
 import cpp.logic.Messages;
+import cpp.logic.commands.assignment.AllocateAssignmentCommand;
+import cpp.logic.commands.classgroup.AllocateClassGroupCommand;
 import cpp.logic.commands.exceptions.CommandException;
 import cpp.model.AddressBook;
 import cpp.model.Model;
 import cpp.model.ReadOnlyAddressBook;
 import cpp.model.ReadOnlyUserPrefs;
 import cpp.model.assignment.Assignment;
+import cpp.model.assignment.AssignmentName;
 import cpp.model.assignment.ContactAssignment;
 import cpp.model.classgroup.ClassGroup;
+import cpp.model.classgroup.ClassGroupName;
 import cpp.model.contact.Contact;
 import cpp.testutil.Assert;
 import cpp.testutil.ContactBuilder;
@@ -51,6 +55,28 @@ public class AddContactCommandTest {
         ModelStub modelStub = new ModelStubWithContact(validContact);
 
         Assert.assertThrows(CommandException.class, AddContactCommand.MESSAGE_DUPLICATE_CONTACT,
+                () -> addContactCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_invalidClassName_throwsCommandException() {
+        Contact validContact = new ContactBuilder().build();
+        AddContactCommand addContactCommand = new AddContactCommand(validContact, new ClassGroupName("CS2103T10"),
+                null);
+        ModelStub modelStub = new ModelStubAcceptingContactAdded();
+
+        Assert.assertThrows(CommandException.class, AllocateClassGroupCommand.MESSAGE_INVALID_CLASS_GROUP_NAME,
+                () -> addContactCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_invalidAssignmentName_throwsCommandException() {
+        Contact validContact = new ContactBuilder().build();
+        AddContactCommand addContactCommand = new AddContactCommand(validContact, null,
+                new AssignmentName("Assignment 9"));
+        ModelStub modelStub = new ModelStubAcceptingContactAdded();
+
+        Assert.assertThrows(CommandException.class, AllocateAssignmentCommand.MESSAGE_INVALID_ASSIGNMENT_NAME,
                 () -> addContactCommand.execute(modelStub));
     }
 
