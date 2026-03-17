@@ -107,7 +107,7 @@ public class AddAssignmentCommandTest {
     }
 
     @Test
-    public void execute_allocation_withDuplicateBetweenContactIndicesAndClassGroup_skipsDuplicate() {
+    public void execute_duplicateBetweenContactIndicesAndClassGroup_skipsDuplicate() {
         AddAssignmentCommand addContactCommand = new AddAssignmentCommand(TypicalAssignments.ASSIGNMENT_ONE,
                 List.of(Index.fromOneBased(1)), new ClassGroupName("OverlapGroup"));
 

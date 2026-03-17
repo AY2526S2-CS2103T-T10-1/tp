@@ -74,7 +74,7 @@ public class UniqueContactAssignmentListTest {
     }
 
     @Test
-    public void setContactAssignments_validUniqueContactAssignmentList_replacesOwnListWithProvidedUniqueContactAssignmentList() {
+    public void setContactAssignments_validUniqueContactAssignmentList_replacesList() {
         UniqueContactAssignmentList replacement = new UniqueContactAssignmentList();
         ContactAssignment ca = new ContactAssignment("contactId", "assignmentId");
         replacement.add(ca);

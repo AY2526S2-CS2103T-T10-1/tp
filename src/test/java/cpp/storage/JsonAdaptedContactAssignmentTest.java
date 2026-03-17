@@ -46,7 +46,7 @@ public class JsonAdaptedContactAssignmentTest {
     }
 
     @Test
-    public void toModelType_validContactAssignmentDetailsFromContactAssignment_returnsContactAssignment() throws Exception {
+    public void toModelType_validContactAssignmentDetailsFromCa_returnsCa() throws Exception {
         AddressBook addressBook = new AddressBook();
         Assignment assignment = new Assignment(JsonAdaptedContactAssignmentTest.VALID_ASSIGNMENT_ID,
                 new AssignmentName("Assignment 1"), LocalDateTime.now());
@@ -56,12 +56,12 @@ public class JsonAdaptedContactAssignmentTest {
                 new ContactName("Alice"), new Phone("12345678"), new Email("alice@example.com"),
                 new Address("Some address"), tags);
         addressBook.addContact(contact);
-        ContactAssignment contactAssignment = new ContactAssignment(JsonAdaptedContactAssignmentTest.VALID_ASSIGNMENT_ID,
+        ContactAssignment contactAssignment = new ContactAssignment(
+                JsonAdaptedContactAssignmentTest.VALID_ASSIGNMENT_ID,
                 JsonAdaptedContactAssignmentTest.VALID_CONTACT_ID, true, true, 100);
         JsonAdaptedContactAssignment json = new JsonAdaptedContactAssignment(contactAssignment);
         Assertions.assertEquals(contactAssignment, json.toModelType(addressBook));
     }
-
 
     @Test
     public void toModelType_nullAssignmentId_throwsIllegalValueException() {
@@ -70,7 +70,8 @@ public class JsonAdaptedContactAssignmentTest {
                 JsonAdaptedContactAssignmentTest.VALID_CONTACT_ID, true, true, 100);
         String expectedMessage = String.format(JsonAdaptedContactAssignment.MISSING_FIELD_MESSAGE_FORMAT,
                 "assignmentId");
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, () -> json.toModelType(new AddressBook()));
+        Assert.assertThrows(IllegalValueException.class, expectedMessage,
+                () -> json.toModelType(new AddressBook()));
     }
 
     @Test
