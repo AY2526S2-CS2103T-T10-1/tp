@@ -471,7 +471,7 @@ public class ListCommandParserTest {
     public void parse_doubleVowels_throwsParseException() {
         CommandParserTestUtil.assertParseFailure(this.parser, "coontacts",
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
-        CommandParserTestUtil.assertParseFailure(this.parser, "aassignments",
+        CommandParserTestUtil.assertParseFailure(this.parser, "aassiignmeents",
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
     }
 
