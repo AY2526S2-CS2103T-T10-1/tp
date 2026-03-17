@@ -59,7 +59,11 @@ public class UniqueContactAssignmentList implements Iterable<ContactAssignment> 
     public void removeMultiple(List<ContactAssignment> toRemoveList) {
         CollectionUtil.requireAllNonNull(toRemoveList);
         for (ContactAssignment ca : toRemoveList) {
-            this.remove(ca);
+            try {
+                this.remove(ca);
+            } catch (ContactAssignmentNotFoundException e) {
+                // ignore if any contact assignment is not found since that aligns with our goal
+            }
         }
     }
 
