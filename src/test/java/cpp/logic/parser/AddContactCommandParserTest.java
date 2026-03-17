@@ -149,6 +149,30 @@ public class AddContactCommandParserTest {
     }
 
     @Test
+    public void parse_optionalClassPresent_success() {
+        Contact expectedContact = new ContactBuilder(TypicalContacts.AMY).withTags().build();
+        ClassGroupName expectedClassGroupName = new ClassGroupName("CS2103T10");
+
+        CommandParserTestUtil.assertParseSuccess(this.parser,
+                CommandTestUtil.NAME_DESC_AMY + CommandTestUtil.PHONE_DESC_AMY
+                        + CommandTestUtil.EMAIL_DESC_AMY + CommandTestUtil.ADDRESS_DESC_AMY
+                        + " " + CliSyntax.PREFIX_CLASS + expectedClassGroupName.fullName,
+                new AddContactCommand(expectedContact, expectedClassGroupName, null));
+    }
+
+    @Test
+    public void parse_optionalAssignmentPresent_success() {
+        Contact expectedContact = new ContactBuilder(TypicalContacts.AMY).withTags().build();
+        AssignmentName expectedAssignmentName = new AssignmentName("Assignment 1");
+
+        CommandParserTestUtil.assertParseSuccess(this.parser,
+                CommandTestUtil.NAME_DESC_AMY + CommandTestUtil.PHONE_DESC_AMY
+                        + CommandTestUtil.EMAIL_DESC_AMY + CommandTestUtil.ADDRESS_DESC_AMY
+                        + " " + CliSyntax.PREFIX_ASSIGNMENT + expectedAssignmentName.fullName,
+                new AddContactCommand(expectedContact, null, expectedAssignmentName));
+    }
+
+    @Test
     public void parse_repeatedOptionalValue_failure() {
         String validExpectedContactString = CommandTestUtil.NAME_DESC_BOB + CommandTestUtil.PHONE_DESC_BOB
                 + CommandTestUtil.EMAIL_DESC_BOB + CommandTestUtil.ADDRESS_DESC_BOB;
