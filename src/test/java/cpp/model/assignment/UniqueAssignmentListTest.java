@@ -23,6 +23,22 @@ public class UniqueAssignmentListTest {
     }
 
     @Test
+    public void containsId_nullId_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class, () -> this.uniqueAssignmentList.containsId(null));
+    }
+
+    @Test
+    public void containsId_assignmentNotInList_returnsFalse() {
+        Assertions.assertFalse(this.uniqueAssignmentList.containsId(TypicalAssignments.ASSIGNMENT_ONE.getId()));
+    }
+
+    @Test
+    public void containsId_assignmentInList_returnsTrue() {
+        this.uniqueAssignmentList.add(TypicalAssignments.ASSIGNMENT_ONE);
+        Assertions.assertTrue(this.uniqueAssignmentList.containsId(TypicalAssignments.ASSIGNMENT_ONE.getId()));
+    }
+
+    @Test
     public void contains_assignmentNotInList_returnsFalse() {
         Assertions.assertFalse(this.uniqueAssignmentList.contains(TypicalAssignments.ASSIGNMENT_ONE));
     }
@@ -165,6 +181,24 @@ public class UniqueAssignmentListTest {
     public void asUnmodifiableObservableList_modifyList_throwsUnsupportedOperationException() {
         Assert.assertThrows(UnsupportedOperationException.class,
                 () -> this.uniqueAssignmentList.asUnmodifiableObservableList().remove(0));
+    }
+
+    @Test
+    public void iterator_normalList_success() {
+        this.uniqueAssignmentList.add(TypicalAssignments.ASSIGNMENT_ONE);
+        this.uniqueAssignmentList.add(TypicalAssignments.ASSIGNMENT_TWO);
+        List<Assignment> expectedList = Arrays.asList(TypicalAssignments.ASSIGNMENT_ONE,
+                TypicalAssignments.ASSIGNMENT_TWO);
+        int i = 0;
+        for (Assignment assignment : this.uniqueAssignmentList) {
+            Assertions.assertEquals(expectedList.get(i), assignment);
+            i++;
+        }
+    }
+
+    @Test
+    public void equals_sameObject_returnsTrue() {
+        Assertions.assertTrue(this.uniqueAssignmentList.equals(this.uniqueAssignmentList));
     }
 
     @Test
