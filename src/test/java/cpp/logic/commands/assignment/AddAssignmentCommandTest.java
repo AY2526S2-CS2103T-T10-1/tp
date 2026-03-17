@@ -3,21 +3,29 @@ package cpp.logic.commands.assignment;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import cpp.commons.core.index.Index;
 import cpp.logic.Messages;
 import cpp.logic.commands.CommandResult;
 import cpp.logic.commands.exceptions.CommandException;
+import cpp.logic.parser.ParserUtil;
 import cpp.model.AddressBook;
 import cpp.model.ReadOnlyAddressBook;
 import cpp.model.assignment.Assignment;
+import cpp.model.assignment.ContactAssignment;
+import cpp.model.assignment.exceptions.ContactAlreadyAllocatedAssignmentException;
+import cpp.model.classgroup.ClassGroup;
+import cpp.model.classgroup.ClassGroupName;
 import cpp.model.contact.Contact;
 import cpp.testutil.Assert;
 import cpp.testutil.AssignmentBuilder;
 import cpp.testutil.ModelStub;
 import cpp.testutil.TypicalAssignments;
+import cpp.testutil.TypicalContacts;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -52,10 +60,93 @@ public class AddAssignmentCommandTest {
     }
 
     @Test
-    public void equals_sameValues_returnsTrue() {
+    public void execute_nullModel_throwsNullPointerException() {
+        AddAssignmentCommand addContactCommand = new AddAssignmentCommand(TypicalAssignments.ASSIGNMENT_ONE, List.of());
+
+        Assert.assertThrows(NullPointerException.class, () -> addContactCommand.execute(null));
+    }
+
+    @Test
+    public void execute_classGroupNotFound_throwsCommandException() {
+        AddAssignmentCommand addContactCommand = new AddAssignmentCommand(TypicalAssignments.ASSIGNMENT_ONE, List.of(),
+                new ClassGroupName("NonExistentClassGroup"));
+
+        Assert.assertThrows(CommandException.class, Messages.MESSAGE_CLASS_GROUP_NOT_FOUND,
+                () -> addContactCommand.execute(new ModelStubAcceptingAssignmentAdded()));
+    }
+
+    @Test
+    public void execute_validClassGroup_createsAssignmentAndAllocatesToContactsInClassGroup() {
+        AddAssignmentCommand addContactCommand = new AddAssignmentCommand(TypicalAssignments.ASSIGNMENT_ONE,
+                List.of(Index.fromOneBased(1)), new ClassGroupName("ValidClassGroup"));
+        ModelStubWithClassGroup modelStub = new ModelStubWithClassGroup();
+        try {
+            CommandResult result = addContactCommand.execute(modelStub);
+
+            // assignment added
+            Assertions.assertEquals(1, modelStub.assignmentsAdded.size());
+            Assertions.assertEquals(TypicalAssignments.ASSIGNMENT_ONE, modelStub.assignmentsAdded.get(0));
+
+            // two allocations: one by index (Alice) and one by class group (Benson)
+            Assertions.assertEquals(2, modelStub.contactAssignmentsAdded.size());
+            List<String> allocatedNames = modelStub.contactAssignmentsAdded.stream()
+                    .map(ca -> modelStub.getAddressBook().getContactList().stream()
+                            .filter(c -> c.getId().equals(ca.getContactId())).findFirst().get().getName().fullName)
+                    .collect(Collectors.toList());
+
+            String expectedAllocatedContacts = TypicalContacts.ALICE.getName().fullName + "; "
+                    + TypicalContacts.BENSON.getName().fullName;
+
+            Assertions.assertEquals(String.format(AddAssignmentCommand.MESSAGE_SUCCESS_WITH_ALLOCATION,
+                    Messages.format(TypicalAssignments.ASSIGNMENT_ONE), 2, expectedAllocatedContacts),
+                    result.getFeedbackToUser());
+
+        } catch (CommandException e) {
+            Assertions.fail("Execution of valid AddAssignmentCommand should not throw CommandException.");
+        }
+    }
+
+    @Test
+    public void execute_allocation_withDuplicateBetweenContactIndicesAndClassGroup_skipsDuplicate() {
+        AddAssignmentCommand addContactCommand = new AddAssignmentCommand(TypicalAssignments.ASSIGNMENT_ONE,
+                List.of(Index.fromOneBased(1)), new ClassGroupName("OverlapGroup"));
+
+        ModelStubWithClassGroupOverlap modelStub = new ModelStubWithClassGroupOverlap();
+        try {
+            CommandResult result = addContactCommand.execute(modelStub);
+
+            // assignment added
+            Assertions.assertEquals(1, modelStub.assignmentsAdded.size());
+
+            // allocation should only add Alice once (index + group overlap)
+            Assertions.assertEquals(1, modelStub.contactAssignmentsAdded.size());
+            String expectedAllocatedContacts = TypicalContacts.ALICE.getName().fullName;
+            Assertions.assertEquals(String.format(AddAssignmentCommand.MESSAGE_SUCCESS_WITH_ALLOCATION,
+                    Messages.format(TypicalAssignments.ASSIGNMENT_ONE), 1, expectedAllocatedContacts),
+                    result.getFeedbackToUser());
+
+        } catch (CommandException e) {
+            Assertions.fail("Execution should not throw CommandException.");
+        }
+    }
+
+    @Test
+    public void execute_invalidContactIndex_throwsCommandException() {
+        AddAssignmentCommand addContactCommand = new AddAssignmentCommand(TypicalAssignments.ASSIGNMENT_ONE,
+                List.of(Index.fromOneBased(100)));
+
+        ModelStubAcceptingAssignmentAdded modelStub = new ModelStubAcceptingAssignmentAdded();
+        Assert.assertThrows(CommandException.class, Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX,
+                () -> addContactCommand.execute(modelStub));
+    }
+
+    @Test
+    public void equals_sameValues_returnsTrue() throws Exception {
         Assignment assignment = TypicalAssignments.ASSIGNMENT_ONE;
-        AddAssignmentCommand addContactCommand = new AddAssignmentCommand(assignment, List.of());
-        AddAssignmentCommand addContactCommandCopy = new AddAssignmentCommand(assignment, List.of());
+        AddAssignmentCommand addContactCommand = new AddAssignmentCommand(assignment,
+                ParserUtil.parseContactIndices("1 2"), new ClassGroupName("ValidClassGroup"));
+        AddAssignmentCommand addContactCommandCopy = new AddAssignmentCommand(assignment,
+                ParserUtil.parseContactIndices("1 2"), new ClassGroupName("ValidClassGroup"));
 
         // same object -> true
         Assertions.assertTrue(addContactCommand.equals(addContactCommand));
@@ -65,9 +156,10 @@ public class AddAssignmentCommandTest {
     }
 
     @Test
-    public void equals_differentValues_returnsFalse() {
+    public void equals_differentValues_returnsFalse() throws Exception {
         Assignment assignment = TypicalAssignments.ASSIGNMENT_ONE;
-        AddAssignmentCommand addContactCommand = new AddAssignmentCommand(assignment, List.of());
+        AddAssignmentCommand addContactCommand = new AddAssignmentCommand(assignment,
+                ParserUtil.parseContactIndices("1 2"), new ClassGroupName("ValidClassGroup"));
 
         // different types -> false
         Assertions.assertFalse(addContactCommand.equals(1));
@@ -78,8 +170,19 @@ public class AddAssignmentCommandTest {
         // different assignment -> false
         Assignment different = new AssignmentBuilder(TypicalAssignments.ASSIGNMENT_ONE)
                 .withName("Different").build();
-        AddAssignmentCommand differentCommand = new AddAssignmentCommand(different, List.of());
+        AddAssignmentCommand differentCommand = new AddAssignmentCommand(different,
+                ParserUtil.parseContactIndices("1 2"), new ClassGroupName("ValidClassGroup"));
         Assertions.assertFalse(addContactCommand.equals(differentCommand));
+
+        // different contact indices -> false
+        AddAssignmentCommand differentCommand2 = new AddAssignmentCommand(assignment,
+                ParserUtil.parseContactIndices("2 3"), new ClassGroupName("ValidClassGroup"));
+        Assertions.assertFalse(addContactCommand.equals(differentCommand2));
+
+        // different class group -> false
+        AddAssignmentCommand differentCommand3 = new AddAssignmentCommand(assignment,
+                ParserUtil.parseContactIndices("1 2"), new ClassGroupName("DifferentClassGroup"));
+        Assertions.assertFalse(addContactCommand.equals(differentCommand3));
     }
 
     @Test
@@ -116,6 +219,7 @@ public class AddAssignmentCommandTest {
      */
     private class ModelStubAcceptingAssignmentAdded extends ModelStub {
         final ArrayList<Assignment> assignmentsAdded = new ArrayList<>();
+        final ArrayList<ContactAssignment> contactAssignmentsAdded = new ArrayList<>();
 
         @Override
         public boolean hasAssignment(Assignment assignment) {
@@ -130,6 +234,15 @@ public class AddAssignmentCommandTest {
         }
 
         @Override
+        public void addContactAssignment(ContactAssignment ca) {
+            Objects.requireNonNull(ca);
+            if (this.contactAssignmentsAdded.stream().anyMatch(existing -> existing.equals(ca))) {
+                throw new ContactAlreadyAllocatedAssignmentException();
+            }
+            this.contactAssignmentsAdded.add(ca);
+        }
+
+        @Override
         public ObservableList<Contact> getFilteredContactList() {
             return FXCollections.observableArrayList();
         }
@@ -137,6 +250,73 @@ public class AddAssignmentCommandTest {
         @Override
         public ReadOnlyAddressBook getAddressBook() {
             return new AddressBook();
+        }
+    }
+
+    private class ModelStubWithClassGroup extends ModelStubAcceptingAssignmentAdded {
+        @Override
+        public boolean hasClassGroup(ClassGroup classGroup) {
+            return classGroup.getName().equals(new ClassGroupName("ValidClassGroup"));
+        }
+
+        @Override
+        public void addContactAssignment(ContactAssignment ca) {
+            super.addContactAssignment(ca);
+        }
+
+        @Override
+        public ObservableList<Contact> getFilteredContactList() {
+            return FXCollections.observableArrayList(TypicalContacts.getTypicalContacts());
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            AddressBook ab = new AddressBook();
+            for (Contact c : TypicalContacts.getTypicalContacts()) {
+                ab.addContact(c);
+            }
+            ClassGroup cg = new ClassGroup(new ClassGroupName("ValidClassGroup"));
+            try {
+                cg.allocateContact(TypicalContacts.BENSON.getId());
+            } catch (Exception e) {
+                // ignore
+            }
+            ab.addClassGroup(cg);
+            return ab;
+        }
+
+    }
+
+    private class ModelStubWithClassGroupOverlap extends ModelStubAcceptingAssignmentAdded {
+        @Override
+        public boolean hasClassGroup(ClassGroup classGroup) {
+            return classGroup.getName().equals(new ClassGroupName("OverlapGroup"));
+        }
+
+        @Override
+        public void addContactAssignment(ContactAssignment ca) {
+            super.addContactAssignment(ca);
+        }
+
+        @Override
+        public ObservableList<Contact> getFilteredContactList() {
+            return FXCollections.observableArrayList(TypicalContacts.getTypicalContacts());
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            AddressBook ab = new AddressBook();
+            for (Contact c : TypicalContacts.getTypicalContacts()) {
+                ab.addContact(c);
+            }
+            ClassGroup cg = new ClassGroup(new ClassGroupName("OverlapGroup"));
+            try {
+                cg.allocateContact(TypicalContacts.ALICE.getId());
+            } catch (Exception e) {
+                // ignore
+            }
+            ab.addClassGroup(cg);
+            return ab;
         }
     }
 
