@@ -100,7 +100,7 @@ public class ListCommandTest {
     // ========== EDGE CASE INTEGRATION TESTS ==========
 
     @Test
-    public void execute_listContactCommandWithEmptyAddressBook_showsEmptyList() {
+    public void listContactCommand_emptyAddressBook_showsEmptyList() {
         Model model = new ModelManager(new AddressBookBuilder().build(), new UserPrefs());
         ListContactCommand command = new ListContactCommand();
         CommandResult result = command.execute(model);
@@ -111,7 +111,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listAssignmentCommand_emptyAddressBook() {
+    public void listAssignmentCommand_emptyAddressBook_showsEmptyList() {
         Model model = new ModelManager(new AddressBookBuilder().build(), new UserPrefs());
         ListAssignmentCommand command = new ListAssignmentCommand();
         CommandResult result = command.execute(model);
@@ -122,7 +122,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listClassCommand_emptyAddressBook() {
+    public void listClassCommand_emptyAddressBook_showsEmptyList() {
         Model model = new ModelManager(new AddressBookBuilder().build(), new UserPrefs());
         ListClassCommand command = new ListClassCommand();
         CommandResult result = command.execute(model);
@@ -133,7 +133,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listContactCommand_singleContact() {
+    public void listContactCommand_singleContact_showsList() {
         Model model = new ModelManager(
                 new AddressBookBuilder().withContact(TypicalContacts.ALICE).build(),
                 new UserPrefs());
@@ -146,7 +146,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listContactCommand_multipleContacts() {
+    public void listContactCommand_multipleContacts_showsList() {
         Model model = new ModelManager(
                 new AddressBookBuilder()
                         .withContact(TypicalContacts.ALICE)
@@ -163,7 +163,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listAssignmentCommand_singleAssignment() {
+    public void listAssignmentCommand_singleAssignment_showsList() {
         Model model = new ModelManager(
                 new AddressBookBuilder().withAssignment(TypicalAssignments.ASSIGNMENT_ONE).build(),
                 new UserPrefs());
@@ -176,7 +176,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listAssignmentCommand_multipleAssignments() {
+    public void listAssignmentCommand_multipleAssignments_showsList() {
         Model model = new ModelManager(
                 new AddressBookBuilder()
                         .withAssignment(TypicalAssignments.ASSIGNMENT_ONE)
@@ -192,7 +192,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listContactCommand_resetsFilters() {
+    public void listContactCommand_resetsFilters_showsAllData() {
         Model model = new ModelManager(
                 new AddressBookBuilder()
                         .withContact(TypicalContacts.ALICE)
@@ -213,7 +213,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listAssignmentCommand_resetsFilters() {
+    public void listAssignmentCommand_resetsFilters_showsAllData() {
         Model model = new ModelManager(
                 new AddressBookBuilder()
                         .withAssignment(TypicalAssignments.ASSIGNMENT_ONE)
@@ -234,7 +234,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listContactCommandMultipleTimes_showsAllData() {
+    public void listContactCommand_multipleExecutions_showsAllData() {
         Model model = new ModelManager(
                 new AddressBookBuilder()
                         .withContact(TypicalContacts.ALICE)
@@ -261,7 +261,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listContactCommand_correctViewType() {
+    public void listContactCommand_correctViewType_showList() {
         Model model = new ModelManager(new AddressBookBuilder().build(), new UserPrefs());
         ListContactCommand command = new ListContactCommand();
         CommandResult result = command.execute(model);
@@ -270,7 +270,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listAssignmentCommand_correctViewType() {
+    public void listAssignmentCommand_correctViewType_showList() {
         Model model = new ModelManager(new AddressBookBuilder().build(), new UserPrefs());
         ListAssignmentCommand command = new ListAssignmentCommand();
         CommandResult result = command.execute(model);
@@ -279,7 +279,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listClassCommand_correctViewType() {
+    public void listClassCommand_correctViewType_showList() {
         Model model = new ModelManager(new AddressBookBuilder().build(), new UserPrefs());
         ListClassCommand command = new ListClassCommand();
         CommandResult result = command.execute(model);
@@ -288,25 +288,19 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_nullModel_throwsNullPointerException() {
+    public void listContactCommand_nullModel_throwsNullPointerException() {
         ListContactCommand command = new ListContactCommand();
         Assertions.assertThrows(NullPointerException.class, () -> command.execute(null));
     }
 
     @Test
-    public void execute_listAssignmentCommandNullModel_throwsNullPointerException() {
+    public void listAssignmentCommand_nullModel_throwsNullPointerException() {
         ListAssignmentCommand command = new ListAssignmentCommand();
         Assertions.assertThrows(NullPointerException.class, () -> command.execute(null));
     }
 
     @Test
-    public void execute_listContactCommandNullModel_throwsNullPointerException() {
-        ListContactCommand command = new ListContactCommand();
-        Assertions.assertThrows(NullPointerException.class, () -> command.execute(null));
-    }
-
-    @Test
-    public void execute_listClassCommandNullModel_throwsNullPointerException() {
+    public void listClassCommand_nullModel_throwsNullPointerException() {
         ListClassCommand command = new ListClassCommand();
         Assertions.assertThrows(NullPointerException.class, () -> command.execute(null));
     }
@@ -336,7 +330,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listAfterModification_showsUpdatedData() {
+    public void listContactCommand_afterModification_showsUpdatedData() {
         Model model = new ModelManager(
                 new AddressBookBuilder().withContact(TypicalContacts.ALICE).build(),
                 new UserPrefs());
@@ -357,7 +351,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listAssignmentAfterModification_showsUpdatedData() {
+    public void listAssignmentCommand_afterModification_showsUpdatedData() {
         Model model = new ModelManager(
                 new AddressBookBuilder().withAssignment(TypicalAssignments.ASSIGNMENT_ONE).build(),
                 new UserPrefs());
@@ -376,7 +370,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_listClassAfterModification_showsUpdatedData() {
+    public void listClassCommand_afterModification_showsUpdatedData() {
         Model model = new ModelManager(new AddressBookBuilder().build(), new UserPrefs());
 
         ListClassCommand command = new ListClassCommand();
@@ -387,26 +381,5 @@ public class ListCommandTest {
         // Execute list again - should still show 0 items since nothing was added
         command.execute(model);
         Assertions.assertEquals(0, model.getFilteredClassGroupList().size());
-    }
-
-    @Test
-    public void execute_listContactCommandWithFilteredList_showsAllContacts() {
-        Model model = new ModelManager(
-                new AddressBookBuilder()
-                        .withContact(TypicalContacts.ALICE)
-                        .withContact(TypicalContacts.BENSON)
-                        .build(),
-                new UserPrefs());
-
-        // Apply a filter that shows only one contact
-        model.updateFilteredContactList(contact -> contact.getName().fullName.startsWith("A"));
-        Assertions.assertEquals(1, model.getFilteredContactList().size());
-
-        // Execute list command which should reset filters
-        ListContactCommand command = new ListContactCommand();
-        command.execute(model);
-
-        // Now all contacts should be visible
-        Assertions.assertEquals(2, model.getFilteredContactList().size());
     }
 }
