@@ -19,14 +19,14 @@ import cpp.model.contact.Contact;
 import cpp.model.util.ClassGroupUtil;
 
 /**
- * Unallocates a contact from a class group by their displayed indices.
+ * Unallocates contact(s) from a class group by their displayed indices.
  */
 public class UnallocateClassGroupCommand extends Command {
 
     public static final String COMMAND_WORD = "unallocclass";
 
     public static final String MESSAGE_USAGE = UnallocateClassGroupCommand.COMMAND_WORD
-            + ": Unallocates a contact from a class group. "
+            + ": Unallocates contact(s) from a class group. "
             + "Parameters: "
             + CliSyntax.PREFIX_CLASS + "CLASS NAME "
             + CliSyntax.PREFIX_CONTACT + "CONTACT INDICES...\n"

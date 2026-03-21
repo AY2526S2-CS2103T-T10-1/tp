@@ -26,7 +26,7 @@ import cpp.model.util.AssignmentUtil;
 import cpp.model.util.ClassGroupUtil;
 
 /**
- * Unallocates an existing assignment from a contact by their displayed indices
+ * Unallocates an existing assignment from contact(s) by their displayed indices
  * or class group.
  */
 public class UnallocateAssignmentCommand extends Command {
@@ -34,7 +34,7 @@ public class UnallocateAssignmentCommand extends Command {
     public static final String COMMAND_WORD = "unallocass";
 
     public static final String MESSAGE_USAGE = UnallocateAssignmentCommand.COMMAND_WORD
-            + ": Unallocates an assignment from a contact. "
+            + ": Unallocates an assignment from contact(s). "
             + "Parameters: "
             + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT NAME "
             + "[" + CliSyntax.PREFIX_CLASS + "CLASS NAME] "

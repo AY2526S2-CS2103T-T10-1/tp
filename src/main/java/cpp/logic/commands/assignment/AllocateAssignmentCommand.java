@@ -26,7 +26,7 @@ import cpp.model.util.AssignmentUtil;
 import cpp.model.util.ClassGroupUtil;
 
 /**
- * Allocates an existing assignment to a contact by their displayed indices or
+ * Allocates an existing assignment to contact(s) by their displayed indices or
  * class group.
  */
 public class AllocateAssignmentCommand extends Command {
@@ -34,7 +34,7 @@ public class AllocateAssignmentCommand extends Command {
     public static final String COMMAND_WORD = "allocass";
 
     public static final String MESSAGE_USAGE = AllocateAssignmentCommand.COMMAND_WORD
-            + ": Allocates an assignment to a contact. "
+            + ": Allocates an assignment to contact(s). "
             + "Parameters: "
             + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT NAME "
             + "[" + CliSyntax.PREFIX_CLASS + "CLASS NAME] "

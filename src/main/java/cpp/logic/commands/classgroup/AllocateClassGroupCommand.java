@@ -20,14 +20,14 @@ import cpp.model.contact.Contact;
 import cpp.model.util.ClassGroupUtil;
 
 /**
- * Allocates a contact to a class group by their displayed indices.
+ * Allocates contact(s) to a class group by their displayed indices.
  */
 public class AllocateClassGroupCommand extends Command {
 
     public static final String COMMAND_WORD = "allocclass";
 
     public static final String MESSAGE_USAGE = AllocateClassGroupCommand.COMMAND_WORD
-            + ": Allocates an contact to a class group. "
+            + ": Allocates contact(s) to a class group. "
             + "Parameters: "
             + CliSyntax.PREFIX_CLASS + "CLASS NAME "
             + CliSyntax.PREFIX_CONTACT + "CONTACT INDICES...\n"
