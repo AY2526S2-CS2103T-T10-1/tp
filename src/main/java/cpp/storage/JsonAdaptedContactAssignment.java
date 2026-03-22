@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import cpp.commons.exceptions.IllegalValueException;
 import cpp.logic.parser.ParserUtil;
+import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.AddressBook;
 import cpp.model.assignment.ContactAssignment;
 import cpp.model.assignment.GradeInfo;
@@ -133,22 +134,23 @@ class JsonAdaptedContactAssignment {
             } else {
                 modelGradingDate = null;
             }
-        } catch (DateTimeParseException e) {
+        } catch (ParseException e) {
             throw new IllegalValueException(String.format(JsonAdaptedContactAssignment.MISSING_FIELD_MESSAGE_FORMAT,
                     "gradingDate"));
         }
         try {
+            final float parsedScore = Float.parseFloat(this.score);
             if (!GradeInfo.isValidGradeInfo(Boolean.parseBoolean(this.isGraded), modelGradingDate,
-                    Integer.parseInt(this.score),
+                    parsedScore,
                     modelSubmissionInfo)) {
                 throw new IllegalValueException(GradeInfo.INVALID_GRADE_STRING);
             }
+
+            modelGradeInfo = new GradeInfo(Boolean.parseBoolean(this.isGraded), modelGradingDate,
+                    parsedScore, modelSubmissionInfo);
         } catch (NumberFormatException e) {
             throw new IllegalValueException(JsonAdaptedContactAssignment.INVALID_SCORE_MESSAGE);
         }
-
-        modelGradeInfo = new GradeInfo(Boolean.parseBoolean(this.isGraded), modelGradingDate,
-                Integer.parseInt(this.score), modelSubmissionInfo);
 
         return new ContactAssignment(this.assignmentId, this.contactId, modelSubmissionInfo.isSubmitted(),
                 modelSubmissionDate, modelGradeInfo.isGraded(), modelGradingDate, modelGradeInfo.getScore());

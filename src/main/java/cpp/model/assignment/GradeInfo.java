@@ -18,7 +18,7 @@ public final class GradeInfo {
 
     private final boolean isGraded;
     private final LocalDateTime gradingDate;
-    private final int score;
+    private final float score;
 
     /**
      * Creates a GradeInfo with the given details. GradeInfo is valid only if the
@@ -28,7 +28,7 @@ public final class GradeInfo {
      * - score must be a non-negative integer below 100
      * - gradingDate cannot be before submissionDate
      */
-    public GradeInfo(boolean isGraded, LocalDateTime gradingDate, int score, SubmissionInfo submissionInfo) {
+    public GradeInfo(boolean isGraded, LocalDateTime gradingDate, float score, SubmissionInfo submissionInfo) {
         if (!GradeInfo.isValidGradeInfo(isGraded, gradingDate, score, submissionInfo)) {
             throw new IllegalArgumentException(GradeInfo.INVALID_GRADE_STRING);
         }
@@ -41,7 +41,7 @@ public final class GradeInfo {
      * Checks whether the given grading details satisfy the invariants for a valid
      * GradeInfo.
      */
-    public static boolean isValidGradeInfo(boolean isGraded, LocalDateTime gradingDate, int score,
+    public static boolean isValidGradeInfo(boolean isGraded, LocalDateTime gradingDate, float score,
             SubmissionInfo submissionInfo) {
         if (isGraded && !submissionInfo.isSubmitted()) {
             return false;
@@ -69,7 +69,7 @@ public final class GradeInfo {
         return this.gradingDate;
     }
 
-    public int getScore() {
+    public float getScore() {
         return this.score;
     }
 
@@ -84,7 +84,7 @@ public final class GradeInfo {
         GradeInfo o = (GradeInfo) other;
         return this.isGraded == o.isGraded
                 && Objects.equals(this.gradingDate, o.gradingDate)
-                && this.score == o.score;
+                && Float.compare(this.score, o.score) == 0;
     }
 
     @Override

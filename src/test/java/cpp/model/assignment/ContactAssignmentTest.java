@@ -70,7 +70,7 @@ public class ContactAssignmentTest {
                 "a1", "c1", true, submissionDate, true, gradingDate, 90);
         String expected = """
                 ContactAssignment[assignmentId=a1, contactId=c1, submission=SubmissionInfo[submitted=true, \
-                date=%s], grade=GradeInfo[graded=true, date=%s, score=90]]"""
+                date=%s], grade=GradeInfo[graded=true, date=%s, score=90.0]]"""
                 .formatted(submissionDate.format(ParserUtil.DATETIME_FORMATTER),
                         gradingDate.format(ParserUtil.DATETIME_FORMATTER));
         Assertions.assertEquals(expected, ca.toString());

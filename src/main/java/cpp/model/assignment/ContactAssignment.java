@@ -39,7 +39,7 @@ public class ContactAssignment {
      * available.
      */
     public ContactAssignment(String assignmentId, String contactId, boolean isSubmitted, LocalDateTime submissionDate,
-            boolean isGraded, LocalDateTime gradingDate, int score) {
+            boolean isGraded, LocalDateTime gradingDate, float score) {
         // Note: we allow submissionDate and gradingDate to be null, as they may not be
         // set if the assignment is not yet submitted or graded.
         CollectionUtil.requireAllNonNull(assignmentId, contactId, isSubmitted, isGraded, score);
@@ -73,7 +73,7 @@ public class ContactAssignment {
         return this.gradeInfo.getGradingDate();
     }
 
-    public int getScore() {
+    public float getScore() {
         return this.gradeInfo.getScore();
     }
 
@@ -109,7 +109,7 @@ public class ContactAssignment {
      * @param score       the score to assign to this contact assignment
      * @param gradingDate the date and time when this contact assignment was graded
      */
-    public void grade(int score, LocalDateTime gradingDate) {
+    public void grade(float score, LocalDateTime gradingDate) {
         this.gradeInfo = new GradeInfo(true, gradingDate, score, this.submissionInfo);
     }
 
