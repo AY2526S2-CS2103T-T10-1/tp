@@ -5,7 +5,6 @@ import java.util.List;
 import cpp.commons.core.index.Index;
 import cpp.logic.Messages;
 import cpp.logic.commands.assignment.AllocateAssignmentCommand;
-import cpp.logic.commands.assignment.UnallocateAssignmentCommand;
 import cpp.logic.parser.ArgumentMultimap;
 import cpp.logic.parser.ArgumentTokenizer;
 import cpp.logic.parser.CliSyntax;
@@ -32,7 +31,7 @@ public class AllocateAssignmentCommandParser implements Parser<AllocateAssignmen
 
         if (!hasAssignment || !(hasContact || hasClass) || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT,
-                    UnallocateAssignmentCommand.MESSAGE_USAGE));
+                    AllocateAssignmentCommand.MESSAGE_USAGE));
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_ASSIGNMENT, CliSyntax.PREFIX_CLASS,

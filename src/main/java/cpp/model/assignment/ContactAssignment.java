@@ -67,6 +67,10 @@ public class ContactAssignment {
         return this.score;
     }
 
+    /**
+     * Marks this contact assignment as submitted. Throws an exception if it is
+     * already marked as submitted.
+     */
     public void markSubmitted() {
         if (this.isSubmitted) {
             throw new ContactAssignmentAlreadySubmittedException();
