@@ -2,10 +2,8 @@ package cpp.logic.commands.assignment;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import cpp.commons.core.index.Index;
 import cpp.commons.util.ToStringBuilder;
@@ -61,7 +59,6 @@ public class GradeAssignmentCommand extends Command {
 
     private final AssignmentName assignmentName;
     private final List<Index> contactIndices;
-    private final Set<Contact> contactsToGrade = new HashSet<>();
     private final float score;
     private final LocalDateTime gradingDate;
 
@@ -163,17 +160,10 @@ public class GradeAssignmentCommand extends Command {
     }
 
     private void gradeByContact(Model model, Assignment assignment, Contact contact) {
-        if (this.contactsToGrade.contains(contact)) {
-            // Skip contacts that have already been marked as submitted through
-            // contact indices in the same command
-            return;
-        }
-
         try {
             model.grade(assignment, contact, this.score, this.gradingDate);
             this.gradedCount++;
             this.buildSuccessfulGradeString(contact.getName().fullName);
-            this.contactsToGrade.add(contact);
 
         } catch (ContactAssignmentNotFoundException e) {
             // Skip contacts that don't have the assignment allocated.
