@@ -98,6 +98,7 @@ public class AssignmentManager {
 
     /**
      * Marks the contact assignment for the given assignment and contact as
+     * submitted. Contact assignment must exist and not already be marked as
      * submitted.
      *
      * @param assignmentId the id of the assignment to mark as submitted

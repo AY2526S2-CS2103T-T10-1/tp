@@ -3,6 +3,7 @@ package cpp.model.assignment;
 import java.util.Objects;
 
 import cpp.commons.util.CollectionUtil;
+import cpp.model.assignment.exceptions.ContactAssignmentAlreadySubmittedException;
 
 /**
  * Association between an Assignment and a Contact (by id).
@@ -68,6 +69,9 @@ public class ContactAssignment {
     }
 
     public void markSubmitted() {
+        if (this.isSubmitted) {
+            throw new ContactAssignmentAlreadySubmittedException();
+        }
         this.isSubmitted = true;
     }
 
