@@ -118,6 +118,11 @@ public class ModelStub implements Model {
     }
 
     @Override
+    public void markUnsubmitted(Assignment assignment, Contact contact) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
     public boolean hasClassGroup(ClassGroup classGroup) {
         throw new AssertionError("This method should not be called.");
     }
