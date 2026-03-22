@@ -124,6 +124,11 @@ public class ModelStub implements Model {
     }
 
     @Override
+    public void grade(Assignment assignment, Contact contact, float score, LocalDateTime gradingDate) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
     public boolean hasClassGroup(ClassGroup classGroup) {
         throw new AssertionError("This method should not be called.");
     }
