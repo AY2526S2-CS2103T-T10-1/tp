@@ -118,6 +118,17 @@ public class SubmitAssignmentCommandTest {
     }
 
     @Test
+    public void execute_emptyClassGroup_throwsCommandException() {
+        SubmitAssignmentCommand cmd = new SubmitAssignmentCommand(TypicalAssignments.ASSIGNMENT_ONE.getName(),
+                List.of(), new ClassGroupName("EmptyGroup"),
+                LocalDateTime.parse("21-02-2026 23:50", ParserUtil.DATETIME_FORMATTER));
+
+        ModelStubWithEmptyClassGroup modelStub = new ModelStubWithEmptyClassGroup(TypicalAssignments.ASSIGNMENT_ONE);
+        Assert.assertThrows(CommandException.class, Messages.MESSAGE_CLASS_GROUP_NO_CONTACTS,
+                () -> cmd.execute(modelStub));
+    }
+
+    @Test
     public void execute_assignmentNotFound_throwsCommandException() throws Exception {
         ModelStubAcceptingMarkSubmitted modelStub = new ModelStubAcceptingMarkSubmitted();
         SubmitAssignmentCommand cmd = new SubmitAssignmentCommand(new AssignmentName("NonExistent"),
@@ -375,6 +386,32 @@ public class SubmitAssignmentCommandTest {
             }
             ab.addClassGroup(cg);
             ab.addAssignment(TypicalAssignments.ASSIGNMENT_ONE);
+            return ab;
+        }
+    }
+
+    public class ModelStubWithEmptyClassGroup extends ModelStub {
+        private final Assignment assignment;
+
+        ModelStubWithEmptyClassGroup(Assignment assignment) {
+            Objects.requireNonNull(assignment);
+            this.assignment = assignment;
+        }
+
+        @Override
+        public ObservableList<Contact> getFilteredContactList() {
+            return FXCollections.observableArrayList(TypicalContacts.getTypicalContacts());
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            AddressBook ab = new AddressBook();
+            for (Contact c : TypicalContacts.getTypicalContacts()) {
+                ab.addContact(c);
+            }
+            ab.addAssignment(this.assignment);
+            ClassGroup cg = new ClassGroup(new ClassGroupName("EmptyGroup"));
+            ab.addClassGroup(cg);
             return ab;
         }
     }
