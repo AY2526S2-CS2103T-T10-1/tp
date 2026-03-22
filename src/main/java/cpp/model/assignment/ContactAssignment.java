@@ -35,8 +35,7 @@ public class ContactAssignment {
 
     /**
      * Creates a contact assignment with the given details. This constructor is used
-     * for
-     * loading from storage, where the submission and grading state is already
+     * for loading from storage, where the submission and grading state is already
      * available.
      */
     public ContactAssignment(String assignmentId, String contactId, boolean isSubmitted, boolean isGraded, int score) {

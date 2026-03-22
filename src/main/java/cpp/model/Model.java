@@ -128,6 +128,11 @@ public interface Model {
     void removeContactAssignment(ContactAssignment ca);
 
     /**
+     * Marks the assignment as submitted for the given contact.
+     */
+    void markSubmitted(Assignment assignment, Contact contact);
+
+    /**
      * Returns true if a class group with the same identity as {@code classGroup}
      * exists in the class group list.
      */
