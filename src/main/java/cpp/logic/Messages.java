@@ -59,7 +59,7 @@ public class Messages {
         final StringBuilder builder = new StringBuilder();
         builder.append(assignment.getName())
                 .append("; Deadline: ")
-                .append(assignment.getDeadline().format(ParserUtil.DEADLINE_FORMATTER));
+                .append(assignment.getDeadline().format(ParserUtil.DATETIME_FORMATTER));
         return builder.toString();
     }
 

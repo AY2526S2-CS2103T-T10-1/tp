@@ -32,12 +32,12 @@ public class AddAssignmentCommand extends Command {
             + ": Adds an assignment to the assignment list. "
             + "Parameters: "
             + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT NAME "
-            + CliSyntax.PREFIX_DEADLINE + "DEADLINE "
+            + CliSyntax.PREFIX_DATETIME + "DEADLINE "
             + "[" + CliSyntax.PREFIX_CLASS + "CLASS NAME] "
             + "[" + CliSyntax.PREFIX_CONTACT + "CONTACT INDICES...]\n"
             + "Example: " + AddAssignmentCommand.COMMAND_WORD + " "
             + CliSyntax.PREFIX_ASSIGNMENT + "Assignment 1 "
-            + CliSyntax.PREFIX_DEADLINE + "21-02-2026 23:59 "
+            + CliSyntax.PREFIX_DATETIME + "21-02-2026 23:59 "
             + CliSyntax.PREFIX_CLASS + "CS2103T10 "
             + CliSyntax.PREFIX_CONTACT + "1 2 3";
 
