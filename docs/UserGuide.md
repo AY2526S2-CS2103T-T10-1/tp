@@ -132,19 +132,46 @@ Examples:
 * `find alex david` returns `Alex Yeoh`, `David Li`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
-### Deleting a contact : `delete`
+### Deleting a contact, assignment, or class group : `delete`
 
-Deletes the specified contact from the address book.
+Deletes the specified contact(s), assignment, or class group from the address book.
 
-Format: `delete INDEX`
+**Delete contact(s)**
 
-* Deletes the contact at the specified `INDEX`.
+Format: `delete ct/INDEX [ct/INDEX]…​`
+
+* Deletes the contact(s) at the specified `INDEX` (or multiple indices).
 * The index refers to the index number shown in the displayed contact list.
 * The index **must be a positive integer** 1, 2, 3, …​
+* At least one `ct/INDEX` must be provided.
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd contact in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st contact in the results of the `find` command.
+* `list` followed by `delete ct/2` deletes the 2nd contact in the address book.
+* `find Betsy` followed by `delete ct/1` deletes the 1st contact in the results of the `find` command.
+* `delete ct/1 ct/3` deletes the 1st and 3rd contacts shown in the displayed list.
+
+**Delete assignment**
+
+Format: `delete ass/ASSIGNMENT_NAME`
+
+* Deletes the assignment with the given `ASSIGNMENT_NAME`.
+* The name must match exactly (case-sensitive).
+
+Examples:
+* `delete ass/Assignment 1` deletes the assignment named `Assignment 1`.
+* `delete ass/Midterm Exam` deletes the assignment named `Midterm Exam`.
+
+**Delete class group**
+
+Format: `delete c/CLASS_NAME`
+
+* Deletes the class group with the given `CLASS_NAME`.
+* The name must match exactly (case-sensitive).
+* Deleting a class group removes the grouping only. The contacts that were in the class group are **not** deleted from the address book.
+
+Examples:
+* `delete c/CS2103T-T14` deletes the class group named `CS2103T-T14`.
+* `delete c/Tutorial Group A` deletes the class group named `Tutorial Group A`.
 
 ### Clearing all entries : `clear`
 
@@ -199,7 +226,7 @@ _Details coming soon ..._
 | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague` |
 | **Clear**  | `clear`                                                                                                                                                               |
-| **Delete** | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                   |
+| **Delete** | `delete ct/INDEX [ct/INDEX]…​` e.g., `delete ct/3`<br>`delete ass/ASSIGNMENT_NAME` e.g., `delete ass/Assignment 1`<br>`delete c/CLASS_NAME` e.g., `delete c/CS2103T-T14` |
 | **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                           |
 | **Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                            |
 | **List**   | `list`                                                                                                                                                                |
