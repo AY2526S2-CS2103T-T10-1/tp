@@ -18,6 +18,8 @@ public class Messages {
     public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command";
     public static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format! \n%1$s";
     public static final String MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX = "The contact index provided is invalid";
+    public static final String MESSAGE_INVALID_CLASS_GROUP_DISPLAYED_INDEX =
+            "The class group index provided is invalid";
     public static final String MESSAGE_ASSIGNMENT_NOT_FOUND = "The assignment provided is not found";
     public static final String MESSAGE_CLASS_GROUP_NOT_FOUND = "The class group provided is not found";
     public static final String MESSAGE_CONTACTS_LISTED_OVERVIEW = "%1$d contacts listed!";
