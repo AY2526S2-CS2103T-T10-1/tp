@@ -118,7 +118,6 @@ public class ParserUtil {
     public static Tag parseTag(String tag) throws ParseException {
         Objects.requireNonNull(tag);
         String trimmedTag = tag.trim().replaceAll("\\s+", " ");
-        ;
         if (!Tag.isValidTagName(trimmedTag)) {
             throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
         }
