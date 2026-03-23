@@ -20,11 +20,14 @@ import cpp.logic.commands.FindCommand;
 import cpp.logic.commands.HelpCommand;
 import cpp.logic.commands.ListCommand;
 import cpp.logic.commands.assignment.AddAssignmentCommand;
+import cpp.logic.commands.assignment.EditAssignmentCommand;
+import cpp.logic.commands.assignment.EditAssignmentCommand.EditAssignmentDescriptor;
 import cpp.logic.commands.classgroup.AddClassGroupCommand;
 import cpp.logic.commands.classgroup.AllocateClassGroupCommand;
 import cpp.logic.commands.classgroup.UnallocateClassGroupCommand;
 import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.assignment.Assignment;
+import cpp.model.assignment.AssignmentName;
 import cpp.model.classgroup.ClassGroup;
 import cpp.model.contact.Contact;
 import cpp.model.contact.ContactNameContainsKeywordsPredicate;
@@ -138,6 +141,19 @@ public class AddressBookParserTest {
                                 new ArrayList<>(Arrays.asList(TypicalIndexes.INDEX_FIRST_CONTACT))));
         Assertions.assertEquals(new UnallocateClassGroupCommand(classGroup.getName(),
                 List.of(TypicalIndexes.INDEX_FIRST_CONTACT)), command);
+    }
+
+    @Test
+    public void parseCommand_editAssignment() throws Exception {
+        String newName = "New Assignment";
+        EditAssignmentDescriptor descriptor = new EditAssignmentDescriptor();
+        descriptor.setName(new AssignmentName(newName));
+        EditAssignmentCommand command = (EditAssignmentCommand) this.parser.parseCommand(
+                EditAssignmentCommand.COMMAND_WORD + " "
+                        + TypicalIndexes.INDEX_FIRST_CONTACT.getOneBased() + " "
+                        + CliSyntax.PREFIX_ASSIGNMENT + newName);
+        Assertions.assertEquals(
+                new EditAssignmentCommand(TypicalIndexes.INDEX_FIRST_CONTACT, descriptor), command);
     }
 
     @Test
