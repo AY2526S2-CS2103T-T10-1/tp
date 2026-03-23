@@ -48,6 +48,8 @@ public class CommandTestUtil {
     public static final String TAG_DESC_HUSBAND = " " + CliSyntax.PREFIX_TAG + CommandTestUtil.VALID_TAG_HUSBAND;
     public static final String CONTACT_INDICES_MULTIPLE = " " + CliSyntax.PREFIX_CONTACT
             + CommandTestUtil.VALID_CONTACT_INDICES;
+    public static final String CLASS_NAME_DESC = " " + CliSyntax.PREFIX_CLASS
+            + CommandTestUtil.VALID_CLASS_NAME_CS2103T;
 
     public static final String INVALID_NAME_DESC = " " + CliSyntax.PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_PHONE_DESC = " " + CliSyntax.PREFIX_PHONE + "911a"; // 'a' not allowed in phones

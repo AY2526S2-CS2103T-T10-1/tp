@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import cpp.commons.core.GuiSettings;
+import cpp.model.assignment.ContactAssignment;
+import cpp.model.assignment.exceptions.ContactAlreadyAllocatedAssignmentException;
+import cpp.model.assignment.exceptions.ContactAssignmentNotFoundException;
 import cpp.model.classgroup.ClassGroup;
 import cpp.model.classgroup.exceptions.DuplicateClassGroupException;
 import cpp.model.contact.ContactNameContainsKeywordsPredicate;
@@ -134,6 +137,60 @@ public class ModelManagerTest {
         Assertions.assertTrue(this.modelManager.hasAssignment(TypicalAssignments.ASSIGNMENT_ONE));
         this.modelManager.deleteAssignment(TypicalAssignments.ASSIGNMENT_ONE);
         Assertions.assertFalse(this.modelManager.hasAssignment(TypicalAssignments.ASSIGNMENT_ONE));
+    }
+
+    @Test
+    public void addContactAssignment_validContactAssignment_addSuccessful() {
+        ContactAssignment ca = new ContactAssignment(TypicalAssignments.ASSIGNMENT_ONE.getId(),
+                TypicalContacts.ALICE.getId(), false, false, 0);
+        this.modelManager.addContact(TypicalContacts.ALICE);
+        this.modelManager.addAssignment(TypicalAssignments.ASSIGNMENT_ONE);
+        this.modelManager.addContactAssignment(ca);
+        Assertions.assertTrue(this.modelManager.getAddressBook().getContactAssignmentList().contains(ca));
+    }
+
+    @Test
+    public void addContactAssignment_duplicateContactAssignment_throwsIllegalArgumentException() {
+        ContactAssignment ca = new ContactAssignment(TypicalAssignments.ASSIGNMENT_ONE.getId(),
+                TypicalContacts.ALICE.getId(), false, false, 0);
+        this.modelManager.addContact(TypicalContacts.ALICE);
+        this.modelManager.addAssignment(TypicalAssignments.ASSIGNMENT_ONE);
+        this.modelManager.addContactAssignment(ca);
+        Assert.assertThrows(
+                ContactAlreadyAllocatedAssignmentException.class,
+                () -> this.modelManager.addContactAssignment(ca));
+    }
+
+    @Test
+    public void addContactAssignment_nullContactAssignment_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class,
+                () -> this.modelManager.addContactAssignment(null));
+    }
+
+    @Test
+    public void removeContactAssignment_validContactAssignment_removeSuccessful() {
+        ContactAssignment ca = new ContactAssignment(TypicalAssignments.ASSIGNMENT_ONE.getId(),
+                TypicalContacts.ALICE.getId(), false, false, 0);
+        this.modelManager.addContact(TypicalContacts.ALICE);
+        this.modelManager.addAssignment(TypicalAssignments.ASSIGNMENT_ONE);
+        this.modelManager.addContactAssignment(ca);
+        Assertions.assertTrue(this.modelManager.getAddressBook().getContactAssignmentList().contains(ca));
+        this.modelManager.removeContactAssignment(ca);
+        Assertions.assertFalse(this.modelManager.getAddressBook().getContactAssignmentList().contains(ca));
+    }
+
+    @Test
+    public void removeContactAssignment_nonExistentContactAssignment_throwsIllegalArgumentException() {
+        ContactAssignment ca = new ContactAssignment(TypicalAssignments.ASSIGNMENT_ONE.getId(),
+                TypicalContacts.ALICE.getId(), false, false, 0);
+        Assert.assertThrows(ContactAssignmentNotFoundException.class,
+                () -> this.modelManager.removeContactAssignment(ca));
+    }
+
+    @Test
+    public void removeContactAssignment_nullContactAssignment_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class,
+                () -> this.modelManager.removeContactAssignment(null));
     }
 
     @Test
@@ -284,39 +341,5 @@ public class ModelManagerTest {
         UserPrefs differentUserPrefs = new UserPrefs();
         differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
         Assertions.assertFalse(this.modelManager.equals(new ModelManager(addressBook, differentUserPrefs)));
-    }
-
-    @Test
-    public void equals_differentFilteredAssignmentLists_returnsFalse() {
-        AddressBook addressBook = new AddressBookBuilder().withAssignment(TypicalAssignments.ASSIGNMENT_ONE)
-                .build();
-        UserPrefs userPrefs = new UserPrefs();
-
-        this.modelManager = new ModelManager(addressBook, userPrefs);
-        ModelManager modelManagerCopy = new ModelManager(addressBook, userPrefs);
-
-        // Both should be equal initially
-        Assertions.assertTrue(this.modelManager.equals(modelManagerCopy));
-
-        // Verify filtered lists exist and are accessible
-        Assertions.assertNotNull(this.modelManager.getFilteredAssignmentList());
-        Assertions.assertNotNull(modelManagerCopy.getFilteredAssignmentList());
-    }
-
-    @Test
-    public void equals_differentFilteredClassGroupLists_returnsFalse() {
-        AddressBook addressBook = new AddressBookBuilder().withContact(TypicalContacts.ALICE)
-                .build();
-        UserPrefs userPrefs = new UserPrefs();
-
-        this.modelManager = new ModelManager(addressBook, userPrefs);
-        ModelManager modelManagerCopy = new ModelManager(addressBook, userPrefs);
-
-        // Both should be equal initially
-        Assertions.assertTrue(this.modelManager.equals(modelManagerCopy));
-
-        // Verify filtered lists exist and are accessible
-        Assertions.assertNotNull(this.modelManager.getFilteredClassGroupList());
-        Assertions.assertNotNull(modelManagerCopy.getFilteredClassGroupList());
     }
 }

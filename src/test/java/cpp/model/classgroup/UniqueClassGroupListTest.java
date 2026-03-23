@@ -12,6 +12,7 @@ import cpp.model.classgroup.exceptions.DuplicateClassGroupException;
 import cpp.testutil.Assert;
 import cpp.testutil.ClassGroupBuilder;
 import cpp.testutil.TypicalClassGroups;
+import cpp.testutil.TypicalContacts;
 
 public class UniqueClassGroupListTest {
 
@@ -117,6 +118,25 @@ public class UniqueClassGroupListTest {
         this.uniqueClassGroupList.add(TypicalClassGroups.CLASS_GROUP_ONE);
         this.uniqueClassGroupList.remove(TypicalClassGroups.CLASS_GROUP_ONE);
         UniqueClassGroupList expected = new UniqueClassGroupList();
+        Assertions.assertEquals(expected, this.uniqueClassGroupList);
+    }
+
+    @Test
+    public void unallocateContactFromAllClassGroups_validContact_unallocatesContactFromAllClassGroups() {
+        ClassGroup classGroupOne = new ClassGroupBuilder().withId("id1").withName("CS2101T10")
+                .withContactIds(TypicalContacts.ALICE.getId()).build();
+        ClassGroup classGroupTwo = new ClassGroupBuilder().withId("id2").withName("CS3230T3")
+                .withContactIds(TypicalContacts.ALICE.getId(), TypicalContacts.BOB.getId()).build();
+        ClassGroup classGroupThree = new ClassGroupBuilder().withId("id3").withName("CS2103T10").build();
+        this.uniqueClassGroupList.add(classGroupOne);
+        this.uniqueClassGroupList.add(classGroupTwo);
+        this.uniqueClassGroupList.add(classGroupThree);
+        this.uniqueClassGroupList.unallocateContactFromAllClassGroups(TypicalContacts.ALICE);
+        UniqueClassGroupList expected = new UniqueClassGroupList();
+        expected.add(new ClassGroupBuilder(classGroupOne).withContactIds().build());
+        expected.add(new ClassGroupBuilder(classGroupTwo).withContactIds(TypicalContacts.BOB.getId()).build());
+        expected.add(new ClassGroupBuilder(classGroupThree).withContactIds().build());
+
         Assertions.assertEquals(expected, this.uniqueClassGroupList);
     }
 

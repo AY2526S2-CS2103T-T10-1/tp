@@ -8,8 +8,10 @@ import cpp.logic.Messages;
 import cpp.logic.commands.CommandTestUtil;
 import cpp.logic.commands.assignment.AddAssignmentCommand;
 import cpp.logic.parser.CommandParserTestUtil;
+import cpp.logic.parser.ParserUtil;
 import cpp.model.assignment.Assignment;
 import cpp.model.assignment.AssignmentName;
+import cpp.model.classgroup.ClassGroupName;
 import cpp.testutil.AssignmentBuilder;
 import cpp.testutil.AssignmentUtil;
 import cpp.testutil.TypicalAssignments;
@@ -25,6 +27,29 @@ public class AddAssignmentCommandParserTest {
         CommandParserTestUtil.assertParseSuccess(this.parser,
                 CommandTestUtil.PREAMBLE_WHITESPACE + AssignmentUtil.getAssignmentDetails(expectedAssignment),
                 new AddAssignmentCommand(expectedAssignment, List.of()));
+
+        // with contact indices
+        CommandParserTestUtil.assertParseSuccess(this.parser,
+                CommandTestUtil.PREAMBLE_WHITESPACE + AssignmentUtil.getAssignmentDetails(expectedAssignment)
+                        + CommandTestUtil.CONTACT_INDICES_MULTIPLE,
+                new AddAssignmentCommand(expectedAssignment,
+                        ParserUtil.parseContactIndices(CommandTestUtil.VALID_CONTACT_INDICES)));
+
+        // with class group
+        CommandParserTestUtil.assertParseSuccess(this.parser,
+                CommandTestUtil.PREAMBLE_WHITESPACE + AssignmentUtil.getAssignmentDetails(expectedAssignment)
+                        + CommandTestUtil.CLASS_NAME_DESC,
+                new AddAssignmentCommand(expectedAssignment, List.of(),
+                        new ClassGroupName(CommandTestUtil.VALID_CLASS_NAME_CS2103T)));
+
+        // with contact indices and class group
+        CommandParserTestUtil.assertParseSuccess(this.parser,
+                CommandTestUtil.PREAMBLE_WHITESPACE + AssignmentUtil.getAssignmentDetails(expectedAssignment)
+                        + CommandTestUtil.CLASS_NAME_DESC
+                        + CommandTestUtil.CONTACT_INDICES_MULTIPLE,
+                new AddAssignmentCommand(expectedAssignment,
+                        ParserUtil.parseContactIndices(CommandTestUtil.VALID_CONTACT_INDICES),
+                        new ClassGroupName(CommandTestUtil.VALID_CLASS_NAME_CS2103T)));
     }
 
     @Test

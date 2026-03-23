@@ -16,6 +16,7 @@ class JsonAdaptedContactAssignment {
     public static final String INVALID_ASSIGNMENT_ID_MESSAGE = """
             Assignment with id %s does not exist in the address book""";
     public static final String INVALID_CONTACT_ID_MESSAGE = "Contact with id %s does not exist in the address book";
+    public static final String INVALID_SCORE_MESSAGE = "Score must be a non-negative integer";
 
     private final String assignmentId;
     private final String contactId;
@@ -85,7 +86,7 @@ class JsonAdaptedContactAssignment {
                     "score"));
         }
         if (this.score < 0) {
-            throw new IllegalValueException("Score cannot be negative");
+            throw new IllegalValueException(JsonAdaptedContactAssignment.INVALID_SCORE_MESSAGE);
         }
 
         return new ContactAssignment(this.assignmentId, this.contactId, this.isSubmitted, this.isGraded,

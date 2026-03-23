@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import cpp.commons.core.index.Index;
 import cpp.commons.util.ToStringBuilder;
+import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
 import cpp.logic.commands.CommandUtil;
@@ -36,7 +37,6 @@ public class AllocateClassGroupCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = """
             Allocated class group: %1$s to %2$s contacts.\nContacts allocated: %3$s""";
-    public static final String MESSAGE_INVALID_CLASS_GROUP_NAME = "The class group name provided is invalid";
     public static final String MESSAGE_ALLOCATION_FAILED = "No new contacts were allocated the class group";
 
     private final ClassGroupName classGroupName;
@@ -64,7 +64,7 @@ public class AllocateClassGroupCommand extends Command {
         ClassGroup classGroupToAllocate = ClassGroupUtil.findClassGroup(classGroupList, this.classGroupName);
 
         if (classGroupToAllocate == null) {
-            throw new CommandException(AllocateClassGroupCommand.MESSAGE_INVALID_CLASS_GROUP_NAME);
+            throw new CommandException(Messages.MESSAGE_CLASS_GROUP_NOT_FOUND);
         }
 
         List<Contact> lastShownContactList = model.getFilteredContactList();

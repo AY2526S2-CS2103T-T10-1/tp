@@ -10,7 +10,6 @@ import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
 import cpp.logic.commands.CommandUtil;
-import cpp.logic.commands.classgroup.AllocateClassGroupCommand;
 import cpp.logic.commands.exceptions.CommandException;
 import cpp.logic.parser.CliSyntax;
 import cpp.model.Model;
@@ -99,7 +98,7 @@ public class AddAssignmentCommand extends Command {
         ClassGroup classGroupToAllocate = ClassGroupUtil.findClassGroup(model.getAddressBook().getClassGroupList(),
                 this.classGroupName);
         if (this.classGroupName != null && classGroupToAllocate == null) {
-            throw new CommandException(AllocateClassGroupCommand.MESSAGE_INVALID_CLASS_GROUP_NAME);
+            throw new CommandException(Messages.MESSAGE_CLASS_GROUP_NOT_FOUND);
         }
 
         this.allocateToContactsByContactIndices(model, this.toAdd, lastShownContactList);

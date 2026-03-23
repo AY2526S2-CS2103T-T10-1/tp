@@ -20,8 +20,6 @@ public class JsonSerializableAddressBookTest {
             "JsonSerializableAddressBookTest");
     private static final Path TYPICAL_CONTACTS_FILE = JsonSerializableAddressBookTest.TEST_DATA_FOLDER
             .resolve("typicalContactsAddressBook.json");
-    private static final Path INVALID_CONTACT_FILE_ID = JsonSerializableAddressBookTest.TEST_DATA_FOLDER
-            .resolve("invalidContactAddressBookId.json");
     private static final Path INVALID_CONTACT_FILE_NAME = JsonSerializableAddressBookTest.TEST_DATA_FOLDER
             .resolve("invalidContactAddressBookName.json");
     private static final Path INVALID_CONTACT_FILE_PHONE = JsonSerializableAddressBookTest.TEST_DATA_FOLDER
@@ -42,6 +40,8 @@ public class JsonSerializableAddressBookTest {
             .resolve("invalidAssignmentAddressBookName.json");
     private static final Path DUPLICATE_ASSIGNMENT_FILE = JsonSerializableAddressBookTest.TEST_DATA_FOLDER
             .resolve("duplicateAssignmentAddressBook.json");
+    private static final Path DUPLICATE_CONTACT_ASSIGNMENT_FILE = JsonSerializableAddressBookTest.TEST_DATA_FOLDER
+            .resolve("duplicateContactAssignmentAddressBook.json");
     private static final Path TYPICAL_CLASS_GROUPS_FILE = JsonSerializableAddressBookTest.TEST_DATA_FOLDER
             .resolve("typicalClassGroupsAddressBook.json");
     private static final Path INVALID_CLASS_GROUP_NAME_FILE = JsonSerializableAddressBookTest.TEST_DATA_FOLDER
@@ -161,6 +161,28 @@ public class JsonSerializableAddressBookTest {
                 .get();
         Assert.assertThrows(IllegalValueException.class,
                 JsonSerializableAddressBook.MESSAGE_DUPLICATE_CLASS_GROUP,
+                dataFromFile::toModelType);
+    }
+
+    @Test
+    public void toModelType_duplicateContacts_throwsIllegalValueException() throws Exception {
+        JsonSerializableAddressBook dataFromFile = JsonUtil
+                .readJsonFile(JsonSerializableAddressBookTest.DUPLICATE_CONTACT_FILE,
+                        JsonSerializableAddressBook.class)
+                .get();
+        Assert.assertThrows(IllegalValueException.class,
+                JsonSerializableAddressBook.MESSAGE_DUPLICATE_CONTACT,
+                dataFromFile::toModelType);
+    }
+
+    @Test
+    public void toModelType_duplicateContactAssignments_throwsIllegalValueException() throws Exception {
+        JsonSerializableAddressBook dataFromFile = JsonUtil
+                .readJsonFile(JsonSerializableAddressBookTest.DUPLICATE_CONTACT_ASSIGNMENT_FILE,
+                        JsonSerializableAddressBook.class)
+                .get();
+        Assert.assertThrows(IllegalValueException.class,
+                JsonSerializableAddressBook.MESSAGE_DUPLICATE_CONTACT_ASSIGNMENT,
                 dataFromFile::toModelType);
     }
 }

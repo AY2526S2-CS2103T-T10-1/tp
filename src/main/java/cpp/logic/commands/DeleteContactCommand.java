@@ -12,7 +12,8 @@ import cpp.model.Model;
 import cpp.model.contact.Contact;
 
 /**
- * Deletes one or more contacts identified using their displayed indices from the address book.
+ * Deletes one or more contacts identified using their displayed indices from
+ * the address book.
  */
 public class DeleteContactCommand extends DeleteCommand {
 

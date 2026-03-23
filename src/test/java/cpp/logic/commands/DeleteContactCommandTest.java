@@ -93,7 +93,7 @@ public class DeleteContactCommandTest {
                 Messages.format(firstContact))
                 + "\n"
                 + String.format(DeleteContactCommand.MESSAGE_DELETE_CONTACT_SUCCESS,
-                Messages.format(secondContact));
+                        Messages.format(secondContact));
 
         ModelManager expectedModel = new ModelManager(this.model.getAddressBook(), new UserPrefs());
         expectedModel.deleteContact(firstContact);

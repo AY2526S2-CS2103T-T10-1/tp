@@ -10,7 +10,6 @@ import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
 import cpp.logic.commands.CommandUtil;
-import cpp.logic.commands.classgroup.AllocateClassGroupCommand;
 import cpp.logic.commands.exceptions.CommandException;
 import cpp.logic.parser.CliSyntax;
 import cpp.model.Model;
@@ -47,7 +46,6 @@ public class AllocateAssignmentCommand extends Command {
     public static final String MESSAGE_SUCCESS = """
             Allocated assignment: %1$s to %2$s contact(s)
             Contacts allocated: %3$s""";
-    public static final String MESSAGE_INVALID_ASSIGNMENT_NAME = "The assignment name provided is invalid";
     public static final String MESSAGE_ALLOCATION_FAILED = "No contacts were allocated the assignment";
 
     private final AssignmentName assignmentName;
@@ -95,7 +93,7 @@ public class AllocateAssignmentCommand extends Command {
         Assignment assignmentToAllocate = AssignmentUtil.findAssignment(assignmentList, this.assignmentName);
 
         if (assignmentToAllocate == null) {
-            throw new CommandException(AllocateAssignmentCommand.MESSAGE_INVALID_ASSIGNMENT_NAME);
+            throw new CommandException(Messages.MESSAGE_ASSIGNMENT_NOT_FOUND);
         }
 
         List<Contact> lastShownContactList = model.getFilteredContactList();
@@ -105,7 +103,7 @@ public class AllocateAssignmentCommand extends Command {
         ClassGroup classGroupToAllocate = ClassGroupUtil.findClassGroup(model.getAddressBook().getClassGroupList(),
                 this.classGroupName);
         if (this.classGroupName != null && classGroupToAllocate == null) {
-            throw new CommandException(AllocateClassGroupCommand.MESSAGE_INVALID_CLASS_GROUP_NAME);
+            throw new CommandException(Messages.MESSAGE_CLASS_GROUP_NOT_FOUND);
         }
 
         this.allocateToContactsByContactIndices(model, assignmentToAllocate, lastShownContactList);

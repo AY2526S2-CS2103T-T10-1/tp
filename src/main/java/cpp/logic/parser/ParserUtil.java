@@ -42,7 +42,7 @@ public class ParserUtil {
      *                        unsigned integer).
      */
     public static Index parseIndex(String oneBasedIndex) throws ParseException {
-        String trimmedIndex = oneBasedIndex.trim();
+        String trimmedIndex = oneBasedIndex.trim().replaceAll("\\s+", " ");
         if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
             throw new ParseException(ParserUtil.MESSAGE_INVALID_INDEX);
         }
@@ -57,7 +57,7 @@ public class ParserUtil {
      */
     public static ContactName parseName(String name) throws ParseException {
         Objects.requireNonNull(name);
-        String trimmedName = name.trim();
+        String trimmedName = name.trim().replaceAll("\\s+", " ");
         if (!ContactName.isValidName(trimmedName)) {
             throw new ParseException(ContactName.MESSAGE_CONSTRAINTS);
         }
@@ -72,7 +72,7 @@ public class ParserUtil {
      */
     public static Phone parsePhone(String phone) throws ParseException {
         Objects.requireNonNull(phone);
-        String trimmedPhone = phone.trim();
+        String trimmedPhone = phone.trim().replaceAll("\\s+", " ");
         if (!Phone.isValidPhone(trimmedPhone)) {
             throw new ParseException(Phone.MESSAGE_CONSTRAINTS);
         }
@@ -87,7 +87,7 @@ public class ParserUtil {
      */
     public static Address parseAddress(String address) throws ParseException {
         Objects.requireNonNull(address);
-        String trimmedAddress = address.trim();
+        String trimmedAddress = address.trim().replaceAll("\\s+", " ");
         if (!Address.isValidAddress(trimmedAddress)) {
             throw new ParseException(Address.MESSAGE_CONSTRAINTS);
         }
@@ -102,7 +102,7 @@ public class ParserUtil {
      */
     public static Email parseEmail(String email) throws ParseException {
         Objects.requireNonNull(email);
-        String trimmedEmail = email.trim();
+        String trimmedEmail = email.trim().replaceAll("\\s+", " ");
         if (!Email.isValidEmail(trimmedEmail)) {
             throw new ParseException(Email.MESSAGE_CONSTRAINTS);
         }
@@ -117,7 +117,7 @@ public class ParserUtil {
      */
     public static Tag parseTag(String tag) throws ParseException {
         Objects.requireNonNull(tag);
-        String trimmedTag = tag.trim();
+        String trimmedTag = tag.trim().replaceAll("\\s+", " ");
         if (!Tag.isValidTagName(trimmedTag)) {
             throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
         }
