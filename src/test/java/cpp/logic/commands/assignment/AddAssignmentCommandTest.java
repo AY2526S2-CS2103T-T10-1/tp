@@ -3,7 +3,6 @@ package cpp.logic.commands.assignment;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -89,10 +88,6 @@ public class AddAssignmentCommandTest {
 
             // two allocations: one by index (Alice) and one by class group (Benson)
             Assertions.assertEquals(2, modelStub.contactAssignmentsAdded.size());
-            List<String> allocatedNames = modelStub.contactAssignmentsAdded.stream()
-                    .map(ca -> modelStub.getAddressBook().getContactList().stream()
-                            .filter(c -> c.getId().equals(ca.getContactId())).findFirst().get().getName().fullName)
-                    .collect(Collectors.toList());
 
             String expectedAllocatedContacts = TypicalContacts.ALICE.getName().fullName + "; "
                     + TypicalContacts.BENSON.getName().fullName;

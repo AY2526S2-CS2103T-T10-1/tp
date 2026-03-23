@@ -20,8 +20,6 @@ public class JsonSerializableAddressBookTest {
             "JsonSerializableAddressBookTest");
     private static final Path TYPICAL_CONTACTS_FILE = JsonSerializableAddressBookTest.TEST_DATA_FOLDER
             .resolve("typicalContactsAddressBook.json");
-    private static final Path INVALID_CONTACT_FILE_ID = JsonSerializableAddressBookTest.TEST_DATA_FOLDER
-            .resolve("invalidContactAddressBookId.json");
     private static final Path INVALID_CONTACT_FILE_NAME = JsonSerializableAddressBookTest.TEST_DATA_FOLDER
             .resolve("invalidContactAddressBookName.json");
     private static final Path INVALID_CONTACT_FILE_PHONE = JsonSerializableAddressBookTest.TEST_DATA_FOLDER

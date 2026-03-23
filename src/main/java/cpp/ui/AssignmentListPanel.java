@@ -1,8 +1,5 @@
 package cpp.ui;
 
-import java.util.logging.Logger;
-
-import cpp.commons.core.LogsCenter;
 import cpp.model.assignment.Assignment;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,7 +12,6 @@ import javafx.scene.layout.Region;
  */
 public class AssignmentListPanel extends UiPart<Region> {
     private static final String FXML = "AssignmentListPanel.fxml";
-    private final Logger logger = LogsCenter.getLogger(AssignmentListPanel.class);
 
     @FXML
     private ListView<Assignment> assignmentListView;
