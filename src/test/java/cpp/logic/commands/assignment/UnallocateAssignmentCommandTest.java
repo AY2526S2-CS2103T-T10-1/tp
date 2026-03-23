@@ -14,6 +14,7 @@ import cpp.logic.commands.exceptions.CommandException;
 import cpp.model.AddressBook;
 import cpp.model.ReadOnlyAddressBook;
 import cpp.model.assignment.Assignment;
+import cpp.model.assignment.AssignmentName;
 import cpp.model.assignment.ContactAssignment;
 import cpp.model.assignment.exceptions.ContactAssignmentNotFoundException;
 import cpp.model.classgroup.ClassGroup;
@@ -153,7 +154,7 @@ public class UnallocateAssignmentCommandTest {
 
         // different assignment
         UnallocateAssignmentCommand differentAssignment = new UnallocateAssignmentCommand(
-                new cpp.model.assignment.AssignmentName("Different"), indices, cgName);
+                new AssignmentName("Different"), indices, cgName);
         Assertions.assertFalse(cmd.equals(differentAssignment));
 
         // different indices
@@ -198,7 +199,7 @@ public class UnallocateAssignmentCommandTest {
                 Arrays.asList(TypicalIndexes.INDEX_FIRST_CONTACT));
 
         UnallocateAssignmentCommand cmd = new UnallocateAssignmentCommand(
-                new cpp.model.assignment.AssignmentName("Unknown"),
+                new AssignmentName("Unknown"),
                 validContactIndices);
 
         Assert.assertThrows(CommandException.class, Messages.MESSAGE_ASSIGNMENT_NOT_FOUND,

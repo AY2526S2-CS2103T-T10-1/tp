@@ -1,5 +1,9 @@
 package cpp.model.assignment;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -80,7 +84,7 @@ public class UniqueContactAssignmentListTest {
         this.uniqueContactAssignmentList.add(ca1);
         this.uniqueContactAssignmentList.add(ca2);
 
-        java.util.List<ContactAssignment> toRemoveList = new java.util.ArrayList<>();
+        List<ContactAssignment> toRemoveList = new ArrayList<>();
         toRemoveList.add(ca1);
         toRemoveList.add(ca2);
 
@@ -107,12 +111,12 @@ public class UniqueContactAssignmentListTest {
     @Test
     public void setContactAssignments_nullList_throwsNullPointerException() {
         Assertions.assertThrows(NullPointerException.class,
-                () -> this.uniqueContactAssignmentList.setContactAssignments((java.util.List<ContactAssignment>) null));
+                () -> this.uniqueContactAssignmentList.setContactAssignments((List<ContactAssignment>) null));
     }
 
     @Test
     public void setContactAssignments_validList_replacesOwnListWithProvidedList() {
-        java.util.List<ContactAssignment> replacement = new java.util.ArrayList<>();
+        List<ContactAssignment> replacement = new ArrayList<>();
         ContactAssignment ca = new ContactAssignment("contactId", "assignmentId");
         replacement.add(ca);
         this.uniqueContactAssignmentList.setContactAssignments(replacement);
@@ -121,7 +125,7 @@ public class UniqueContactAssignmentListTest {
 
     @Test
     public void setContactAssignments_listWithDuplicateContactAssignments_throwsDuplicateContactAssignmentException() {
-        java.util.List<ContactAssignment> replacement = new java.util.ArrayList<>();
+        List<ContactAssignment> replacement = new ArrayList<>();
         ContactAssignment ca = new ContactAssignment("contactId", "assignmentId");
         ContactAssignment ca2 = new ContactAssignment("contactId2", "assignmentId2");
         ContactAssignment ca3 = new ContactAssignment("contactId3", "assignmentId3");
@@ -135,7 +139,7 @@ public class UniqueContactAssignmentListTest {
 
     @Test
     public void setContactAssignments_listWithNullContactAssignment_throwsNullPointerException() {
-        java.util.List<ContactAssignment> replacement = new java.util.ArrayList<>();
+        List<ContactAssignment> replacement = new ArrayList<>();
         replacement.add(null);
         Assertions.assertThrows(NullPointerException.class,
                 () -> this.uniqueContactAssignmentList.setContactAssignments(replacement));
@@ -148,7 +152,7 @@ public class UniqueContactAssignmentListTest {
         this.uniqueContactAssignmentList.add(ca1);
         this.uniqueContactAssignmentList.add(ca2);
 
-        java.util.Iterator<ContactAssignment> iterator = this.uniqueContactAssignmentList.iterator();
+        Iterator<ContactAssignment> iterator = this.uniqueContactAssignmentList.iterator();
         Assertions.assertTrue(iterator.hasNext());
         Assertions.assertTrue(iterator.next().equals(ca1));
         Assertions.assertTrue(iterator.hasNext());
