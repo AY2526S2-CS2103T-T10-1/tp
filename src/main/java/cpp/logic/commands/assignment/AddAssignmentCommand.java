@@ -101,6 +101,10 @@ public class AddAssignmentCommand extends Command {
             throw new CommandException(Messages.MESSAGE_CLASS_GROUP_NOT_FOUND);
         }
 
+        if (classGroupToAllocate != null && classGroupToAllocate.getContactIdSet().isEmpty()) {
+            throw new CommandException(Messages.MESSAGE_CLASS_GROUP_NO_CONTACTS);
+        }
+
         this.allocateToContactsByContactIndices(model, this.toAdd, lastShownContactList);
         if (classGroupToAllocate != null) {
             this.allocateToContactsByClassGroup(model, this.toAdd, classGroupToAllocate);
