@@ -205,13 +205,14 @@ public class UnallocateAssignmentCommand extends Command {
             model.removeContactAssignment(ca);
             this.unallocatedCount++;
             this.buildSuccessfulUnallocationString(contact.getName().fullName);
-            this.contactsToUnallocate.add(contact);
 
         } catch (ContactAssignmentNotFoundException e) {
             // Skip contacts that don't have the assignment allocated.
             this.unsuccessfulUnallocationCount++;
             this.buildUnsuccessfulUnallocationString(contact.getName().fullName);
         }
+
+        this.contactsToUnallocate.add(contact);
     }
 
     private void buildSuccessfulUnallocationString(String contactName) {

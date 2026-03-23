@@ -204,13 +204,14 @@ public class AllocateAssignmentCommand extends Command {
             model.addContactAssignment(ca);
             this.allocatedCount++;
             this.buildSuccessfulAllocationString(contact.getName().fullName);
-            this.contactsToAllocate.add(contact);
 
         } catch (ContactAlreadyAllocatedAssignmentException e) {
             // Skip contacts that already have the assignment allocated.
             this.unsuccessfulAllocationCount++;
             this.buildUnsuccessfulAllocationString(contact.getName().fullName);
         }
+
+        this.contactsToAllocate.add(contact);
     }
 
     private void buildSuccessfulAllocationString(String contactName) {
