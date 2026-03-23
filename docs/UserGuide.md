@@ -238,7 +238,7 @@ Refer to the [**Features**](#features) below for advanced features with the full
 
 * Items with `…`​ after them can be used multiple times.<br>
   e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.<br>
-  e.g. `ct/CONTACT INDICES` can be used as `ct/1`, `ct/1 2 3`, `ct/1 3 5 7` etc.
+  e.g. `ct/CONTACT_INDICES` can be used as `ct/1`, `ct/1 2 3`, `ct/1 3 5 7` etc.
 
 * Parameters can be in any order.<br>
   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
@@ -348,17 +348,17 @@ Examples:
 
 Adds an assignment to the address book.
 
-Format: `addass ass/ASSIGNMENT NAME d/DEADLINE [c/CLASS NAME] [ct/CONTACT INDICES...]​`
+Format: `addass ass/ASSIGNMENT NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]​`
 
 * Creates an assignment with the specified `ASSIGNMENT NAME` and `DEADLINE`.
 
 * The `DEADLINE` provided must be in the format `dd-MM-yyyy HH:mm`.
 
-* `c/CLASS NAME` is optional and can be used to allocate the assignment to all contacts in that class.
+* `c/CLASS_NAME` is optional and can be used to allocate the assignment to all contacts in that class.
 
-* `ct/CONTACT INDICES` is optional and can be used to allocate the assignment to specific contacts. If the `ct/` prefix is included, at least 1 contact index must be specified.
+* `ct/CONTACT_INDICES` is optional and can be used to allocate the assignment to specific contacts. If the `ct/` prefix is included, at least 1 contact index must be specified.
 
-* These `CONTACT INDICES` must be positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
+* These `CONTACT_INDICES` must be positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
 <box type="warning" seamless>
 
@@ -374,7 +374,7 @@ Format: `addass ass/ASSIGNMENT NAME d/DEADLINE [c/CLASS NAME] [ct/CONTACT INDICE
 
 <box type="tip" seamless>
 
-* You can enter the `c/CLASS NAME` and/or `ct/CONTACT INDICES` parameters to allocate the assignment to specific contacts at the time of creation. This is optional and can also be done later using the `allocass` command.
+* You can enter the `c/CLASS_NAME` and/or `ct/CONTACT_INDICES` parameters to allocate the assignment to specific contacts at the time of creation. This is optional and can also be done later using the `allocass` command.
 
 </box>
 
@@ -399,15 +399,15 @@ Examples:
 
 Allocates an assignment to specific contacts.
 
-Format: `allocass ass/ASSIGNMENT NAME [ct/CONTACT INDICES...] [c/CLASS NAME]`
+Format: `allocass ass/ASSIGNMENT NAME [ct/CONTACT_INDICES...] [c/CLASS_NAME]`
 
 * Allocates the assignment to the specified contacts, as well as all contacts in the specified class.
 
 * The `ASSIGNMENT NAME` must match the name of an existing assignment (case-insensitive).
 
-* At least 1 of [ct/CONTACT INDICES...] or [c/CLASS NAME] must be provided.
+* At least 1 of `[ct/CONTACT_INDICES...]` or `[c/CLASS_NAME]` must be provided.
 
-* The `CONTACT INDICES` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
+* The `CONTACT_INDICES` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
   
 <box type="warning" seamless>
 
@@ -425,7 +425,7 @@ Format: `allocass ass/ASSIGNMENT NAME [ct/CONTACT INDICES...] [c/CLASS NAME]`
 
 <box type="tip" seamless>
 
-* You can enter both the `c/CLASS NAME` and `ct/CONTACT INDICES` parameters to allocate the assignment to more contacts at the same time.
+* You can enter both the `c/CLASS_NAME` and `ct/CONTACT_INDICES` parameters to allocate the assignment to more contacts at the same time.
 
 </box>
 
@@ -437,7 +437,7 @@ Examples:
 * `allocass ass/Assignment 2 c/CS2103T`<br>
   Allocates the "Assignment 2" to all contacts in the "CS2103T" class.
 
-* `allocass ass/Assignment 3 ct/1 2 3 c/CS2103T`<br>
+* `allocass ass/Assignment 3 c/CS2103T ct/1 2 3`<br>
   Allocates the "Assignment 3" to the 1st, 2nd, and 3rd contacts in the list, as well as all contacts belonging to class "CS2103T".
 
   In this example, the class "CS2103T" contains contacts 2-5, and contact 3 was already allocated the assignment.<br>
@@ -447,15 +447,15 @@ Examples:
 
 Unallocates an assignment from specific contacts.
 
-Format: `unallocass ass/ASSIGNMENT NAME [ct/CONTACT INDICES...] [c/CLASS NAME]`
+Format: `unallocass ass/ASSIGNMENT NAME [ct/CONTACT_INDICES...] [c/CLASS_NAME]`
 
 * Unallocates the assignment from the specified contacts, as well as all contacts in the specified class.
 
 * The `ASSIGNMENT NAME` must match the name of an existing assignment (case-insensitive).
 
-* At least 1 of [ct/CONTACT INDICES...] or [c/CLASS NAME] must be provided.
+* At least 1 of `[ct/CONTACT_INDICES...]` or `[c/CLASS_NAME]` must be provided.
 
-* The `CONTACT INDICES` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
+* The `CONTACT_INDICES` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
   
 <box type="warning" seamless>
 
@@ -473,7 +473,7 @@ Format: `unallocass ass/ASSIGNMENT NAME [ct/CONTACT INDICES...] [c/CLASS NAME]`
 
 <box type="tip" seamless>
 
-* You can enter both the `c/CLASS NAME` and `ct/CONTACT INDICES` parameters to unallocate the assignment from more contacts at the same time.
+* You can enter both the `c/CLASS_NAME` and `ct/CONTACT_INDICES` parameters to unallocate the assignment from more contacts at the same time.
 
 </box>
 
@@ -485,7 +485,7 @@ Examples:
 * `unallocass ass/Assignment 2 c/CS2103T`<br>
   Unallocates the "Assignment 2" from all contacts in the "CS2103T" class.
 
-* `unallocass ass/Assignment 3 ct/1 2 3 c/CS2103T`<br>
+* `unallocass ass/Assignment 3 c/CS2103T ct/1 2 3`<br>
   Unallocates the "Assignment 3" from the 1st, 2nd, and 3rd contacts in the list, as well as all contacts belonging to class "CS2103T".
 
   In this example, the class "CS2103T" contains contacts 2-5, and only contacts 1, 2, 4, and 5 had the assignment allocated.<br>
@@ -556,14 +556,17 @@ If you encounter other issues, please raise a ticket with the project maintainer
 
 ## Command summary
 
-| Action     | Format, Examples                                                                                                                                                      |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague` |
-| **Clear**  | `clear`                                                                                                                                                               |
-| **Delete** | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                   |
-| **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                           |
-| **Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                            |
-| **List**   | `list`                                                                                                                                                                |
-| **Help**   | `help`                                                                                                                                                                |
+| Action                    | Format, Examples                                                                                                                                                      |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Add**                   | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague` |
+| **Clear**                 | `clear`                                                                                                                                                               |
+| **Add Assignment**        | `addass n/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]​` <br> e.g., `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T ct/4 5`                |
+| **Allocate Assignment**   | `allocass n/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `allocass ass/Assignment 3 c/CS2103T ct/1 2 3`                                         |
+| **Unallocate Assignment** | `unallocass n/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `unallocass ass/Assignment 3 c/CS2103T ct/1 2 3`                                     |
+| **Delete**                | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                   |
+| **Edit**                  | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                           |
+| **Find**                  | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                            |
+| **List**                  | `list`                                                                                                                                                                |
+| **Help**                  | `help`                                                                                                                                                                |
 
 </div>
