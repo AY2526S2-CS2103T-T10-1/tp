@@ -1,8 +1,5 @@
 package cpp.ui;
 
-import java.util.logging.Logger;
-
-import cpp.commons.core.LogsCenter;
 import cpp.model.contact.Contact;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,7 +12,6 @@ import javafx.scene.layout.Region;
  */
 public class ContactListPanel extends UiPart<Region> {
     private static final String FXML = "ContactListPanel.fxml";
-    private final Logger logger = LogsCenter.getLogger(ContactListPanel.class);
 
     @FXML
     private ListView<Contact> contactListView;

@@ -1,8 +1,5 @@
 package cpp.ui;
 
-import java.util.logging.Logger;
-
-import cpp.commons.core.LogsCenter;
 import cpp.model.classgroup.ClassGroup;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,7 +12,6 @@ import javafx.scene.layout.Region;
  */
 public class ClassGroupListPanel extends UiPart<Region> {
     private static final String FXML = "ClassGroupListPanel.fxml";
-    private final Logger logger = LogsCenter.getLogger(ClassGroupListPanel.class);
 
     @FXML
     private ListView<ClassGroup> classGroupListView;
