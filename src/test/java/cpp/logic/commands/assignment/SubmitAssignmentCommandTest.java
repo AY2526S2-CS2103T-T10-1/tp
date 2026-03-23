@@ -308,31 +308,6 @@ public class SubmitAssignmentCommandTest {
         }
     }
 
-    private class ModelStubWithClassGroupTwo extends ModelStubAcceptingMarkSubmitted {
-        @Override
-        public boolean hasClassGroup(ClassGroup classGroup) {
-            return classGroup.getName().equals(new ClassGroupName("TwoGroup"));
-        }
-
-        @Override
-        public ReadOnlyAddressBook getAddressBook() {
-            AddressBook ab = new AddressBook();
-            for (Contact c : TypicalContacts.getTypicalContacts()) {
-                ab.addContact(c);
-            }
-            ClassGroup cg = new ClassGroup(new ClassGroupName("TwoGroup"));
-            try {
-                cg.allocateContact(TypicalContacts.ALICE.getId());
-                cg.allocateContact(TypicalContacts.BENSON.getId());
-            } catch (Exception e) {
-                // ignore
-            }
-            ab.addClassGroup(cg);
-            ab.addAssignment(TypicalAssignments.ASSIGNMENT_ONE);
-            return ab;
-        }
-    }
-
     private class ModelStubMarkAllNotAllocated extends ModelStubAcceptingMarkSubmitted {
         @Override
         public void markSubmitted(Assignment assignment, Contact contact, LocalDateTime submissionDate)
