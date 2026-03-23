@@ -17,14 +17,14 @@ public class UniqueContactAssignmentListTest {
     @Test
     public void contains_contactAssignmentNotInList_returnsFalse() {
         ContactAssignment ca = new ContactAssignment("contactId", "assignmentId");
-        assert !this.uniqueContactAssignmentList.contains(ca);
+        Assertions.assertTrue(!this.uniqueContactAssignmentList.contains(ca));
     }
 
     @Test
     public void contains_contactAssignmentInList_returnsTrue() {
         ContactAssignment ca = new ContactAssignment("contactId", "assignmentId");
         this.uniqueContactAssignmentList.add(ca);
-        assert this.uniqueContactAssignmentList.contains(ca);
+        Assertions.assertTrue(this.uniqueContactAssignmentList.contains(ca));
     }
 
     @Test
@@ -44,7 +44,7 @@ public class UniqueContactAssignmentListTest {
     public void add_validContactAssignment_addsContactAssignment() {
         ContactAssignment ca = new ContactAssignment("contactId", "assignmentId");
         this.uniqueContactAssignmentList.add(ca);
-        assert this.uniqueContactAssignmentList.contains(ca);
+        Assertions.assertTrue(this.uniqueContactAssignmentList.contains(ca));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class UniqueContactAssignmentListTest {
         ContactAssignment ca = new ContactAssignment("contactId", "assignmentId");
         this.uniqueContactAssignmentList.add(ca);
         this.uniqueContactAssignmentList.remove(ca);
-        assert !this.uniqueContactAssignmentList.contains(ca);
+        Assertions.assertTrue(!this.uniqueContactAssignmentList.contains(ca));
     }
 
     @Test
@@ -85,8 +85,8 @@ public class UniqueContactAssignmentListTest {
         toRemoveList.add(ca2);
 
         this.uniqueContactAssignmentList.removeMultiple(toRemoveList);
-        assert !this.uniqueContactAssignmentList.contains(ca1);
-        assert !this.uniqueContactAssignmentList.contains(ca2);
+        Assertions.assertTrue(!this.uniqueContactAssignmentList.contains(ca1));
+        Assertions.assertTrue(!this.uniqueContactAssignmentList.contains(ca2));
     }
 
     @Test
@@ -101,7 +101,7 @@ public class UniqueContactAssignmentListTest {
         ContactAssignment ca = new ContactAssignment("contactId", "assignmentId");
         replacement.add(ca);
         this.uniqueContactAssignmentList.setContactAssignments(replacement);
-        assert this.uniqueContactAssignmentList.contains(ca);
+        Assertions.assertTrue(this.uniqueContactAssignmentList.contains(ca));
     }
 
     @Test
@@ -116,7 +116,7 @@ public class UniqueContactAssignmentListTest {
         ContactAssignment ca = new ContactAssignment("contactId", "assignmentId");
         replacement.add(ca);
         this.uniqueContactAssignmentList.setContactAssignments(replacement);
-        assert this.uniqueContactAssignmentList.contains(ca);
+        Assertions.assertTrue(this.uniqueContactAssignmentList.contains(ca));
     }
 
     @Test
@@ -149,11 +149,11 @@ public class UniqueContactAssignmentListTest {
         this.uniqueContactAssignmentList.add(ca2);
 
         java.util.Iterator<ContactAssignment> iterator = this.uniqueContactAssignmentList.iterator();
-        assert iterator.hasNext();
-        assert iterator.next().equals(ca1);
-        assert iterator.hasNext();
-        assert iterator.next().equals(ca2);
-        assert !iterator.hasNext();
+        Assertions.assertTrue(iterator.hasNext());
+        Assertions.assertTrue(iterator.next().equals(ca1));
+        Assertions.assertTrue(iterator.hasNext());
+        Assertions.assertTrue(iterator.next().equals(ca2));
+        Assertions.assertFalse(iterator.hasNext());
     }
 
     @Test
@@ -175,9 +175,9 @@ public class UniqueContactAssignmentListTest {
         list2.add(ca1);
         list2.add(ca2);
 
-        assert list1.equals(list2);
-        assert list1.equals(list1);
-        assert !list1.equals(null);
+        Assertions.assertTrue(list1.equals(list2));
+        Assertions.assertTrue(list1.equals(list1));
+        Assertions.assertFalse(list1.equals(null));
     }
 
     @Test
@@ -193,6 +193,6 @@ public class UniqueContactAssignmentListTest {
         list2.add(ca1);
         list2.add(ca2);
 
-        assert list1.hashCode() == list2.hashCode();
+        Assertions.assertTrue(list1.hashCode() == list2.hashCode());
     }
 }
