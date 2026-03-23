@@ -1,0 +1,63 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":DeleteCommandParser" as DeleteCommandParser LOGIC_COLOR
+participant "d:DeleteClassGroupCommand" as DeleteClassGroupCommand LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant ":Model" as Model MODEL_COLOR
+end box
+
+[-> AddressBookParser : parseCommand("delete c/CS2103T10")
+activate AddressBookParser
+
+create DeleteCommandParser
+AddressBookParser -> DeleteCommandParser
+activate DeleteCommandParser
+
+DeleteCommandParser --> AddressBookParser
+deactivate DeleteCommandParser
+
+AddressBookParser -> DeleteCommandParser : parse("c/CS2103T10")
+activate DeleteCommandParser
+
+note right of DeleteCommandParser : Detects c/ prefix,\nroutes to class group variant
+
+create DeleteClassGroupCommand
+DeleteCommandParser -> DeleteClassGroupCommand
+activate DeleteClassGroupCommand
+
+DeleteClassGroupCommand --> DeleteCommandParser
+deactivate DeleteClassGroupCommand
+
+DeleteCommandParser --> AddressBookParser : d
+deactivate DeleteCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+DeleteCommandParser -[hidden]-> AddressBookParser
+destroy DeleteCommandParser
+
+AddressBookParser -->[ : d
+deactivate AddressBookParser
+
+[-> DeleteClassGroupCommand : execute(model)
+activate DeleteClassGroupCommand
+
+DeleteClassGroupCommand -> Model : getAddressBook().getClassGroupList()
+activate Model
+
+Model --> DeleteClassGroupCommand : classGroupList
+deactivate Model
+
+DeleteClassGroupCommand -> Model : deleteClassGroup(classGroupToDelete)
+activate Model
+
+Model --> DeleteClassGroupCommand
+deactivate Model
+
+DeleteClassGroupCommand -->[ : CommandResult
+deactivate DeleteClassGroupCommand
+@enduml
