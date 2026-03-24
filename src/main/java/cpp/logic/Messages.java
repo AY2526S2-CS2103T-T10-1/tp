@@ -21,6 +21,8 @@ public class Messages {
     public static final String MESSAGE_ASSIGNMENT_NOT_FOUND = "The assignment provided is not found";
     public static final String MESSAGE_CLASS_GROUP_NOT_FOUND = "The class group provided is not found";
     public static final String MESSAGE_CONTACTS_LISTED_OVERVIEW = "%1$d contacts listed!";
+    public static final String MESSAGE_ASSIGNMENTS_LISTED_OVERVIEW = "%1$d assignments listed!";
+    public static final String MESSAGE_CLASS_GROUPS_LISTED_OVERVIEW = "%1$d class groups listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS = """
             Multiple values specified for the following single-valued field(s): """;
 

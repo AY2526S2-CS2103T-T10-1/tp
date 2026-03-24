@@ -12,19 +12,19 @@ import cpp.model.contact.ContactNameContainsKeywordsPredicate;
  * argument keywords.
  * Keyword matching is case insensitive.
  */
-public class FindCommand extends Command {
+public class FindContactCommand extends Command {
 
-    public static final String COMMAND_WORD = "find";
+    public static final String COMMAND_WORD = "findcontact";
 
-    public static final String MESSAGE_USAGE = FindCommand.COMMAND_WORD
+    public static final String MESSAGE_USAGE = FindContactCommand.COMMAND_WORD
             + ": Finds all contacts whose names contain any of "
             + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
             + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
-            + "Example: " + FindCommand.COMMAND_WORD + " alice bob charlie";
+            + "Example: " + FindContactCommand.COMMAND_WORD + " alice bob charlie";
 
     private final ContactNameContainsKeywordsPredicate predicate;
 
-    public FindCommand(ContactNameContainsKeywordsPredicate predicate) {
+    public FindContactCommand(ContactNameContainsKeywordsPredicate predicate) {
         this.predicate = predicate;
     }
 
@@ -43,12 +43,12 @@ public class FindCommand extends Command {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof FindCommand)) {
+        if (!(other instanceof FindContactCommand)) {
             return false;
         }
 
-        FindCommand otherFindCommand = (FindCommand) other;
-        return this.predicate.equals(otherFindCommand.predicate);
+        FindContactCommand otherFindContactCommand = (FindContactCommand) other;
+        return this.predicate.equals(otherFindContactCommand.predicate);
     }
 
     @Override
