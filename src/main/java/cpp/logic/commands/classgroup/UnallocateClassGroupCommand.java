@@ -46,9 +46,9 @@ public class UnallocateClassGroupCommand extends Command {
     private final ClassGroupName classGroupName;
     private final List<Index> contactIndices;
 
-    private int unallocatedCount;
+    private int successfulUnallocationCount;
     private int unsuccessfulUnallocationCount;
-    private StringBuilder successfullyUnallocatedNames = new StringBuilder();
+    private StringBuilder successfulContactUnallocations = new StringBuilder();
     private StringBuilder unsuccessfulContactUnallocations = new StringBuilder();
 
     /**
@@ -60,7 +60,7 @@ public class UnallocateClassGroupCommand extends Command {
         Objects.requireNonNull(contactIndices);
         this.classGroupName = classGroupName;
         this.contactIndices = new ArrayList<>(contactIndices);
-        this.unallocatedCount = 0;
+        this.successfulUnallocationCount = 0;
         this.unsuccessfulUnallocationCount = 0;
     }
 
@@ -83,14 +83,14 @@ public class UnallocateClassGroupCommand extends Command {
             this.unsuccessfulContactUnallocations.append("None");
         }
 
-        if (this.unallocatedCount == 0) {
+        if (this.successfulUnallocationCount == 0) {
             throw new CommandException(String.format(UnallocateClassGroupCommand.MESSAGE_UNALLOCATION_FAILED,
                     this.unsuccessfulContactUnallocations.toString()));
         }
 
         return new CommandResult(
                 String.format(UnallocateClassGroupCommand.MESSAGE_SUCCESS, this.classGroupName.fullName,
-                        this.unallocatedCount, this.successfullyUnallocatedNames.toString(),
+                        this.successfulUnallocationCount, this.successfulContactUnallocations.toString(),
                         this.unsuccessfulContactUnallocations.toString()));
     }
 
@@ -121,11 +121,9 @@ public class UnallocateClassGroupCommand extends Command {
             Contact contactToUnallocate = lastShownContactList.get(contactIndex.getZeroBased());
             try {
                 classGroupToUnallocate.unallocateContact(contactToUnallocate.getId());
-                this.unallocatedCount++;
+                this.successfulUnallocationCount++;
                 this.buildSuccessfulUnallocationString(contactToUnallocate.getName().fullName);
             } catch (ContactNotAllocatedClassGroupException e) {
-                // Contact was not allocated to the class group, skip and continue unallocating
-                // the rest of the contacts
                 this.unsuccessfulUnallocationCount++;
                 this.buildUnsuccessfulUnallocationString(contactToUnallocate.getName().fullName);
             }
@@ -133,10 +131,10 @@ public class UnallocateClassGroupCommand extends Command {
     }
 
     private void buildSuccessfulUnallocationString(String contactName) {
-        if (this.successfullyUnallocatedNames.length() > 0) {
-            this.successfullyUnallocatedNames.append("; ");
+        if (this.successfulContactUnallocations.length() > 0) {
+            this.successfulContactUnallocations.append("; ");
         }
-        this.successfullyUnallocatedNames.append(contactName);
+        this.successfulContactUnallocations.append(contactName);
     }
 
     private void buildUnsuccessfulUnallocationString(String contactName) {

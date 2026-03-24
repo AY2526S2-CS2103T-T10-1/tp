@@ -57,8 +57,8 @@ public class UnallocateAssignmentCommand extends Command {
     private final List<Index> contactIndices;
     private final Set<Contact> contactsToUnallocate;
     private final ClassGroupName classGroupName;
-    private int unallocatedCount;
-    private StringBuilder unallocatedContacts;
+    private int successfulUnallocationCount;
+    private StringBuilder successfulContactUnallocations;
     private int unsuccessfulUnallocationCount;
     private StringBuilder unsuccessfulContactUnallocations;
 
@@ -73,8 +73,8 @@ public class UnallocateAssignmentCommand extends Command {
         this.contactIndices = new ArrayList<>(contactIndices);
         this.contactsToUnallocate = new HashSet<>();
         this.classGroupName = null;
-        this.unallocatedCount = 0;
-        this.unallocatedContacts = new StringBuilder();
+        this.successfulUnallocationCount = 0;
+        this.successfulContactUnallocations = new StringBuilder();
         this.unsuccessfulUnallocationCount = 0;
         this.unsuccessfulContactUnallocations = new StringBuilder();
     }
@@ -92,8 +92,8 @@ public class UnallocateAssignmentCommand extends Command {
         this.contactIndices = new ArrayList<>(contactIndices);
         this.contactsToUnallocate = new HashSet<>();
         this.classGroupName = classGroupName;
-        this.unallocatedCount = 0;
-        this.unallocatedContacts = new StringBuilder();
+        this.successfulUnallocationCount = 0;
+        this.successfulContactUnallocations = new StringBuilder();
         this.unsuccessfulUnallocationCount = 0;
         this.unsuccessfulContactUnallocations = new StringBuilder();
     }
@@ -133,13 +133,14 @@ public class UnallocateAssignmentCommand extends Command {
             this.unsuccessfulContactUnallocations.append("None");
         }
 
-        if (this.unallocatedCount == 0) {
+        if (this.successfulUnallocationCount == 0) {
             throw new CommandException(String.format(UnallocateAssignmentCommand.MESSAGE_UNALLOCATION_FAILED,
                     this.unsuccessfulContactUnallocations.toString()));
         }
 
         return new CommandResult(String.format(UnallocateAssignmentCommand.MESSAGE_SUCCESS,
-                Messages.format(assignmentToUnallocate), this.unallocatedCount, this.unallocatedContacts.toString(),
+                Messages.format(assignmentToUnallocate), this.successfulUnallocationCount,
+                this.successfulContactUnallocations.toString(),
                 this.unsuccessfulContactUnallocations.toString()));
     }
 
@@ -203,11 +204,10 @@ public class UnallocateAssignmentCommand extends Command {
 
         try {
             model.removeContactAssignment(ca);
-            this.unallocatedCount++;
+            this.successfulUnallocationCount++;
             this.buildSuccessfulUnallocationString(contact.getName().fullName);
 
         } catch (ContactAssignmentNotFoundException e) {
-            // Skip contacts that don't have the assignment allocated.
             this.unsuccessfulUnallocationCount++;
             this.buildUnsuccessfulUnallocationString(contact.getName().fullName);
         }
@@ -216,10 +216,10 @@ public class UnallocateAssignmentCommand extends Command {
     }
 
     private void buildSuccessfulUnallocationString(String contactName) {
-        if (this.unallocatedContacts.length() > 0) {
-            this.unallocatedContacts.append("; ");
+        if (this.successfulContactUnallocations.length() > 0) {
+            this.successfulContactUnallocations.append("; ");
         }
-        this.unallocatedContacts.append(contactName);
+        this.successfulContactUnallocations.append(contactName);
     }
 
     private void buildUnsuccessfulUnallocationString(String contactName) {
