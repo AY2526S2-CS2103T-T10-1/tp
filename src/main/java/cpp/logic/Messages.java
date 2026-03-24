@@ -9,6 +9,7 @@ import cpp.logic.parser.Prefix;
 import cpp.model.assignment.Assignment;
 import cpp.model.classgroup.ClassGroup;
 import cpp.model.contact.Contact;
+import cpp.model.tag.Tag;
 
 /**
  * Container for user visible messages.
@@ -47,9 +48,13 @@ public class Messages {
                 .append("; Email: ")
                 .append(contact.getEmail())
                 .append("; Address: ")
-                .append(contact.getAddress())
-                .append("; Tags: ");
-        contact.getTags().forEach(builder::append);
+                .append(contact.getAddress());
+        Set<Tag> tags = contact.getTags();
+        if (!tags.isEmpty()) {
+            builder.append("; Tags: ");
+            tags.forEach(builder::append);
+        }
+
         return builder.toString();
     }
 

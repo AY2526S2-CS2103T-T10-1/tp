@@ -78,7 +78,7 @@ public class UnallocateClassGroupCommandTest {
         Assertions.assertFalse(validClassGroup.getContactIdSet().contains(validContact2.getId()));
         Assertions.assertTrue(validClassGroup.getContactIdSet().contains(validContact3.getId()));
 
-        // New command with Indexes 1 to 3, where indicees 1 and 2 are already
+        // New command with Indices 1 to 3, where indices 1 and 2 are already
         // unallocated from the class group, and index 3 is not unallocated yet
         ArrayList<Index> allContactIndices = new ArrayList<>(
                 Arrays.asList(TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT,

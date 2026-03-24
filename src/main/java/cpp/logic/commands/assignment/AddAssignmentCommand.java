@@ -44,7 +44,7 @@ public class AddAssignmentCommand extends Command {
     public static final String MESSAGE_SUCCESS = "New assignment added: %1$s";
     public static final String MESSAGE_SUCCESS_WITH_ALLOCATION = """
             New assignment added: %1$s
-            Allocated assignment to %2$s contact(s)
+            Allocated assignment to %2$s contact(s).
             Contacts allocated: %3$s""";
     public static final String MESSAGE_DUPLICATE_ASSIGNMENT = "This assignment already exists in the assignment list";
 

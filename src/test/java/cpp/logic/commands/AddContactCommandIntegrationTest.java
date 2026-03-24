@@ -40,7 +40,7 @@ public class AddContactCommandIntegrationTest {
         expectedModel.addContact(validContact);
 
         CommandTestUtil.assertCommandSuccess(new AddContactCommand(validContact), this.model,
-                String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(validContact)),
+                String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(validContact), "", ""),
                 expectedModel);
     }
 
@@ -82,7 +82,9 @@ public class AddContactCommandIntegrationTest {
 
         CommandTestUtil.assertCommandSuccess(
                 new AddContactCommand(validContact, null, assignment.getName()), this.model,
-                String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(validContact)),
+                String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(validContact), "",
+                        String.format(AddContactCommand.MESSAGE_SUCCESS_ASSIGNMENT_ALLOCATION,
+                                Messages.format(assignment))),
                 expectedModel);
     }
 
@@ -95,7 +97,11 @@ public class AddContactCommandIntegrationTest {
 
         CommandResult commandResult = new AddContactCommand(validContact, classGroupName, null).execute(this.model);
 
-        Assertions.assertEquals(String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(validContact)),
+        Assertions.assertEquals(
+                String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(validContact),
+                        String.format(AddContactCommand.MESSAGE_SUCCESS_CLASS_GROUP_ALLOCATION,
+                                Messages.format(classGroup)),
+                        ""),
                 commandResult.getFeedbackToUser());
         Assertions.assertTrue(this.model.hasContact(validContact));
         ClassGroup actualClassGroup = this.model.getAddressBook().getClassGroupList().stream()
@@ -116,7 +122,12 @@ public class AddContactCommandIntegrationTest {
         CommandResult commandResult = new AddContactCommand(validContact, classGroupName, assignment.getName())
                 .execute(this.model);
 
-        Assertions.assertEquals(String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(validContact)),
+        Assertions.assertEquals(
+                String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(validContact),
+                        String.format(AddContactCommand.MESSAGE_SUCCESS_CLASS_GROUP_ALLOCATION,
+                                Messages.format(classGroup)),
+                        String.format(AddContactCommand.MESSAGE_SUCCESS_ASSIGNMENT_ALLOCATION,
+                                Messages.format(assignment))),
                 commandResult.getFeedbackToUser());
         Assertions.assertTrue(this.model.hasContact(validContact));
         Assertions.assertTrue(this.model.getAddressBook().getContactAssignmentList()
