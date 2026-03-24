@@ -289,7 +289,7 @@ Format: `list contacts`
 
 * The result box will display the message: `Listed all contacts`
 
-* The command does not accept any additional arguments. If you type extra words (e.g., `list contacts cs2103t`), the system will reject it and display an `Invalid command format` error.
+* The command does not accept any additional arguments. If you type extra words (e.g., `list contacts cs2103t`), the system will reject it and display an `Invalid command format!` error.
   
 ### Editing a contact : `edit`
 
@@ -418,7 +418,7 @@ Format: `list assignments`
 
 * The result box will display the message: `Listed all assignments`
 
-* The command does not accept any additional arguments. If you type extra words (e.g., `list assignments cs2103t`), the system will reject it and display an `Invalid command format` error.
+* The command does not accept any additional arguments. If you type extra words (e.g., `list assignments cs2103t`), the system will reject it and display an `Invalid command format!` error.
   
 ### Allocating assignments to contacts: `allocass`
 
@@ -532,7 +532,7 @@ Format: `list classes`
 
 * The result box will display the message: `Listed all classes`
 
-* The command does not accept any additional arguments. If you type extra words (e.g., `list classes cs2103t`), the system will reject it and display an `Invalid command format` error.
+* The command does not accept any additional arguments. If you type extra words (e.g., `list classes cs2103t`), the system will reject it and display an `Invalid command format!` error.
   
 ### Clearing all entries : `clear`
 
