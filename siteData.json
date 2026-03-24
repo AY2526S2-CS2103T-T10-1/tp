@@ -115,7 +115,7 @@
         "quick-cli-tutorial-common-tasks-and-expected-output": "Quick CLI tutorial (common tasks and expected output)",
         "features": "Features",
         "viewing-help-help": "Viewing help : help",
-        "adding-a-contact-add": "Adding a contact: add",
+        "adding-a-contact-addcontact": "Adding a contact: addcontact",
         "listing-all-contacts-list": "Listing all contacts : list",
         "editing-a-contact-edit": "Editing a contact : edit",
         "locating-contacts-by-name-find": "Locating contacts by name: find",
