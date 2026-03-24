@@ -308,15 +308,69 @@ Examples:
 * `addcontact n/Betsy Crowe e/betsycrowe@example.com a/Betsy Street, Block 123, #06-07 p/1234567` <br>
   Creates a contact with the name "Betsy Crowe", phone number "1234567", email "betsycrowe<span></span>@example.com", address "Betsy Street, Block 123, #06-07"
 
-* `addcontact n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 c/CS2103T10 ass/Assignment 1 t/friends t/owesMoney`<br>
-  Creates a contact with the name "John Doe", phone number "98765432", email "johnd<span></span>@example.com", address "311, Clementi Ave 2, #02-25", allocated to class group "CS2103T10" and assignment "Assignment 1", with tags "friends" and "owesMoney".
+* `addcontact n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 c/CS2103T-T10-1 ass/Assignment 1 t/friends t/owesMoney`<br>
+  Creates a contact with the name "John Doe", phone number "98765432", email "johnd<span></span>@example.com", address "311, Clementi Ave 2, #02-25", allocated to class group "CS2103T-T10-1" and assignment "Assignment 1", with tags "friends" and "owesMoney".
 
-### Listing all contacts : `list`
+### Listing all contacts : `list contacts`
 
 Shows a list of all contacts in the address book.
 
-Format: `list`
+Format: `list contacts`
 
+* If your address book is completely empty (no contacts have been added yet), running this command will simply display an empty list. It will not generate an error.
+
+* The tab will be automatically switched to `Contacts` upon successful execution.
+
+* The result box will display the message: `Listed all contacts`
+
+* The command does not accept any additional arguments. If you type extra words (e.g., `list contacts cs2103t`), the system will reject it and display an `Invalid command format!` error.
+
+<box type="tip" seamless>
+
+**Tip:** You may also click on the tabs to switch between Contacts, Classes, and Assignments. Note that this will not affect any existing filters on the displayed lists, unlike the `list <TAB>` command which will clear all filters and show all items in that category.
+
+</box>
+
+### Listing all classes : `list classes`
+
+Shows a list of all classes in the address book.
+
+Format: `list classes`
+
+* If no classes have been added yet, running this command will simply display an empty list. It will not generate an error.
+
+* The tab will be automatically switched to `Classes` upon successful execution.
+
+* The result box will display the message: `Listed all classes`
+
+* The command does not accept any additional arguments. If you type extra words (e.g., `list classes cs2103t`), the system will reject it and display an `Invalid command format!` error.
+
+<box type="tip" seamless>
+
+**Tip:** You may also click on the tabs to switch between Contacts, Classes, and Assignments. Note that this will not affect any existing filters on the displayed lists, unlike the `list <TAB>` command which will clear all filters and show all items in that category.
+
+</box>
+
+### Listing all assignments : `list assignments`
+
+Shows a list of all assignments in the address book.
+
+Format: `list assignments`
+
+* If your assignment list is completely empty (no assignments have been added yet), running this command will simply display an empty list. It will not generate an error.
+
+* The tab will be automatically switched to `Assignments` upon successful execution.
+
+* The result box will display the message: `Listed all assignments`
+
+* The command does not accept any additional arguments. If you type extra words (e.g., `list assignments cs2103t`), the system will reject it and display an `Invalid command format!` error.
+
+<box type="tip" seamless>
+
+**Tip:** You may also click on the tabs to switch between Contacts, Classes, and Assignments. Note that this will not affect any existing filters on the displayed lists, unlike the `list <TAB>` command which will clear all filters and show all items in that category.
+
+</box>
+  
 ### Editing a contact : `edit`
 
 Edits an existing contact in the address book.
@@ -377,7 +431,7 @@ Format: `delete INDEX`
 
 Examples:
 
-* `list` followed by `delete 2` deletes the 2nd contact in the address book.
+* `list contacts` followed by `delete 2` deletes the 2nd contact in the address book.
 
 * `find Betsy` followed by `delete 1` deletes the 1st contact in the results of the `find` command.
 
@@ -435,10 +489,10 @@ Format: `allocclass c/CLASS_NAME ct/CONTACT_INDICES...`
 
 Examples:
 
-* `list contacts` followed by `allocass c/CS2103T-T10-1 ct/1`<br>
+* `list contacts` followed by `allocclass c/CS2103T-T10-1 ct/1`<br>
   Allocates the class "CS2103T-T10-1" to only the 1st contact in the list.
 
-* `list contacts` followed by `allocass c/CS2103T-T10-1 ct/1 2 3`<br>
+* `list contacts` followed by `allocclass c/CS2103T-T10-1 ct/1 2 3`<br>
   Allocates the class "CS2103T-T10-1" to the 1st, 2nd, and 3rd contacts in the list.
 
 ### Unallocating classes from contacts: `unallocclass`
@@ -465,10 +519,10 @@ Format: `unallocclass c/CLASS_NAME ct/CONTACT_INDICES...`
 
 Examples:
 
-* `list contacts` followed by `unallocass c/CS2103T-T10-1 ct/1`<br>
+* `list contacts` followed by `unallocclass c/CS2103T-T10-1 ct/1`<br>
   Unallocates the class "CS2103T-T10-1" from only the 1st contact in the list.
 
-* `list contacts` followed by `unallocass c/CS2103T-T10-1 ct/1 2 3`<br>
+* `list contacts` followed by `unallocclass c/CS2103T-T10-1 ct/1 2 3`<br>
   Unallocates the class "CS2103T-T10-1" from the 1st, 2nd, and 3rd contacts in the list.
 
 ### Adding assignments: `addass`
@@ -501,7 +555,7 @@ Format: `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICE
 
 <box type="tip" seamless>
 
-* You can enter both the `c/CLASS_NAME` and `ct/CONTACT_INDICES...` parameters to allocate the assignment to specific contacts at the time of creation. This is optional and can also be done later using the `allocass` command.
+**Tip:** You can enter both the `c/CLASS_NAME` and `ct/CONTACT_INDICES...` parameters to allocate the assignment to specific contacts at the time of creation. This is optional and can also be done later using the `allocass` command.
 
 </box>
 
@@ -554,7 +608,7 @@ Format: `allocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]`
 
 <box type="tip" seamless>
 
-* You can enter both the `c/CLASS_NAME` and `ct/CONTACT_INDICES...` parameters to allocate the assignment to more contacts at the same time.
+**Tip:** You can enter both the `c/CLASS_NAME` and `ct/CONTACT_INDICES...` parameters to allocate the assignment to more contacts at the same time.
 
 </box>
 
@@ -604,7 +658,7 @@ Format: `unallocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]`
 
 <box type="tip" seamless>
 
-* You can enter both the `c/CLASS_NAME` and `ct/CONTACT_INDICES...` parameters to unallocate the assignment from more contacts at the same time.
+**Tip:** You can enter both the `c/CLASS_NAME` and `ct/CONTACT_INDICES...` parameters to unallocate the assignment from more contacts at the same time.
 
 </box>
 
@@ -704,7 +758,9 @@ If you encounter other issues, please raise a ticket with the project maintainer
 | **Delete**                | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                                                                        |
 | **Edit**                  | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                                                                                                               |
 | **Find**                  | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                                                                                                                 |
-| **List**                  | `list`                                                                                                                                                                                                                                                     |
+| **List Contacts**         | `list contacts`                                                                                                                                                                                                                                            |
+| **List Classes**          | `list classes`                                                                                                                                                                                                                                             |
+| **List Assignments**      | `list assignments`                                                                                                                                                                                                                                         |
 | **Help**                  | `help`                                                                                                                                                                                                                                                     |
 
 </div>
