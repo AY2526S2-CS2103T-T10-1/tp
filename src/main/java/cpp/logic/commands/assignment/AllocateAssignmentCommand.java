@@ -55,8 +55,8 @@ public class AllocateAssignmentCommand extends Command {
     private final List<Index> contactIndices;
     private final Set<Contact> contactsToAllocate;
     private final ClassGroupName classGroupName;
-    private int allocatedCount;
-    private StringBuilder allocatedContacts;
+    private int successfulAllocationCount;
+    private StringBuilder successfulContactAllocations;
     private int unsuccessfulAllocationCount;
     private StringBuilder unsuccessfulContactAllocations;
 
@@ -71,8 +71,8 @@ public class AllocateAssignmentCommand extends Command {
         this.contactIndices = new ArrayList<>(contactIndices);
         this.contactsToAllocate = new HashSet<>();
         this.classGroupName = null;
-        this.allocatedCount = 0;
-        this.allocatedContacts = new StringBuilder();
+        this.successfulAllocationCount = 0;
+        this.successfulContactAllocations = new StringBuilder();
         this.unsuccessfulAllocationCount = 0;
         this.unsuccessfulContactAllocations = new StringBuilder();
     }
@@ -90,8 +90,8 @@ public class AllocateAssignmentCommand extends Command {
         this.contactIndices = new ArrayList<>(contactIndices);
         this.contactsToAllocate = new HashSet<>();
         this.classGroupName = classGroupName;
-        this.allocatedCount = 0;
-        this.allocatedContacts = new StringBuilder();
+        this.successfulAllocationCount = 0;
+        this.successfulContactAllocations = new StringBuilder();
         this.unsuccessfulAllocationCount = 0;
         this.unsuccessfulContactAllocations = new StringBuilder();
     }
@@ -123,7 +123,7 @@ public class AllocateAssignmentCommand extends Command {
             this.allocateToContactsByClassGroup(model, assignmentToAllocate, classGroupToAllocate);
         }
 
-        if (this.allocatedCount == 0) {
+        if (this.successfulAllocationCount == 0) {
             throw new CommandException(AllocateAssignmentCommand.MESSAGE_ALLOCATION_FAILED);
         }
 
@@ -132,7 +132,8 @@ public class AllocateAssignmentCommand extends Command {
         }
 
         return new CommandResult(String.format(AllocateAssignmentCommand.MESSAGE_SUCCESS,
-                Messages.format(assignmentToAllocate), this.allocatedCount, this.allocatedContacts.toString(),
+                Messages.format(assignmentToAllocate), this.successfulAllocationCount,
+                this.successfulContactAllocations.toString(),
                 this.unsuccessfulContactAllocations.toString()));
     }
 
@@ -195,11 +196,10 @@ public class AllocateAssignmentCommand extends Command {
 
         try {
             model.addContactAssignment(ca);
-            this.allocatedCount++;
+            this.successfulAllocationCount++;
             this.buildSuccessfulAllocationString(contact.getName().fullName);
 
         } catch (ContactAlreadyAllocatedAssignmentException e) {
-            // Skip contacts that already have the assignment allocated.
             this.unsuccessfulAllocationCount++;
             this.buildUnsuccessfulAllocationString(contact.getName().fullName);
         }
@@ -208,10 +208,10 @@ public class AllocateAssignmentCommand extends Command {
     }
 
     private void buildSuccessfulAllocationString(String contactName) {
-        if (this.allocatedContacts.length() > 0) {
-            this.allocatedContacts.append("; ");
+        if (this.successfulContactAllocations.length() > 0) {
+            this.successfulContactAllocations.append("; ");
         }
-        this.allocatedContacts.append(contactName);
+        this.successfulContactAllocations.append(contactName);
     }
 
     private void buildUnsuccessfulAllocationString(String contactName) {

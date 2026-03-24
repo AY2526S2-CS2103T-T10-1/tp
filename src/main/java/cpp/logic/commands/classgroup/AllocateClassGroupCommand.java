@@ -44,9 +44,9 @@ public class AllocateClassGroupCommand extends Command {
     private final ClassGroupName classGroupName;
     private final List<Index> contactIndices;
 
-    private int successfulAllocations = 0;
+    private int successfulAllocationsCount = 0;
     private int unsuccessfulAllocationCount = 0;
-    private StringBuilder successfullyAllocatedNames = new StringBuilder();
+    private StringBuilder successfulContactAllocations = new StringBuilder();
     private StringBuilder unsuccessfulContactAllocations = new StringBuilder();
 
     /**
@@ -81,7 +81,7 @@ public class AllocateClassGroupCommand extends Command {
 
         return new CommandResult(
                 String.format(AllocateClassGroupCommand.MESSAGE_SUCCESS, this.classGroupName.fullName,
-                        this.successfulAllocations, this.successfullyAllocatedNames.toString(),
+                        this.successfulAllocationsCount, this.successfulContactAllocations.toString(),
                         this.unsuccessfulContactAllocations.toString()));
     }
 
@@ -117,11 +117,9 @@ public class AllocateClassGroupCommand extends Command {
             try {
                 classGroupToAllocate.allocateContact(contactId);
                 anySuccessfulAllocation = true;
-                this.successfulAllocations++;
+                this.successfulAllocationsCount++;
                 this.buildSuccessfulAllocationString(contact.getName().fullName);
             } catch (ContactAlreadyAllocatedClassGroupException e) {
-                // Contact is already allocated to this class group, skip and continue
-                // allocating the rest of the contacts
                 this.unsuccessfulAllocationCount++;
                 this.buildUnsuccessfulAllocationString(contact.getName().fullName);
             }
@@ -133,10 +131,10 @@ public class AllocateClassGroupCommand extends Command {
     }
 
     private void buildSuccessfulAllocationString(String contactName) {
-        if (this.successfullyAllocatedNames.length() > 0) {
-            this.successfullyAllocatedNames.append("; ");
+        if (this.successfulContactAllocations.length() > 0) {
+            this.successfulContactAllocations.append("; ");
         }
-        this.successfullyAllocatedNames.append(contactName);
+        this.successfulContactAllocations.append(contactName);
     }
 
     private void buildUnsuccessfulAllocationString(String contactName) {
