@@ -48,7 +48,7 @@ public class AllocateClassGroupCommand extends Command {
 
     private int successfulAllocationCount = 0;
     private int unsuccessfulAllocationCount = 0;
-    private StringBuilder successfullyAllocatedNames = new StringBuilder();
+    private StringBuilder successfulContactAllocations = new StringBuilder();
     private StringBuilder unsuccessfulContactAllocations = new StringBuilder();
 
     /**
@@ -88,7 +88,7 @@ public class AllocateClassGroupCommand extends Command {
 
         return new CommandResult(
                 String.format(AllocateClassGroupCommand.MESSAGE_SUCCESS, this.classGroupName.fullName,
-                        this.successfulAllocationCount, this.successfullyAllocatedNames.toString(),
+                        this.successfulAllocationCount, this.successfulContactAllocations.toString(),
                         this.unsuccessfulContactAllocations.toString()));
     }
 
@@ -124,8 +124,6 @@ public class AllocateClassGroupCommand extends Command {
                 this.successfulAllocationCount++;
                 this.buildSuccessfulAllocationString(contact.getName().fullName);
             } catch (ContactAlreadyAllocatedClassGroupException e) {
-                // Contact is already allocated to this class group, skip and continue
-                // allocating the rest of the contacts
                 this.unsuccessfulAllocationCount++;
                 this.buildUnsuccessfulAllocationString(contact.getName().fullName);
             }
@@ -133,10 +131,10 @@ public class AllocateClassGroupCommand extends Command {
     }
 
     private void buildSuccessfulAllocationString(String contactName) {
-        if (this.successfullyAllocatedNames.length() > 0) {
-            this.successfullyAllocatedNames.append("; ");
+        if (this.successfulContactAllocations.length() > 0) {
+            this.successfulContactAllocations.append("; ");
         }
-        this.successfullyAllocatedNames.append(contactName);
+        this.successfulContactAllocations.append(contactName);
     }
 
     private void buildUnsuccessfulAllocationString(String contactName) {
