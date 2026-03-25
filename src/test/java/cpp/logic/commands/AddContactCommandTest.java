@@ -33,7 +33,7 @@ public class AddContactCommandTest {
 
         CommandResult commandResult = new AddContactCommand(validContact).execute(modelStub);
 
-        Assertions.assertEquals(String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(validContact)),
+        Assertions.assertEquals(String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(validContact), "", ""),
                 commandResult.getFeedbackToUser());
         Assertions.assertEquals(Arrays.asList(validContact), modelStub.contactsAdded);
     }
@@ -136,7 +136,8 @@ public class AddContactCommandTest {
     @Test
     public void toStringMethod() {
         AddContactCommand addContactCommand = new AddContactCommand(TypicalContacts.ALICE);
-        String expected = AddContactCommand.class.getCanonicalName() + "{toAdd=" + TypicalContacts.ALICE + "}";
+        String expected = AddContactCommand.class.getCanonicalName() + "{toAdd=" + TypicalContacts.ALICE
+                + ", classGroupName=" + null + ", assignmentName=" + null + "}";
         Assertions.assertEquals(expected, addContactCommand.toString());
     }
 
