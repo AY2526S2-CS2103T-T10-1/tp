@@ -1,7 +1,6 @@
 package cpp.storage;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -103,7 +102,7 @@ class JsonAdaptedContactAssignment {
             } else {
                 modelSubmissionDate = null;
             }
-        } catch (DateTimeParseException e) {
+        } catch (ParseException e) {
             throw new IllegalValueException(String.format(JsonAdaptedContactAssignment.MISSING_FIELD_MESSAGE_FORMAT,
                     "submissionDate"));
         }

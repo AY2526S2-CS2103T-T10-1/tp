@@ -28,45 +28,51 @@ public class GradeInfoTest {
     }
 
     @Test
-    public void constructor_gradedButNotSubmitted_throwsIllegalArgumentException() {
+    public void createFromStorage_gradedButNotSubmitted_throwsIllegalArgumentException() {
         SubmissionInfo si = new SubmissionInfo(false, null);
         LocalDateTime grading = LocalDateTime.now();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new GradeInfo(true, grading, 50f, si));
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> GradeInfo.createFromStorage(true, grading, 50f, si));
     }
 
     @Test
-    public void constructor_gradedWithNullDate_throwsIllegalArgumentException() {
+    public void createFromStorage_gradedWithNullDate_throwsIllegalArgumentException() {
         SubmissionInfo si = new SubmissionInfo(true, LocalDateTime.now());
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new GradeInfo(true, null, 50f, si));
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> GradeInfo.createFromStorage(true, null, 50f, si));
     }
 
     @Test
-    public void constructor_ungradedWithNonNullDate_throwsIllegalArgumentException() {
-        SubmissionInfo si = new SubmissionInfo(true, LocalDateTime.now());
-        LocalDateTime grading = LocalDateTime.now();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new GradeInfo(false, grading, 0f, si));
-    }
-
-    @Test
-    public void constructor_negativeScore_throwsIllegalArgumentException() {
+    public void createFromStorage_ungradedWithNonNullDate_throwsIllegalArgumentException() {
         SubmissionInfo si = new SubmissionInfo(true, LocalDateTime.now());
         LocalDateTime grading = LocalDateTime.now();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new GradeInfo(true, grading, -1f, si));
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> GradeInfo.createFromStorage(false, grading, 0f, si));
     }
 
     @Test
-    public void constructor_scoreTooLarge_throwsIllegalArgumentException() {
+    public void createFromStorage_negativeScore_throwsIllegalArgumentException() {
         SubmissionInfo si = new SubmissionInfo(true, LocalDateTime.now());
         LocalDateTime grading = LocalDateTime.now();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new GradeInfo(true, grading, 101f, si));
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> GradeInfo.createFromStorage(true, grading, -1f, si));
     }
 
     @Test
-    public void constructor_gradingBeforeSubmission_throwsIllegalArgumentException() {
+    public void createFromStorage_scoreTooLarge_throwsIllegalArgumentException() {
+        SubmissionInfo si = new SubmissionInfo(true, LocalDateTime.now());
+        LocalDateTime grading = LocalDateTime.now();
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> GradeInfo.createFromStorage(true, grading, 101f, si));
+    }
+
+    @Test
+    public void createFromStorage_gradingBeforeSubmission_throwsIllegalArgumentException() {
         LocalDateTime submission = LocalDateTime.now();
         LocalDateTime grading = submission.minusDays(1);
         SubmissionInfo si = new SubmissionInfo(true, submission);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new GradeInfo(true, grading, 50f, si));
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> GradeInfo.createFromStorage(true, grading, 50f, si));
     }
 
     @Test

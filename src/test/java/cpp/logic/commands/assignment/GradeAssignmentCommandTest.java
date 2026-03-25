@@ -44,7 +44,7 @@ public class GradeAssignmentCommandTest {
                 Messages.format(assignment), date.format(ParserUtil.DATETIME_FORMATTER), 3, 85f,
                 TypicalContacts.ALICE.getName().fullName + "; " + TypicalContacts.BENSON.getName().fullName + "; "
                         + TypicalContacts.CARL.getName().fullName,
-                "None", "None", "None");
+                "None", "None", "None", "None");
 
         Assertions.assertEquals(expected, result.getFeedbackToUser());
     }
@@ -79,7 +79,8 @@ public class GradeAssignmentCommandTest {
 
         String expected = String.format(GradeAssignmentCommand.MESSAGE_GRADE_FAILED, "None", "None",
                 TypicalContacts.ALICE.getName().fullName + "; " + TypicalContacts.BENSON.getName().fullName + "; "
-                        + TypicalContacts.CARL.getName().fullName);
+                        + TypicalContacts.CARL.getName().fullName,
+                "None");
 
         Assert.assertThrows(CommandException.class, expected, () -> cmd.execute(modelStub));
 
@@ -90,7 +91,7 @@ public class GradeAssignmentCommandTest {
         expected = String.format(GradeAssignmentCommand.MESSAGE_GRADE_FAILED, "None",
                 TypicalContacts.ALICE.getName().fullName + "; " + TypicalContacts.BENSON.getName().fullName + "; "
                         + TypicalContacts.CARL.getName().fullName,
-                "None");
+                "None", "None");
         Assert.assertThrows(CommandException.class, expected, () -> cmd2.execute(modelStub2));
 
         ModelStubGradeAllAlreadyGraded modelStub3 = new ModelStubGradeAllAlreadyGraded();
@@ -100,7 +101,7 @@ public class GradeAssignmentCommandTest {
         expected = String.format(
                 GradeAssignmentCommand.MESSAGE_GRADE_FAILED, TypicalContacts.ALICE.getName().fullName + "; "
                         + TypicalContacts.BENSON.getName().fullName + "; " + TypicalContacts.CARL.getName().fullName,
-                "None", "None");
+                "None", "None", "None");
         Assert.assertThrows(CommandException.class, expected, () -> cmd3.execute(modelStub3));
     }
 
@@ -158,7 +159,7 @@ public class GradeAssignmentCommandTest {
                 + "]"
                 + ", classGroupName=null"
                 + ", score=10.0"
-                + "}";
+                + ", gradingDate=21-02-2026 23:50}";
         Assertions.assertEquals(expected, cmd.toString());
     }
 

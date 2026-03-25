@@ -227,6 +227,7 @@ public class JsonAdaptedContactAssignmentTest {
         String expectedMessage = String.format(JsonAdaptedContactAssignment.MISSING_FIELD_MESSAGE_FORMAT,
                 "submissionDate");
         Assert.assertThrows(IllegalValueException.class, expectedMessage, () -> json.toModelType(addressBook));
+
         JsonAdaptedContactAssignment json2 = new JsonAdaptedContactAssignment(
                 JsonAdaptedContactAssignmentTest.VALID_ASSIGNMENT_ID, JsonAdaptedContactAssignmentTest.VALID_CONTACT_ID,
                 "true", "123", "false", null, "0");
