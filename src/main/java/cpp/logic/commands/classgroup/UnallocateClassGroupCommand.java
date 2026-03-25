@@ -3,9 +3,12 @@ package cpp.logic.commands.classgroup;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
+import cpp.commons.core.LogsCenter;
 import cpp.commons.core.index.Index;
 import cpp.commons.util.ToStringBuilder;
+import cpp.logic.LogicManager;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
 import cpp.logic.commands.CommandUtil;
@@ -48,6 +51,9 @@ public class UnallocateClassGroupCommand extends Command {
     private int unsuccessfulUnallocationCount;
     private StringBuilder successfulContactUnallocations = new StringBuilder();
     private StringBuilder unsuccessfulContactUnallocations = new StringBuilder();
+
+    // Logger for logging unsuccessful unallocations
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
     /**
      * Creates an UnallocateClassGroupCommand with the specified class group name
@@ -119,6 +125,8 @@ public class UnallocateClassGroupCommand extends Command {
                 this.successfulUnallocationCount++;
                 this.buildSuccessfulUnallocationString(contactToUnallocate.getName().fullName);
             } catch (ContactNotAllocatedClassGroupException e) {
+                this.logger.info(
+                        "Contact already unallocated from class group: " + contactToUnallocate.getName().fullName);
                 this.unsuccessfulUnallocationCount++;
                 this.buildUnsuccessfulUnallocationString(contactToUnallocate.getName().fullName);
             }

@@ -3,9 +3,12 @@ package cpp.logic.commands.classgroup;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
+import cpp.commons.core.LogsCenter;
 import cpp.commons.core.index.Index;
 import cpp.commons.util.ToStringBuilder;
+import cpp.logic.LogicManager;
 import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
@@ -48,6 +51,9 @@ public class AllocateClassGroupCommand extends Command {
     private int unsuccessfulAllocationCount = 0;
     private StringBuilder successfulContactAllocations = new StringBuilder();
     private StringBuilder unsuccessfulContactAllocations = new StringBuilder();
+
+    // Logger for logging unsuccessful allocations
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
     /**
      * Creates an AllocateClassGroupCommand with the specified class group name and
@@ -120,6 +126,7 @@ public class AllocateClassGroupCommand extends Command {
                 this.successfulAllocationCount++;
                 this.buildSuccessfulAllocationString(contact.getName().fullName);
             } catch (ContactAlreadyAllocatedClassGroupException e) {
+                this.logger.info("Contact already allocated to class group: " + contact.getName().fullName);
                 this.unsuccessfulAllocationCount++;
                 this.buildUnsuccessfulAllocationString(contact.getName().fullName);
             }
