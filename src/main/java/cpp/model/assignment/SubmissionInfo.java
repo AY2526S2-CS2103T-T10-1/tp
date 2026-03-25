@@ -31,10 +31,16 @@ public final class SubmissionInfo {
      * SubmissionInfo.
      */
     public static boolean isValidSubmissionInfo(boolean isSubmitted, LocalDateTime submissionDate) {
-        if (isSubmitted && submissionDate == null) {
-            return false;
-        }
-        if (!isSubmitted && submissionDate != null) {
+        // if (isSubmitted && submissionDate == null) {
+        // return false;
+        // }
+        // if (!isSubmitted && submissionDate != null) {
+        // return false;
+        // }
+
+        // Return false if submitted but no submission date, or if not submitted but
+        // submission date exists
+        if (isSubmitted ^ (submissionDate != null)) {
             return false;
         }
         return true;

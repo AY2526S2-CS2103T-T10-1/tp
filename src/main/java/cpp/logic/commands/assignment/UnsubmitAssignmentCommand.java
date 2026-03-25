@@ -104,9 +104,9 @@ public class UnsubmitAssignmentCommand extends Command {
 
         List<Assignment> assignmentList = model.getAddressBook().getAssignmentList();
 
-        Assignment assignmentToUnallocate = AssignmentUtil.findAssignment(assignmentList, this.assignmentName);
+        Assignment assignmentToUnsubmit = AssignmentUtil.findAssignment(assignmentList, this.assignmentName);
 
-        if (assignmentToUnallocate == null) {
+        if (assignmentToUnsubmit == null) {
             throw new CommandException(Messages.MESSAGE_ASSIGNMENT_NOT_FOUND);
         }
 
@@ -114,19 +114,19 @@ public class UnsubmitAssignmentCommand extends Command {
 
         CommandUtil.checkContactIndices(lastShownContactList, this.contactIndices);
 
-        ClassGroup classGroupToUnallocate = ClassGroupUtil.findClassGroup(model.getAddressBook().getClassGroupList(),
+        ClassGroup classGroupToUnmark = ClassGroupUtil.findClassGroup(model.getAddressBook().getClassGroupList(),
                 this.classGroupName);
-        if (this.classGroupName != null && classGroupToUnallocate == null) {
+        if (this.classGroupName != null && classGroupToUnmark == null) {
             throw new CommandException(Messages.MESSAGE_CLASS_GROUP_NOT_FOUND);
         }
 
-        if (classGroupToUnallocate != null && classGroupToUnallocate.getContactIdSet().isEmpty()) {
+        if (classGroupToUnmark != null && classGroupToUnmark.getContactIdSet().isEmpty()) {
             throw new CommandException(Messages.MESSAGE_CLASS_GROUP_NO_CONTACTS);
         }
 
-        this.markUnsubmittedByContactIndices(model, assignmentToUnallocate, lastShownContactList);
-        if (classGroupToUnallocate != null) {
-            this.markUnsubmittedByClassGroup(model, assignmentToUnallocate, classGroupToUnallocate);
+        this.markUnsubmittedByContactIndices(model, assignmentToUnsubmit, lastShownContactList);
+        if (classGroupToUnmark != null) {
+            this.markUnsubmittedByClassGroup(model, assignmentToUnsubmit, classGroupToUnmark);
         }
 
         if (this.alreadyUnmarkedCount == 0) {
@@ -143,7 +143,7 @@ public class UnsubmitAssignmentCommand extends Command {
         }
 
         return new CommandResult(String.format(UnsubmitAssignmentCommand.MESSAGE_SUCCESS,
-                Messages.format(assignmentToUnallocate), this.unmarkedCount, this.unmarkedContacts.toString(),
+                Messages.format(assignmentToUnsubmit), this.unmarkedCount, this.unmarkedContacts.toString(),
                 this.alreadyUnmarkedContacts.toString(), this.notAllocatedContacts.toString()));
 
     }
@@ -173,28 +173,28 @@ public class UnsubmitAssignmentCommand extends Command {
                 .toString();
     }
 
-    private void markUnsubmittedByContactIndices(Model model, Assignment assignmentToUnallocate,
+    private void markUnsubmittedByContactIndices(Model model, Assignment assignmentToUnsubmit,
             List<Contact> lastShownContactList) {
 
         for (Index idx : this.contactIndices) {
             Contact contact = lastShownContactList.get(idx.getZeroBased());
 
-            this.markUnsubmittedByContact(model, assignmentToUnallocate, contact);
+            this.markUnsubmittedByContact(model, assignmentToUnsubmit, contact);
         }
     }
 
-    private void markUnsubmittedByClassGroup(Model model, Assignment assignmentToUnallocate,
-            ClassGroup classGroupToUnallocate) {
+    private void markUnsubmittedByClassGroup(Model model, Assignment assignmentToUnsubmit,
+            ClassGroup classGroupToUnmark) {
         List<Contact> contactList = model.getAddressBook().getContactList();
 
-        for (String contactId : classGroupToUnallocate.getContactIdSet()) {
+        for (String contactId : classGroupToUnmark.getContactIdSet()) {
             Contact contact = contactList.stream()
                     .filter(c -> c.getId().equals(contactId))
                     .findAny()
                     .orElse(null);
 
             if (contact != null) {
-                this.markUnsubmittedByContact(model, assignmentToUnallocate, contact);
+                this.markUnsubmittedByContact(model, assignmentToUnsubmit, contact);
             }
         }
     }

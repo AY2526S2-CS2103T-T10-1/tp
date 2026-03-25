@@ -113,9 +113,9 @@ public class SubmitAssignmentCommand extends Command {
 
         List<Assignment> assignmentList = model.getAddressBook().getAssignmentList();
 
-        Assignment assignmentToUnallocate = AssignmentUtil.findAssignment(assignmentList, this.assignmentName);
+        Assignment assignmentToSubmit = AssignmentUtil.findAssignment(assignmentList, this.assignmentName);
 
-        if (assignmentToUnallocate == null) {
+        if (assignmentToSubmit == null) {
             throw new CommandException(Messages.MESSAGE_ASSIGNMENT_NOT_FOUND);
         }
 
@@ -123,19 +123,19 @@ public class SubmitAssignmentCommand extends Command {
 
         CommandUtil.checkContactIndices(lastShownContactList, this.contactIndices);
 
-        ClassGroup classGroupToUnallocate = ClassGroupUtil.findClassGroup(model.getAddressBook().getClassGroupList(),
+        ClassGroup classGroupToMark = ClassGroupUtil.findClassGroup(model.getAddressBook().getClassGroupList(),
                 this.classGroupName);
-        if (this.classGroupName != null && classGroupToUnallocate == null) {
+        if (this.classGroupName != null && classGroupToMark == null) {
             throw new CommandException(Messages.MESSAGE_CLASS_GROUP_NOT_FOUND);
         }
 
-        if (classGroupToUnallocate != null && classGroupToUnallocate.getContactIdSet().isEmpty()) {
+        if (classGroupToMark != null && classGroupToMark.getContactIdSet().isEmpty()) {
             throw new CommandException(Messages.MESSAGE_CLASS_GROUP_NO_CONTACTS);
         }
 
-        this.markSubmittedByContactIndices(model, assignmentToUnallocate, lastShownContactList);
-        if (classGroupToUnallocate != null) {
-            this.markSubmittedByClassGroup(model, assignmentToUnallocate, classGroupToUnallocate);
+        this.markSubmittedByContactIndices(model, assignmentToSubmit, lastShownContactList);
+        if (classGroupToMark != null) {
+            this.markSubmittedByClassGroup(model, assignmentToSubmit, classGroupToMark);
         }
 
         if (this.alreadyMarkedCount == 0) {
@@ -152,7 +152,7 @@ public class SubmitAssignmentCommand extends Command {
         }
 
         return new CommandResult(String.format(SubmitAssignmentCommand.MESSAGE_SUCCESS,
-                Messages.format(assignmentToUnallocate), this.submissionDate.format(ParserUtil.DATETIME_FORMATTER),
+                Messages.format(assignmentToSubmit), this.submissionDate.format(ParserUtil.DATETIME_FORMATTER),
                 this.markedCount,
                 this.markedContacts.toString(), this.alreadyMarkedContacts.toString(),
                 this.notAllocatedContacts.toString()));
@@ -186,28 +186,28 @@ public class SubmitAssignmentCommand extends Command {
                 .toString();
     }
 
-    private void markSubmittedByContactIndices(Model model, Assignment assignmentToUnallocate,
+    private void markSubmittedByContactIndices(Model model, Assignment assignmentToSubmit,
             List<Contact> lastShownContactList) {
 
         for (Index idx : this.contactIndices) {
             Contact contact = lastShownContactList.get(idx.getZeroBased());
 
-            this.markSubmittedByContact(model, assignmentToUnallocate, contact);
+            this.markSubmittedByContact(model, assignmentToSubmit, contact);
         }
     }
 
-    private void markSubmittedByClassGroup(Model model, Assignment assignmentToUnallocate,
-            ClassGroup classGroupToUnallocate) {
+    private void markSubmittedByClassGroup(Model model, Assignment assignmentToSubmit,
+            ClassGroup classGroupToMark) {
         List<Contact> contactList = model.getAddressBook().getContactList();
 
-        for (String contactId : classGroupToUnallocate.getContactIdSet()) {
+        for (String contactId : classGroupToMark.getContactIdSet()) {
             Contact contact = contactList.stream()
                     .filter(c -> c.getId().equals(contactId))
                     .findAny()
                     .orElse(null);
 
             if (contact != null) {
-                this.markSubmittedByContact(model, assignmentToUnallocate, contact);
+                this.markSubmittedByContact(model, assignmentToSubmit, contact);
             }
         }
     }
