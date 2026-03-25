@@ -74,7 +74,7 @@ public class UnallocateAssignmentCommandTest {
 
         String expectedUnallocatedContacts = validContact1.getName().fullName + "; " + validContact2.getName().fullName;
         Assertions.assertEquals(String.format(UnallocateAssignmentCommand.MESSAGE_SUCCESS,
-                Messages.format(validAssignment), 2, expectedUnallocatedContacts), result.getFeedbackToUser());
+                Messages.format(validAssignment), 2, expectedUnallocatedContacts, "None"), result.getFeedbackToUser());
         Assertions.assertEquals(0, modelStub.contactAssignments.size());
     }
 
@@ -90,8 +90,35 @@ public class UnallocateAssignmentCommandTest {
 
         String expectedUnallocatedContacts = TypicalContacts.BENSON.getName().fullName;
         Assertions.assertEquals(String.format(UnallocateAssignmentCommand.MESSAGE_SUCCESS,
-                Messages.format(validAssignment), 1, expectedUnallocatedContacts), result.getFeedbackToUser());
-        Assertions.assertEquals(0, modelStub.contactAssignments.size());
+                Messages.format(validAssignment), 1, expectedUnallocatedContacts, "None"), result.getFeedbackToUser());
+        Assertions.assertEquals(1, modelStub.contactAssignments.size()); // AMY should still be allocated
+    }
+
+    @Test
+    public void execute_validClassGroupNameAndContactIndices_unallocatesFromClassGroupAndSpecifiedContacts()
+            throws Exception {
+        Assignment validAssignment = TypicalAssignments.ASSIGNMENT_ONE;
+        Contact validContact1 = TypicalContacts.getTypicalContacts().get(0); // ALICE
+        Contact validContact2 = TypicalContacts.getTypicalContacts().get(1); // BENSON
+        ModelStubWithAssignedClassGroup modelStub = new ModelStubWithAssignedClassGroup(validAssignment);
+
+        ArrayList<Index> validContactIndices = new ArrayList<>(
+                Arrays.asList(TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT,
+                        TypicalIndexes.INDEX_THIRD_CONTACT));
+
+        UnallocateAssignmentCommand cmd = new UnallocateAssignmentCommand(validAssignment.getName(),
+                validContactIndices, new ClassGroupName("ValidClassGroup"));
+
+        CommandResult result = cmd.execute(modelStub);
+
+        Assertions.assertEquals(String.format(UnallocateAssignmentCommand.MESSAGE_SUCCESS,
+                Messages.format(validAssignment), 1, validContact2.getName().fullName,
+                validContact1.getName().fullName + "; "
+                        + TypicalContacts.getTypicalContacts().get(2).getName().fullName),
+                result.getFeedbackToUser());
+        // AMY should still be allocated, BENSON should be unallocated, ALICE was not
+        // allocated to begin with so should not affect the count
+        Assertions.assertEquals(1, modelStub.contactAssignments.size());
     }
 
     @Test
@@ -316,8 +343,10 @@ public class UnallocateAssignmentCommandTest {
         ModelStubWithAssignedClassGroup(Assignment assignment) {
             Objects.requireNonNull(assignment);
             this.assignment = assignment;
-            // pre-allocate to BENSON
+            // pre-allocate to BENSON and AMY
             this.contactAssignments.add(new ContactAssignment(assignment.getId(), TypicalContacts.BENSON.getId()));
+            this.contactAssignments.add(
+                    new ContactAssignment(assignment.getId(), TypicalContacts.AMY.getId()));
         }
 
         @Override

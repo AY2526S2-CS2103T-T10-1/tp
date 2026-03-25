@@ -143,9 +143,9 @@ Within a few seconds the application will appear. The main User Interface (UI) c
 
 ### Quick CLI tutorial (common tasks and expected output)
 
-#### Tips
-
 <box type="tip" seamless>
+
+**Tips:**
 
 * Do not attempt to copy multiple commands at once. Copy and paste one command at a time, and wait for the result display to show the confirmation message before pasting the next command.
 
@@ -213,13 +213,13 @@ Within a few seconds the application will appear. The main User Interface (UI) c
     2 contacts listed!
     ```
 
-#### Warnings and expected failures
-
 <box type="warning" seamless>
+
+**Warnings:**
 
 * Back up your data folder (`data/addressbook.json`) before manual edits. A corrupted `addressbook.json` will cause the app to start with an empty dataset.
 
-* The app prevents obvious duplicates at entry; if you attempt to add contacts, assignments, or class groups with the same name, CPP will reject the entry with an explanatory error.
+* The app prevents obvious duplicates at entry; if you attempt to add contacts, assignments, or classes with the same name, CPP will reject the entry with an explanatory error.
 
 </box>
 
@@ -258,102 +258,244 @@ Shows a message explaining how to access the help page.
 
 ![help message](images/helpMessage.png)
 
-Format: `help`
+**Format:** `help`
 
-### Adding a contact: `add`
+### Adding a contact: `addcontact`
 
 Adds a contact to the address book.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...`
+**Format:** `addcontact n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [c/CLASS_NAME] [ass/ASSIGNMENT_NAME] [t/TAG]...`
+
+* Creates a contact with the specified `NAME`, `PHONE_NUMBER`, `EMAIL` and `ADDRESS`.
+
+* The `NAME` provided must only contain alphanumeric characters and spaces only. It cannot be blank.
+
+* The `NAME` must be unique across all contacts (case-insensitive).
+
+* The `PHONE_NUMBER` provided must only contain numeric digits (0-9), be a minimum of 3 digits long, and cannot be blank.
+
+* The `EMAIL` provided must be in the format `local-part@domain`.
+
+  * The local part can contain alphanumeric characters and special characters (`+`, `.`, `-`), but cannot start or end with special characters.
+
+  * The domain must contain at least one period, each label must be alphanumeric with optional hyphens between characters, and the top-level domain must be at least 2 characters long. No spaces allowed, and cannot be blank.
+
+* The `ADDRESS` provided can contain any characters, and cannot be blank.
+
+* `c/CLASS_NAME` is optional and can be used to allocate the specified class to the contact. If the `c/` prefix is included, the `CLASS_NAME` must match the name of an existing class (case-insensitive).
+
+* `ass/ASSIGNMENT_NAME` is optional and can be used to allocate the specified assignment to the contact. If the `ass/` prefix is included, the `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+
+* `t/TAG` is optional and can be used to add tags to the contact. Each `TAG` must be a single alphanumeric word (no spaces), and tags are case-sensitive.
+
+* If multiple instances of the same tag are provided, the command still succeeds, but only one instance of that tag is added.
+
+<box type="warning" seamless>
+
+**Warnings:**
+
+* If the specified class or assignment does not exist, the command will fail and no contact is created.
+
+* If any of the parameters are invalid, the command will also fail and no contact is created.
+
+</box>
 
 <box type="tip" seamless>
 
 **Tip:** A contact can have any number of tags (including 0)
 </box>
 
-Examples:
+**Examples:**
 
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
+* `addcontact n/Betsy Crowe e/betsycrowe@example.com a/Betsy Street, Block 123, #06-07 p/1234567` <br>
+  Creates a contact with the name "Betsy Crowe", phone number "1234567", email "betsycrowe<span></span>@example.com", address "Betsy Street, Block 123, #06-07"
 
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* `addcontact n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 c/CS2103T-T10-1 ass/Assignment 1 t/friends t/owesMoney`<br>
+  Creates a contact with the name "John Doe", phone number "98765432", email "johnd<span></span>@example.com", address "311, Clementi Ave 2, #02-25", allocated to class group "CS2103T-T10-1" and assignment "Assignment 1", with tags "friends" and "owesMoney".
 
-### Listing all contacts : `list`
+  [IMAGE TO BE ADDED]
+
+### Listing all contacts : `list contacts`
 
 Shows a list of all contacts in the address book.
 
-Format: `list`
+**Format:** `list contacts`
 
-### Editing a contact : `edit`
+* If your address book is completely empty (no contacts have been added yet), running this command will simply display an empty list. It will not generate an error.
 
-Edits an existing contact in the address book.
+* The tab will be automatically switched to `Contacts` upon successful execution.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]...`
+* The result box will display the message: `Listed all contacts`
 
-* Edits the contact at the specified `INDEX`. The index refers to the index number shown in the displayed contact list. The index **must be a positive integer** 1, 2, 3, ...
+* The command does not accept any additional arguments. If you type extra words (e.g., `list contacts cs2103t`), the system will reject it and display an `Invalid command format!` error.
 
-* At least one of the optional fields must be provided.
+<box type="tip" seamless>
 
-* Existing values will be updated to the input values.
+**Tip:** You may also click on the tabs to switch between Contacts, Classes, and Assignments. Note that this will not affect any existing filters on the displayed lists, unlike the `list <TAB>` command which will clear all filters and show all items in that category.
 
-* When editing tags, the existing tags of the contact will be removed i.e adding of tags is not cumulative.
+</box>
 
-* You can remove all the contact’s tags by typing `t/` without specifying any tags after it.
+### Listing all classes : `list classes`
 
-Examples:
+Shows a list of all classes in the address book.
 
-* `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st contact to be `91234567` and `johndoe@example.com` respectively.
+**Format:** `list classes`
 
-* `edit 2 n/Betsy Crower t/` Edits the name of the 2nd contact to be `Betsy Crower` and clears all existing tags.
+* If no classes have been added yet, running this command will simply display an empty list. It will not generate an error.
 
-### Locating contacts by name: `find`
+* The tab will be automatically switched to `Classes` upon successful execution.
 
-Finds contacts whose names contain any of the given keywords.
+* The result box will display the message: `Listed all classes`
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+* The command does not accept any additional arguments. If you type extra words (e.g., `list classes cs2103t`), the system will reject it and display an `Invalid command format!` error.
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
+<box type="tip" seamless>
 
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
+**Tip:** You may also click on the tabs to switch between Contacts, Classes, and Assignments. Note that this will not affect any existing filters on the displayed lists, unlike the `list <TAB>` command which will clear all filters and show all items in that category.
 
-* Only the name is searched.
+</box>
 
-* Only full words will be matched e.g. `Han` will not match `Hans`
+### Listing all assignments : `list assignments`
 
-* Contacts matching at least one keyword will be returned (i.e. `OR` search).<br>
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+Shows a list of all assignments in the address book.
 
-Examples:
+**Format:** `list assignments`
 
-* `find John` returns `john` and `John Doe`
+* If your assignment list is completely empty (no assignments have been added yet), running this command will simply display an empty list. It will not generate an error.
 
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* The tab will be automatically switched to `Assignments` upon successful execution.
 
-### Deleting a contact : `delete`
+* The result box will display the message: `Listed all assignments`
 
-Deletes the specified contact from the address book.
+* The command does not accept any additional arguments. If you type extra words (e.g., `list assignments cs2103t`), the system will reject it and display an `Invalid command format!` error.
 
-Format: `delete INDEX`
+<box type="tip" seamless>
 
-* Deletes the contact at the specified `INDEX`.
+**Tip:** You may also click on the tabs to switch between Contacts, Classes, and Assignments. Note that this will not affect any existing filters on the displayed lists, unlike the `list <TAB>` command which will clear all filters and show all items in that category.
 
-* The index refers to the index number shown in the displayed contact list.
+</box>
+  
+### [TO BE UPDATED] Editing a contact : `edit`
 
-* The index **must be a positive integer** 1, 2, 3, ...
+TO BE UPDATED.
 
-Examples:
+### [TO BE UPDATED] Locating contacts by name: `find`
 
-* `list` followed by `delete 2` deletes the 2nd contact in the address book.
+TO BE UPDATED.
 
-* `find Betsy` followed by `delete 1` deletes the 1st contact in the results of the `find` command.
+### [TO BE UPDATED] Deleting a contact : `delete`
+
+TO BE UPDATED.
+
+### Adding classes: `addclass`
+
+Adds a class to the address book.
+
+**Format:** `addclass c/CLASS_NAME [ct/CONTACT_INDICES...]`
+
+* Creates a class with the specified `CLASS_NAME`. The `CLASS_NAME` must be unique and should not match the name of any existing class (case-insensitive).
+
+* `ct/CONTACT_INDICES...` is optional and can be used to allocate the class to specific contacts upon creation. If the `ct/` prefix is included, at least 1 contact index must be specified.
+
+* These `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
+
+<box type="warning" seamless>
+
+**Warnings:**
+
+* If any of the specified contacts do not exist, the command will fail and no class is created.
+
+* If any of the parameters are invalid, the command will also fail and no class is created.
+
+* The contact indices specified refer to the currently displayed contact list after filtering (e.g., after a `find` command). It is recommended to run `list contacts` before this command to ensure the correct contact indices are used.
+
+</box>
+
+**Examples:**
+
+* `addclass c/CS2103T-T10-1`<br>
+  Creates a class with the name "CS2103T-T10-1".
+
+* `list contacts` followed by `addclass c/CS2103T-T10-1 ct/1 2 3`<br>
+  Creates a class with the name "CS2103T-T10-1" allocated to the 1st, 2nd, and 3rd contacts.
+
+  [IMAGE TO BE ADDED]
+
+### Allocating classes to contacts: `allocclass`
+
+Allocates a class to specific contacts.
+
+**Format:** `allocclass c/CLASS_NAME ct/CONTACT_INDICES...`
+
+* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+
+* These `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
+  
+<box type="warning" seamless>
+
+**Warnings:**
+
+* If any of the specified contacts or class do not exist, the command will fail and no allocation is done.
+
+* If any of the parameters are invalid, the command will also fail and no allocation is done.
+
+* The contact indices specified refer to the currently displayed contact list after filtering (e.g., after a `find` command). It is recommended to run `list contacts` before this command to ensure the correct contact indices are used.
+
+* Reallocating a class to a contact that already belongs to that class will not cause any changes to the contact's class memberships. However, if no successful allocations are performed at the end of the command, the command will fail and the user will see an error message specifying the issue.
+
+</box>
+
+**Examples:**
+
+* `list contacts` followed by `allocclass c/CS2103T-T10-1 ct/1`<br>
+  Allocates the class "CS2103T-T10-1" to only the 1st contact in the list.
+
+* `list contacts` followed by `allocclass c/CS2103T-T10-1 ct/1 2 3`<br>
+  Allocates the class "CS2103T-T10-1" to the 1st, 2nd, and 3rd contacts in the list.
+
+  [IMAGE TO BE ADDED]
+
+### Unallocating classes from contacts: `unallocclass`
+
+Unallocates a class from specific contacts.
+
+**Format:** `unallocclass c/CLASS_NAME ct/CONTACT_INDICES...`
+
+* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+
+* These `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
+  
+<box type="warning" seamless>
+
+**Warnings:**
+
+* If any of the specified contacts or class do not exist, the command will fail and no allocation is done.
+
+* If any of the parameters are invalid, the command will also fail and no allocation is done.
+
+* The contact indices specified refer to the currently displayed contact list after filtering (e.g., after a `find` command). It is recommended to run `list contacts` before this command to ensure the correct contact indices are used.
+
+* Unallocating a class from a contact that does not belong to that class will not cause any changes to the contact's class memberships. However, if no successful unallocations are performed at the end of the command, the command will fail and the user will see an error message specifying the issue.
+
+</box>
+
+**Examples:**
+
+* `list contacts` followed by `unallocclass c/CS2103T-T10-1 ct/1`<br>
+  Unallocates the class "CS2103T-T10-1" from only the 1st contact in the list.
+
+* `list contacts` followed by `unallocclass c/CS2103T-T10-1 ct/1 2 3`<br>
+  Unallocates the class "CS2103T-T10-1" from the 1st, 2nd, and 3rd contacts in the list.
+
+  [IMAGE TO BE ADDED]
 
 ### Adding assignments: `addass`
 
 Adds an assignment to the address book.
 
-Format: `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]`
+**Format:** `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]`
 
-* Creates an assignment with the specified `ASSIGNMENT_NAME` and `DEADLINE`.
+* Creates an assignment with the specified `ASSIGNMENT_NAME` and `DEADLINE`. The `ASSIGNMENT_NAME` must be unique and should not match the name of any existing assignment (case-insensitive).
 
 * The `DEADLINE` provided must be in the format `dd-MM-yyyy HH:mm`.
 
@@ -364,6 +506,8 @@ Format: `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICE
 * These `CONTACT_INDICES...` must be positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
 <box type="warning" seamless>
+
+**Warnings:**
 
 * If any of the specified contacts or classes do not exist, the command will fail and no assignment is created.
 
@@ -377,32 +521,32 @@ Format: `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICE
 
 <box type="tip" seamless>
 
-* You can enter both the `c/CLASS_NAME` and `ct/CONTACT_INDICES...` parameters to allocate the assignment to specific contacts at the time of creation. This is optional and can also be done later using the `allocass` command.
+**Tip:** You can enter both the `c/CLASS_NAME` and `ct/CONTACT_INDICES...` parameters to allocate the assignment to specific contacts at the time of creation. This is optional and can also be done later using the `allocass` command.
 
 </box>
 
-Examples:
+**Examples:**
 
 * `addass ass/Assignment 1 d/01-12-2023 23:59`<br>
   Creates an assignment with the name "Assignment 1" and deadline "1 Dec 2023 23:59".
 
-* `addass ass/Assignment 2 d/15-12-2023 23:59 c/CS2103T`<br>
-  Creates an assignment with the name "Assignment 2" and deadline "15 Dec 2023 23:59", allocated to all contacts belonging to class "CS2103T".
+* `addass ass/Assignment 2 d/15-12-2023 23:59 c/CS2103T-T10-1`<br>
+  Creates an assignment with the name "Assignment 2" and deadline "15 Dec 2023 23:59", allocated to all contacts belonging to class "CS2103T-T10-1".
 
 * `list contacts` followed by `addass ass/Assignment 3 d/30-12-2023 23:59 ct/1 2 3`<br>
   Creates an assignment with the name "Assignment 3" and deadline "30 Dec 2023 23:59", allocated to the 1st, 2nd, and 3rd contacts in the list.
 
-* `list contacts` followed by `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T ct/4 5`<br>
-  Creates an assignment with the name "Assignment 4" and deadline "15 Jan 2024 23:59", allocated to the 4th and 5th contacts in the list, as well as all contacts belonging to class "CS2103T".
+* `list contacts` followed by `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T-T10-1 ct/4 5`<br>
+  Creates an assignment with the name "Assignment 4" and deadline "15 Jan 2024 23:59", allocated to the 4th and 5th contacts in the list, as well as all contacts belonging to class "CS2103T-T10-1".
   
-  The screenshot below illustrates the last example, where the class "CS2103T" consists of contacts 2-5.\
+  The screenshot below illustrates the last example, where the class "CS2103T-T10-1" consists of contacts 2-5.\
   ![Creating and allocating Assignment 4](images/addass-result.png)
 
 ### Allocating assignments to contacts: `allocass`
 
 Allocates an assignment to specific contacts.
 
-Format: `allocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]`
+**Format:** `allocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]`
 
 * Allocates the assignment to the specified contacts, as well as all contacts in the specified class.
 
@@ -410,11 +554,13 @@ Format: `allocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]`
 
 * At least 1 of `[c/CLASS_NAME]` or `[ct/CONTACT_INDICES...]` must be provided.
 
-  * The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
 
 * The `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
   
 <box type="warning" seamless>
+
+**Warnings:**
 
 * If any of the specified contacts or classes do not exist, the command will fail and no allocation is done.
 
@@ -430,29 +576,29 @@ Format: `allocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]`
 
 <box type="tip" seamless>
 
-* You can enter both the `c/CLASS_NAME` and `ct/CONTACT_INDICES...` parameters to allocate the assignment to more contacts at the same time.
+**Tip:** You can enter both the `c/CLASS_NAME` and `ct/CONTACT_INDICES...` parameters to allocate the assignment to more contacts at the same time.
 
 </box>
 
-Examples:
+**Examples:**
 
 * `allocass ass/Assignment 1 ct/1 2 3`<br>
   Allocates the "Assignment 1" to the 1st, 2nd, and 3rd contacts in the list.
 
-* `allocass ass/Assignment 2 c/CS2103T`<br>
-  Allocates the "Assignment 2" to all contacts in the "CS2103T" class.
+* `allocass ass/Assignment 2 c/CS2103T-T10-1`<br>
+  Allocates the "Assignment 2" to all contacts in the "CS2103T-T10-1" class.
 
-* `allocass ass/Assignment 3 c/CS2103T ct/1 2 3`<br>
-  Allocates the "Assignment 3" to the 1st, 2nd, and 3rd contacts in the list, as well as all contacts belonging to class "CS2103T".
+* `allocass ass/Assignment 3 c/CS2103T-T10-1 ct/1 2 3`<br>
+  Allocates the "Assignment 3" to the 1st, 2nd, and 3rd contacts in the list, as well as all contacts belonging to class "CS2103T-T10-1".
 
-  The screenshot below illustrates the last example, where the class "CS2103T" contains contacts 2-5, and contact 3 was already allocated the assignment.<br>
+  The screenshot below illustrates the last example, where the class "CS2103T-T10-1" contains contacts 2-5, and contact 3 was already allocated the assignment.<br>
   ![Allocating Assignment 3](images/allocass-result.png)
 
 ### Unallocating assignments from contacts: `unallocass`
 
 Unallocates an assignment from specific contacts.
 
-Format: `unallocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]`
+**Format:** `unallocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]`
 
 * Unallocates the assignment from the specified contacts, as well as all contacts in the specified class.
 
@@ -465,6 +611,8 @@ Format: `unallocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]`
 * The `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
   
 <box type="warning" seamless>
+
+**Warnings:**
 
 * If any of the specified contacts or classes do not exist, the command will fail and no unallocation is done.
 
@@ -480,35 +628,35 @@ Format: `unallocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]`
 
 <box type="tip" seamless>
 
-* You can enter both the `c/CLASS_NAME` and `ct/CONTACT_INDICES...` parameters to unallocate the assignment from more contacts at the same time.
+**Tip:** You can enter both the `c/CLASS_NAME` and `ct/CONTACT_INDICES...` parameters to unallocate the assignment from more contacts at the same time.
 
 </box>
 
-Examples:
+**Examples:**
 
 * `unallocass ass/Assignment 1 ct/1 2 3`<br>
   Unallocates the "Assignment 1" from the 1st, 2nd, and 3rd contacts in the list.
 
-* `unallocass ass/Assignment 2 c/CS2103T`<br>
-  Unallocates the "Assignment 2" from all contacts in the "CS2103T" class.
+* `unallocass ass/Assignment 2 c/CS2103T-T10-1`<br>
+  Unallocates the "Assignment 2" from all contacts in the "CS2103T-T10-1" class.
 
-* `unallocass ass/Assignment 3 c/CS2103T ct/1 2 3`<br>
-  Unallocates the "Assignment 3" from the 1st, 2nd, and 3rd contacts in the list, as well as all contacts belonging to class "CS2103T".
+* `unallocass ass/Assignment 3 c/CS2103T-T10-1 ct/1 2 3`<br>
+  Unallocates the "Assignment 3" from the 1st, 2nd, and 3rd contacts in the list, as well as all contacts belonging to class "CS2103T-T10-1".
 
-  The screenshot below illustrates the last example, where the class "CS2103T" contains contacts 2-5, and only contacts 1, 2, 4, and 5 had the assignment allocated.<br>
+  The screenshot below illustrates the last example, where the class "CS2103T-T10-1" contains contacts 2-5, and only contacts 1, 2, 4, and 5 had the assignment allocated.<br>
   ![Unallocating Assignment 3](images/unallocass-result.png)
 
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
 
-Format: `clear`
+**Format:** `clear`
 
 ### Exiting the program : `exit`
 
 Exits the program.
 
-Format: `exit`
+**Format:** `exit`
 
 ### Saving the data
 
@@ -520,9 +668,11 @@ AddressBook data is saved automatically in `[JAR file location]/data/addressbook
 
 <box type="warning" seamless>
 
-**Caution:**
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+**Warnings:**
+
+* If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.
+
+* Certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
 
 ### Archiving data files `[coming in v2.0]`
@@ -539,8 +689,8 @@ _Details coming soon ..._
 **Q**: How can I back up my data and restore it if something goes wrong?\
 **A**: Make a copy of `data/addressbook.json` and store it in a safe location such as a cloud or external drive. To restore, stop CPP, replace the `addressbook.json` in the app home `data/` folder, then start CPP.
 
-**Q**: How does CPP prevent duplicate contacts?\
-**A**: CPP performs basic duplicate detection at entry. **For contacts**, the **name**, **phone number**, and **email** should be unique. No 2 contacts should share the same name, or the same phone number, or the same email. If you attempt to add a contact that violates these rules, CPP will reject the entry and show an error message. **For classes and assignments**, the **name** should be unique.
+**Q**: How does CPP prevent duplicate entries?\
+**A**: CPP performs basic duplicate detection at entry. **For contacts, classes and assignments**, the **name** should be unique. No 2 contacts, classes nor assignments should share the same name. If you attempt to add a contact, class or assignment that violates these rules, CPP will reject the entry and show an error message.
 
 **Q**: Can I export/import data for other systems (e.g., Excel)?\
 **A**: The primary data format used by CPP is JavaScript Object Notation (JSON). We do not support importing from Excel, but users may manually convert their Excel files to JSON format, adhering to the structure and format of the `addressbook.json` file generated on first run. Manual editing of `addressbook.json` is not recommended unless you are comfortable with JSON.
@@ -567,17 +717,22 @@ If you encounter other issues, please raise a ticket with the project maintainer
 
 ## Command summary
 
-| Action                    | Format, Examples                                                                                                                                                       |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Add**                   | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague` |
-| **Clear**                 | `clear`                                                                                                                                                                |
-| **Add Assignment**        | `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T ct/4 5`                |
-| **Allocate Assignment**   | `allocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `allocass ass/Assignment 3 c/CS2103T ct/1 2 3`                                        |
-| **Unallocate Assignment** | `unallocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `unallocass ass/Assignment 3 c/CS2103T ct/1 2 3`                                    |
-| **Delete**                | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                    |
-| **Edit**                  | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                           |
-| **Find**                  | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                             |
-| **List**                  | `list`                                                                                                                                                                 |
-| **Help**                  | `help`                                                                                                                                                                 |
+| Action                    | Format, Examples                                                                                                                                                                                                                                           |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Add Contact**           | `addcontact n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [c/CLASS_NAME] [ass/ASSIGNMENT_NAME] [t/TAG]...` <br> e.g., `addcontact n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 c/CS2103T-T10-1 ass/Assignment 1 t/friend t/colleague` |
+| **Clear**                 | `clear`                                                                                                                                                                                                                                                    |
+| **Add Class**             | `addclass c/CLASS_NAME [ct/CONTACT_INDICES...]` <br> e.g., `addclass c/CS2103T-T10-1 ct/1 2 3`                                                                                                                                                             |
+| **Allocate Class**        | `allocclass c/CLASS_NAME ct/CONTACT_INDICES...` <br> e.g., `allocclass c/CS2103T-T10-1 ct/1 2 3`                                                                                                                                                           |
+| **Unallocate Class**      | `unallocclass c/CLASS_NAME ct/CONTACT_INDICES...` <br> e.g., `unallocclass c/CS2103T-T10-1 ct/1 2 3`                                                                                                                                                       |
+| **Add Assignment**        | `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T-T10-1 ct/4 5`                                                                                              |
+| **Allocate Assignment**   | `allocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `allocass ass/Assignment 3 c/CS2103T-T10-1 ct/1 2 3`                                                                                                                      |
+| **Unallocate Assignment** | `unallocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `unallocass ass/Assignment 3 c/CS2103T-T10-1 ct/1 2 3`                                                                                                                  |
+| **Delete**                | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                                                                        |
+| **Edit**                  | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                                                                                                               |
+| **Find**                  | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                                                                                                                 |
+| **List Contacts**         | `list contacts`                                                                                                                                                                                                                                            |
+| **List Classes**          | `list classes`                                                                                                                                                                                                                                             |
+| **List Assignments**      | `list assignments`                                                                                                                                                                                                                                         |
+| **Help**                  | `help`                                                                                                                                                                                                                                                     |
 
 </div>

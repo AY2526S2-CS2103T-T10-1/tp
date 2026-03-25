@@ -19,14 +19,14 @@ import cpp.model.contact.Contact;
 import cpp.model.util.ClassGroupUtil;
 
 /**
- * Unallocates a contact from a class group by their displayed indices.
+ * Unallocates contact(s) from a class group by their displayed indices.
  */
 public class UnallocateClassGroupCommand extends Command {
 
     public static final String COMMAND_WORD = "unallocclass";
 
     public static final String MESSAGE_USAGE = UnallocateClassGroupCommand.COMMAND_WORD
-            + ": Unallocates a contact from a class group. "
+            + ": Unallocates contact(s) from a class group. "
             + "Parameters: "
             + CliSyntax.PREFIX_CLASS + "CLASS NAME "
             + CliSyntax.PREFIX_CONTACT + "CONTACT INDICES...\n"
@@ -35,16 +35,19 @@ public class UnallocateClassGroupCommand extends Command {
             + CliSyntax.PREFIX_CONTACT + "1 2 3";
 
     public static final String MESSAGE_SUCCESS = """
-            Unallocated class group: %1$s from %2$s contacts.\nContacts unallocated: %3$s
-            """;
+            Unallocated class group: %1$s from %2$s contact(s).
+            Contacts unallocated: %3$s
+            Contacts not unallocated (not allocated to class group initially): %4$s""";
     public static final String MESSAGE_INVALID_CLASS_GROUP_NAME = "The class group name provided is invalid";
     public static final String MESSAGE_UNALLOCATION_FAILED = "No contacts were unallocated from the class group.";
 
     private final ClassGroupName classGroupName;
     private final List<Index> contactIndices;
 
-    private int unallocatedCount;
-    private StringBuilder successfullyUnallocatedNames = new StringBuilder();
+    private int successfulUnallocationCount;
+    private int unsuccessfulUnallocationCount;
+    private StringBuilder successfulContactUnallocations = new StringBuilder();
+    private StringBuilder unsuccessfulContactUnallocations = new StringBuilder();
 
     /**
      * Creates an UnallocateClassGroupCommand with the specified class group name
@@ -55,6 +58,8 @@ public class UnallocateClassGroupCommand extends Command {
         Objects.requireNonNull(contactIndices);
         this.classGroupName = classGroupName;
         this.contactIndices = new ArrayList<>(contactIndices);
+        this.successfulUnallocationCount = 0;
+        this.unsuccessfulUnallocationCount = 0;
     }
 
     @Override
@@ -72,9 +77,14 @@ public class UnallocateClassGroupCommand extends Command {
         CommandUtil.checkContactIndices(lastShownContactList, this.contactIndices);
         this.unallocateContactsFromClassGroup(classGroupToUnallocate, lastShownContactList);
 
+        if (this.unsuccessfulUnallocationCount == 0) {
+            this.unsuccessfulContactUnallocations.append("None");
+        }
+
         return new CommandResult(
                 String.format(UnallocateClassGroupCommand.MESSAGE_SUCCESS, this.classGroupName.fullName,
-                        this.unallocatedCount, this.successfullyUnallocatedNames.toString()));
+                        this.successfulUnallocationCount, this.successfulContactUnallocations.toString(),
+                        this.unsuccessfulContactUnallocations.toString()));
     }
 
     @Override
@@ -106,11 +116,11 @@ public class UnallocateClassGroupCommand extends Command {
             try {
                 classGroupToUnallocate.unallocateContact(contactToUnallocate.getId());
                 anySuccessfulUnallocation = true;
-                this.unallocatedCount++;
-                this.buildSuccessfullyUnallocatedString(contactToUnallocate.getName().fullName);
+                this.successfulUnallocationCount++;
+                this.buildSuccessfulUnallocationString(contactToUnallocate.getName().fullName);
             } catch (ContactNotAllocatedClassGroupException e) {
-                // Contact was not allocated to the class group, skip and continue unallocating
-                // the rest of the contacts
+                this.unsuccessfulUnallocationCount++;
+                this.buildUnsuccessfulUnallocationString(contactToUnallocate.getName().fullName);
             }
         }
 
@@ -119,10 +129,17 @@ public class UnallocateClassGroupCommand extends Command {
         }
     }
 
-    private void buildSuccessfullyUnallocatedString(String contactName) {
-        if (this.successfullyUnallocatedNames.length() > 0) {
-            this.successfullyUnallocatedNames.append("; ");
+    private void buildSuccessfulUnallocationString(String contactName) {
+        if (this.successfulContactUnallocations.length() > 0) {
+            this.successfulContactUnallocations.append("; ");
         }
-        this.successfullyUnallocatedNames.append(contactName);
+        this.successfulContactUnallocations.append(contactName);
+    }
+
+    private void buildUnsuccessfulUnallocationString(String contactName) {
+        if (this.unsuccessfulContactUnallocations.length() > 0) {
+            this.unsuccessfulContactUnallocations.append("; ");
+        }
+        this.unsuccessfulContactUnallocations.append(contactName);
     }
 }
