@@ -137,6 +137,14 @@ How the parsing works:
 
 ---
 
+#### Classes view
+
+<puml src="diagrams/ModelClassDiagramClassGroups.puml" width="450" />
+
+**ClassGroup view:** highlights classes and class group-related entities.
+
+---
+
 #### Assignments view
 
 <puml src="diagrams/ModelClassDiagramAssignments.puml" width="450" />
