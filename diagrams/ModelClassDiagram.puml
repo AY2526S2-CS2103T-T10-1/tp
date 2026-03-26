@@ -18,6 +18,8 @@ Class UniqueAssignmentList
 Class Assignment
 Class UniqueContactAssignmentList
 Class ContactAssignment
+Class UniqueClassGroupList
+Class ClassGroup
 
 Class I #FFFFFF
 }
@@ -31,20 +33,24 @@ ModelManager .up.|> Model
 Model .right.> ReadOnlyUserPrefs
 Model .left.> ReadOnlyAddressBook
 ModelManager -left-> "1" AddressBook
-ModelManager -right-> "1" UserPrefs
+ModelManager --> "1" UserPrefs
 UserPrefs .up.|> ReadOnlyUserPrefs
 
 AddressBook *-down-> "1" UniqueContactList
-AddressBook *--> "1" UniqueAssignmentList
-AddressBook *--> "1" UniqueContactAssignmentList
+AddressBook *-down-> "1" UniqueAssignmentList
+AddressBook *-down-> "1" UniqueContactAssignmentList
+AddressBook *-down-> "1" UniqueClassGroupList
+
 UniqueContactList -down-> "~* all" Contact
 UniqueAssignmentList --> "~* all" Assignment
 UniqueContactAssignmentList --> "~* all" ContactAssignment
+UniqueClassGroupList --> "~* all" ClassGroup
 
 Contact -[hidden]up--> I
 UniqueContactList -[hidden]right-> I
 
 ModelManager --> "~* filtered" Contact
-ModelManager --> "~* filtered" Assignment
+ModelManager -down-> "~* filtered" Assignment
+ModelManager -down-> "~* filtered" ClassGroup
 
 @enduml

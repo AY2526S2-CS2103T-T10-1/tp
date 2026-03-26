@@ -1,0 +1,18 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
+
+Package ClassGroup as ClassGroupPackage <<Rectangle>>{
+    Class ClassGroup
+    Class ClassGroupName
+}
+
+AddressBook *-right-> "1" UniqueClassGroupList
+
+UniqueClassGroupList -right-> "*" ClassGroup
+
+ClassGroup *--> "1" ClassGroupName
+Contact "*" -left- ClassGroup :assignedTo <
+@enduml

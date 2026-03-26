@@ -23,6 +23,6 @@ UniqueContactAssignmentList --> ContactAssignment
 Assignment *--> "1" AssignmentName
 ContactAssignment *--> "1" SubmissionInfo
 ContactAssignment *--> "1" GradeInfo
-Contact  -- "*" Assignment :assignedTo
+Contact  -- "*" Assignment :assignedTo <
 (Contact, Assignment) .. ContactAssignment
 @enduml
