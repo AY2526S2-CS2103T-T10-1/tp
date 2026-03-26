@@ -6,9 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Logger;
 
+import cpp.commons.core.LogsCenter;
 import cpp.commons.core.index.Index;
 import cpp.commons.util.ToStringBuilder;
+import cpp.logic.LogicManager;
 import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
@@ -86,6 +89,8 @@ public class GradeAssignmentCommand extends Command {
     private StringBuilder notSubmittedContacts = new StringBuilder();
     private StringBuilder notAllocatedContacts = new StringBuilder();
     private StringBuilder gradeTimeBeforeSubmissionTimeContacts = new StringBuilder();
+
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
     /**
      * Creates a GradeAssignmentCommand to grade the specified assignment for the
@@ -249,16 +254,22 @@ public class GradeAssignmentCommand extends Command {
         } catch (ContactAssignmentNotFoundException e) {
             this.notAllocatedCount++;
             this.buildNotAllocatedString(contact.getName().fullName);
+            this.logger
+                    .info("Contact not marked as graded (not allocated to assignment): " + contact.getName().fullName);
         } catch (ContactAssignmentNotSubmittedException e) {
             this.notSubmittedCount++;
             this.buildNotSubmittedString(contact.getName().fullName);
-
+            this.logger.info("Contact not marked as graded (not submitted): " + contact.getName().fullName);
         } catch (ContactAssignmentAlreadyGradedException e) {
             this.alreadyGradedCount++;
             this.buildAlreadyGradedString(contact.getName().fullName);
+            this.logger.info("Contact not marked as graded (already graded): " + contact.getName().fullName);
         } catch (ContactAssignmentGradedBeforeSubmissionException e) {
             this.gradeTimeBeforeSubmissionTimeCount++;
             this.buildGradeTimeBeforeSubmissionTimeString(contact.getName().fullName);
+            this.logger.info(
+                    "Contact not marked as graded (grade time before submission time): " + contact.getName().fullName);
+
         }
 
         this.contactsToGrade.add(contact);

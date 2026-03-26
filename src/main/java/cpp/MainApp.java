@@ -176,13 +176,14 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        MainApp.logger.info("Starting AddressBook " + MainApp.VERSION);
+        MainApp.logger.info("Starting ClassroomPlusPlus " + MainApp.VERSION);
         this.ui.start(primaryStage);
     }
 
     @Override
     public void stop() {
-        MainApp.logger.info("============================ [ Stopping AddressBook ] =============================");
+        MainApp.logger
+                .info("============================ [ Stopping ClassroomPlusPlus ] =============================");
         try {
             this.storage.saveUserPrefs(this.model.getUserPrefs());
         } catch (IOException e) {

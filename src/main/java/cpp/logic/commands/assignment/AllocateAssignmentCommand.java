@@ -5,9 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Logger;
 
+import cpp.commons.core.LogsCenter;
 import cpp.commons.core.index.Index;
 import cpp.commons.util.ToStringBuilder;
+import cpp.logic.LogicManager;
 import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
@@ -61,6 +64,8 @@ public class AllocateAssignmentCommand extends Command {
     private StringBuilder successfulContactAllocations;
     private int unsuccessfulAllocationCount;
     private StringBuilder unsuccessfulContactAllocations;
+
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
     /**
      * Creates an AllocateAssignmentCommand with the specified assignment and
@@ -209,6 +214,8 @@ public class AllocateAssignmentCommand extends Command {
         } catch (ContactAlreadyAllocatedAssignmentException e) {
             this.unsuccessfulAllocationCount++;
             this.buildUnsuccessfulAllocationString(contact.getName().fullName);
+            this.logger.info(
+                    "Failed to allocate assignment to contact (already allocated): " + contact.getName().fullName);
         }
 
         this.contactsToAllocate.add(contact);
