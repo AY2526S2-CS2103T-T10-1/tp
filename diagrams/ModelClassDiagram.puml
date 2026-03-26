@@ -14,11 +14,10 @@ Class UserPrefs
 
 Class UniqueContactList
 Class Contact
-Class Address
-Class Email
-Class Name
-Class Phone
-Class Tag
+Class UniqueAssignmentList
+Class Assignment
+Class UniqueContactAssignmentList
+Class ContactAssignment
 
 Class I #FFFFFF
 }
@@ -35,20 +34,17 @@ ModelManager -left-> "1" AddressBook
 ModelManager -right-> "1" UserPrefs
 UserPrefs .up.|> ReadOnlyUserPrefs
 
-AddressBook *--> "1" UniqueContactList
-UniqueContactList --> "~* all" Contact
-Contact *--> Name
-Contact *--> Phone
-Contact *--> Email
-Contact *--> Address
-Contact *--> "*" Tag
+AddressBook *-down-> "1" UniqueContactList
+AddressBook *--> "1" UniqueAssignmentList
+AddressBook *--> "1" UniqueContactAssignmentList
+UniqueContactList -down-> "~* all" Contact
+UniqueAssignmentList --> "~* all" Assignment
+UniqueContactAssignmentList --> "~* all" ContactAssignment
 
 Contact -[hidden]up--> I
 UniqueContactList -[hidden]right-> I
 
-Name -[hidden]right-> Phone
-Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
-
 ModelManager --> "~* filtered" Contact
+ModelManager --> "~* filtered" Assignment
+
 @enduml

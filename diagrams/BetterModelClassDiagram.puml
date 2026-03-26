@@ -4,18 +4,23 @@ skinparam arrowThickness 1.1
 skinparam arrowColor MODEL_COLOR
 skinparam classBackgroundColor MODEL_COLOR
 
+Package Contact as ContactPackage <<Rectangle>>{
+    Class Contact
+    Class ContactName
+    Class Phone
+    Class Email
+    Class Address
+    Class Tag
+}
+
 AddressBook *-right-> "1" UniqueContactList
-AddressBook *-right-> "1" UniqueTagList
-UniqueTagList -[hidden]down- UniqueContactList
-UniqueTagList -[hidden]down- UniqueContactList
 
-UniqueTagList -right-> "*" Tag
-UniqueContactList -right-> Contact
+UniqueContactList --> "*" Contact
 
-Contact -up-> "*" Tag
+Contact *--> "*" Tag
 
-Contact *--> Name
-Contact *--> Phone
-Contact *--> Email
-Contact *--> Address
+Contact *--> "1" ContactName
+Contact *--> "1" Phone
+Contact *--> "1" Email
+Contact *--> "1" Address
 @enduml
