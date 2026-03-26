@@ -5,9 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Logger;
 
+import cpp.commons.core.LogsCenter;
 import cpp.commons.core.index.Index;
 import cpp.commons.util.ToStringBuilder;
+import cpp.logic.LogicManager;
 import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
@@ -71,6 +74,8 @@ public class UngradeAssignmentCommand extends Command {
     private StringBuilder notGradedContacts = new StringBuilder();
     private StringBuilder notSubmittedContacts = new StringBuilder();
     private StringBuilder notAllocatedContacts = new StringBuilder();
+
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
     /**
      * Creates a UngradeAssignmentCommand to ungrade the specified assignment for
@@ -214,18 +219,19 @@ public class UngradeAssignmentCommand extends Command {
             this.buildSuccessfulUngradeString(contact.getName().fullName);
 
         } catch (ContactAssignmentNotFoundException e) {
-            // Skip contacts that don't have the assignment allocated.
             this.notAllocatedCount++;
             this.buildNotAllocatedString(contact.getName().fullName);
+            this.logger.info(
+                    "Contact not marked as ungraded (not allocated to assignment): " + contact.getName().fullName);
         } catch (ContactAssignmentNotSubmittedException e) {
-            // Skip contacts that have not submitted the assignment.
             this.notSubmittedCount++;
             this.buildNotSubmittedString(contact.getName().fullName);
+            this.logger.info("Contact not marked as ungraded (not submitted): " + contact.getName().fullName);
 
         } catch (ContactAssignmentNotGradedException e) {
-            // Skip contacts that are already not graded.
             this.notGradedCount++;
             this.buildNotGradedString(contact.getName().fullName);
+            this.logger.info("Contact not marked as ungraded (not graded): " + contact.getName().fullName);
         }
 
         this.contactsToUngrade.add(contact);

@@ -5,9 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Logger;
 
+import cpp.commons.core.LogsCenter;
 import cpp.commons.core.index.Index;
 import cpp.commons.util.ToStringBuilder;
+import cpp.logic.LogicManager;
 import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
@@ -61,6 +64,8 @@ public class UnallocateAssignmentCommand extends Command {
     private StringBuilder successfulContactUnallocations;
     private int unsuccessfulUnallocationCount;
     private StringBuilder unsuccessfulContactUnallocations;
+
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
     /**
      * Creates an UnallocateAssignmentCommand with the specified assignment and
@@ -206,10 +211,12 @@ public class UnallocateAssignmentCommand extends Command {
             model.removeContactAssignment(ca);
             this.successfulUnallocationCount++;
             this.buildSuccessfulUnallocationString(contact.getName().fullName);
-
         } catch (ContactAssignmentNotFoundException e) {
             this.unsuccessfulUnallocationCount++;
             this.buildUnsuccessfulUnallocationString(contact.getName().fullName);
+            this.logger.info(
+                    "Failed to unallocate assignment from contact (not allocated initially): "
+                            + contact.getName().fullName);
         }
 
         this.contactsToUnallocate.add(contact);

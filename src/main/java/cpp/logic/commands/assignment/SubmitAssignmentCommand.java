@@ -6,9 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Logger;
 
+import cpp.commons.core.LogsCenter;
 import cpp.commons.core.index.Index;
 import cpp.commons.util.ToStringBuilder;
+import cpp.logic.LogicManager;
 import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
@@ -72,6 +75,8 @@ public class SubmitAssignmentCommand extends Command {
     private StringBuilder markedContacts;
     private StringBuilder alreadyMarkedContacts;
     private StringBuilder notAllocatedContacts;
+
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
     /**
      * Creates a SubmitAssignmentCommand to mark the specified assignment as
@@ -230,13 +235,15 @@ public class SubmitAssignmentCommand extends Command {
             this.buildSuccessfulMarkString(contact.getName().fullName);
 
         } catch (ContactAssignmentNotFoundException e) {
-            // Skip contacts that don't have the assignment allocated.
             this.notAllocatedCount++;
             this.buildNotAllocatedString(contact.getName().fullName);
+            this.logger.info(
+                    "Contact not marked as submitted (not allocated to assignment): " + contact.getName().fullName);
         } catch (ContactAssignmentAlreadySubmittedException e) {
-            // Skip contacts that have already been marked as submitted.
             this.alreadyMarkedCount++;
             this.buildAlreadyMarkedString(contact.getName().fullName);
+            this.logger.info("Contact not marked as submitted for assignment (already submitted): "
+                    + contact.getName().fullName);
         }
 
         this.contactsToMark.add(contact);

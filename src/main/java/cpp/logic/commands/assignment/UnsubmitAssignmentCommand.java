@@ -5,9 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Logger;
 
+import cpp.commons.core.LogsCenter;
 import cpp.commons.core.index.Index;
 import cpp.commons.util.ToStringBuilder;
+import cpp.logic.LogicManager;
 import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
@@ -67,6 +70,8 @@ public class UnsubmitAssignmentCommand extends Command {
     private StringBuilder unmarkedContacts;
     private StringBuilder alreadyUnmarkedContacts;
     private StringBuilder notAllocatedContacts;
+
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
     /**
      * Creates an UnsubmitAssignmentCommand to mark the specified assignment as
@@ -216,13 +221,15 @@ public class UnsubmitAssignmentCommand extends Command {
             this.buildSuccessfulUnmarkString(contact.getName().fullName);
 
         } catch (ContactAssignmentNotFoundException e) {
-            // Skip contacts that don't have the assignment allocated.
             this.notAllocatedCount++;
             this.buildNotAllocatedString(contact.getName().fullName);
+            this.logger.info(
+                    "Contact not marked as unsubmitted (not allocated to assignment): " + contact.getName().fullName);
         } catch (ContactAssignmentNotSubmittedException e) {
-            // Skip contacts that are not currently marked as submitted.
             this.alreadyUnmarkedCount++;
             this.buildAlreadyUnmarkedString(contact.getName().fullName);
+            this.logger.info(
+                    "Contact not marked as unsubmitted (not submitted): " + contact.getName().fullName);
         }
 
         this.contactsToUnmark.add(contact);

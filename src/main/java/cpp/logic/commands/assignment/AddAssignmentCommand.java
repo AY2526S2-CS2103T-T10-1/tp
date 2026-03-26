@@ -3,9 +3,12 @@ package cpp.logic.commands.assignment;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
+import cpp.commons.core.LogsCenter;
 import cpp.commons.core.index.Index;
 import cpp.commons.util.ToStringBuilder;
+import cpp.logic.LogicManager;
 import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
@@ -53,6 +56,8 @@ public class AddAssignmentCommand extends Command {
     private final ClassGroupName classGroupName;
     private int allocatedCount;
     private StringBuilder allocatedContacts;
+
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
     /**
      * Creates an AddAssignmentCommand to add the specified {@code Assignment} and
@@ -189,6 +194,8 @@ public class AddAssignmentCommand extends Command {
             // indices, and the same contact is allocated via both methods. In this case, we
             // can simply skip the duplicate allocation and continue allocating to the rest
             // of the contacts.
+            this.logger.info("Contact in class group already allocated to assignment through contact indices: "
+                    + contact.getName().fullName);
         }
     }
 }
