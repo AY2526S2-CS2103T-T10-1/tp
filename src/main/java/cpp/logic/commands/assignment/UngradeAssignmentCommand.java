@@ -39,7 +39,7 @@ public class UngradeAssignmentCommand extends Command {
             + " Parameters: "
             + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT_NAME "
             + "[" + CliSyntax.PREFIX_CLASS + "CLASS_NAME] "
-            + "[" + CliSyntax.PREFIX_CONTACT + "CONTACT_INDICES...] "
+            + "[" + CliSyntax.PREFIX_CONTACT + "CONTACT_INDICES...]\n"
             + "At least one of " + CliSyntax.PREFIX_CLASS + " or " + CliSyntax.PREFIX_CONTACT + " must be provided.\n"
             + "Example: " + UngradeAssignmentCommand.COMMAND_WORD + " "
             + CliSyntax.PREFIX_ASSIGNMENT + "Assignment 1 "
