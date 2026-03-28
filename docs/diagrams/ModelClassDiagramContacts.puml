@@ -1,0 +1,26 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
+
+Package Contact as ContactPackage <<Rectangle>>{
+    Class Contact
+    Class ContactName
+    Class Phone
+    Class Email
+    Class Address
+    Class Tag
+}
+
+AddressBook *-right-> "1" UniqueContactList
+
+UniqueContactList --> "*" Contact
+
+Contact *--> "*" Tag
+
+Contact *--> "1" ContactName
+Contact *--> "1" Phone
+Contact *--> "1" Email
+Contact *--> "1" Address
+@enduml

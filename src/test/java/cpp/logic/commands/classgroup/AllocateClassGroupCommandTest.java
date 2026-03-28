@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import cpp.commons.core.index.Index;
+import cpp.logic.Messages;
 import cpp.logic.commands.CommandResult;
 import cpp.logic.commands.exceptions.CommandException;
 import cpp.model.AddressBook;
@@ -44,9 +45,10 @@ public class AllocateClassGroupCommandTest {
         ClassGroupName validClassGroupName = new ClassGroupName(ClassGroupBuilder.DEFAULT_NAME);
         Contact validContact1 = TypicalContacts.getTypicalContacts().get(0);
         Contact validContact2 = TypicalContacts.getTypicalContacts().get(1);
+        Contact validContact3 = TypicalContacts.getTypicalContacts().get(2);
         ClassGroup validClassGroup = new ClassGroup(validClassGroupName);
         ModelStubWithContactAndClassGroup modelStub = new ModelStubWithContactAndClassGroup(validContact1,
-                validContact2,
+                validContact2, validContact3,
                 validClassGroup);
 
         ArrayList<Index> validContactIndices = new ArrayList<>(
@@ -59,12 +61,32 @@ public class AllocateClassGroupCommandTest {
 
         Assertions.assertEquals(
                 String.format(AllocateClassGroupCommand.MESSAGE_SUCCESS, validClassGroupName, 2,
-                        validContact1.getName() + "; " + validContact2.getName()),
+                        validContact1.getName() + "; " + validContact2.getName(), "None"),
                 commandResult.getFeedbackToUser());
         Assertions.assertEquals(2, validClassGroup.getContactIdSet().size());
         Assertions.assertEquals(2, modelStub.classGroup.getContactIdSet().size());
         Assertions.assertTrue(validClassGroup.getContactIdSet().contains(validContact1.getId()));
         Assertions.assertTrue(validClassGroup.getContactIdSet().contains(validContact2.getId()));
+
+        // New command with Indices 1 to 3, where indices 1 and 2 are already allocated
+        // to the class group, and index 3 is not allocated yet
+        ArrayList<Index> newContactIndices = new ArrayList<>(
+                Arrays.asList(TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT,
+                        TypicalIndexes.INDEX_THIRD_CONTACT));
+        AllocateClassGroupCommand newAllocateClassGroupCommand = new AllocateClassGroupCommand(validClassGroupName,
+                newContactIndices);
+        CommandResult newCommandResult = newAllocateClassGroupCommand.execute(modelStub);
+
+        Assertions.assertEquals(
+                String.format(AllocateClassGroupCommand.MESSAGE_SUCCESS, validClassGroupName, 1,
+                        validContact3.getName(), validContact1.getName() + "; "
+                                + validContact2.getName()),
+                newCommandResult.getFeedbackToUser());
+        Assertions.assertEquals(3, validClassGroup.getContactIdSet().size());
+        Assertions.assertEquals(3, modelStub.classGroup.getContactIdSet().size());
+        Assertions.assertTrue(validClassGroup.getContactIdSet().contains(validContact1.getId()));
+        Assertions.assertTrue(validClassGroup.getContactIdSet().contains(validContact2.getId()));
+        Assertions.assertTrue(validClassGroup.getContactIdSet().contains(validContact3.getId()));
     }
 
     @Test
@@ -72,10 +94,11 @@ public class AllocateClassGroupCommandTest {
         ClassGroupName validClassGroupName = new ClassGroupName(ClassGroupBuilder.DEFAULT_NAME);
         Contact validContact1 = TypicalContacts.getTypicalContacts().get(0);
         Contact validContact2 = TypicalContacts.getTypicalContacts().get(1);
+        Contact validContact3 = TypicalContacts.getTypicalContacts().get(2);
         ClassGroup validClassGroup = new ClassGroup(validClassGroupName);
         validClassGroup.allocateContact(validContact1.getId());
         ModelStubWithContactAndClassGroup modelStub = new ModelStubWithContactAndClassGroup(validContact1,
-                validContact2,
+                validContact2, validContact3,
                 validClassGroup);
 
         ArrayList<Index> validContactIndices = new ArrayList<>(
@@ -84,7 +107,29 @@ public class AllocateClassGroupCommandTest {
         AllocateClassGroupCommand allocateClassGroupCommand = new AllocateClassGroupCommand(validClassGroupName,
                 validContactIndices);
 
-        Assert.assertThrows(CommandException.class, AllocateClassGroupCommand.MESSAGE_ALLOCATION_FAILED,
+        Assert.assertThrows(CommandException.class, String.format(AllocateClassGroupCommand.MESSAGE_ALLOCATION_FAILED,
+                TypicalContacts.ALICE.getName().fullName),
+                () -> allocateClassGroupCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_invalidClassGroupName_throwsCommandException() {
+        ClassGroupName invalidClassGroupName = new ClassGroupName("Invalid Name");
+        Contact validContact1 = TypicalContacts.getTypicalContacts().get(0);
+        Contact validContact2 = TypicalContacts.getTypicalContacts().get(1);
+        Contact validContact3 = TypicalContacts.getTypicalContacts().get(2);
+        ClassGroup validClassGroup = new ClassGroup(new ClassGroupName(ClassGroupBuilder.DEFAULT_NAME));
+        ModelStubWithContactAndClassGroup modelStub = new ModelStubWithContactAndClassGroup(validContact1,
+                validContact2, validContact3,
+                validClassGroup);
+
+        ArrayList<Index> validContactIndices = new ArrayList<>(
+                Arrays.asList(TypicalIndexes.INDEX_FIRST_CONTACT));
+
+        AllocateClassGroupCommand allocateClassGroupCommand = new AllocateClassGroupCommand(invalidClassGroupName,
+                validContactIndices);
+
+        Assert.assertThrows(CommandException.class, Messages.MESSAGE_CLASS_GROUP_NOT_FOUND,
                 () -> allocateClassGroupCommand.execute(modelStub));
     }
 
@@ -168,14 +213,17 @@ public class AllocateClassGroupCommandTest {
     private class ModelStubWithContactAndClassGroup extends ModelStub {
         private final Contact contact1;
         private final Contact contact2;
+        private final Contact contact3;
         private final ClassGroup classGroup;
 
-        ModelStubWithContactAndClassGroup(Contact contact1, Contact contact2, ClassGroup classGroup) {
+        ModelStubWithContactAndClassGroup(Contact contact1, Contact contact2, Contact contact3, ClassGroup classGroup) {
             Objects.requireNonNull(contact1);
             Objects.requireNonNull(contact2);
+            Objects.requireNonNull(contact3);
             Objects.requireNonNull(classGroup);
             this.contact1 = contact1;
             this.contact2 = contact2;
+            this.contact3 = contact3;
             this.classGroup = classGroup;
         }
 
@@ -190,6 +238,7 @@ public class AllocateClassGroupCommandTest {
             AddressBook addressBook = new AddressBook();
             addressBook.addContact(this.contact1);
             addressBook.addContact(this.contact2);
+            addressBook.addContact(this.contact3);
             addressBook.addClassGroup(this.classGroup);
             return addressBook;
         }
@@ -199,6 +248,7 @@ public class AllocateClassGroupCommandTest {
             AddressBook addressBook = new AddressBook();
             addressBook.addContact(this.contact1);
             addressBook.addContact(this.contact2);
+            addressBook.addContact(this.contact3);
             return addressBook.getContactList();
         }
     }

@@ -78,6 +78,30 @@ public class AddAssignmentCommandTest {
     }
 
     @Test
+    public void execute_classGroupWithNoContacts_throwsCommandException() {
+        AddAssignmentCommand addContactCommand = new AddAssignmentCommand(TypicalAssignments.ASSIGNMENT_ONE, List.of(),
+                new ClassGroupName("EmptyGroup"));
+
+        ModelStub modelStub = new ModelStubAcceptingAssignmentAdded() {
+            @Override
+            public boolean hasClassGroup(ClassGroup classGroup) {
+                return classGroup.getName().equals(new ClassGroupName("EmptyGroup"));
+            }
+
+            @Override
+            public ReadOnlyAddressBook getAddressBook() {
+                AddressBook ab = new AddressBook();
+                ClassGroup cg = new ClassGroup(new ClassGroupName("EmptyGroup"));
+                ab.addClassGroup(cg);
+                return ab;
+            }
+        };
+
+        Assert.assertThrows(CommandException.class, Messages.MESSAGE_CLASS_GROUP_NO_CONTACTS,
+                () -> addContactCommand.execute(modelStub));
+    }
+
+    @Test
     public void execute_validClassGroup_createsAssignmentAndAllocatesToContactsInClassGroup() {
         AddAssignmentCommand addAssignmentCommand = new AddAssignmentCommand(TypicalAssignments.ASSIGNMENT_ONE,
                 List.of(Index.fromOneBased(1)), new ClassGroupName("ValidClassGroup"));

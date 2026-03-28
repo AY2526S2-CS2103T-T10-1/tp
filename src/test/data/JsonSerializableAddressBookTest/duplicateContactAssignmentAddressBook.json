@@ -11,14 +11,18 @@
             "assignmentId": "cf6c38bc-1a36-4966-8679-559fe9ee3e41",
             "contactId": "683f92b5-9e96-47bb-94cd-e8ede5523d7a",
             "isSubmitted": false,
+            "submissionDate": null,
             "isGraded": false,
+            "gradingDate": null,
             "score": 0
         },
         {
             "assignmentId": "cf6c38bc-1a36-4966-8679-559fe9ee3e41",
             "contactId": "683f92b5-9e96-47bb-94cd-e8ede5523d7a",
             "isSubmitted": true,
+            "submissionDate": "19-12-2025 12:29",
             "isGraded": true,
+            "gradingDate": "20-12-2025 12:29",
             "score": 10
         }
     ],

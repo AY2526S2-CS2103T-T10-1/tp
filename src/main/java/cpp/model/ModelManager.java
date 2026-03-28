@@ -1,6 +1,7 @@
 package cpp.model;
 
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -184,6 +185,40 @@ public class ModelManager implements Model {
 
         this.assignmentManager.deregisterContactAssignment(ca);
         this.addressBook.removeContactAssignment(ca);
+    }
+
+    @Override
+    public void markSubmitted(Assignment assignment, Contact contact, LocalDateTime submissionDate) {
+        Objects.requireNonNull(assignment);
+        Objects.requireNonNull(contact);
+        Objects.requireNonNull(submissionDate);
+
+        this.assignmentManager.submit(assignment.getId(), contact.getId(), submissionDate);
+    }
+
+    @Override
+    public void markUnsubmitted(Assignment assignment, Contact contact) {
+        Objects.requireNonNull(assignment);
+        Objects.requireNonNull(contact);
+
+        this.assignmentManager.unsubmit(assignment.getId(), contact.getId());
+    }
+
+    @Override
+    public void grade(Assignment assignment, Contact contact, float score, LocalDateTime gradingDate) {
+        Objects.requireNonNull(assignment);
+        Objects.requireNonNull(contact);
+        Objects.requireNonNull(gradingDate);
+
+        this.assignmentManager.grade(assignment.getId(), contact.getId(), score, gradingDate);
+    }
+
+    @Override
+    public void ungrade(Assignment assignment, Contact contact) {
+        Objects.requireNonNull(assignment);
+        Objects.requireNonNull(contact);
+
+        this.assignmentManager.ungrade(assignment.getId(), contact.getId());
     }
 
     @Override

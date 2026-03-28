@@ -1,5 +1,6 @@
 package cpp.logic.parser;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -16,6 +17,7 @@ import cpp.commons.core.index.Index;
 import cpp.commons.util.StringUtil;
 import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.assignment.AssignmentName;
+import cpp.model.assignment.GradeInfo;
 import cpp.model.classgroup.ClassGroupName;
 import cpp.model.contact.Address;
 import cpp.model.contact.ContactName;
@@ -31,7 +33,10 @@ public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
     public static final String MESSAGE_EMPTY_INDICES = "Contact indices should not be blank.";
-    public static final DateTimeFormatter DEADLINE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    public static final String MESSAGE_INVALID_DATETIME = """
+            Invalid date and time format. Please use the format: dd-MM-yyyy HH:mm""";
+    public static final String MESSAGE_INVALID_FUTURE_DATETIME = "Date and time cannot be in the future.";
+    public static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading
@@ -144,11 +149,23 @@ public class ParserUtil {
         String trimmedDatetime = datetime.trim().replaceAll("\\s+", " ").trim();
         LocalDateTime parsedDateTime;
         try {
-            parsedDateTime = LocalDateTime.parse(trimmedDatetime, ParserUtil.DEADLINE_FORMATTER);
+            parsedDateTime = LocalDateTime.parse(trimmedDatetime, ParserUtil.DATETIME_FORMATTER);
         } catch (DateTimeParseException e) {
             throw new ParseException("Invalid date and time format. Please use the format: dd-MM-yyyy HH:mm");
         }
         return parsedDateTime;
+    }
+
+    /**
+     * Parses a {@code String datetime} into a {@code LocalDateTime} and checks if
+     * it is not in the future.
+     */
+    public static LocalDateTime parseDateTime(String datetime) throws ParseException {
+        LocalDateTime dateTime = ParserUtil.parseDeadline(datetime);
+        if (dateTime.isAfter(LocalDateTime.now())) {
+            throw new ParseException(ParserUtil.MESSAGE_INVALID_FUTURE_DATETIME);
+        }
+        return dateTime;
     }
 
     /**
@@ -161,6 +178,25 @@ public class ParserUtil {
             throw new ParseException(AssignmentName.MESSAGE_CONSTRAINTS);
         }
         return new AssignmentName(trimmedName);
+    }
+
+    /**
+     * Parses a {@code String score} into a {@code float}.
+     */
+    public static float parseScore(String scoreString) throws ParseException {
+        Objects.requireNonNull(scoreString);
+        String trimmedScore = scoreString.trim().replaceAll("\\s+", " ");
+        try {
+            BigDecimal score = new BigDecimal(trimmedScore);
+            if (!GradeInfo.isValidScore(score)) {
+                throw new ParseException(GradeInfo.INVALID_SCORE_STRING);
+            }
+
+            // Round to 1 decimal place
+            return Math.round(score.doubleValue() * 10.0d) / 10.0f;
+        } catch (NumberFormatException e) {
+            throw new ParseException(GradeInfo.INVALID_SCORE_STRING);
+        }
     }
 
     /**

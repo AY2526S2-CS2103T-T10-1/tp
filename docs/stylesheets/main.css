@@ -161,10 +161,36 @@ mark {
   }
 }
 
-h2,
-h3,
-h4,
+h1 {
+    color: #513D32FF;
+    margin: 30px 0 30px 0;
+}
+
+h2 {
+    color: #f58944ff;
+    margin: 30px 0 25px 0;
+}
+
+h3 {
+    color: #e08e37ff;
+    margin: 30px 0 15px 0;
+}
+h4 {
+    color: #f5a25dff;
+    margin: 20px 0 10px 0;
+}
 h5,
 h6 {
   color: #e46c0a;
+}
+
+.markbind-img {
+    width: 30px;
+}
+
+.user-guide img {
+    height: auto;
+    width: 900px;
+    display: block !important;
+    margin: 30px auto !important;
 }

@@ -1,0 +1,28 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
+
+Package Assignment as AssignmentPackage <<Rectangle>>{
+    Class Assignment
+    Class AssignmentName
+}
+
+Package ContactAssignment as ContactAssignmentPackage <<Rectangle>>{
+    Class ContactAssignment
+    Class GradeInfo
+    Class SubmissionInfo
+}
+
+AddressBook *--> "1" UniqueAssignmentList
+AddressBook *--> "1" UniqueContactAssignmentList
+UniqueAssignmentList --> Assignment
+UniqueContactAssignmentList --> ContactAssignment
+
+Assignment *--> "1" AssignmentName
+ContactAssignment *--> "1" SubmissionInfo
+ContactAssignment *--> "1" GradeInfo
+Contact  -- "*" Assignment :assignedTo <
+(Contact, Assignment) .. ContactAssignment
+@enduml

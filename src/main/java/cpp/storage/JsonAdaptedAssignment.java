@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import cpp.commons.exceptions.IllegalValueException;
+import cpp.logic.parser.ParserUtil;
 import cpp.model.assignment.Assignment;
 import cpp.model.assignment.AssignmentName;
 
@@ -69,7 +70,7 @@ class JsonAdaptedAssignment {
         }
         final LocalDateTime modelDeadline;
         try {
-            modelDeadline = LocalDateTime.parse(this.deadline, JsonAdaptedAssignment.FORMATTER);
+            modelDeadline = ParserUtil.parseDeadline(this.deadline);
         } catch (Exception e) {
             throw new IllegalValueException("Invalid date and time format. Please use the format: dd-MM-yyyy HH:mm");
         }

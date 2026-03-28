@@ -1,6 +1,7 @@
 package cpp.logic.commands.classgroup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.junit.jupiter.api.Assertions;
@@ -17,6 +18,9 @@ import cpp.testutil.Assert;
 import cpp.testutil.ClassGroupBuilder;
 import cpp.testutil.ModelStub;
 import cpp.testutil.TypicalClassGroups;
+import cpp.testutil.TypicalContacts;
+import cpp.testutil.TypicalIndexes;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class AddClassGroupCommandTest {
@@ -30,17 +34,38 @@ public class AddClassGroupCommandTest {
     }
 
     @Test
-    public void execute_classGroupAcceptedByModel_addSuccessful() throws Exception {
+    public void execute_classGroupAcceptedByModelWithoutAllocation_addSuccessful() throws Exception {
         ModelStubAcceptingClassGroupAdded modelStub = new ModelStubAcceptingClassGroupAdded();
         ClassGroup validClassGroup = TypicalClassGroups.CLASS_GROUP_ONE;
 
         CommandResult commandResult = new AddClassGroupCommand(validClassGroup, new ArrayList<>()).execute(modelStub);
 
-        Assertions.assertEquals(
-                String.format(AddClassGroupCommand.MESSAGE_SUCCESS, Messages.format(validClassGroup)),
+        Assertions.assertEquals(String.format(AddClassGroupCommand.MESSAGE_SUCCESS, Messages.format(validClassGroup)),
                 commandResult.getFeedbackToUser());
         Assertions.assertEquals(1, modelStub.classGroupsAdded.size());
         Assertions.assertEquals(validClassGroup, modelStub.classGroupsAdded.get(0));
+    }
+
+    @Test
+    public void execute_classGroupAcceptedByModelWithAllocation_addSuccessful() throws Exception {
+        ModelStubAcceptingClassGroupAdded modelStub = new ModelStubAcceptingClassGroupAdded();
+        ClassGroup validClassGroup = TypicalClassGroups.CLASS_GROUP_ONE;
+
+        CommandResult commandResult = new AddClassGroupCommand(validClassGroup,
+                Arrays.asList(TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT))
+                .execute(modelStub);
+
+        Assertions.assertEquals(
+                String.format(AddClassGroupCommand.MESSAGE_SUCCESS_WITH_ALLOCATION, Messages.format(validClassGroup), 2,
+                        "Alice Pauline; Benson Meier"),
+                commandResult.getFeedbackToUser());
+        Assertions.assertEquals(1, modelStub.classGroupsAdded.size());
+        Assertions.assertEquals(validClassGroup, modelStub.classGroupsAdded.get(0));
+        Assertions.assertTrue(
+                modelStub.classGroupsAdded.get(0).getContactIdSet()
+                        .contains(TypicalContacts.getTypicalContacts().get(0).getId()));
+        Assertions.assertTrue(modelStub.classGroupsAdded.get(0).getContactIdSet()
+                .contains(TypicalContacts.getTypicalContacts().get(1).getId()));
     }
 
     @Test
@@ -130,12 +155,16 @@ public class AddClassGroupCommandTest {
 
         @Override
         public ReadOnlyAddressBook getAddressBook() {
-            return new AddressBook();
+            AddressBook ab = new AddressBook();
+            for (Contact c : TypicalContacts.getTypicalContacts()) {
+                ab.addContact(c);
+            }
+            return ab;
         }
 
         @Override
         public ObservableList<Contact> getFilteredContactList() {
-            return new AddressBook().getContactList();
+            return FXCollections.observableArrayList(TypicalContacts.getTypicalContacts());
         }
     }
 }

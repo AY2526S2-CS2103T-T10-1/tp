@@ -1,11 +1,16 @@
 package cpp.logic.commands.assignment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.logging.Logger;
 
+import cpp.commons.core.LogsCenter;
 import cpp.commons.core.index.Index;
 import cpp.commons.util.ToStringBuilder;
+import cpp.logic.LogicManager;
 import cpp.logic.Messages;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.CommandResult;
@@ -24,7 +29,7 @@ import cpp.model.util.AssignmentUtil;
 import cpp.model.util.ClassGroupUtil;
 
 /**
- * Allocates an existing assignment to a contact by their displayed indices or
+ * Allocates an existing assignment to contact(s) by their displayed indices or
  * class group.
  */
 public class AllocateAssignmentCommand extends Command {
@@ -32,11 +37,11 @@ public class AllocateAssignmentCommand extends Command {
     public static final String COMMAND_WORD = "allocass";
 
     public static final String MESSAGE_USAGE = AllocateAssignmentCommand.COMMAND_WORD
-            + ": Allocates an assignment to a contact. "
+            + ": Allocates an assignment to contact(s).\n"
             + "Parameters: "
-            + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT NAME "
-            + "[" + CliSyntax.PREFIX_CLASS + "CLASS NAME] "
-            + "[" + CliSyntax.PREFIX_CONTACT + "CONTACT INDICES...]\n"
+            + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT_NAME "
+            + "[" + CliSyntax.PREFIX_CLASS + "CLASS_NAME] "
+            + "[" + CliSyntax.PREFIX_CONTACT + "CONTACT_INDICES...]\n"
             + "At least one of " + CliSyntax.PREFIX_CLASS + " or " + CliSyntax.PREFIX_CONTACT + " must be provided.\n"
             + "Example: " + AllocateAssignmentCommand.COMMAND_WORD + " "
             + CliSyntax.PREFIX_ASSIGNMENT + "Assignment 1 "
@@ -44,15 +49,23 @@ public class AllocateAssignmentCommand extends Command {
             + CliSyntax.PREFIX_CONTACT + "1 2 3";
 
     public static final String MESSAGE_SUCCESS = """
-            Allocated assignment: %1$s to %2$s contact(s)
-            Contacts allocated: %3$s""";
-    public static final String MESSAGE_ALLOCATION_FAILED = "No contacts were allocated the assignment";
+            Allocated assignment: %1$s to %2$s contact(s).
+            Contacts allocated: %3$s
+            Contacts not allocated (already allocated this assignment): %4$s""";
+    public static final String MESSAGE_ALLOCATION_FAILED = """
+            No contacts were allocated the assignment.
+            Contacts not allocated (already allocated this assignment): %1$s""";
 
     private final AssignmentName assignmentName;
     private final List<Index> contactIndices;
+    private final Set<Contact> contactsToAllocate;
     private final ClassGroupName classGroupName;
-    private int allocatedCount;
-    private StringBuilder allocatedContacts;
+    private int successfulAllocationCount;
+    private StringBuilder successfulContactAllocations;
+    private int unsuccessfulAllocationCount;
+    private StringBuilder unsuccessfulContactAllocations;
+
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
     /**
      * Creates an AllocateAssignmentCommand with the specified assignment and
@@ -63,9 +76,12 @@ public class AllocateAssignmentCommand extends Command {
         Objects.requireNonNull(contactIndices);
         this.assignmentName = assignmentName;
         this.contactIndices = new ArrayList<>(contactIndices);
+        this.contactsToAllocate = new HashSet<>();
         this.classGroupName = null;
-        this.allocatedCount = 0;
-        this.allocatedContacts = new StringBuilder();
+        this.successfulAllocationCount = 0;
+        this.successfulContactAllocations = new StringBuilder();
+        this.unsuccessfulAllocationCount = 0;
+        this.unsuccessfulContactAllocations = new StringBuilder();
     }
 
     /**
@@ -79,9 +95,12 @@ public class AllocateAssignmentCommand extends Command {
         Objects.requireNonNull(classGroupName);
         this.assignmentName = assignmentName;
         this.contactIndices = new ArrayList<>(contactIndices);
+        this.contactsToAllocate = new HashSet<>();
         this.classGroupName = classGroupName;
-        this.allocatedCount = 0;
-        this.allocatedContacts = new StringBuilder();
+        this.successfulAllocationCount = 0;
+        this.successfulContactAllocations = new StringBuilder();
+        this.unsuccessfulAllocationCount = 0;
+        this.unsuccessfulContactAllocations = new StringBuilder();
     }
 
     @Override
@@ -106,17 +125,28 @@ public class AllocateAssignmentCommand extends Command {
             throw new CommandException(Messages.MESSAGE_CLASS_GROUP_NOT_FOUND);
         }
 
+        if (classGroupToAllocate != null && classGroupToAllocate.getContactIdSet().isEmpty()) {
+            throw new CommandException(Messages.MESSAGE_CLASS_GROUP_NO_CONTACTS);
+        }
+
         this.allocateToContactsByContactIndices(model, assignmentToAllocate, lastShownContactList);
         if (classGroupToAllocate != null) {
             this.allocateToContactsByClassGroup(model, assignmentToAllocate, classGroupToAllocate);
         }
 
-        if (this.allocatedCount == 0) {
-            throw new CommandException(AllocateAssignmentCommand.MESSAGE_ALLOCATION_FAILED);
+        if (this.unsuccessfulAllocationCount == 0) {
+            this.unsuccessfulContactAllocations.append("None");
+        }
+
+        if (this.successfulAllocationCount == 0) {
+            throw new CommandException(String.format(AllocateAssignmentCommand.MESSAGE_ALLOCATION_FAILED,
+                    this.unsuccessfulContactAllocations.toString()));
         }
 
         return new CommandResult(String.format(AllocateAssignmentCommand.MESSAGE_SUCCESS,
-                Messages.format(assignmentToAllocate), this.allocatedCount, this.allocatedContacts.toString()));
+                Messages.format(assignmentToAllocate), this.successfulAllocationCount,
+                this.successfulContactAllocations.toString(),
+                this.unsuccessfulContactAllocations.toString()));
     }
 
     @Override
@@ -168,20 +198,41 @@ public class AllocateAssignmentCommand extends Command {
     }
 
     private void allocateToContact(Model model, Assignment assignment, Contact contact) {
+        if (this.contactsToAllocate.contains(contact)) {
+            // Skip contacts that have already been allocated the assignment through contact
+            // indices in the same command
+            return;
+        }
+
         ContactAssignment ca = new ContactAssignment(assignment.getId(), contact.getId());
 
         try {
             model.addContactAssignment(ca);
-
-            if (this.allocatedContacts.length() > 0) {
-                this.allocatedContacts.append("; ");
-            }
-            this.allocatedContacts.append(contact.getName().fullName);
-            this.allocatedCount++;
+            this.successfulAllocationCount++;
+            this.buildSuccessfulAllocationString(contact.getName().fullName);
 
         } catch (ContactAlreadyAllocatedAssignmentException e) {
-            // Skip contacts that already have the assignment allocated.
+            this.unsuccessfulAllocationCount++;
+            this.buildUnsuccessfulAllocationString(contact.getName().fullName);
+            this.logger.info(
+                    "Failed to allocate assignment to contact (already allocated): " + contact.getName().fullName);
         }
+
+        this.contactsToAllocate.add(contact);
+    }
+
+    private void buildSuccessfulAllocationString(String contactName) {
+        if (this.successfulContactAllocations.length() > 0) {
+            this.successfulContactAllocations.append("; ");
+        }
+        this.successfulContactAllocations.append(contactName);
+    }
+
+    private void buildUnsuccessfulAllocationString(String contactName) {
+        if (this.unsuccessfulContactAllocations.length() > 0) {
+            this.unsuccessfulContactAllocations.append("; ");
+        }
+        this.unsuccessfulContactAllocations.append(contactName);
     }
 
 }

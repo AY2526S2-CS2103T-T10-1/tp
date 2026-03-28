@@ -24,14 +24,15 @@ public class AddContactCommand extends Command {
 
     public static final String COMMAND_WORD = "addcontact";
 
-    public static final String MESSAGE_USAGE = AddContactCommand.COMMAND_WORD + ": Adds a contact to the address book. "
+    public static final String MESSAGE_USAGE = AddContactCommand.COMMAND_WORD
+            + ": Adds a contact to the address book.\n"
             + "Parameters: "
             + CliSyntax.PREFIX_NAME + "NAME "
-            + CliSyntax.PREFIX_PHONE + "PHONE "
+            + CliSyntax.PREFIX_PHONE + "PHONE_NUMBER "
             + CliSyntax.PREFIX_EMAIL + "EMAIL "
             + CliSyntax.PREFIX_ADDRESS + "ADDRESS "
             + "[" + CliSyntax.PREFIX_CLASS + "CLASS_NAME] "
-            + "[" + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT_NAME]\n"
+            + "[" + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT_NAME] "
             + "[" + CliSyntax.PREFIX_TAG + "TAG]...\n"
             + "Example: " + AddContactCommand.COMMAND_WORD + " "
             + CliSyntax.PREFIX_NAME + "John Doe "
@@ -43,7 +44,9 @@ public class AddContactCommand extends Command {
             + CliSyntax.PREFIX_TAG + "friends "
             + CliSyntax.PREFIX_TAG + "owesMoney";
 
-    public static final String MESSAGE_SUCCESS = "New contact added: %1$s";
+    public static final String MESSAGE_SUCCESS = "New contact added: %1$s%2$s%3$s";
+    public static final String MESSAGE_SUCCESS_CLASS_GROUP_ALLOCATION = "\nAllocated class group: %1$s";
+    public static final String MESSAGE_SUCCESS_ASSIGNMENT_ALLOCATION = "\nAllocated assignment: %1$s";
     public static final String MESSAGE_DUPLICATE_CONTACT = "This contact already exists in the address book";
 
     private final Contact toAdd;
@@ -100,18 +103,25 @@ public class AddContactCommand extends Command {
 
         // Passed validity checks, so can proceed with allocation and addition
 
+        String allocatedAssignmentString = "";
         if (assignmentToAllocate != null) {
             ContactAssignment ca = new ContactAssignment(assignmentToAllocate.getId(), this.toAdd.getId());
             model.addContactAssignment(ca);
+            allocatedAssignmentString = String.format(AddContactCommand.MESSAGE_SUCCESS_ASSIGNMENT_ALLOCATION,
+                    Messages.format(assignmentToAllocate));
         }
 
+        String allocatedClassGroupString = "";
         if (classGroupToAllocate != null) {
             classGroupToAllocate.allocateContact(this.toAdd.getId());
+            allocatedClassGroupString = String.format(AddContactCommand.MESSAGE_SUCCESS_CLASS_GROUP_ALLOCATION,
+                    Messages.format(classGroupToAllocate));
         }
 
         model.addContact(this.toAdd);
 
-        return new CommandResult(String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(this.toAdd)));
+        return new CommandResult(String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(this.toAdd),
+                allocatedClassGroupString, allocatedAssignmentString));
     }
 
     @Override
@@ -135,6 +145,8 @@ public class AddContactCommand extends Command {
     public String toString() {
         return new ToStringBuilder(this)
                 .add("toAdd", this.toAdd)
+                .add("classGroupName", this.classGroupName)
+                .add("assignmentName", this.assignmentName)
                 .toString();
     }
 }

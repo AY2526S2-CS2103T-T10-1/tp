@@ -1,5 +1,6 @@
 package cpp.logic.parser;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,17 +12,24 @@ import org.junit.jupiter.api.Test;
 import cpp.logic.Messages;
 import cpp.logic.commands.AddContactCommand;
 import cpp.logic.commands.ClearCommand;
+import cpp.logic.commands.CommandTestUtil;
 import cpp.logic.commands.DeleteCommand;
 import cpp.logic.commands.DeleteContactCommand;
 import cpp.logic.commands.EditCommand;
 import cpp.logic.commands.EditCommand.EditContactDescriptor;
 import cpp.logic.commands.ExitCommand;
-import cpp.logic.commands.FindCommand;
+import cpp.logic.commands.FindContactCommand;
 import cpp.logic.commands.HelpCommand;
 import cpp.logic.commands.ListCommand;
 import cpp.logic.commands.assignment.AddAssignmentCommand;
+import cpp.logic.commands.assignment.AllocateAssignmentCommand;
 import cpp.logic.commands.assignment.EditAssignmentCommand;
 import cpp.logic.commands.assignment.EditAssignmentCommand.EditAssignmentDescriptor;
+import cpp.logic.commands.assignment.GradeAssignmentCommand;
+import cpp.logic.commands.assignment.SubmitAssignmentCommand;
+import cpp.logic.commands.assignment.UnallocateAssignmentCommand;
+import cpp.logic.commands.assignment.UngradeAssignmentCommand;
+import cpp.logic.commands.assignment.UnsubmitAssignmentCommand;
 import cpp.logic.commands.classgroup.AddClassGroupCommand;
 import cpp.logic.commands.classgroup.AllocateClassGroupCommand;
 import cpp.logic.commands.classgroup.UnallocateClassGroupCommand;
@@ -40,6 +48,7 @@ import cpp.testutil.ContactBuilder;
 import cpp.testutil.ContactUtil;
 import cpp.testutil.EditContactDescriptorBuilder;
 import cpp.testutil.TypicalAssignments;
+import cpp.testutil.TypicalClassGroups;
 import cpp.testutil.TypicalIndexes;
 
 public class AddressBookParserTest {
@@ -86,9 +95,9 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_find() throws Exception {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
-        FindCommand command = (FindCommand) this.parser.parseCommand(
-                FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
-        Assertions.assertEquals(new FindCommand(new ContactNameContainsKeywordsPredicate(keywords)), command);
+        FindContactCommand command = (FindContactCommand) this.parser.parseCommand(
+                FindContactCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
+        Assertions.assertEquals(new FindContactCommand(new ContactNameContainsKeywordsPredicate(keywords)), command);
     }
 
     @Test
@@ -111,6 +120,115 @@ public class AddressBookParserTest {
         AddAssignmentCommand command = (AddAssignmentCommand) this.parser
                 .parseCommand(AssignmentUtil.getAddAssignmentCommand(assignment));
         Assertions.assertEquals(new AddAssignmentCommand(assignment, List.of()), command);
+    }
+
+    @Test
+    public void parseCommand_allocateAssignment() throws Exception {
+        Assignment sampleAssignment = new AssignmentBuilder(TypicalAssignments.ASSIGNMENT_ONE).build();
+        AllocateAssignmentCommand command = (AllocateAssignmentCommand) this.parser
+                .parseCommand(AllocateAssignmentCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_ASSIGNMENT
+                        + sampleAssignment.getName().fullName + " " + CommandTestUtil.CONTACT_INDICES_MULTIPLE);
+        Assertions.assertEquals(new AllocateAssignmentCommand(sampleAssignment.getName(), new ArrayList<>(Arrays.asList(
+                TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT,
+                TypicalIndexes.INDEX_THIRD_CONTACT))), command);
+
+        AllocateAssignmentCommand commandWithClassGroup = (AllocateAssignmentCommand) this.parser
+                .parseCommand(AllocateAssignmentCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_ASSIGNMENT
+                        + sampleAssignment.getName().fullName + " " + CliSyntax.PREFIX_CLASS
+                        + TypicalClassGroups.CLASS_GROUP_ONE.getName().fullName);
+        Assertions.assertEquals(new AllocateAssignmentCommand(sampleAssignment.getName(), new ArrayList<>(),
+                TypicalClassGroups.CLASS_GROUP_ONE.getName()), commandWithClassGroup);
+    }
+
+    @Test
+    public void parseCommand_unallocateAssignment() throws Exception {
+        Assignment sampleAssignment = new AssignmentBuilder(TypicalAssignments.ASSIGNMENT_ONE).build();
+        UnallocateAssignmentCommand command = (UnallocateAssignmentCommand) this.parser
+                .parseCommand(UnallocateAssignmentCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_ASSIGNMENT
+                        + sampleAssignment.getName().fullName + " " + CommandTestUtil.CONTACT_INDICES_MULTIPLE);
+        Assertions.assertEquals(new UnallocateAssignmentCommand(sampleAssignment.getName(),
+                new ArrayList<>(Arrays.asList(
+                        TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT,
+                        TypicalIndexes.INDEX_THIRD_CONTACT))),
+                command);
+    }
+
+    @Test
+    public void parseCommand_submitAssignment() throws Exception {
+        Assignment sampleAssignment = new AssignmentBuilder(TypicalAssignments.ASSIGNMENT_ONE).build();
+        LocalDateTime submissionDate = LocalDateTime.now();
+        LocalDateTime expectedSubmissionDate = LocalDateTime.parse(submissionDate.format(ParserUtil.DATETIME_FORMATTER),
+                ParserUtil.DATETIME_FORMATTER);
+        SubmitAssignmentCommand command = (SubmitAssignmentCommand) this.parser
+                .parseCommand(SubmitAssignmentCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_ASSIGNMENT
+                        + sampleAssignment.getName().fullName + " " + CommandTestUtil.CONTACT_INDICES_MULTIPLE + " "
+                        + CliSyntax.PREFIX_DATETIME + submissionDate.format(ParserUtil.DATETIME_FORMATTER));
+        Assertions.assertEquals(new SubmitAssignmentCommand(sampleAssignment.getName(),
+                new ArrayList<>(Arrays.asList(
+                        TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT,
+                        TypicalIndexes.INDEX_THIRD_CONTACT)),
+                expectedSubmissionDate),
+                command);
+
+        SubmitAssignmentCommand commandWithClassGroup = (SubmitAssignmentCommand) this.parser
+                .parseCommand(SubmitAssignmentCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_ASSIGNMENT
+                        + sampleAssignment.getName().fullName + " " + CliSyntax.PREFIX_CLASS
+                        + TypicalClassGroups.CLASS_GROUP_ONE.getName().fullName + " " + CliSyntax.PREFIX_DATETIME
+                        + submissionDate.format(ParserUtil.DATETIME_FORMATTER));
+        Assertions.assertEquals(new SubmitAssignmentCommand(sampleAssignment.getName(), new ArrayList<>(),
+                TypicalClassGroups.CLASS_GROUP_ONE.getName(), expectedSubmissionDate), commandWithClassGroup);
+    }
+
+    @Test
+    public void parseCommand_unsubmitAssignment() throws Exception {
+        Assignment sampleAssignment = new AssignmentBuilder(TypicalAssignments.ASSIGNMENT_ONE).build();
+        UnsubmitAssignmentCommand command = (UnsubmitAssignmentCommand) this.parser
+                .parseCommand(UnsubmitAssignmentCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_ASSIGNMENT
+                        + sampleAssignment.getName().fullName + " " + CommandTestUtil.CONTACT_INDICES_MULTIPLE);
+        Assertions.assertEquals(new UnsubmitAssignmentCommand(sampleAssignment.getName(),
+                new ArrayList<>(Arrays.asList(
+                        TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT,
+                        TypicalIndexes.INDEX_THIRD_CONTACT))),
+                command);
+
+        UnsubmitAssignmentCommand commandWithClassGroup = (UnsubmitAssignmentCommand) this.parser
+                .parseCommand(UnsubmitAssignmentCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_ASSIGNMENT
+                        + sampleAssignment.getName().fullName + " " + CliSyntax.PREFIX_CLASS
+                        + TypicalClassGroups.CLASS_GROUP_ONE.getName().fullName);
+        Assertions.assertEquals(new UnsubmitAssignmentCommand(sampleAssignment.getName(), new ArrayList<>(),
+                TypicalClassGroups.CLASS_GROUP_ONE.getName()), commandWithClassGroup);
+    }
+
+    @Test
+    public void parseCommand_gradeAssignment() throws Exception {
+        Assignment sampleAssignment = new AssignmentBuilder(TypicalAssignments.ASSIGNMENT_ONE).build();
+        LocalDateTime gradingDate = LocalDateTime.now();
+        LocalDateTime expectedGradingDate = LocalDateTime.parse(gradingDate.format(ParserUtil.DATETIME_FORMATTER),
+                ParserUtil.DATETIME_FORMATTER);
+        GradeAssignmentCommand command = (GradeAssignmentCommand) this.parser
+                .parseCommand(GradeAssignmentCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_ASSIGNMENT
+                        + sampleAssignment.getName().fullName + " " + CommandTestUtil.CONTACT_INDICES_MULTIPLE + " "
+                        + CliSyntax.PREFIX_SCORE + "85" + " " + CliSyntax.PREFIX_DATETIME
+                        + gradingDate.format(ParserUtil.DATETIME_FORMATTER));
+        Assertions.assertEquals(new GradeAssignmentCommand(sampleAssignment.getName(),
+                new ArrayList<>(Arrays.asList(
+                        TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT,
+                        TypicalIndexes.INDEX_THIRD_CONTACT)),
+                85f, expectedGradingDate),
+                command);
+    }
+
+    @Test
+    public void parseCommand_ungradeAssignment() throws Exception {
+        Assignment sampleAssignment = new AssignmentBuilder(TypicalAssignments.ASSIGNMENT_ONE).build();
+        UngradeAssignmentCommand command = (UngradeAssignmentCommand) this.parser
+                .parseCommand(UngradeAssignmentCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_ASSIGNMENT
+                        + sampleAssignment.getName().fullName + " " + CommandTestUtil.CONTACT_INDICES_MULTIPLE);
+        Assertions.assertEquals(new UngradeAssignmentCommand(sampleAssignment.getName(),
+                new ArrayList<>(Arrays.asList(
+                        TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT,
+                        TypicalIndexes.INDEX_THIRD_CONTACT))),
+                command);
     }
 
     @Test

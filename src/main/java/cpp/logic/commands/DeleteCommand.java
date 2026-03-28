@@ -13,9 +13,9 @@ public abstract class DeleteCommand extends Command {
     public static final String MESSAGE_USAGE = DeleteCommand.COMMAND_WORD
             + ": Deletes contact(s) based on index specified, an assignment, or a class group.\n"
             + "Parameters: "
-            + CliSyntax.PREFIX_CONTACT + "CONTACT INDICES... or "
-            + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT NAME or "
-            + CliSyntax.PREFIX_CLASS + "CLASS NAME\n"
+            + CliSyntax.PREFIX_CONTACT + "CONTACT_INDICES... or "
+            + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT_NAME or "
+            + CliSyntax.PREFIX_CLASS + "CLASS_NAME\n"
             + "Exactly one prefix must be specified.\n"
             + "Examples: " + DeleteCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_CONTACT + "1 2 3, "
             + DeleteCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_ASSIGNMENT + "Assignment 1, "

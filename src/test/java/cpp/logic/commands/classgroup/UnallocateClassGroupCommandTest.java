@@ -45,17 +45,20 @@ public class UnallocateClassGroupCommandTest {
         ClassGroupName validClassGroupName = new ClassGroupName(ClassGroupBuilder.DEFAULT_NAME);
         Contact validContact1 = TypicalContacts.getTypicalContacts().get(0);
         Contact validContact2 = TypicalContacts.getTypicalContacts().get(1);
+        Contact validContact3 = TypicalContacts.getTypicalContacts().get(2);
         ClassGroup validClassGroup = new ClassGroup(validClassGroupName);
         validClassGroup.allocateContact(validContact1.getId());
         validClassGroup.allocateContact(validContact2.getId());
+        validClassGroup.allocateContact(validContact3.getId());
         ModelStubWithContactAndClassGroup modelStub = new ModelStubWithContactAndClassGroup(validContact1,
-                validContact2,
+                validContact2, validContact3,
                 validClassGroup);
 
-        Assertions.assertEquals(2, validClassGroup.getContactIdSet().size());
-        Assertions.assertEquals(2, modelStub.classGroup.getContactIdSet().size());
+        Assertions.assertEquals(3, validClassGroup.getContactIdSet().size());
+        Assertions.assertEquals(3, modelStub.classGroup.getContactIdSet().size());
         Assertions.assertTrue(validClassGroup.getContactIdSet().contains(validContact1.getId()));
         Assertions.assertTrue(validClassGroup.getContactIdSet().contains(validContact2.getId()));
+        Assertions.assertTrue(validClassGroup.getContactIdSet().contains(validContact3.getId()));
 
         ArrayList<Index> validContactIndices = new ArrayList<>(
                 Arrays.asList(TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT));
@@ -67,12 +70,32 @@ public class UnallocateClassGroupCommandTest {
 
         Assertions.assertEquals(
                 String.format(UnallocateClassGroupCommand.MESSAGE_SUCCESS, validClassGroupName.fullName, 2,
-                        validContact1.getName() + "; " + validContact2.getName()),
+                        validContact1.getName() + "; " + validContact2.getName(), "None"),
                 commandResult.getFeedbackToUser());
+        Assertions.assertEquals(1, validClassGroup.getContactIdSet().size());
+        Assertions.assertEquals(1, modelStub.classGroup.getContactIdSet().size());
+        Assertions.assertFalse(validClassGroup.getContactIdSet().contains(validContact1.getId()));
+        Assertions.assertFalse(validClassGroup.getContactIdSet().contains(validContact2.getId()));
+        Assertions.assertTrue(validClassGroup.getContactIdSet().contains(validContact3.getId()));
+
+        // New command with Indices 1 to 3, where indices 1 and 2 are already
+        // unallocated from the class group, and index 3 is not unallocated yet
+        ArrayList<Index> allContactIndices = new ArrayList<>(
+                Arrays.asList(TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT,
+                        TypicalIndexes.INDEX_THIRD_CONTACT));
+        UnallocateClassGroupCommand unallocateClassGroupCommand2 = new UnallocateClassGroupCommand(validClassGroupName,
+                allContactIndices);
+        CommandResult newCommandResult = unallocateClassGroupCommand2.execute(modelStub);
+
+        Assertions.assertEquals(
+                String.format(UnallocateClassGroupCommand.MESSAGE_SUCCESS, validClassGroupName.fullName, 1,
+                        validContact3.getName(), validContact1.getName() + "; " + validContact2.getName()),
+                newCommandResult.getFeedbackToUser());
         Assertions.assertEquals(0, validClassGroup.getContactIdSet().size());
         Assertions.assertEquals(0, modelStub.classGroup.getContactIdSet().size());
         Assertions.assertFalse(validClassGroup.getContactIdSet().contains(validContact1.getId()));
         Assertions.assertFalse(validClassGroup.getContactIdSet().contains(validContact2.getId()));
+        Assertions.assertFalse(validClassGroup.getContactIdSet().contains(validContact3.getId()));
     }
 
     @Test
@@ -81,10 +104,11 @@ public class UnallocateClassGroupCommandTest {
         ClassGroupName invalidClassGroupName = new ClassGroupName("UnknownClass");
         Contact validContact1 = TypicalContacts.getTypicalContacts().get(0);
         Contact validContact2 = TypicalContacts.getTypicalContacts().get(1);
+        Contact validContact3 = TypicalContacts.getTypicalContacts().get(2);
         ClassGroup existingClassGroup = new ClassGroup(existingClassGroupName);
         existingClassGroup.allocateContact(validContact1.getId());
         ModelStubWithContactAndClassGroup modelStub = new ModelStubWithContactAndClassGroup(validContact1,
-                validContact2,
+                validContact2, validContact3,
                 existingClassGroup);
 
         ArrayList<Index> validContactIndices = new ArrayList<>(
@@ -102,9 +126,10 @@ public class UnallocateClassGroupCommandTest {
         ClassGroupName validClassGroupName = new ClassGroupName(ClassGroupBuilder.DEFAULT_NAME);
         Contact validContact1 = TypicalContacts.getTypicalContacts().get(0);
         Contact validContact2 = TypicalContacts.getTypicalContacts().get(1);
+        Contact validContact3 = TypicalContacts.getTypicalContacts().get(2);
         ClassGroup validClassGroup = new ClassGroup(validClassGroupName);
         ModelStubWithContactAndClassGroup modelStub = new ModelStubWithContactAndClassGroup(validContact1,
-                validContact2,
+                validContact2, validContact3,
                 validClassGroup);
 
         ArrayList<Index> validContactIndices = new ArrayList<>(
@@ -113,7 +138,9 @@ public class UnallocateClassGroupCommandTest {
         UnallocateClassGroupCommand unallocateClassGroupCommand = new UnallocateClassGroupCommand(validClassGroupName,
                 validContactIndices);
 
-        Assert.assertThrows(CommandException.class, UnallocateClassGroupCommand.MESSAGE_UNALLOCATION_FAILED,
+        Assert.assertThrows(CommandException.class,
+                String.format(UnallocateClassGroupCommand.MESSAGE_UNALLOCATION_FAILED,
+                        TypicalContacts.ALICE.getName().fullName),
                 () -> unallocateClassGroupCommand.execute(modelStub));
     }
 
@@ -197,14 +224,17 @@ public class UnallocateClassGroupCommandTest {
     private class ModelStubWithContactAndClassGroup extends ModelStub {
         private final Contact contact1;
         private final Contact contact2;
+        private final Contact contact3;
         private final ClassGroup classGroup;
 
-        ModelStubWithContactAndClassGroup(Contact contact1, Contact contact2, ClassGroup classGroup) {
+        ModelStubWithContactAndClassGroup(Contact contact1, Contact contact2, Contact contact3, ClassGroup classGroup) {
             Objects.requireNonNull(contact1);
             Objects.requireNonNull(contact2);
+            Objects.requireNonNull(contact3);
             Objects.requireNonNull(classGroup);
             this.contact1 = contact1;
             this.contact2 = contact2;
+            this.contact3 = contact3;
             this.classGroup = classGroup;
         }
 
@@ -219,6 +249,7 @@ public class UnallocateClassGroupCommandTest {
             AddressBook addressBook = new AddressBook();
             addressBook.addContact(this.contact1);
             addressBook.addContact(this.contact2);
+            addressBook.addContact(this.contact3);
             addressBook.addClassGroup(this.classGroup);
             return addressBook;
         }
@@ -228,6 +259,7 @@ public class UnallocateClassGroupCommandTest {
             AddressBook addressBook = new AddressBook();
             addressBook.addContact(this.contact1);
             addressBook.addContact(this.contact2);
+            addressBook.addContact(this.contact3);
             return addressBook.getContactList();
         }
     }

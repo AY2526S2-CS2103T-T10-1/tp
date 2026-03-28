@@ -36,7 +36,7 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
 
-    public static final Version VERSION = new Version(0, 1, 0, true);
+    public static final Version VERSION = new Version(0, 2, 0, true);
 
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
 
@@ -176,13 +176,14 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        MainApp.logger.info("Starting AddressBook " + MainApp.VERSION);
+        MainApp.logger.info("Starting ClassroomPlusPlus " + MainApp.VERSION);
         this.ui.start(primaryStage);
     }
 
     @Override
     public void stop() {
-        MainApp.logger.info("============================ [ Stopping AddressBook ] =============================");
+        MainApp.logger
+                .info("============================ [ Stopping ClassroomPlusPlus ] =============================");
         try {
             this.storage.saveUserPrefs(this.model.getUserPrefs());
         } catch (IOException e) {

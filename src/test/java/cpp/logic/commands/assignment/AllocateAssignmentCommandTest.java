@@ -68,7 +68,7 @@ public class AllocateAssignmentCommandTest {
 
         String expectedAllocatedContacts = TypicalContacts.BENSON.getName().fullName;
         Assertions.assertEquals(String.format(AllocateAssignmentCommand.MESSAGE_SUCCESS,
-                Messages.format(validAssignment), 1, expectedAllocatedContacts), result.getFeedbackToUser());
+                Messages.format(validAssignment), 1, expectedAllocatedContacts, "None"), result.getFeedbackToUser());
         Assertions.assertEquals(1, modelStub.contactAssignmentsAdded.size());
         Assertions.assertTrue(modelStub.contactAssignmentsAdded.stream()
                 .anyMatch(ca -> ca.getContactId().equals(TypicalContacts.BENSON.getId())));
@@ -159,12 +159,38 @@ public class AllocateAssignmentCommandTest {
 
         String expectedAllocatedContacts = validContact1.getName().fullName + "; " + validContact2.getName().fullName;
         Assertions.assertEquals(String.format(AllocateAssignmentCommand.MESSAGE_SUCCESS,
-                Messages.format(validAssignment), 2, expectedAllocatedContacts), result.getFeedbackToUser());
+                Messages.format(validAssignment), 2, expectedAllocatedContacts, "None"), result.getFeedbackToUser());
         Assertions.assertEquals(2, modelStub.contactAssignmentsAdded.size());
         Assertions.assertTrue(modelStub.contactAssignmentsAdded.stream()
                 .anyMatch(ca -> ca.getContactId().equals(validContact1.getId())));
         Assertions.assertTrue(modelStub.contactAssignmentsAdded.stream()
                 .anyMatch(ca -> ca.getContactId().equals(validContact2.getId())));
+    }
+
+    @Test
+    public void execute_validAssignmentNameAndContactIndicesAndClassGroupName_success() throws Exception {
+        Assignment validAssignment = TypicalAssignments.ASSIGNMENT_ONE;
+        Contact validContact1 = TypicalContacts.getTypicalContacts().get(0);
+        Contact validContact2 = TypicalContacts.getTypicalContacts().get(1);
+        ModelStubWithClassGroup modelStub = new ModelStubWithClassGroup(validAssignment);
+
+        ArrayList<Index> validContactIndices = new ArrayList<>(
+                Arrays.asList(TypicalIndexes.INDEX_FIRST_CONTACT, TypicalIndexes.INDEX_SECOND_CONTACT));
+        ClassGroupName validClassGroupName = new ClassGroupName("ValidClassGroup");
+
+        // prepopulate with allocation so duplicate exception occurs for BENSON in class
+        // group allocation
+        modelStub.contactAssignmentsAdded.add(new ContactAssignment(validAssignment.getId(), validContact1.getId()));
+
+        AllocateAssignmentCommand cmd = new AllocateAssignmentCommand(validAssignment.getName(), validContactIndices,
+                validClassGroupName);
+
+        CommandResult result = cmd.execute(modelStub);
+
+        String expectedAllocatedContacts = validContact2.getName().fullName;
+        Assertions.assertEquals(String.format(AllocateAssignmentCommand.MESSAGE_SUCCESS,
+                Messages.format(validAssignment), 1, expectedAllocatedContacts, validContact1.getName().fullName),
+                result.getFeedbackToUser());
     }
 
     @Test
@@ -180,6 +206,20 @@ public class AllocateAssignmentCommandTest {
                 validContactIndices);
 
         Assert.assertThrows(CommandException.class, Messages.MESSAGE_ASSIGNMENT_NOT_FOUND,
+                () -> cmd.execute(modelStub));
+    }
+
+    @Test
+    public void execute_emptyClassGroup_throwsCommandException() {
+        Assignment validAssignment = TypicalAssignments.ASSIGNMENT_ONE;
+        ModelStubWithEmptyClassGroup modelStub = new ModelStubWithEmptyClassGroup(validAssignment);
+
+        ClassGroupName emptyClassGroupName = new ClassGroupName("EmptyGroup");
+
+        AllocateAssignmentCommand cmd = new AllocateAssignmentCommand(validAssignment.getName(),
+                new ArrayList<>(), emptyClassGroupName);
+
+        Assert.assertThrows(CommandException.class, Messages.MESSAGE_CLASS_GROUP_NO_CONTACTS,
                 () -> cmd.execute(modelStub));
     }
 
@@ -201,7 +241,9 @@ public class AllocateAssignmentCommandTest {
 
         AllocateAssignmentCommand cmd = new AllocateAssignmentCommand(validAssignment.getName(), validContactIndices);
 
-        Assert.assertThrows(CommandException.class, AllocateAssignmentCommand.MESSAGE_ALLOCATION_FAILED,
+        Assert.assertThrows(CommandException.class,
+                String.format(AllocateAssignmentCommand.MESSAGE_ALLOCATION_FAILED,
+                        validContact1.getName().fullName + "; " + validContact2.getName().fullName),
                 () -> cmd.execute(modelStub));
     }
 
@@ -318,6 +360,32 @@ public class AllocateAssignmentCommandTest {
                 throw new ContactAlreadyAllocatedAssignmentException();
             }
             this.contactAssignmentsAdded.add(ca);
+        }
+    }
+
+    public class ModelStubWithEmptyClassGroup extends ModelStub {
+        private final Assignment assignment;
+
+        ModelStubWithEmptyClassGroup(Assignment assignment) {
+            Objects.requireNonNull(assignment);
+            this.assignment = assignment;
+        }
+
+        @Override
+        public ObservableList<Contact> getFilteredContactList() {
+            return FXCollections.observableArrayList(TypicalContacts.getTypicalContacts());
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            AddressBook ab = new AddressBook();
+            for (Contact c : TypicalContacts.getTypicalContacts()) {
+                ab.addContact(c);
+            }
+            ab.addAssignment(this.assignment);
+            ClassGroup cg = new ClassGroup(new ClassGroupName("EmptyGroup"));
+            ab.addClassGroup(cg);
+            return ab;
         }
     }
 

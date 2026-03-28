@@ -232,6 +232,32 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseDateTime_null_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseDateTime((String) null));
+    }
+
+    @Test
+    public void parseDateTime_invalidValue_throwsParseException() {
+        Assert.assertThrows(ParseException.class,
+                () -> ParserUtil.parseDateTime(ParserUtilTest.INVALID_DEADLINE));
+    }
+
+    @Test
+    public void parseDateTime_validValueWithoutWhitespace_returnsLocalDateTime() throws Exception {
+        LocalDateTime expected = LocalDateTime.parse(ParserUtilTest.VALID_DEADLINE,
+                DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
+        Assertions.assertEquals(expected, ParserUtil.parseDateTime(ParserUtilTest.VALID_DEADLINE));
+    }
+
+    @Test
+    public void parseDateTime_invalidFutureDateTime_throwsParseException() {
+        LocalDateTime futureDateTime = LocalDateTime.now().plusDays(1);
+        String futureDateTimeString = futureDateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
+        Assert.assertThrows(ParseException.class, ParserUtil.MESSAGE_INVALID_FUTURE_DATETIME,
+                () -> ParserUtil.parseDateTime(futureDateTimeString));
+    }
+
+    @Test
     public void parseAssignmentName_null_throwsNullPointerException() {
         Assert.assertThrows(NullPointerException.class,
                 () -> ParserUtil.parseAssignmentName((String) null));

@@ -1,6 +1,7 @@
 package cpp.testutil;
 
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.function.Predicate;
 
 import cpp.commons.core.GuiSettings;
@@ -114,6 +115,26 @@ public class ModelStub implements Model {
 
     @Override
     public void removeContactAssignment(ContactAssignment ca) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void markSubmitted(Assignment assignment, Contact contact, LocalDateTime submissionDate) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void markUnsubmitted(Assignment assignment, Contact contact) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void grade(Assignment assignment, Contact contact, float score, LocalDateTime gradingDate) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void ungrade(Assignment assignment, Contact contact) {
         throw new AssertionError("This method should not be called.");
     }
 

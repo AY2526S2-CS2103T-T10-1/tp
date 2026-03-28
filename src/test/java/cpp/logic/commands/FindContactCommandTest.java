@@ -15,9 +15,9 @@ import cpp.testutil.TypicalContacts;
 
 /**
  * Contains integration tests (interaction with the Model) for
- * {@code FindCommand}.
+ * {@code FindContactCommand}.
  */
-public class FindCommandTest {
+public class FindContactCommandTest {
     private Model model = new ModelManager(TypicalContacts.getTypicalAddressBook(), new UserPrefs());
     private Model expectedModel = new ModelManager(TypicalContacts.getTypicalAddressBook(), new UserPrefs());
 
@@ -28,14 +28,14 @@ public class FindCommandTest {
         ContactNameContainsKeywordsPredicate secondPredicate = new ContactNameContainsKeywordsPredicate(
                 Collections.singletonList("second"));
 
-        FindCommand findFirstCommand = new FindCommand(firstPredicate);
-        FindCommand findSecondCommand = new FindCommand(secondPredicate);
+        FindContactCommand findFirstCommand = new FindContactCommand(firstPredicate);
+        FindContactCommand findSecondCommand = new FindContactCommand(secondPredicate);
 
         // same object -> returns true
         Assertions.assertTrue(findFirstCommand.equals(findFirstCommand));
 
         // same values -> returns true
-        FindCommand findFirstCommandCopy = new FindCommand(firstPredicate);
+        FindContactCommand findFirstCommandCopy = new FindContactCommand(firstPredicate);
         Assertions.assertTrue(findFirstCommand.equals(findFirstCommandCopy));
 
         // different types -> returns false
@@ -52,9 +52,10 @@ public class FindCommandTest {
     public void execute_zeroKeywords_noContactFound() {
         String expectedMessage = String.format(Messages.MESSAGE_CONTACTS_LISTED_OVERVIEW, 0);
         ContactNameContainsKeywordsPredicate predicate = this.preparePredicate(" ");
-        FindCommand command = new FindCommand(predicate);
+        FindContactCommand command = new FindContactCommand(predicate);
         this.expectedModel.updateFilteredContactList(predicate);
-        CommandTestUtil.assertCommandSuccess(command, this.model, expectedMessage, this.expectedModel);
+        CommandTestUtil.assertCommandSuccess(command, this.model,
+                new CommandResult(expectedMessage, CommandResult.ListView.CONTACTS), this.expectedModel);
         Assertions.assertEquals(Collections.emptyList(), this.model.getFilteredContactList());
     }
 
@@ -62,9 +63,10 @@ public class FindCommandTest {
     public void execute_multipleKeywords_multipleContactsFound() {
         String expectedMessage = String.format(Messages.MESSAGE_CONTACTS_LISTED_OVERVIEW, 3);
         ContactNameContainsKeywordsPredicate predicate = this.preparePredicate("Kurz Elle Kunz");
-        FindCommand command = new FindCommand(predicate);
+        FindContactCommand command = new FindContactCommand(predicate);
         this.expectedModel.updateFilteredContactList(predicate);
-        CommandTestUtil.assertCommandSuccess(command, this.model, expectedMessage, this.expectedModel);
+        CommandTestUtil.assertCommandSuccess(command, this.model,
+                new CommandResult(expectedMessage, CommandResult.ListView.CONTACTS), this.expectedModel);
         Assertions.assertEquals(Arrays.asList(TypicalContacts.CARL, TypicalContacts.ELLE, TypicalContacts.FIONA),
                 this.model.getFilteredContactList());
     }
@@ -73,8 +75,8 @@ public class FindCommandTest {
     public void toStringMethod() {
         ContactNameContainsKeywordsPredicate predicate = new ContactNameContainsKeywordsPredicate(
                 Arrays.asList("keyword"));
-        FindCommand findCommand = new FindCommand(predicate);
-        String expected = FindCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
+        FindContactCommand findCommand = new FindContactCommand(predicate);
+        String expected = FindContactCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         Assertions.assertEquals(expected, findCommand.toString());
     }
 

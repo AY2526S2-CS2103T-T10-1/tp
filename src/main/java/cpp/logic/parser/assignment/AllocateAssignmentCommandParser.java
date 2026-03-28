@@ -25,11 +25,11 @@ public class AllocateAssignmentCommandParser implements Parser<AllocateAssignmen
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
                 CliSyntax.PREFIX_ASSIGNMENT, CliSyntax.PREFIX_CLASS, CliSyntax.PREFIX_CONTACT);
 
-        if ((!ParserUtil.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_ASSIGNMENT,
-                CliSyntax.PREFIX_CONTACT)
-                && !ParserUtil.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_ASSIGNMENT,
-                        CliSyntax.PREFIX_CLASS))
-                || !argMultimap.getPreamble().isEmpty()) {
+        boolean hasAssignment = argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).isPresent();
+        boolean hasContact = argMultimap.getValue(CliSyntax.PREFIX_CONTACT).isPresent();
+        boolean hasClass = argMultimap.getValue(CliSyntax.PREFIX_CLASS).isPresent();
+
+        if (!hasAssignment || !(hasContact || hasClass) || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT,
                     AllocateAssignmentCommand.MESSAGE_USAGE));
         }
@@ -41,12 +41,12 @@ public class AllocateAssignmentCommandParser implements Parser<AllocateAssignmen
                 .parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get());
 
         List<Index> contactIndices = List.of();
-        if (ParserUtil.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_CONTACT)) {
+        if (hasContact) {
             String contactString = argMultimap.getValue(CliSyntax.PREFIX_CONTACT).orElse("");
             contactIndices = ParserUtil.parseContactIndices(contactString);
         }
 
-        if (ParserUtil.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_CLASS)) {
+        if (hasClass) {
             String classGroupString = argMultimap.getValue(CliSyntax.PREFIX_CLASS).orElse("");
             ClassGroupName classGroupName = ParserUtil.parseClassGroupName(classGroupString);
             return new AllocateAssignmentCommand(assignmentName, contactIndices, classGroupName);

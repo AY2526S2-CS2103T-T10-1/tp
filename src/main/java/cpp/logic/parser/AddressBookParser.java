@@ -12,20 +12,30 @@ import cpp.logic.commands.Command;
 import cpp.logic.commands.DeleteCommand;
 import cpp.logic.commands.EditCommand;
 import cpp.logic.commands.ExitCommand;
-import cpp.logic.commands.FindCommand;
+import cpp.logic.commands.FindAssignmentCommand;
+import cpp.logic.commands.FindClassCommand;
+import cpp.logic.commands.FindContactCommand;
 import cpp.logic.commands.HelpCommand;
 import cpp.logic.commands.ListCommand;
 import cpp.logic.commands.assignment.AddAssignmentCommand;
 import cpp.logic.commands.assignment.AllocateAssignmentCommand;
 import cpp.logic.commands.assignment.EditAssignmentCommand;
+import cpp.logic.commands.assignment.GradeAssignmentCommand;
+import cpp.logic.commands.assignment.SubmitAssignmentCommand;
 import cpp.logic.commands.assignment.UnallocateAssignmentCommand;
+import cpp.logic.commands.assignment.UngradeAssignmentCommand;
+import cpp.logic.commands.assignment.UnsubmitAssignmentCommand;
 import cpp.logic.commands.classgroup.AddClassGroupCommand;
 import cpp.logic.commands.classgroup.AllocateClassGroupCommand;
 import cpp.logic.commands.classgroup.UnallocateClassGroupCommand;
 import cpp.logic.parser.assignment.AddAssignmentCommandParser;
 import cpp.logic.parser.assignment.AllocateAssignmentCommandParser;
 import cpp.logic.parser.assignment.EditAssignmentCommandParser;
+import cpp.logic.parser.assignment.GradeAssignmentCommandParser;
+import cpp.logic.parser.assignment.SubmitAssignmentCommandParser;
 import cpp.logic.parser.assignment.UnallocateAssignmentCommandParser;
+import cpp.logic.parser.assignment.UngradeAssignmentCommandParser;
+import cpp.logic.parser.assignment.UnsubmitAssignmentCommandParser;
 import cpp.logic.parser.classgroup.AddClassGroupCommandParser;
 import cpp.logic.parser.classgroup.AllocateClassGroupCommandParser;
 import cpp.logic.parser.classgroup.UnallocateClassGroupCommandParser;
@@ -78,8 +88,14 @@ public class AddressBookParser {
         case ClearCommand.COMMAND_WORD:
             return new ClearCommand();
 
-        case FindCommand.COMMAND_WORD:
-            return new FindCommandParser().parse(arguments);
+        case FindContactCommand.COMMAND_WORD:
+            return new FindContactCommandParser().parse(arguments);
+
+        case FindClassCommand.COMMAND_WORD:
+            return new FindClassCommandParser().parse(arguments);
+
+        case FindAssignmentCommand.COMMAND_WORD:
+            return new FindAssignmentCommandParser().parse(arguments);
 
         case ListCommand.COMMAND_WORD:
             return new ListCommandParser().parse(arguments);
@@ -101,6 +117,18 @@ public class AddressBookParser {
 
         case UnallocateAssignmentCommand.COMMAND_WORD:
             return new UnallocateAssignmentCommandParser().parse(arguments);
+
+        case SubmitAssignmentCommand.COMMAND_WORD:
+            return new SubmitAssignmentCommandParser().parse(arguments);
+
+        case UnsubmitAssignmentCommand.COMMAND_WORD:
+            return new UnsubmitAssignmentCommandParser().parse(arguments);
+
+        case GradeAssignmentCommand.COMMAND_WORD:
+            return new GradeAssignmentCommandParser().parse(arguments);
+
+        case UngradeAssignmentCommand.COMMAND_WORD:
+            return new UngradeAssignmentCommandParser().parse(arguments);
 
         case AddClassGroupCommand.COMMAND_WORD:
             return new AddClassGroupCommandParser().parse(arguments);

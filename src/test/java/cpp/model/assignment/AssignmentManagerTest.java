@@ -1,5 +1,6 @@
 package cpp.model.assignment;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +9,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import cpp.model.assignment.exceptions.AssignmentNotSubmittedException;
 import cpp.model.assignment.exceptions.ContactAssignmentNotFoundException;
+import cpp.model.assignment.exceptions.ContactAssignmentNotGradedException;
+import cpp.model.assignment.exceptions.ContactAssignmentNotSubmittedException;
 import cpp.testutil.Assert;
 import cpp.testutil.TypicalAssignments;
 import cpp.testutil.TypicalContacts;
@@ -97,27 +99,83 @@ public class AssignmentManagerTest {
 
     @Test
     public void submitAndGrade_success() {
+        LocalDateTime submissionDate = LocalDateTime.now();
         this.manager.registerContactAssignment(this.ca1);
-        this.manager.submit("A1", "C1");
+        this.manager.submit("A1", "C1", submissionDate);
         Assertions.assertTrue(this.ca1.isSubmitted());
 
-        this.manager.grade("A1", "C1", 90);
+        this.manager.grade("A1", "C1", 90, submissionDate.plusDays(1));
         Assertions.assertTrue(this.ca1.isGraded());
         Assertions.assertEquals(90, this.ca1.getScore());
     }
 
     @Test
     public void submit_nonExistingContactAssignment_throws() {
-        Assert.assertThrows(ContactAssignmentNotFoundException.class, () -> this.manager.submit("no", "no"));
+        LocalDateTime submissionDate = LocalDateTime.now();
+        Assert.assertThrows(ContactAssignmentNotFoundException.class,
+                () -> this.manager.submit("no", "no", submissionDate));
         this.manager.registerContactAssignment(this.ca1);
-        Assert.assertThrows(ContactAssignmentNotFoundException.class, () -> this.manager.submit("A1", "no"));
-        Assert.assertThrows(ContactAssignmentNotFoundException.class, () -> this.manager.submit("no", "C1"));
+        Assert.assertThrows(ContactAssignmentNotFoundException.class,
+                () -> this.manager.submit("A1", "no", submissionDate));
+        Assert.assertThrows(ContactAssignmentNotFoundException.class,
+                () -> this.manager.submit("no", "C1", submissionDate));
+    }
+
+    @Test
+    public void unsubmit_success() {
+        LocalDateTime submissionDate = LocalDateTime.now();
+        this.manager.registerContactAssignment(this.ca1);
+        this.manager.submit("A1", "C1", submissionDate);
+        Assertions.assertTrue(this.ca1.isSubmitted());
+
+        this.manager.unsubmit("A1", "C1");
+        Assertions.assertFalse(this.ca1.isSubmitted());
+    }
+
+    @Test
+    public void unsubmit_nonExistingContactAssignment_throwsContactAssignmentNotFoundException() {
+        Assert.assertThrows(ContactAssignmentNotFoundException.class,
+                () -> this.manager.unsubmit("no", "no"));
+        this.manager.registerContactAssignment(this.ca1);
+        Assert.assertThrows(ContactAssignmentNotFoundException.class,
+                () -> this.manager.unsubmit("A1", "no"));
+        Assert.assertThrows(ContactAssignmentNotFoundException.class,
+                () -> this.manager.unsubmit("no", "C1"));
     }
 
     @Test
     public void grade_withoutSubmit_throws() {
         this.manager.registerContactAssignment(this.ca2);
-        Assert.assertThrows(AssignmentNotSubmittedException.class, () -> this.manager.grade("A2", "C2", 50));
+        Assert.assertThrows(ContactAssignmentNotSubmittedException.class,
+                () -> this.manager.grade("A2", "C2", 50, LocalDateTime.now()));
+    }
+
+    @Test
+    public void ungrade_withoutGrade_throwsContactAssignmentNotGradedException() {
+        this.manager.registerContactAssignment(this.ca2);
+        this.manager.submit("A2", "C2", LocalDateTime.now());
+        Assert.assertThrows(ContactAssignmentNotGradedException.class,
+                () -> this.manager.ungrade("A2", "C2"));
+    }
+
+    @Test
+    public void ungrade_withoutSubmit_throwsContactAssignmentNotSubmittedException() {
+        this.manager.registerContactAssignment(this.ca2);
+        Assert.assertThrows(ContactAssignmentNotSubmittedException.class,
+                () -> this.manager.ungrade("A2", "C2"));
+    }
+
+    @Test
+    public void ungrade_success() {
+        LocalDateTime submissionDate = LocalDateTime.now();
+        LocalDateTime gradingDate = submissionDate.plusDays(1);
+        this.manager.registerContactAssignment(this.ca2);
+        this.manager.submit("A2", "C2", submissionDate);
+        this.manager.grade("A2", "C2", 50, gradingDate);
+
+        this.manager.ungrade("A2", "C2");
+        Assertions.assertFalse(this.ca2.isGraded());
+        Assertions.assertEquals(0, this.ca2.getScore());
     }
 
     @Test
@@ -188,8 +246,12 @@ public class AssignmentManagerTest {
 
     @Test
     public void operations_onMissingContactAssignment_throwNotFound() {
-        Assert.assertThrows(ContactAssignmentNotFoundException.class, () -> this.manager.submit("no", "no"));
-        Assert.assertThrows(ContactAssignmentNotFoundException.class, () -> this.manager.grade("no", "no", 10));
+        LocalDateTime submissionDate = LocalDateTime.now();
+        LocalDateTime gradingDate = submissionDate.plusDays(1);
+        Assert.assertThrows(ContactAssignmentNotFoundException.class,
+                () -> this.manager.submit("no", "no", submissionDate));
+        Assert.assertThrows(ContactAssignmentNotFoundException.class,
+                () -> this.manager.grade("no", "no", 100, gradingDate));
     }
 
     @Test
