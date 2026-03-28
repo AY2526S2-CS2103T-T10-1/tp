@@ -768,6 +768,182 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ## **Appendix: Instructions for manual testing**
 
+Given below are instructions to test the app manually.
+
+<box type="info" seamless>
+
+**Note:** These instructions only provide a starting point for testers to work on;
+testers are expected to do more _exploratory_ testing.
+
+</box>
+
+### Adding classes
+
+1. Adding a class group and checking that it is added successfully
+
+    1. Prerequisites: The class group "Class 1" does not exist in the address book, and the user is currently on the Classes tab in the GUI.
+
+    1. Test case: `addclass c/Class 1`
+
+        Expected outcome:
+
+        ```text
+        New class group added: Class 1
+        ```
+
+1. Adding a class group that already exists
+
+    1. Prerequisites: The class group "Class 1" already exists in the address book.
+
+    1. Test case: `addclass c/Class 1`
+
+        Expected outcome:
+
+        ```text
+        This class group already exists in the address book
+        ```
+
+### Adding assignments
+
+1. Adding an assignment and checking that it is added successfully
+
+    1. Prerequisites: The assignment "Assignment 1" does not exist in the address book, and the user is currently on the Assignments tab in the GUI.
+
+    1. Test case: `addass ass/Assignment 1 d/12-12-2026 23:59`
+
+        Expected outcome:
+
+        ```text
+        New assignment added: Assignment 1; Deadline: 12-12-2026 23:59
+        ```
+
+1. Adding an assignment that already exists
+
+    1. Prerequisites: The assignment "Assignment 1" already exists in the address book.
+
+    1. Test case: `addass ass/Assignment 1 d/12-12-2026 23:59`
+
+        Expected outcome:
+
+        ```text
+        This assignment already exists in the address book
+        ```
+
+### Grading assignments
+
+1. Grading an assignment before it is submitted should fail
+
+   1. Prerequisites: The assignment "Assignment 1" exists in the address book, and the contact with index 1 (Alex Yeoh) is allocated the assignment but has not submitted it.
+
+   1. Test case: `grade ass/Assignment 1 ct/1 s/90.654`
+
+        Expected outcome:
+
+        ```text
+        Failed to grade any contacts for the assignment.
+        Contacts not graded (already graded): None
+        Contacts not graded (not submitted yet): Alex Yeoh
+        Contacts not graded (not allocated the assignment): None
+        Contacts not graded (grade time before submission time): None
+        ```
+
+1. Grading a submitted assignment
+
+    1. Prerequisites: The assignment "Assignment 1" exists in the address book, and the contact with index 1 (Alex Yeoh) is allocated the assignment and has submitted it.
+
+    1. Test case: `grade ass/Assignment 1 ct/1 s/90.654`
+
+        Expected outcome:
+
+        ```text
+        Graded assignment: Assignment 1; Deadline: 12-12-2026 23:59 on 29-03-2026 00:43 for 1 contact(s) with score 90.7.
+        Contacts graded: Alex Yeoh
+        Contacts not graded (already graded): None
+        Contacts not graded (not submitted yet): None
+        Contacts not graded (not allocated the assignment): None
+        Contacts not graded (grade time before submission time): None
+        ```
+
 ## **Appendix: Effort**
 
+The difficulty level of CPP is estimated to be around a moderate level. Extensive features have been introduced to CPP in a short amount of time.
+
+Some achievements of our team include the introduction of 2 entirely new entities (Classes and Assignments) to the address book, which took a significant amount of effort to implement, given the complexity of integrating them into the existing system which resulted in many areas of development.
+
+We also introduced various features related to them, such as the ability to allocate and unallocate classes and assignments, update submission status and grading details for each contact's assignment submission, and view the details of each contact, class, and assignment.
+
+Other features that modified to fit our new design include the `edit` command, which now allows editing of class and assignment details, and the `delete` command, which now also deletes the associated classes and assignments for a contact.
+
+The GUI had to be modified to accomodate the new entities, to be able to display the details of each contact, class, and assignment, and to provide a way for users to navigate between the different tabs. The `list` and `find` commands also had a rework to be able to list and filter the different entities based on the current tab.
+
+To make the uses experience smoother, we also implemented various features such as allocation options during contact, class, and assignment creation.
+
+Overall, the introduction of the new entities and their associated features required a significant amount of effort in terms of design, implementation, and testing, covering a wide range of areas in the codebase and requiring 21091 lines of code changes (accurate as of 29-03-2026).
+
 ## **Appendix: Planned Enhancements**
+
+Team size: 5
+
+1. **Filter contacts by their submission and grading status for a specific assignment**
+
+   * **Description**: Allow users to filter contacts based on their submission and grading status for a specific assignment. For example, users can filter to see only those contacts who have submitted an assignment but have not been graded yet.
+
+   * **Proposed implementation**: Introduce new filter options in the `view` command that allow users to specify the assignment and the desired submission/grading status. The system will then display the filtered list of contacts accordingly.
+
+   * **Example usage**:
+
+       * Command: `view ass/Assignment 1 sub/true grade/false`
+
+       * Expected outcome: List of contacts who have submitted the assignment but have not been graded yet.
+
+1. **Sort contacts by their scores for a specific assignment**
+
+    * **Description**: Allow users to sort contacts based on their scores for a specific assignment.
+
+    * **Proposed implementation**: Introduce a new sort option in the `view` command that allows users to specify the assignment and the sorting criteria (e.g., ascending or descending order of scores). The system will then display the list of contacts accordingly.
+
+    * **Example usage**:
+
+        * Command: `view ass/Assignment 1 sort/score asc`
+
+        * Expected outcome: List of contacts sorted by their scores for the specified assignment in ascending order.
+
+1. **Archive contacts, classes, and assignments**
+
+    * **Description**: Allows users to archive unused contacts, classes, and assignments, so that they can focus on the currently relevant ones.
+
+    * **Proposed implementation**: Introduce a new `archive` command that allows users to move contacts, classes, and assignments to an archive state, making them hidden from the default view.
+
+    * **Example usage**:
+
+        * Command: `archive ct/1` or `archive c/Class 1` or `archive ass/Assignment 1`
+
+        * Expected outcome: The specified contact, class, or assignment is moved to the archive state and hidden from the default view.
+
+1. **Attendance taking**
+
+    * **Description**: Allows users to mark the attendance of contacts for specific classes.
+
+    * **Proposed implementation**: Introduce a new `attend` and `absent` command that allows users to mark the attendance of contacts for a specific class.
+
+    * **Example usage**:
+
+        * Command: `attend c/Class 1 ct/1 2 3 4 5`
+
+        * Expected outcome: The specified contacts with index 1, 2, 3, 4, 5 are marked as present for the given class.
+
+        * Command: `absent c/Class 1 ct/6 7 8 9 10`
+
+        * Expected outcome: The specified contacts with index 6, 7, 8, 9, 10 are marked as absent for the given class.
+
+1. **Exporting data**
+
+    * **Description**: Allows users to export the data in the address book to a file.
+
+    * **Proposed implementation**: Introduce a new `export` command that allows users to export the data in the address book to a CSV file.
+
+    * **Example usage**:
+
+        * Command: `export f/contacts.csv`
+
+        * Expected outcome: The data in the address book is exported to a file named `contacts.csv`, with the contacts, classes, and assignments organized in a structured format.
