@@ -38,13 +38,13 @@ public class EditClassGroupCommandParser implements Parser<EditClassGroupCommand
                             EditClassGroupCommand.MESSAGE_USAGE), pe);
         }
 
+        argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_CLASS);
+
         if (!ParserUtil.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_CLASS)) {
             throw new ParseException(
                     String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT,
                             EditClassGroupCommand.MESSAGE_USAGE));
         }
-
-        argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_CLASS);
 
         ClassGroupName newName = ParserUtil.parseClassGroupName(
                 argMultimap.getValue(CliSyntax.PREFIX_CLASS).get());

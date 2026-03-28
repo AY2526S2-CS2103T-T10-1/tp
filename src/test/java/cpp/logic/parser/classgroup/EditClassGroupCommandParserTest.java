@@ -44,6 +44,16 @@ public class EditClassGroupCommandParserTest {
     }
 
     @Test
+    public void parse_duplicatePrefix_failure() {
+        String expectedMessage = Messages.getErrorMessageForDuplicatePrefixes(CliSyntax.PREFIX_CLASS);
+
+        // duplicate c/ prefix
+        CommandParserTestUtil.assertParseFailure(this.parser,
+                "1 " + CliSyntax.PREFIX_CLASS + "CS2103T " + CliSyntax.PREFIX_CLASS + "CS2103T2",
+                expectedMessage);
+    }
+
+    @Test
     public void parse_invalidName_failure() {
         // invalid class name (contains special characters)
         CommandParserTestUtil.assertParseFailure(this.parser,
