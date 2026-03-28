@@ -234,17 +234,17 @@ Refer to the [**Features**](#features) below for advanced features with the full
 **Notes about the command format:**<br>
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  e.g. in `addcontact n/NAME`, `NAME` is a parameter which can be used as `addcontact n/John Doe`.
+  e.g. in `addcontact n/CONTACT_NAME`, `CONTACT_NAME` is a parameter which can be used as `addcontact n/John Doe`.
 
 * Items in square brackets are optional.<br>
-  e.g `n/NAME [t/TAG]...` can be used as `n/John Doe t/friend` or as `n/John Doe`.
+  e.g `n/CONTACT_NAME [t/TAG]...` can be used as `n/John Doe t/friend` or as `n/John Doe`.
 
 * Items with `...` after them can be used multiple times.<br>
   e.g. `[t/TAG]...` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.<br>
   e.g. `ct/CONTACT_INDICES...` can be used as `ct/1`, `ct/1 2 3`, `ct/1 3 5 7` etc.
 
 * Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+  e.g. if the command specifies `n/CONTACT_NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/CONTACT_NAME` is also acceptable.
 
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `exit`, and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
@@ -264,13 +264,13 @@ Shows a message explaining how to access the help page.
 
 Adds a contact to the address book.
 
-**Format:** `addcontact n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [c/CLASS_NAME] [ass/ASSIGNMENT_NAME] [t/TAG]...`
+**Format:** `addcontact n/CONTACT_NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [c/CLASS_NAME] [ass/ASSIGNMENT_NAME] [t/TAG]...`
 
-* Creates a contact with the specified `NAME`, `PHONE_NUMBER`, `EMAIL` and `ADDRESS`.
+* Creates a contact with the specified `CONTACT_NAME`, `PHONE_NUMBER`, `EMAIL` and `ADDRESS`.
 
-* The `NAME` provided must only contain alphanumeric characters and spaces only. It cannot be blank.
+* The `CONTACT_NAME` provided must only contain alphanumeric characters and spaces only. It cannot be blank.
 
-* The `NAME` must be unique across all contacts (case-insensitive).
+* The `CONTACT_NAME` must be unique across all contacts (case-insensitive).
 
 * The `PHONE_NUMBER` provided must only contain numeric digits (0-9), be a minimum of 3 digits long, and cannot be blank.
 
@@ -717,22 +717,22 @@ If you encounter other issues, please raise a ticket with the project maintainer
 
 ## Command summary
 
-| Action                    | Format, Examples                                                                                                                                                                                                                                           |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Add Contact**           | `addcontact n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [c/CLASS_NAME] [ass/ASSIGNMENT_NAME] [t/TAG]...` <br> e.g., `addcontact n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 c/CS2103T-T10-1 ass/Assignment 1 t/friend t/colleague` |
-| **Clear**                 | `clear`                                                                                                                                                                                                                                                    |
-| **Add Class**             | `addclass c/CLASS_NAME [ct/CONTACT_INDICES...]` <br> e.g., `addclass c/CS2103T-T10-1 ct/1 2 3`                                                                                                                                                             |
-| **Allocate Class**        | `allocclass c/CLASS_NAME ct/CONTACT_INDICES...` <br> e.g., `allocclass c/CS2103T-T10-1 ct/1 2 3`                                                                                                                                                           |
-| **Unallocate Class**      | `unallocclass c/CLASS_NAME ct/CONTACT_INDICES...` <br> e.g., `unallocclass c/CS2103T-T10-1 ct/1 2 3`                                                                                                                                                       |
-| **Add Assignment**        | `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T-T10-1 ct/4 5`                                                                                              |
-| **Allocate Assignment**   | `allocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `allocass ass/Assignment 3 c/CS2103T-T10-1 ct/1 2 3`                                                                                                                      |
-| **Unallocate Assignment** | `unallocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `unallocass ass/Assignment 3 c/CS2103T-T10-1 ct/1 2 3`                                                                                                                  |
-| **Delete**                | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                                                                        |
-| **Edit**                  | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                                                                                                               |
-| **Find**                  | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                                                                                                                 |
-| **List Contacts**         | `list contacts`                                                                                                                                                                                                                                            |
-| **List Classes**          | `list classes`                                                                                                                                                                                                                                             |
-| **List Assignments**      | `list assignments`                                                                                                                                                                                                                                         |
-| **Help**                  | `help`                                                                                                                                                                                                                                                     |
+| Action                    | Format, Examples                                                                                                                                                                                                                                                   |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Add Contact**           | `addcontact n/CONTACT_NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [c/CLASS_NAME] [ass/ASSIGNMENT_NAME] [t/TAG]...` <br> e.g., `addcontact n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 c/CS2103T-T10-1 ass/Assignment 1 t/friend t/colleague` |
+| **Clear**                 | `clear`                                                                                                                                                                                                                                                            |
+| **Add Class**             | `addclass c/CLASS_NAME [ct/CONTACT_INDICES...]` <br> e.g., `addclass c/CS2103T-T10-1 ct/1 2 3`                                                                                                                                                                     |
+| **Allocate Class**        | `allocclass c/CLASS_NAME ct/CONTACT_INDICES...` <br> e.g., `allocclass c/CS2103T-T10-1 ct/1 2 3`                                                                                                                                                                   |
+| **Unallocate Class**      | `unallocclass c/CLASS_NAME ct/CONTACT_INDICES...` <br> e.g., `unallocclass c/CS2103T-T10-1 ct/1 2 3`                                                                                                                                                               |
+| **Add Assignment**        | `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T-T10-1 ct/4 5`                                                                                                      |
+| **Allocate Assignment**   | `allocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `allocass ass/Assignment 3 c/CS2103T-T10-1 ct/1 2 3`                                                                                                                              |
+| **Unallocate Assignment** | `unallocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `unallocass ass/Assignment 3 c/CS2103T-T10-1 ct/1 2 3`                                                                                                                          |
+| **Delete**                | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                                                                                |
+| **Edit**                  | `edit INDEX [n/CONTACT_NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                                                                                                               |
+| **Find**                  | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                                                                                                                         |
+| **List Contacts**         | `list contacts`                                                                                                                                                                                                                                                    |
+| **List Classes**          | `list classes`                                                                                                                                                                                                                                                     |
+| **List Assignments**      | `list assignments`                                                                                                                                                                                                                                                 |
+| **Help**                  | `help`                                                                                                                                                                                                                                                             |
 
 </div>

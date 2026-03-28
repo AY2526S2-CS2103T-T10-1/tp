@@ -27,7 +27,7 @@ public class AddContactCommand extends Command {
     public static final String MESSAGE_USAGE = AddContactCommand.COMMAND_WORD
             + ": Adds a contact to the address book.\n"
             + "Parameters: "
-            + CliSyntax.PREFIX_NAME + "NAME "
+            + CliSyntax.PREFIX_NAME + "CONTACT_NAME "
             + CliSyntax.PREFIX_PHONE + "PHONE_NUMBER "
             + CliSyntax.PREFIX_EMAIL + "EMAIL "
             + CliSyntax.PREFIX_ADDRESS + "ADDRESS "
