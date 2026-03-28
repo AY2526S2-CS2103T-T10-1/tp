@@ -387,7 +387,7 @@ TO BE UPDATED.
 
 Deletes the specified contact(s), assignment, or class from the address book.
 
-**Delete contact**
+**Delete contacts**
 
 Format: `delete ct/CONTACT_INDICES...`
 
