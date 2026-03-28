@@ -709,7 +709,7 @@ CPP data is saved automatically in `[JAR file location]/data/addressbook.json`. 
 1. **File permission issues (Windows)**: Running the app from a protected folder (e.g., `C:\Program Files`) may prevent writing `data/` or `preferences.json`.<br>
    Workaround: Run from a user-writable folder (e.g., Documents) or run the terminal as Administrator.
 
-If you encounter other issues, please raise a ticket with the project maintainers and include `data/addressbook.json` and `preferences.json` for troubleshooting.
+If you encounter other issues, please open a GitHub Issue in the [project repository](https://github.com/AY2526S2-CS2103T-T10-1/tp/issues) and include `data/addressbook.json` and `preferences.json` in your report for troubleshooting.
 
 --------------------------------------------------------------------------------------------------------------------
 
