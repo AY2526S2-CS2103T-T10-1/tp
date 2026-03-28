@@ -266,18 +266,14 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 * **Alternative 1 (current choice):** Saves the entire address book.
   * Pros: Easy to implement.
+
   * Cons: May have performance issues in terms of memory usage.
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
   * Pros: Will use less memory (e.g. for `delete`, just save the contact being deleted).
+
   * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -751,58 +747,3 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **Submission status**: The state of an _Assignment_ for a specified _Contact_ (e.g. not submitted, submitted).
 * **Tags**: A user-defined, optional label attached to a _Contact_ for categorization and filtering (e.g. "Prefect").
 * **Valid**: Satisfies all specified format and constraints defined by the system.
-
---------------------------------------------------------------------------------------------------------------------
-
-## **Appendix: Instructions for manual testing**
-
-Given below are instructions to test the app manually.
-
-<box type="info" seamless>
-
-**Note:** These instructions only provide a starting point for testers to work on;
-testers are expected to do more _exploratory_ testing.
-
-</box>
-
-### Launch and shutdown
-
-1. Initial launch
-
-   1. Download the jar file and copy into an empty folder
-
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
-
-1. Saving window preferences
-
-   1. Resize the window to an optimum size. Move the window to a different location. Close the window.
-
-   1. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
-
-1. _{ more test cases ... }_
-
-### Deleting a contact
-
-1. Deleting a contact while all contacts are being shown
-
-   1. Prerequisites: List all contacts using the `list` command. Multiple contacts in the list.
-
-   1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
-
-   1. Test case: `delete 0`<br>
-      Expected: No contact is deleted. Error details shown in the status message. Status bar remains the same.
-
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
-
-1. _{ more test cases ... }_
-
-### Saving data
-
-1. Dealing with missing/corrupted data files
-
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
-
-1. _{ more test cases ... }_
