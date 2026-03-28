@@ -32,7 +32,7 @@ public class EditAssignmentCommandParserTest {
     public void parse_deadlineFieldPresent_success() {
         Index targetIndex = TypicalIndexes.INDEX_FIRST_CONTACT;
         String deadline = "01-01-2025 23:59";
-        String userInput = targetIndex.getOneBased() + " " + CliSyntax.PREFIX_DEADLINE + deadline;
+        String userInput = targetIndex.getOneBased() + " " + CliSyntax.PREFIX_DATETIME + deadline;
 
         EditAssignmentDescriptor descriptor = new EditAssignmentDescriptor();
         try {

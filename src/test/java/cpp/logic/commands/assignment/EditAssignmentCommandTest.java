@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import cpp.commons.core.index.Index;
 import cpp.logic.Messages;
+import cpp.logic.commands.CommandResult;
 import cpp.logic.commands.CommandTestUtil;
 import cpp.logic.commands.assignment.EditAssignmentCommand.EditAssignmentDescriptor;
 import cpp.model.Model;
@@ -38,13 +39,14 @@ public class EditAssignmentCommandTest {
 
         EditAssignmentCommand editCommand = new EditAssignmentCommand(Index.fromOneBased(1), descriptor);
 
-        String expectedMessage = String.format(EditAssignmentCommand.MESSAGE_EDIT_ASSIGNMENT_SUCCESS,
-                Messages.format(editedAssignment));
+        CommandResult expectedResult = new CommandResult(
+                String.format(EditAssignmentCommand.MESSAGE_EDIT_ASSIGNMENT_SUCCESS,
+                        Messages.format(editedAssignment)), CommandResult.ListView.ASSIGNMENTS);
 
         ModelManager expectedModel = new ModelManager(this.model.getAddressBook(), new UserPrefs());
         expectedModel.setAssignment(TypicalAssignments.ASSIGNMENT_ONE, editedAssignment);
 
-        CommandTestUtil.assertCommandSuccess(editCommand, this.model, expectedMessage, expectedModel);
+        CommandTestUtil.assertCommandSuccess(editCommand, this.model, expectedResult, expectedModel);
     }
 
     @Test
@@ -85,13 +87,14 @@ public class EditAssignmentCommandTest {
 
         EditAssignmentCommand editCommand = new EditAssignmentCommand(Index.fromOneBased(1), descriptor);
 
-        String expectedMessage = String.format(EditAssignmentCommand.MESSAGE_EDIT_ASSIGNMENT_SUCCESS,
-                Messages.format(editedAssignment));
+        CommandResult expectedResult = new CommandResult(
+                String.format(EditAssignmentCommand.MESSAGE_EDIT_ASSIGNMENT_SUCCESS,
+                        Messages.format(editedAssignment)), CommandResult.ListView.ASSIGNMENTS);
 
         ModelManager expectedModel = new ModelManager(this.model.getAddressBook(), new UserPrefs());
         expectedModel.setAssignment(TypicalAssignments.ASSIGNMENT_ONE, editedAssignment);
 
-        CommandTestUtil.assertCommandSuccess(editCommand, this.model, expectedMessage, expectedModel);
+        CommandTestUtil.assertCommandSuccess(editCommand, this.model, expectedResult, expectedModel);
     }
 
     @Test

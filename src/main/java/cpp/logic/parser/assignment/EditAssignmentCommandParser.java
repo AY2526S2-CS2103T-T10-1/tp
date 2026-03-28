@@ -28,7 +28,7 @@ public class EditAssignmentCommandParser implements Parser<EditAssignmentCommand
     public EditAssignmentCommand parse(String args) throws ParseException {
         Objects.requireNonNull(args);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
-                args, CliSyntax.PREFIX_ASSIGNMENT, CliSyntax.PREFIX_DEADLINE);
+                args, CliSyntax.PREFIX_ASSIGNMENT, CliSyntax.PREFIX_DATETIME);
 
         Index index;
         try {
@@ -40,7 +40,7 @@ public class EditAssignmentCommandParser implements Parser<EditAssignmentCommand
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(
-                CliSyntax.PREFIX_ASSIGNMENT, CliSyntax.PREFIX_DEADLINE);
+                CliSyntax.PREFIX_ASSIGNMENT, CliSyntax.PREFIX_DATETIME);
 
         EditAssignmentDescriptor descriptor = new EditAssignmentDescriptor();
 
@@ -48,9 +48,9 @@ public class EditAssignmentCommandParser implements Parser<EditAssignmentCommand
             descriptor.setName(ParserUtil.parseAssignmentName(
                     argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get()));
         }
-        if (argMultimap.getValue(CliSyntax.PREFIX_DEADLINE).isPresent()) {
+        if (argMultimap.getValue(CliSyntax.PREFIX_DATETIME).isPresent()) {
             descriptor.setDeadline(ParserUtil.parseDeadline(
-                    argMultimap.getValue(CliSyntax.PREFIX_DEADLINE).get()));
+                    argMultimap.getValue(CliSyntax.PREFIX_DATETIME).get()));
         }
 
         if (!descriptor.isAnyFieldEdited()) {

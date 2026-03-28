@@ -30,10 +30,10 @@ public class EditAssignmentCommand extends Command {
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + CliSyntax.PREFIX_ASSIGNMENT + "NAME] "
-            + "[" + CliSyntax.PREFIX_DEADLINE + "DEADLINE]\n"
+            + "[" + CliSyntax.PREFIX_DATETIME + "DEADLINE]\n"
             + "Example: " + EditAssignmentCommand.COMMAND_WORD + " 1 "
             + CliSyntax.PREFIX_ASSIGNMENT + "Assignment 1234 "
-            + CliSyntax.PREFIX_DEADLINE + "20-12-2026 23:59";
+            + CliSyntax.PREFIX_DATETIME + "20-12-2026 23:59";
 
     public static final String MESSAGE_EDIT_ASSIGNMENT_SUCCESS = "Edited Assignment: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
@@ -74,8 +74,7 @@ public class EditAssignmentCommand extends Command {
 
         boolean isDuplicate = model.getAddressBook().getAssignmentList().stream()
                 .anyMatch(a -> !a.getId().equals(assignmentToEdit.getId())
-                        && a.getName().equals(newName)
-                        && a.getDeadline().equals(newDeadline));
+                        && a.getName().equals(newName));
         if (isDuplicate) {
             throw new CommandException(EditAssignmentCommand.MESSAGE_DUPLICATE_ASSIGNMENT);
         }
@@ -83,7 +82,7 @@ public class EditAssignmentCommand extends Command {
         model.setAssignment(assignmentToEdit, editedAssignment);
         return new CommandResult(
                 String.format(EditAssignmentCommand.MESSAGE_EDIT_ASSIGNMENT_SUCCESS,
-                        Messages.format(editedAssignment)));
+                        Messages.format(editedAssignment)), CommandResult.ListView.ASSIGNMENTS);
     }
 
     @Override
