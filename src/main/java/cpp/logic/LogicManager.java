@@ -104,19 +104,14 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public Assignment getViewedAssignment() {
-        return this.model.getViewedAssignment();
-    }
-
-    @Override
     public List<ContactAssignment> getContactAssignmentsForAssignment(
             Assignment assignment) {
         return this.model.getContactAssignmentsForAssignment(assignment);
     }
 
     @Override
-    public void clearViewedAssignment() {
-        this.model.clearViewedAssignment();
+    public void clearViewState() {
+        this.model.clearViewState();
     }
 
     @Override

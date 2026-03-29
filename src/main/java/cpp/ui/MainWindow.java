@@ -173,7 +173,7 @@ public class MainWindow extends UiPart<Stage> {
         // tab.
         this.mainTabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
             if (newTab != null && newTab != this.viewTab) {
-                this.logic.clearViewedAssignment();
+                this.logic.clearViewState();
                 this.hideViewTab();
             }
         });
@@ -244,22 +244,6 @@ public class MainWindow extends UiPart<Stage> {
 
     private void handleListCommand(CommandResult commandResult) {
         ListView listView = commandResult.getListView();
-        ViewType viewType = commandResult.getViewType();
-
-        // If a unique view was requested, show the view tab and populate it.
-        if (viewType == ViewType.ASSIGNMENT) {
-            Assignment viewedAssignment = this.logic.getViewedAssignment();
-            if (viewedAssignment != null) {
-                List<ContactAssignment> cas = this.logic
-                        .getContactAssignmentsForAssignment(viewedAssignment);
-                this.assignmentViewPanel.setAssignment(viewedAssignment, cas, this.logic.getAddressBook());
-                if (!this.mainTabPane.getTabs().contains(this.viewTab)) {
-                    this.mainTabPane.getTabs().add(this.viewTab);
-                }
-                this.mainTabPane.getSelectionModel().select(this.viewTab);
-                return;
-            }
-        }
 
         switch (listView) {
         case CONTACTS:

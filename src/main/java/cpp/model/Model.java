@@ -213,12 +213,7 @@ public interface Model {
     /**
      * Clears any currently viewed assignment.
      */
-    void clearViewedAssignment();
-
-    /**
-     * Returns the currently viewed assignment, or null if none.
-     */
-    Assignment getViewedAssignment();
+    void clearViewState();
 
     /**
      * Returns the contact assignments for the given assignment.

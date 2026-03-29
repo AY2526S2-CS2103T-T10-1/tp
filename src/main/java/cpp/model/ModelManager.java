@@ -219,12 +219,6 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public List<ContactAssignment> getContactAssignmentsForContact(Contact contact) {
-        Objects.requireNonNull(contact);
-        return this.assignmentManager.getContactAssignmentsForContact(contact);
-    }
-
-    @Override
     public boolean hasClassGroup(ClassGroup classGroup) {
         Objects.requireNonNull(classGroup);
         return this.addressBook.hasClassGroup(classGroup);
@@ -298,23 +292,20 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void clearViewedAssignment() {
+    public void clearViewState() {
         this.viewState.set(ViewState.none());
-    }
-
-    @Override
-    public Assignment getViewedAssignment() {
-        ViewState vs = this.viewState.get();
-        if (vs == null || vs.getType() != cpp.logic.commands.CommandResult.ViewType.ASSIGNMENT) {
-            return null;
-        }
-        return (Assignment) vs.getPayload();
     }
 
     @Override
     public List<ContactAssignment> getContactAssignmentsForAssignment(Assignment assignment) {
         Objects.requireNonNull(assignment);
         return this.assignmentManager.getContactAssignmentsForAssignment(assignment);
+    }
+
+    @Override
+    public List<ContactAssignment> getContactAssignmentsForContact(Contact contact) {
+        Objects.requireNonNull(contact);
+        return this.assignmentManager.getContactAssignmentsForContact(contact);
     }
 
     @Override

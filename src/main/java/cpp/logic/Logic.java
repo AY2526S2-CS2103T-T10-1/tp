@@ -62,11 +62,6 @@ public interface Logic {
     void setGuiSettings(GuiSettings guiSettings);
 
     /**
-     * View-related APIs for UI integration.
-     */
-    Assignment getViewedAssignment();
-
-    /**
      * Returns a list of contact-assignments for the given assignment.
      */
     List<ContactAssignment> getContactAssignmentsForAssignment(Assignment assignment);
@@ -74,7 +69,7 @@ public interface Logic {
     /**
      * Clears the currently viewed assignment, if any.
      */
-    void clearViewedAssignment();
+    void clearViewState();
 
     /**
      * Returns the central view state property that the UI can listen to for

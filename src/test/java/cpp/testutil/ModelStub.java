@@ -188,13 +188,7 @@ public class ModelStub implements Model {
 
     /** Clears any currently viewed assignment. */
     @Override
-    public void clearViewedAssignment() {
-        throw new AssertionError("This method should not be called.");
-    }
-
-    /** Returns the currently viewed assignment, or null if none. */
-    @Override
-    public Assignment getViewedAssignment() {
+    public void clearViewState() {
         throw new AssertionError("This method should not be called.");
     }
 
