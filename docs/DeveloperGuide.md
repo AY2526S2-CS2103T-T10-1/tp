@@ -128,7 +128,7 @@ How the parsing works:
 
 **Model (current design):** shows `AddressBook` and its relations to the 3 main entities: `Contact`, `ClassGroup`, and `Assignment` through the `Unique{Entity}List` counterparts. The `Model` component also includes a `UserPref` class to store user preferences (e.g., file path of the address book data, GUI settings).
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 #### Contacts view
 
@@ -136,7 +136,7 @@ How the parsing works:
 
 **Contacts view:** highlights classes and contact-related entities.
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 #### Classes view
 
@@ -144,7 +144,7 @@ How the parsing works:
 
 **ClassGroup view:** highlights classes and class group-related entities.
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 #### Assignments view
 
@@ -152,7 +152,7 @@ How the parsing works:
 
 **Assignments view:** highlights classes and assignment-related entities and their relations to `Contact`.
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 The `Model` component,
 
