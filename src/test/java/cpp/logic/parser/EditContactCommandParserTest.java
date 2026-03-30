@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import cpp.commons.core.index.Index;
 import cpp.logic.Messages;
 import cpp.logic.commands.CommandTestUtil;
-import cpp.logic.commands.EditCommand;
-import cpp.logic.commands.EditCommand.EditContactDescriptor;
+import cpp.logic.commands.EditContactCommand;
+import cpp.logic.commands.EditContactCommand.EditContactDescriptor;
 import cpp.model.contact.Address;
 import cpp.model.contact.ContactName;
 import cpp.model.contact.Email;
@@ -15,45 +15,45 @@ import cpp.model.tag.Tag;
 import cpp.testutil.EditContactDescriptorBuilder;
 import cpp.testutil.TypicalIndexes;
 
-public class EditCommandParserTest {
+public class EditContactCommandParserTest {
 
     private static final String TAG_EMPTY = " " + CliSyntax.PREFIX_TAG;
 
     private static final String MESSAGE_INVALID_FORMAT = String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT,
-            EditCommand.MESSAGE_USAGE);
+            EditContactCommand.MESSAGE_USAGE);
 
-    private EditCommandParser parser = new EditCommandParser();
+    private EditContactCommandParser parser = new EditContactCommandParser();
 
     @Test
     public void parse_missingParts_failure() {
         // no index specified
-        CommandParserTestUtil.assertParseFailure(this.parser, CommandTestUtil.VALID_NAME_AMY,
-                EditCommandParserTest.MESSAGE_INVALID_FORMAT);
+        CommandParserTestUtil.assertParseFailure(this.parser, CommandTestUtil.NAME_DESC_AMY,
+                EditContactCommandParserTest.MESSAGE_INVALID_FORMAT);
 
         // no field specified
-        CommandParserTestUtil.assertParseFailure(this.parser, "1", EditCommand.MESSAGE_NOT_EDITED);
+        CommandParserTestUtil.assertParseFailure(this.parser, "1", EditContactCommand.MESSAGE_NOT_EDITED);
 
         // no index and no field specified
-        CommandParserTestUtil.assertParseFailure(this.parser, "", EditCommandParserTest.MESSAGE_INVALID_FORMAT);
+        CommandParserTestUtil.assertParseFailure(this.parser, "", EditContactCommandParserTest.MESSAGE_INVALID_FORMAT);
     }
 
     @Test
     public void parse_invalidPreamble_failure() {
         // negative index
         CommandParserTestUtil.assertParseFailure(this.parser, "-5" + CommandTestUtil.NAME_DESC_AMY,
-                EditCommandParserTest.MESSAGE_INVALID_FORMAT);
+                ParserUtil.MESSAGE_INVALID_INDEX);
 
         // zero index
         CommandParserTestUtil.assertParseFailure(this.parser, "0" + CommandTestUtil.NAME_DESC_AMY,
-                EditCommandParserTest.MESSAGE_INVALID_FORMAT);
+                ParserUtil.MESSAGE_INVALID_INDEX);
 
         // invalid arguments being parsed as preamble
         CommandParserTestUtil.assertParseFailure(this.parser, "1 some random string",
-                EditCommandParserTest.MESSAGE_INVALID_FORMAT);
+                EditContactCommand.MESSAGE_NOT_EDITED);
 
         // invalid prefix being parsed as preamble
         CommandParserTestUtil.assertParseFailure(this.parser, "1 i/ string",
-                EditCommandParserTest.MESSAGE_INVALID_FORMAT);
+                EditContactCommand.MESSAGE_NOT_EDITED);
     }
 
     @Test
@@ -78,12 +78,12 @@ public class EditCommandParserTest {
         // Contact} being edited,
         // parsing it together with a valid tag results in error
         CommandParserTestUtil.assertParseFailure(this.parser, "1" + CommandTestUtil.TAG_DESC_FRIEND
-                + CommandTestUtil.TAG_DESC_HUSBAND + EditCommandParserTest.TAG_EMPTY,
+                + CommandTestUtil.TAG_DESC_HUSBAND + EditContactCommandParserTest.TAG_EMPTY,
                 Tag.MESSAGE_CONSTRAINTS);
         CommandParserTestUtil.assertParseFailure(this.parser, "1" + CommandTestUtil.TAG_DESC_FRIEND
-                + EditCommandParserTest.TAG_EMPTY + CommandTestUtil.TAG_DESC_HUSBAND,
+                + EditContactCommandParserTest.TAG_EMPTY + CommandTestUtil.TAG_DESC_HUSBAND,
                 Tag.MESSAGE_CONSTRAINTS);
-        CommandParserTestUtil.assertParseFailure(this.parser, "1" + EditCommandParserTest.TAG_EMPTY
+        CommandParserTestUtil.assertParseFailure(this.parser, "1" + EditContactCommandParserTest.TAG_EMPTY
                 + CommandTestUtil.TAG_DESC_FRIEND + CommandTestUtil.TAG_DESC_HUSBAND,
                 Tag.MESSAGE_CONSTRAINTS);
 
@@ -108,7 +108,7 @@ public class EditCommandParserTest {
                 .withPhone(CommandTestUtil.VALID_PHONE_BOB).withEmail(CommandTestUtil.VALID_EMAIL_AMY)
                 .withAddress(CommandTestUtil.VALID_ADDRESS_AMY)
                 .withTags(CommandTestUtil.VALID_TAG_HUSBAND, CommandTestUtil.VALID_TAG_FRIEND).build();
-        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+        EditContactCommand expectedCommand = new EditContactCommand(targetIndex, descriptor);
 
         CommandParserTestUtil.assertParseSuccess(this.parser, userInput, expectedCommand);
     }
@@ -122,7 +122,7 @@ public class EditCommandParserTest {
         EditContactDescriptor descriptor = new EditContactDescriptorBuilder()
                 .withPhone(CommandTestUtil.VALID_PHONE_BOB)
                 .withEmail(CommandTestUtil.VALID_EMAIL_AMY).build();
-        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+        EditContactCommand expectedCommand = new EditContactCommand(targetIndex, descriptor);
 
         CommandParserTestUtil.assertParseSuccess(this.parser, userInput, expectedCommand);
     }
@@ -135,31 +135,31 @@ public class EditCommandParserTest {
         EditContactDescriptor descriptor = new EditContactDescriptorBuilder()
                 .withName(CommandTestUtil.VALID_NAME_AMY)
                 .build();
-        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+        EditContactCommand expectedCommand = new EditContactCommand(targetIndex, descriptor);
         CommandParserTestUtil.assertParseSuccess(this.parser, userInput, expectedCommand);
 
         // phone
         userInput = targetIndex.getOneBased() + CommandTestUtil.PHONE_DESC_AMY;
         descriptor = new EditContactDescriptorBuilder().withPhone(CommandTestUtil.VALID_PHONE_AMY).build();
-        expectedCommand = new EditCommand(targetIndex, descriptor);
+        expectedCommand = new EditContactCommand(targetIndex, descriptor);
         CommandParserTestUtil.assertParseSuccess(this.parser, userInput, expectedCommand);
 
         // email
         userInput = targetIndex.getOneBased() + CommandTestUtil.EMAIL_DESC_AMY;
         descriptor = new EditContactDescriptorBuilder().withEmail(CommandTestUtil.VALID_EMAIL_AMY).build();
-        expectedCommand = new EditCommand(targetIndex, descriptor);
+        expectedCommand = new EditContactCommand(targetIndex, descriptor);
         CommandParserTestUtil.assertParseSuccess(this.parser, userInput, expectedCommand);
 
         // address
         userInput = targetIndex.getOneBased() + CommandTestUtil.ADDRESS_DESC_AMY;
         descriptor = new EditContactDescriptorBuilder().withAddress(CommandTestUtil.VALID_ADDRESS_AMY).build();
-        expectedCommand = new EditCommand(targetIndex, descriptor);
+        expectedCommand = new EditContactCommand(targetIndex, descriptor);
         CommandParserTestUtil.assertParseSuccess(this.parser, userInput, expectedCommand);
 
         // tags
         userInput = targetIndex.getOneBased() + CommandTestUtil.TAG_DESC_FRIEND;
         descriptor = new EditContactDescriptorBuilder().withTags(CommandTestUtil.VALID_TAG_FRIEND).build();
-        expectedCommand = new EditCommand(targetIndex, descriptor);
+        expectedCommand = new EditContactCommand(targetIndex, descriptor);
         CommandParserTestUtil.assertParseSuccess(this.parser, userInput, expectedCommand);
     }
 
@@ -214,10 +214,10 @@ public class EditCommandParserTest {
     @Test
     public void parse_resetTags_success() {
         Index targetIndex = TypicalIndexes.INDEX_THIRD_CONTACT;
-        String userInput = targetIndex.getOneBased() + EditCommandParserTest.TAG_EMPTY;
+        String userInput = targetIndex.getOneBased() + EditContactCommandParserTest.TAG_EMPTY;
 
         EditContactDescriptor descriptor = new EditContactDescriptorBuilder().withTags().build();
-        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+        EditContactCommand expectedCommand = new EditContactCommand(targetIndex, descriptor);
 
         CommandParserTestUtil.assertParseSuccess(this.parser, userInput, expectedCommand);
     }

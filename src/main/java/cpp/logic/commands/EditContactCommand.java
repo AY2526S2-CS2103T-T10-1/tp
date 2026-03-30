@@ -24,26 +24,27 @@ import cpp.model.tag.Tag;
 /**
  * Edits the details of an existing contact in the address book.
  */
-public class EditCommand extends Command {
+public class EditContactCommand extends Command {
 
-    public static final String COMMAND_WORD = "edit";
+    public static final String COMMAND_WORD = "editcontact";
 
-    public static final String MESSAGE_USAGE = EditCommand.COMMAND_WORD
+    public static final String MESSAGE_USAGE = EditContactCommand.COMMAND_WORD
             + ": Edits the details of the contact identified "
             + "by the index number used in the displayed contact list. "
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + "[" + CliSyntax.PREFIX_NAME + "NAME] "
-            + "[" + CliSyntax.PREFIX_PHONE + "PHONE] "
+            + "[" + CliSyntax.PREFIX_NAME + "CONTACT_NAME] "
+            + "[" + CliSyntax.PREFIX_PHONE + "PHONE_NUMBER] "
             + "[" + CliSyntax.PREFIX_EMAIL + "EMAIL] "
             + "[" + CliSyntax.PREFIX_ADDRESS + "ADDRESS] "
             + "[" + CliSyntax.PREFIX_TAG + "TAG]...\n"
-            + "Example: " + EditCommand.COMMAND_WORD + " 1 "
+            + "Example: " + EditContactCommand.COMMAND_WORD + " 1 "
             + CliSyntax.PREFIX_PHONE + "91234567 "
             + CliSyntax.PREFIX_EMAIL + "johndoe@example.com";
 
     public static final String MESSAGE_EDIT_CONTACT_SUCCESS = "Edited Contact: %1$s";
-    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
+    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.\n"
+            + EditContactCommand.MESSAGE_USAGE;
     public static final String MESSAGE_DUPLICATE_CONTACT = "This contact already exists in the address book.";
 
     private final Index index;
@@ -54,7 +55,7 @@ public class EditCommand extends Command {
      *                              edit
      * @param editContactDescriptor details to edit the contact with
      */
-    public EditCommand(Index index, EditContactDescriptor editContactDescriptor) {
+    public EditContactCommand(Index index, EditContactDescriptor editContactDescriptor) {
         Objects.requireNonNull(index);
         Objects.requireNonNull(editContactDescriptor);
 
@@ -72,16 +73,16 @@ public class EditCommand extends Command {
         }
 
         Contact contactToEdit = lastShownList.get(this.index.getZeroBased());
-        Contact editedContact = EditCommand.createEditedContact(contactToEdit, this.editContactDescriptor);
+        Contact editedContact = EditContactCommand.createEditedContact(contactToEdit, this.editContactDescriptor);
 
         if (!contactToEdit.isSameContact(editedContact) && model.hasContact(editedContact)) {
-            throw new CommandException(EditCommand.MESSAGE_DUPLICATE_CONTACT);
+            throw new CommandException(EditContactCommand.MESSAGE_DUPLICATE_CONTACT);
         }
 
         model.setContact(contactToEdit, editedContact);
         model.updateFilteredContactList(Model.PREDICATE_SHOW_ALL_CONTACTS);
         return new CommandResult(
-                String.format(EditCommand.MESSAGE_EDIT_CONTACT_SUCCESS, Messages.format(editedContact)));
+                String.format(EditContactCommand.MESSAGE_EDIT_CONTACT_SUCCESS, Messages.format(editedContact)));
     }
 
     /**
@@ -98,7 +99,7 @@ public class EditCommand extends Command {
         Address updatedAddress = editContactDescriptor.getAddress().orElse(contactToEdit.getAddress());
         Set<Tag> updatedTags = editContactDescriptor.getTags().orElse(contactToEdit.getTags());
 
-        return new Contact(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
+        return new Contact(contactToEdit.getId(), updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
     }
 
     @Override
@@ -108,11 +109,11 @@ public class EditCommand extends Command {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof EditCommand)) {
+        if (!(other instanceof EditContactCommand)) {
             return false;
         }
 
-        EditCommand otherEditCommand = (EditCommand) other;
+        EditContactCommand otherEditCommand = (EditContactCommand) other;
         return this.index.equals(otherEditCommand.index)
                 && this.editContactDescriptor.equals(otherEditCommand.editContactDescriptor);
     }

@@ -15,8 +15,8 @@ import cpp.logic.commands.ClearCommand;
 import cpp.logic.commands.CommandTestUtil;
 import cpp.logic.commands.DeleteCommand;
 import cpp.logic.commands.DeleteContactCommand;
-import cpp.logic.commands.EditCommand;
-import cpp.logic.commands.EditCommand.EditContactDescriptor;
+import cpp.logic.commands.EditContactCommand;
+import cpp.logic.commands.EditContactCommand.EditContactDescriptor;
 import cpp.logic.commands.ExitCommand;
 import cpp.logic.commands.FindContactCommand;
 import cpp.logic.commands.HelpCommand;
@@ -30,10 +30,12 @@ import cpp.logic.commands.assignment.UngradeAssignmentCommand;
 import cpp.logic.commands.assignment.UnsubmitAssignmentCommand;
 import cpp.logic.commands.classgroup.AddClassGroupCommand;
 import cpp.logic.commands.classgroup.AllocateClassGroupCommand;
+import cpp.logic.commands.classgroup.EditClassGroupCommand;
 import cpp.logic.commands.classgroup.UnallocateClassGroupCommand;
 import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.assignment.Assignment;
 import cpp.model.classgroup.ClassGroup;
+import cpp.model.classgroup.ClassGroupName;
 import cpp.model.contact.Contact;
 import cpp.model.contact.ContactNameContainsKeywordsPredicate;
 import cpp.testutil.Assert;
@@ -77,10 +79,10 @@ public class AddressBookParserTest {
     public void parseCommand_edit() throws Exception {
         Contact contact = new ContactBuilder().build();
         EditContactDescriptor descriptor = new EditContactDescriptorBuilder(contact).build();
-        EditCommand command = (EditCommand) this.parser.parseCommand(EditCommand.COMMAND_WORD + " "
+        EditContactCommand command = (EditContactCommand) this.parser.parseCommand(EditContactCommand.COMMAND_WORD + " "
                 + TypicalIndexes.INDEX_FIRST_CONTACT.getOneBased() + " "
                 + ContactUtil.getEditContactDescriptorDetails(descriptor));
-        Assertions.assertEquals(new EditCommand(TypicalIndexes.INDEX_FIRST_CONTACT, descriptor), command);
+        Assertions.assertEquals(new EditContactCommand(TypicalIndexes.INDEX_FIRST_CONTACT, descriptor), command);
     }
 
     @Test
@@ -256,6 +258,17 @@ public class AddressBookParserTest {
                                 new ArrayList<>(Arrays.asList(TypicalIndexes.INDEX_FIRST_CONTACT))));
         Assertions.assertEquals(new UnallocateClassGroupCommand(classGroup.getName(),
                 List.of(TypicalIndexes.INDEX_FIRST_CONTACT)), command);
+    }
+
+    @Test
+    public void parseCommand_editClassGroup() throws Exception {
+        EditClassGroupCommand command = (EditClassGroupCommand) this.parser.parseCommand(
+                EditClassGroupCommand.COMMAND_WORD + " "
+                        + TypicalIndexes.INDEX_FIRST_CONTACT.getOneBased() + " "
+                        + CliSyntax.PREFIX_CLASS + "CS2103T");
+        Assertions.assertEquals(
+                new EditClassGroupCommand(TypicalIndexes.INDEX_FIRST_CONTACT, new ClassGroupName("CS2103T")),
+                command);
     }
 
     @Test

@@ -58,6 +58,16 @@ public class ClassGroup {
     }
 
     /**
+     * Replaces the set of contact IDs allocated to this class group with the given
+     * set.
+     */
+    public void setContactIdSet(HashSet<String> contactIdSet) {
+        CollectionUtil.requireAllNonNull(contactIdSet);
+        this.contactIdSet.clear();
+        this.contactIdSet.addAll(contactIdSet);
+    }
+
+    /**
      * Allocates a contact to this class group. If the contact is already allocated
      * to this class group, a ContactAlreadyAllocatedClassGroupException is thrown.
      */

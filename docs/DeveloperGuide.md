@@ -128,7 +128,7 @@ How the parsing works:
 
 **Model (current design):** shows `AddressBook` and its relations to the 3 main entities: `Contact`, `ClassGroup`, and `Assignment` through the `Unique{Entity}List` counterparts. The `Model` component also includes a `UserPref` class to store user preferences (e.g., file path of the address book data, GUI settings).
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 #### Contacts view
 
@@ -136,7 +136,7 @@ How the parsing works:
 
 **Contacts view:** highlights classes and contact-related entities.
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 #### Classes view
 
@@ -144,7 +144,7 @@ How the parsing works:
 
 **ClassGroup view:** highlights classes and class group-related entities.
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 #### Assignments view
 
@@ -152,7 +152,7 @@ How the parsing works:
 
 **Assignments view:** highlights classes and assignment-related entities and their relations to `Contact`.
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 The `Model` component,
 
@@ -188,7 +188,7 @@ This section describes some noteworthy details on how certain features are imple
 
 The `Model` component manages `ClassGroup` entities using `UniqueClassGroupList`. This enforces uniqueness constraints and provides methods to add, delete, and update the entities.
 
-Within the `ClassGroup` entities, the `Contact` entities that belong to the class are stored as a list of `String`s representing the `Contact`s `id` field. This design allows us to easily make edits to contacts without having to worry about updating the `ClassGroup` entities, improving the efficiency of `edit` operations.
+Within the `ClassGroup` entities, the `Contact` entities that belong to the class are stored as a list of `String`s representing the `Contact`'s `id` field. This design allows us to easily make edits to contacts without having to worry about updating the `ClassGroup` entities, improving the efficiency of `edit` operations.
 
 ### Assignment management
 
@@ -782,9 +782,9 @@ testers are expected to do more _exploratory_ testing.
 
 1. Adding a class group and checking that it is added successfully
 
-    1. Prerequisites: The class group "Class 1" does not exist in the address book, and the user is currently on the Classes tab in the GUI.
+    * Prerequisites: The class group "Class 1" does not exist in the address book, and the user is currently on the Classes tab in the GUI.
 
-    1. Test case: `addclass c/Class 1`
+    * Test case: `addclass c/Class 1`
 
         Expected outcome:
 
@@ -794,9 +794,9 @@ testers are expected to do more _exploratory_ testing.
 
 1. Adding a class group that already exists
 
-    1. Prerequisites: The class group "Class 1" already exists in the address book.
+    * Prerequisites: The class group "Class 1" already exists in the address book.
 
-    1. Test case: `addclass c/Class 1`
+    * Test case: `addclass c/Class 1`
 
         Expected outcome:
 
@@ -808,9 +808,9 @@ testers are expected to do more _exploratory_ testing.
 
 1. Adding an assignment and checking that it is added successfully
 
-    1. Prerequisites: The assignment "Assignment 1" does not exist in the address book, and the user is currently on the Assignments tab in the GUI.
+    * Prerequisites: The assignment "Assignment 1" does not exist in the address book, and the user is currently on the Assignments tab in the GUI.
 
-    1. Test case: `addass ass/Assignment 1 d/12-12-2026 23:59`
+    * Test case: `addass ass/Assignment 1 d/12-12-2026 23:59`
 
         Expected outcome:
 
@@ -820,9 +820,9 @@ testers are expected to do more _exploratory_ testing.
 
 1. Adding an assignment that already exists
 
-    1. Prerequisites: The assignment "Assignment 1" already exists in the address book.
+    * Prerequisites: The assignment "Assignment 1" already exists in the address book.
 
-    1. Test case: `addass ass/Assignment 1 d/12-12-2026 23:59`
+    * Test case: `addass ass/Assignment 1 d/12-12-2026 23:59`
 
         Expected outcome:
 
@@ -834,9 +834,9 @@ testers are expected to do more _exploratory_ testing.
 
 1. Grading an assignment before it is submitted should fail
 
-   1. Prerequisites: The assignment "Assignment 1" exists in the address book, and the contact with index 1 (Alex Yeoh) is allocated the assignment but has not submitted it.
+   * Prerequisites: The assignment "Assignment 1" exists in the address book, and the contact with index 1 (Alex Yeoh) is allocated the assignment but has not submitted it.
 
-   1. Test case: `grade ass/Assignment 1 ct/1 s/90.654`
+   * Test case: `grade ass/Assignment 1 ct/1 s/90.654`
 
         Expected outcome:
 
@@ -850,9 +850,9 @@ testers are expected to do more _exploratory_ testing.
 
 1. Grading a submitted assignment
 
-    1. Prerequisites: The assignment "Assignment 1" exists in the address book, and the contact with index 1 (Alex Yeoh) is allocated the assignment and has submitted it.
+    * Prerequisites: The assignment "Assignment 1" exists in the address book, and the contact with index 1 (Alex Yeoh) is allocated the assignment and has submitted it.
 
-    1. Test case: `grade ass/Assignment 1 ct/1 s/90.654`
+    * Test case: `grade ass/Assignment 1 ct/1 s/90.654`
 
         Expected outcome:
 
