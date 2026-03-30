@@ -27,7 +27,7 @@ public class EditContactCommandParserTest {
     @Test
     public void parse_missingParts_failure() {
         // no index specified
-        CommandParserTestUtil.assertParseFailure(this.parser, CommandTestUtil.VALID_NAME_AMY,
+        CommandParserTestUtil.assertParseFailure(this.parser, CommandTestUtil.NAME_DESC_AMY,
                 EditContactCommandParserTest.MESSAGE_INVALID_FORMAT);
 
         // no field specified
@@ -41,19 +41,19 @@ public class EditContactCommandParserTest {
     public void parse_invalidPreamble_failure() {
         // negative index
         CommandParserTestUtil.assertParseFailure(this.parser, "-5" + CommandTestUtil.NAME_DESC_AMY,
-                EditContactCommandParserTest.MESSAGE_INVALID_FORMAT);
+                ParserUtil.MESSAGE_INVALID_INDEX);
 
         // zero index
         CommandParserTestUtil.assertParseFailure(this.parser, "0" + CommandTestUtil.NAME_DESC_AMY,
-                EditContactCommandParserTest.MESSAGE_INVALID_FORMAT);
+                ParserUtil.MESSAGE_INVALID_INDEX);
 
         // invalid arguments being parsed as preamble
         CommandParserTestUtil.assertParseFailure(this.parser, "1 some random string",
-                EditContactCommandParserTest.MESSAGE_INVALID_FORMAT);
+                EditContactCommand.MESSAGE_NOT_EDITED);
 
         // invalid prefix being parsed as preamble
         CommandParserTestUtil.assertParseFailure(this.parser, "1 i/ string",
-                EditContactCommandParserTest.MESSAGE_INVALID_FORMAT);
+                EditContactCommand.MESSAGE_NOT_EDITED);
     }
 
     @Test

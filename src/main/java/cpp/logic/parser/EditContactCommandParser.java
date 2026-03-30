@@ -32,17 +32,13 @@ public class EditContactCommandParser implements Parser<EditContactCommand> {
                 CliSyntax.PREFIX_EMAIL,
                 CliSyntax.PREFIX_ADDRESS, CliSyntax.PREFIX_TAG);
 
-        Index index;
-
-        try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
-        } catch (ParseException pe) {
-            throw new ParseException(
-                    String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, EditContactCommand.MESSAGE_USAGE), pe);
-        }
-
         argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_PHONE, CliSyntax.PREFIX_EMAIL,
                 CliSyntax.PREFIX_ADDRESS);
+
+        if (argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT,
+                    EditContactCommand.MESSAGE_USAGE));
+        }
 
         EditContactDescriptor editContactDescriptor = new EditContactDescriptor();
 
@@ -64,6 +60,8 @@ public class EditContactCommandParser implements Parser<EditContactCommand> {
         if (!editContactDescriptor.isAnyFieldEdited()) {
             throw new ParseException(EditContactCommand.MESSAGE_NOT_EDITED);
         }
+
+        Index index = ParserUtil.parseIndex(argMultimap.getPreamble());
 
         return new EditContactCommand(index, editContactDescriptor);
     }
