@@ -33,8 +33,8 @@ public class EditContactCommand extends Command {
             + "by the index number used in the displayed contact list. "
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + "[" + CliSyntax.PREFIX_NAME + "NAME] "
-            + "[" + CliSyntax.PREFIX_PHONE + "PHONE] "
+            + "[" + CliSyntax.PREFIX_NAME + "CONTACT_NAME] "
+            + "[" + CliSyntax.PREFIX_PHONE + "PHONE_NUMBER] "
             + "[" + CliSyntax.PREFIX_EMAIL + "EMAIL] "
             + "[" + CliSyntax.PREFIX_ADDRESS + "ADDRESS] "
             + "[" + CliSyntax.PREFIX_TAG + "TAG]...\n"
@@ -43,7 +43,8 @@ public class EditContactCommand extends Command {
             + CliSyntax.PREFIX_EMAIL + "johndoe@example.com";
 
     public static final String MESSAGE_EDIT_CONTACT_SUCCESS = "Edited Contact: %1$s";
-    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
+    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.\n"
+            + EditContactCommand.MESSAGE_USAGE;
     public static final String MESSAGE_DUPLICATE_CONTACT = "This contact already exists in the address book.";
 
     private final Index index;
@@ -98,7 +99,7 @@ public class EditContactCommand extends Command {
         Address updatedAddress = editContactDescriptor.getAddress().orElse(contactToEdit.getAddress());
         Set<Tag> updatedTags = editContactDescriptor.getTags().orElse(contactToEdit.getTags());
 
-        return new Contact(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
+        return new Contact(contactToEdit.getId(), updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
     }
 
     @Override
