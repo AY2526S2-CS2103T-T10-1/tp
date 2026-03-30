@@ -3,7 +3,7 @@ package cpp.testutil;
 import java.util.Set;
 
 import cpp.logic.commands.AddContactCommand;
-import cpp.logic.commands.EditCommand.EditContactDescriptor;
+import cpp.logic.commands.EditContactCommand.EditContactDescriptor;
 import cpp.logic.parser.CliSyntax;
 import cpp.model.contact.Contact;
 import cpp.model.tag.Tag;

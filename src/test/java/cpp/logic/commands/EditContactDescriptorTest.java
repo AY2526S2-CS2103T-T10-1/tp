@@ -3,7 +3,7 @@ package cpp.logic.commands;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import cpp.logic.commands.EditCommand.EditContactDescriptor;
+import cpp.logic.commands.EditContactCommand.EditContactDescriptor;
 import cpp.testutil.EditContactDescriptorBuilder;
 
 public class EditContactDescriptorTest {

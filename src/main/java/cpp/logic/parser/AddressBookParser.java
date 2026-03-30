@@ -10,7 +10,7 @@ import cpp.logic.commands.AddContactCommand;
 import cpp.logic.commands.ClearCommand;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.DeleteCommand;
-import cpp.logic.commands.EditCommand;
+import cpp.logic.commands.EditContactCommand;
 import cpp.logic.commands.ExitCommand;
 import cpp.logic.commands.FindAssignmentCommand;
 import cpp.logic.commands.FindClassCommand;
@@ -77,8 +77,8 @@ public class AddressBookParser {
         case AddContactCommand.COMMAND_WORD:
             return new AddContactCommandParser().parse(arguments);
 
-        case EditCommand.COMMAND_WORD:
-            return new EditCommandParser().parse(arguments);
+        case EditContactCommand.COMMAND_WORD:
+            return new EditContactCommandParser().parse(arguments);
 
         case DeleteCommand.COMMAND_WORD:
             return new DeleteCommandParser().parse(arguments);

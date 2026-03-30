@@ -15,8 +15,8 @@ import cpp.logic.commands.ClearCommand;
 import cpp.logic.commands.CommandTestUtil;
 import cpp.logic.commands.DeleteCommand;
 import cpp.logic.commands.DeleteContactCommand;
-import cpp.logic.commands.EditCommand;
-import cpp.logic.commands.EditCommand.EditContactDescriptor;
+import cpp.logic.commands.EditContactCommand;
+import cpp.logic.commands.EditContactCommand.EditContactDescriptor;
 import cpp.logic.commands.ExitCommand;
 import cpp.logic.commands.FindContactCommand;
 import cpp.logic.commands.HelpCommand;
@@ -77,10 +77,10 @@ public class AddressBookParserTest {
     public void parseCommand_edit() throws Exception {
         Contact contact = new ContactBuilder().build();
         EditContactDescriptor descriptor = new EditContactDescriptorBuilder(contact).build();
-        EditCommand command = (EditCommand) this.parser.parseCommand(EditCommand.COMMAND_WORD + " "
+        EditContactCommand command = (EditContactCommand) this.parser.parseCommand(EditContactCommand.COMMAND_WORD + " "
                 + TypicalIndexes.INDEX_FIRST_CONTACT.getOneBased() + " "
                 + ContactUtil.getEditContactDescriptorDetails(descriptor));
-        Assertions.assertEquals(new EditCommand(TypicalIndexes.INDEX_FIRST_CONTACT, descriptor), command);
+        Assertions.assertEquals(new EditContactCommand(TypicalIndexes.INDEX_FIRST_CONTACT, descriptor), command);
     }
 
     @Test
