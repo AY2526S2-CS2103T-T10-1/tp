@@ -51,6 +51,7 @@ public class MainWindow extends UiPart<Stage> {
     private HelpWindow helpWindow;
     private UniqueAssignmentView assignmentViewPanel;
     private UniqueContactView contactViewPanel;
+    private UniqueClassGroupView classGroupViewPanel;
     private Map<ViewType, UiPart<?>> viewPanels = new EnumMap<>(ViewType.class);
     private ViewType currentViewType = ViewType.NONE;
     private Object currentViewPayload = null;
@@ -170,10 +171,14 @@ public class MainWindow extends UiPart<Stage> {
 
         // set up contact view panel inside the view tab placeholder; hide tab initially
         this.contactViewPanel = new UniqueContactView();
-        this.viewPanels.put(ViewType.CONTACT, this.contactViewPanel);
+
+        // set up class group view panel inside the view tab placeholder
+        this.classGroupViewPanel = new UniqueClassGroupView();
 
         // register known view panels
+        this.viewPanels.put(ViewType.CONTACT, this.contactViewPanel);
         this.viewPanels.put(ViewType.ASSIGNMENT, this.assignmentViewPanel);
+        this.viewPanels.put(ViewType.CLASSGROUP, this.classGroupViewPanel);
 
         // remove the view tab so it is hidden until a view command adds it back
         this.mainTabPane.getTabs().remove(this.viewTab);
@@ -330,6 +335,18 @@ public class MainWindow extends UiPart<Stage> {
                 this.mainTabPane.getSelectionModel().select(this.viewTab);
             }
             break;
+        case CLASSGROUP:
+            ClassGroup cg = (ClassGroup) this.currentViewPayload;
+            if (cg != null) {
+                List<Contact> cts = this.logic.getContactsInClassGroup(cg);
+                this.classGroupViewPanel.setClassGroup(cg, cts);
+                this.viewPanelPlaceholder.getChildren().setAll(this.classGroupViewPanel.getRoot());
+                if (!this.mainTabPane.getTabs().contains(this.viewTab)) {
+                    this.mainTabPane.getTabs().add(this.viewTab);
+                }
+                this.mainTabPane.getSelectionModel().select(this.viewTab);
+            }
+            break;
         default:
             this.hideViewTab();
             break;
@@ -363,6 +380,13 @@ public class MainWindow extends UiPart<Stage> {
                         .getContactAssignmentsWithAssignmentsForContact(ct);
                 List<ClassGroup> classGroups = this.logic.getClassGroupsForContact(ct);
                 this.contactViewPanel.setContact(ct, cas, classGroups);
+            }
+            break;
+        case CLASSGROUP:
+            if (this.currentViewPayload instanceof ClassGroup) {
+                ClassGroup cg = (ClassGroup) this.currentViewPayload;
+                List<Contact> cts = this.logic.getContactsInClassGroup(cg);
+                this.classGroupViewPanel.setClassGroup(cg, cts);
             }
             break;
         default:

@@ -313,6 +313,12 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void viewClassGroup(ClassGroup classGroup) {
+        Objects.requireNonNull(classGroup);
+        this.viewState.set(ViewState.ofClassGroup(classGroup));
+    }
+
+    @Override
     public void viewAssignment(Assignment assignment) {
         Objects.requireNonNull(assignment);
         this.viewState.set(ViewState.ofAssignment(assignment));
@@ -348,6 +354,12 @@ public class ModelManager implements Model {
     public List<ContactAssignment> getContactAssignmentsForContact(Contact contact) {
         Objects.requireNonNull(contact);
         return this.assignmentManager.getContactAssignmentsForContact(contact);
+    }
+
+    @Override
+    public List<Contact> getContactsInClassGroup(ClassGroup classGroup) {
+        Objects.requireNonNull(classGroup);
+        return ClassGroupUtil.getContactsInClassGroup(this.addressBook.getContactList(), classGroup);
     }
 
     @Override

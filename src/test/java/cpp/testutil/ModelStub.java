@@ -193,6 +193,11 @@ public class ModelStub implements Model {
         throw new AssertionError("This method should not be called.");
     }
 
+    @Override
+    public void viewClassGroup(ClassGroup classGroup) {
+        throw new AssertionError("This method should not be called.");
+    }
+
     /** Clears any currently viewed assignment. */
     @Override
     public void clearViewState() {
@@ -216,6 +221,12 @@ public class ModelStub implements Model {
     /** Returns the class groups containing the given contact. */
     @Override
     public List<ClassGroup> getClassGroupsForContact(Contact contact) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    /** Returns a list of contacts in the given class group. */
+    @Override
+    public List<Contact> getContactsInClassGroup(ClassGroup classGroup) {
         throw new AssertionError("This method should not be called.");
     }
 

@@ -10,7 +10,6 @@ import cpp.logic.commands.exceptions.CommandException;
 import cpp.model.Model;
 import cpp.model.classgroup.ClassGroup;
 import cpp.model.classgroup.ClassGroupName;
-import cpp.model.contact.Contact;
 import cpp.model.util.ClassGroupUtil;
 
 /**
@@ -20,7 +19,7 @@ import cpp.model.util.ClassGroupUtil;
  */
 public class ViewClassGroupCommand extends ViewCommand {
 
-    public static final String MESSAGE_VIEW_CLASS_GROUP_SUCCESS = "Viewed Class Group:\n%1$s";
+    public static final String MESSAGE_SUCCESS = "Viewed Class Group: %1$s";
 
     private final ClassGroupName classGroupName;
 
@@ -39,10 +38,11 @@ public class ViewClassGroupCommand extends ViewCommand {
             throw new CommandException(Messages.MESSAGE_CLASS_GROUP_NOT_FOUND);
         }
 
-        List<Contact> allContacts = model.getAddressBook().getContactList();
-        List<Contact> contactsInClassGroup = ClassGroupUtil.getContactsInClassGroup(allContacts, classGroupToView);
+        model.viewClassGroup(classGroupToView);
 
-        return new CommandResult("Implementation in progress.");
+        return new CommandResult(
+                String.format(ViewClassGroupCommand.MESSAGE_SUCCESS, Messages.format(classGroupToView)),
+                CommandResult.ViewType.CLASSGROUP);
     }
 
     @Override

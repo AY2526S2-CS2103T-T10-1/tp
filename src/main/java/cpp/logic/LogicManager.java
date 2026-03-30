@@ -122,6 +122,11 @@ public class LogicManager implements Logic {
     }
 
     @Override
+    public List<Contact> getContactsInClassGroup(ClassGroup classGroup) {
+        return this.model.getContactsInClassGroup(classGroup);
+    }
+
+    @Override
     public void clearViewState() {
         this.model.clearViewState();
     }

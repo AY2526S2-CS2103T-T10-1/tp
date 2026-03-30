@@ -213,6 +213,11 @@ public interface Model {
     void viewContact(Contact contact);
 
     /**
+     * Set the current viewed class group in the model.
+     */
+    void viewClassGroup(ClassGroup classGroup);
+
+    /**
      * Set the current viewed assignment in the model.
      */
     void viewAssignment(Assignment assignment);
@@ -238,6 +243,11 @@ public interface Model {
      * the given assignment.
      */
     List<ContactAssignmentWithContact> getContactAssignmentsWithContactsForAssignment(Assignment assignment);
+
+    /**
+     * Returns the contacts assigned to the given class group.
+     */
+    List<Contact> getContactsInClassGroup(ClassGroup classGroup);
 
     /**
      * Observable property for the current view state.
