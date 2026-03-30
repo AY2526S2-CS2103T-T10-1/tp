@@ -16,6 +16,7 @@ import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.assignment.Assignment;
 import cpp.model.assignment.ContactAssignmentWithAssignment;
 import cpp.model.assignment.ContactAssignmentWithContact;
+import cpp.model.classgroup.ClassGroup;
 import cpp.model.contact.Contact;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -320,7 +321,8 @@ public class MainWindow extends UiPart<Stage> {
             if (ct != null) {
                 List<ContactAssignmentWithAssignment> cas = this.logic
                         .getContactAssignmentsWithAssignmentsForContact(ct);
-                this.contactViewPanel.setContact(ct, cas);
+                List<ClassGroup> classGroups = this.logic.getClassGroupsForContact(ct);
+                this.contactViewPanel.setContact(ct, cas, classGroups);
                 this.viewPanelPlaceholder.getChildren().setAll(this.contactViewPanel.getRoot());
                 if (!this.mainTabPane.getTabs().contains(this.viewTab)) {
                     this.mainTabPane.getTabs().add(this.viewTab);
@@ -359,7 +361,8 @@ public class MainWindow extends UiPart<Stage> {
                 Contact ct = (Contact) this.currentViewPayload;
                 List<ContactAssignmentWithAssignment> cas = this.logic
                         .getContactAssignmentsWithAssignmentsForContact(ct);
-                this.contactViewPanel.setContact(ct, cas);
+                List<ClassGroup> classGroups = this.logic.getClassGroupsForContact(ct);
+                this.contactViewPanel.setContact(ct, cas, classGroups);
             }
             break;
         default:

@@ -213,6 +213,12 @@ public class ModelStub implements Model {
         throw new AssertionError("This method should not be called.");
     }
 
+    /** Returns the class groups containing the given contact. */
+    @Override
+    public List<ClassGroup> getClassGroupsForContact(Contact contact) {
+        throw new AssertionError("This method should not be called.");
+    }
+
     /** Observable property for the current view state. */
     @Override
     public ReadOnlyObjectProperty<ViewState> getViewStateProperty() {

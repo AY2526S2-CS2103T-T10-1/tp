@@ -5,6 +5,7 @@ import java.util.List;
 import cpp.model.classgroup.ClassGroup;
 import cpp.model.classgroup.ClassGroupName;
 import cpp.model.contact.Contact;
+import javafx.collections.ObservableList;
 
 /**
  * Utility class for ClassGroup related operations.
@@ -34,6 +35,16 @@ public class ClassGroupUtil {
                 .map(id -> ClassGroupUtil.getSingleContact(contacts, id))
                 .toList();
         return allContacts;
+    }
+
+    /**
+     * Returns all class groups that the given contact belongs to.
+     */
+    public static List<ClassGroup> getClassGroupsForContact(Contact contact, ObservableList<ClassGroup> classGroups) {
+        String contactId = contact.getId();
+        return classGroups.stream()
+                .filter(classGroup -> classGroup.getContactIdSet().contains(contactId))
+                .toList();
     }
 
     private static Contact getSingleContact(List<Contact> contacts, String id) {

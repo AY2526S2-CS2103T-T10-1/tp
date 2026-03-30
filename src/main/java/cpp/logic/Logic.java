@@ -77,6 +77,11 @@ public interface Logic {
             Contact contact);
 
     /**
+     * Returns class groups containing the given contact.
+     */
+    List<ClassGroup> getClassGroupsForContact(Contact contact);
+
+    /**
      * Clears the currently viewed assignment, if any.
      */
     void clearViewState();

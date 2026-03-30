@@ -19,6 +19,7 @@ import cpp.model.assignment.exceptions.ContactAlreadyAllocatedAssignmentExceptio
 import cpp.model.assignment.exceptions.ContactAssignmentNotFoundException;
 import cpp.model.classgroup.ClassGroup;
 import cpp.model.contact.Contact;
+import cpp.model.util.ClassGroupUtil;
 import cpp.model.view.ViewState;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -329,6 +330,12 @@ public class ModelManager implements Model {
         Objects.requireNonNull(contact);
         return this.assignmentManager.getContactAssignmentsWithAssignmentsForContact(contact,
                 this.addressBook.getAssignmentList());
+    }
+
+    @Override
+    public List<ClassGroup> getClassGroupsForContact(Contact contact) {
+        Objects.requireNonNull(contact);
+        return ClassGroupUtil.getClassGroupsForContact(contact, this.addressBook.getClassGroupList());
     }
 
     @Override

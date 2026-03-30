@@ -229,6 +229,11 @@ public interface Model {
     List<ContactAssignmentWithAssignment> getContactAssignmentsWithAssignmentsForContact(Contact contact);
 
     /**
+     * Returns the class groups containing the given contact.
+     */
+    List<ClassGroup> getClassGroupsForContact(Contact contact);
+
+    /**
      * Returns the contact assignments paired with their corresponding contacts for
      * the given assignment.
      */
