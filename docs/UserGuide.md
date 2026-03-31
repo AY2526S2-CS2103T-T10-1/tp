@@ -386,12 +386,14 @@ TO BE UPDATED.
 
 Finds and displays contacts based on the specified criteria. You can search by contact name (default), phone number, or email address. Matching is case-insensitive and uses keyword-based searching.
 
-**Format:** 
+**Format:**
+
 * `findcontact KEYWORD [MORE_KEYWORDS]...` — search by name (default)
 * `findcontact p/KEYWORD [MORE_KEYWORDS]...` — search by phone number
 * `findcontact e/KEYWORD [MORE_KEYWORDS]...` — search by email address
 
 **Command word shortcuts:**
+
 * `findcontact` can be shortened to `findct`
 
 **Key points:**
@@ -440,6 +442,64 @@ Finds and displays contacts based on the specified criteria. You can search by c
 <box type="tip" seamless>
 
 **Tip:** After searching, you can use `list contacts` to clear the filter and see all contacts again. You can also click on the "Contacts" tab to achieve the same result, but note that tab-clicking won't clear existing filters.
+
+</box>
+
+### Finding assignments : `findass`
+
+Finds and displays assignments based on the specified criteria. You can search by assignment name (default) or assignment deadline. Matching is case-insensitive for names and accepts deadline dates in standard formats.
+
+**Format:**
+
+* `findass SEARCH_STRING` — search by assignment name (default)
+* `findass d/DEADLINE` — search by assignment deadline
+
+**Supported deadline formats:**
+
+* `dd-MM-yyyy` — date only (e.g., `31-12-2024`)
+* `dd-MM-yyyy HH:mm` — date with time (e.g., `31-12-2024 23:59`)
+
+**Key points:**
+
+* **Name search:** The command will find assignments that contain the specified text in their name (case-insensitive). For example, `findass CS2103` will find all assignments whose name contains "CS2103".
+
+* **Deadline search (d/):** When searching by deadline, enter a date (and optionally time) to find assignments. The deadline value must be in one of the supported formats. Example: `findass d/31-12-2024` will find assignments with the deadline of 31st December 2024.
+
+* **Tab switching:** The tab will automatically switch to the `Assignments` tab upon successful execution.
+
+* **Filter persistence:** The search results will remain filtered until you run another command that filters the list (e.g., another `findass` command) or use `list assignments` to show all assignments again.
+
+<box type="warning" seamless>
+
+**Warnings:**
+
+* You cannot combine text with the deadline prefix. For example, `findass CS2103 d/31-12-2024` is invalid. Use either a plain name search or the d/ prefix, but not both.
+
+* The deadline prefix (d/) must have a valid date value. Using a prefix with no date (e.g., `findass d/`) will result in an error. Invalid date formats will also be rejected.
+
+* You cannot use unrecognized prefixes like `p/`, `e/`, `c/`, or `n/`. The system will reject commands with invalid prefixes.
+
+* Name searches cannot contain "/" characters. For example, `findass CS2103/T10-1` is invalid. The system will reject names containing "/" to prevent confusion with prefixes.
+
+</box>
+
+**Examples:**
+
+* `findass Assignment 1`
+  Finds all assignments whose name contains "Assignment 1" (case-insensitive).
+
+* `findass CS2103`
+  Finds all assignments whose name contains "CS2103".
+
+* `findass d/31-12-2024`
+  Finds all assignments with a deadline on 31st December 2024.
+
+* `findass d/15-01-2024 23:59`
+  Finds all assignments with a deadline on 15th January 2024 at 23:59 (11:59 PM).
+
+<box type="tip" seamless>
+
+**Tip:** After searching, you can use `list assignments` to clear the filter and see all assignments again. You can also click on the "Assignments" tab to achieve the same result, but note that tab-clicking won't clear existing filters.
 
 </box>
 
@@ -790,6 +850,7 @@ If you encounter other issues, please raise a ticket with the project maintainer
 | **Delete**                | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                                                                        |
 | **Edit**                  | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                                                                                                               |
 | **Find Contact**          | `findcontact (findct) [KEYWORD...] [p/KEYWORD...] [e/KEYWORD...]`<br> e.g., `findcontact alice` or `findct p/91234567`                                                                                                                                     |
+| **Find Assignment**       | `findass SEARCH_STRING` or `findass d/DEADLINE`<br> e.g., `findass CS2103` or `findass d/31-12-2024`                                                                                                                                                       |
 | **List Contacts**         | `list contacts`                                                                                                                                                                                                                                            |
 | **List Classes**          | `list classes`                                                                                                                                                                                                                                             |
 | **List Assignments**      | `list assignments`                                                                                                                                                                                                                                         |
