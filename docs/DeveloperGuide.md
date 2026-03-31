@@ -200,7 +200,21 @@ Similar to the `ClassGroup` design, the `ContactAssignment` class also stores th
 
 A separate `UniqueContactAssignmentList` is used to manage the list of `ContactAssignment`s, and enforce uniqueness constraints for them.
 
-<puml src="diagrams/AssignmentsCombinedDiagram.puml" width="700" />
+<puml src="diagrams/AssignmentsCombinedDiagram.puml" width="600" />
+
+### Delete enhancements
+
+The `delete` command now supports deleting contacts, assignments, and class groups through a single command word. `DeleteCommandParser` acts as a dispatcher: it inspects which prefix is present in the user input (`ct/` for contacts, `ass/` for assignments, `c/` for class groups) and constructs the corresponding subcommand (`DeleteContactCommand`, `DeleteAssignmentCommand`, or `DeleteClassGroupCommand`).
+
+The sequence diagram below illustrates the interactions within the `Logic` component for the command `delete c/CS2103T10`:
+
+<puml src="diagrams/DeleteClassGroupSequenceDiagram.puml" width="900"/>
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+
+</box>
 
 ### \[Proposed\] Undo/redo feature
 
@@ -290,7 +304,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the contact being deleted).
+  * Pros: Will use less memory (e.g. for `delete`, just save the contact, class, or assignment being deleted).
 
   * Cons: We must ensure that the implementation of each individual command are correct.
 
