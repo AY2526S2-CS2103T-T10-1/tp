@@ -912,7 +912,7 @@ CPP data is saved automatically in `[JAR file location]/data/addressbook.json`. 
 
 **Warnings:**
 
-* If your changes to the data file makes its format invalid, CPP will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.
+* If your changes to the data file make its format invalid, CPP will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.
 
 * Certain edits can cause CPP to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
@@ -923,7 +923,7 @@ CPP data is saved automatically in `[JAR file location]/data/addressbook.json`. 
 
 ### Filtering contacts by submission and grading status for a particular assignment
 
-CPP does not currently support filtering contacts by submission and grading status for a particular assignment, but this is a planned feature for future releases, to allow users to easily track the progress of their students for each assignment. For example, users may want to filter the list of contacts to show only those who have submitted assignment but have not been graded yet.
+CPP does not currently support filtering contacts by submission and grading status for a particular assignment, but this is a planned feature for future releases, to allow users to easily track the progress of their students for each assignment. For example, users may want to filter the list of contacts to show only those who have submitted the assignment but have not been graded yet.
 
 We will consider implementing this by adding filter options to the existing `view` command, allowing users to specify the assignment name and the desired submission/grading status.
 
