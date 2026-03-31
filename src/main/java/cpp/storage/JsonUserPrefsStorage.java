@@ -16,8 +16,8 @@ import cpp.model.UserPrefs;
  */
 public class JsonUserPrefsStorage implements UserPrefsStorage {
 
-    private Path filePath;
     private static final Logger logger = LogsCenter.getLogger(JsonUserPrefsStorage.class);
+    private Path filePath;
 
     public JsonUserPrefsStorage(Path filePath) {
         this.filePath = filePath;
