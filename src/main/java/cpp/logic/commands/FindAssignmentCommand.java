@@ -19,11 +19,11 @@ public class FindAssignmentCommand extends Command {
     public static final String MESSAGE_USAGE = FindAssignmentCommand.COMMAND_WORD
             + ": Finds all assignments whose names or deadlines contain the specified keywords "
             + "(case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: SEARCH_STRING | d/ DEADLINE\n"
+            + "Parameters: SEARCH_STRING | d/DEADLINE\n"
             + "Default search: name\n"
             + "Deadline formats: dd-MM-yyyy or dd-MM-yyyy HH:mm\n"
             + "Example: " + FindAssignmentCommand.COMMAND_WORD + " Assignment 1\n"
-            + "Example: " + FindAssignmentCommand.COMMAND_WORD + " d/ 31-12-2024";
+            + "Example: " + FindAssignmentCommand.COMMAND_WORD + " d/31-12-2024";
 
     private final AssignmentSearchPredicate predicate;
 

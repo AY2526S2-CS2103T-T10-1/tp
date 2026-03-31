@@ -17,31 +17,42 @@ public class FindAssignmentCommandParser implements Parser<FindAssignmentCommand
      * FindAssignmentCommand
      * and returns a FindAssignmentCommand object for execution.
      * 
-     * Supports finding by name (default) or deadline (d/)
+     * Supports finding by name (default) or deadline (d/DEADLINE)
      * Examples: findass CS2103 project
-     * findass d/ 31-12-2024
+     * findass d/31-12-2024
      *
      * @throws ParseException if the user input does not conform the expected format
      */
     @Override
     public FindAssignmentCommand parse(String args) throws ParseException {
-        String trimmedArgs = args.trim().replaceAll("\\s+", " ");
-        if (trimmedArgs.isEmpty()) {
-            throw new ParseException(
-                    String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindAssignmentCommand.MESSAGE_USAGE));
-        }
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, CliSyntax.PREFIX_DATETIME);
 
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(trimmedArgs, CliSyntax.PREFIX_DATETIME);
+        argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_DATETIME);
 
         AssignmentSearchPredicate predicate;
+        String preamble = argMultimap.getPreamble().trim();
 
         if (argMultimap.getValue(CliSyntax.PREFIX_DATETIME).isPresent()) {
-            String keyword = argMultimap.getValue(CliSyntax.PREFIX_DATETIME).get();
-            predicate = new AssignmentDeadlineContainsKeywordPredicate(keyword);
+            // If using d/ prefix, no other text should be present
+            if (!preamble.isEmpty()) {
+                throw new ParseException(FindAssignmentCommand.MESSAGE_USAGE);
+            }
+            String deadlineValue = argMultimap.getValue(CliSyntax.PREFIX_DATETIME).get().trim();
+            if (deadlineValue.isEmpty()) {
+                throw new ParseException(FindAssignmentCommand.MESSAGE_USAGE);
+            }
+            predicate = new AssignmentDeadlineContainsKeywordPredicate(deadlineValue);
         } else {
-            // Default to name search
-            String searchTerms = trimmedArgs.replaceAll("\\s+", " ");
-            predicate = new AssignmentNameContainsKeywordsPredicate(searchTerms);
+            // Default to name search using preamble
+            if (preamble.isEmpty()) {
+                throw new ParseException(
+                        String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindAssignmentCommand.MESSAGE_USAGE));
+            }
+            // Reject unrecognized prefixes (e.g., p/, e/, c/, etc.)
+            if (preamble.contains("/")) {
+                throw new ParseException(FindAssignmentCommand.MESSAGE_USAGE);
+            }
+            predicate = new AssignmentNameContainsKeywordsPredicate(preamble);
         }
 
         return new FindAssignmentCommand(predicate);

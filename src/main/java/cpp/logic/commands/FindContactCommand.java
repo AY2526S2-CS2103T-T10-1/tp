@@ -22,12 +22,11 @@ public class FindContactCommand extends Command {
             + FindContactCommand.COMMAND_WORD_ABBREV + ")"
             + ": Finds all contacts whose name/phone/email contain any of "
             + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: (KEYWORD [MORE_KEYWORDS]... | p/ PHONE_KEYWORD [MORE_KEYWORDS]... | "
-            + "e/ EMAIL_KEYWORD [MORE_KEYWORDS]...)\n"
+            + "Parameters: KEYWORD [MORE_KEYWORDS]... | p/KEYWORD [MORE_KEYWORDS]... | e/KEYWORD [MORE_KEYWORDS]...\n"
             + "Default search: name\n"
             + "Example: " + FindContactCommand.COMMAND_WORD + " alice bob\n"
-            + "Example: " + FindContactCommand.COMMAND_WORD + " p/ 91234567 98765432\n"
-            + "Example: " + FindContactCommand.COMMAND_WORD + " e/ gmail yahoo";
+            + "Example: " + FindContactCommand.COMMAND_WORD + " p/91234567 98765432\n"
+            + "Example: " + FindContactCommand.COMMAND_WORD + " e/gmail yahoo";
 
     private final ContactSearchPredicate predicate;
 
