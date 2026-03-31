@@ -119,6 +119,14 @@ public interface Model {
     void deleteAssignment(Assignment target);
 
     /**
+     * Replaces the given assignment {@code target} with {@code editedAssignment}.
+     * {@code target} must exist in the address book.
+     * The assignment identity of {@code editedAssignment} must not be the same as
+     * another existing assignment in the address book.
+     */
+    void setAssignment(Assignment target, Assignment editedAssignment);
+
+    /**
      * Registers and persists the {@code ContactAssignment} allocation.
      */
     void addContactAssignment(ContactAssignment ca);

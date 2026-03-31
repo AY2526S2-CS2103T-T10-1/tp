@@ -84,6 +84,10 @@ public class ListCommandParserTest {
         CommandParserTestUtil.assertParseSuccess(this.parser, "Contacts", expectedListCommand);
         CommandParserTestUtil.assertParseSuccess(this.parser, "CoNtAcTs", expectedListCommand);
         CommandParserTestUtil.assertParseSuccess(this.parser, "cOnTaCtS", expectedListCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, "Ct", expectedListCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, "cT", expectedListCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, "CT", expectedListCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, "ct", expectedListCommand);
     }
 
     @Test
@@ -92,6 +96,9 @@ public class ListCommandParserTest {
         CommandParserTestUtil.assertParseSuccess(this.parser, "ASSIGNMENTS", expectedListCommand);
         CommandParserTestUtil.assertParseSuccess(this.parser, "Assignments", expectedListCommand);
         CommandParserTestUtil.assertParseSuccess(this.parser, "AsSiGnMeNtS", expectedListCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, "ass", expectedListCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, "ASS", expectedListCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, "aSs", expectedListCommand);
     }
 
     @Test
@@ -100,6 +107,8 @@ public class ListCommandParserTest {
         CommandParserTestUtil.assertParseSuccess(this.parser, "CLASSES", expectedListCommand);
         CommandParserTestUtil.assertParseSuccess(this.parser, "Classes", expectedListCommand);
         CommandParserTestUtil.assertParseSuccess(this.parser, "ClAsSeS", expectedListCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, "c", expectedListCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, "C", expectedListCommand);
     }
 
     @Test
@@ -125,7 +134,7 @@ public class ListCommandParserTest {
 
     @Test
     public void parse_singleCharacter_throwsParseException() {
-        CommandParserTestUtil.assertParseFailure(this.parser, "c",
+        CommandParserTestUtil.assertParseFailure(this.parser, "d",
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
         CommandParserTestUtil.assertParseFailure(this.parser, "a",
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
@@ -453,7 +462,7 @@ public class ListCommandParserTest {
     public void parse_partiallySpelledWords_throwsParseException() {
         CommandParserTestUtil.assertParseFailure(this.parser, "cont",
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
-        CommandParserTestUtil.assertParseFailure(this.parser, "ass",
+        CommandParserTestUtil.assertParseFailure(this.parser, "assign",
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
         CommandParserTestUtil.assertParseFailure(this.parser, "cla",
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
