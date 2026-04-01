@@ -18,6 +18,7 @@ import cpp.logic.commands.DeleteContactCommand;
 import cpp.logic.commands.EditContactCommand;
 import cpp.logic.commands.EditContactCommand.EditContactDescriptor;
 import cpp.logic.commands.ExitCommand;
+import cpp.logic.commands.FindClassCommand;
 import cpp.logic.commands.FindContactCommand;
 import cpp.logic.commands.HelpCommand;
 import cpp.logic.commands.ListCommand;
@@ -97,6 +98,20 @@ public class AddressBookParserTest {
         FindContactCommand command = (FindContactCommand) this.parser.parseCommand(
                 FindContactCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
         Assertions.assertEquals(new FindContactCommand(new ContactNameContainsKeywordsPredicate(keywords)), command);
+    }
+
+    @Test
+    public void parseCommand_findAbbreviation() throws Exception {
+        // Test FindContactCommand abbreviation
+        List<String> keywords = Arrays.asList("foo", "bar", "baz");
+        FindContactCommand command = (FindContactCommand) this.parser.parseCommand(
+                FindContactCommand.COMMAND_WORD_ABBREV + " " + keywords.stream().collect(Collectors.joining(" ")));
+        Assertions.assertEquals(new FindContactCommand(new ContactNameContainsKeywordsPredicate(keywords)), command);
+
+        // Test FindClassCommand abbreviation
+        FindClassCommand classCommand = (FindClassCommand) this.parser.parseCommand(
+                FindClassCommand.COMMAND_WORD_ABBREV + " CS2103T");
+        Assertions.assertTrue(classCommand instanceof FindClassCommand);
     }
 
     @Test

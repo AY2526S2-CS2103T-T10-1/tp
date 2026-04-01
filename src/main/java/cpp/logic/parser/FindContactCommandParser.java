@@ -44,34 +44,41 @@ public class FindContactCommandParser implements Parser<FindContactCommand> {
         // Check for conflicting prefixes
         int prefixCount = (hasPhonePrefix ? 1 : 0) + (hasEmailPrefix ? 1 : 0) + (hasNamePrefix ? 1 : 0);
         if (prefixCount > 1) {
-            throw new ParseException(FindContactCommand.MESSAGE_USAGE);
+            throw new ParseException(
+                    String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindContactCommand.MESSAGE_USAGE));
         }
 
         if (hasPhonePrefix) {
             if (!preamble.isEmpty()) {
-                throw new ParseException(FindContactCommand.MESSAGE_USAGE);
+                throw new ParseException(
+                        String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindContactCommand.MESSAGE_USAGE));
             }
             String phoneValue = argMultimap.getValue(CliSyntax.PREFIX_PHONE).get().trim();
             if (phoneValue.isEmpty()) {
-                throw new ParseException(FindContactCommand.MESSAGE_USAGE);
+                throw new ParseException(
+                        String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindContactCommand.MESSAGE_USAGE));
             }
             predicate = new ContactPhoneContainsKeywordsPredicate(Arrays.asList(phoneValue));
         } else if (hasEmailPrefix) {
             if (!preamble.isEmpty()) {
-                throw new ParseException(FindContactCommand.MESSAGE_USAGE);
+                throw new ParseException(
+                        String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindContactCommand.MESSAGE_USAGE));
             }
             String emailValue = argMultimap.getValue(CliSyntax.PREFIX_EMAIL).get().trim();
             if (emailValue.isEmpty()) {
-                throw new ParseException(FindContactCommand.MESSAGE_USAGE);
+                throw new ParseException(
+                        String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindContactCommand.MESSAGE_USAGE));
             }
             predicate = new ContactEmailContainsKeywordsPredicate(Arrays.asList(emailValue));
         } else if (hasNamePrefix) {
             if (!preamble.isEmpty()) {
-                throw new ParseException(FindContactCommand.MESSAGE_USAGE);
+                throw new ParseException(
+                        String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindContactCommand.MESSAGE_USAGE));
             }
             String nameValue = argMultimap.getValue(CliSyntax.PREFIX_NAME).get().trim();
             if (nameValue.isEmpty()) {
-                throw new ParseException(FindContactCommand.MESSAGE_USAGE);
+                throw new ParseException(
+                        String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindContactCommand.MESSAGE_USAGE));
             }
             String[] nameKeywords = nameValue.split("\\s+");
             predicate = new ContactNameContainsKeywordsPredicate(Arrays.asList(nameKeywords));
@@ -83,7 +90,8 @@ public class FindContactCommandParser implements Parser<FindContactCommand> {
             }
             // Reject unrecognized prefixes (e.g., c/, ass/, etc.)
             if (preamble.contains("/")) {
-                throw new ParseException(FindContactCommand.MESSAGE_USAGE);
+                throw new ParseException(
+                        String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindContactCommand.MESSAGE_USAGE));
             }
             String[] nameKeywords = preamble.split("\\s+");
             predicate = new ContactNameContainsKeywordsPredicate(Arrays.asList(nameKeywords));

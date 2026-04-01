@@ -35,11 +35,13 @@ public class FindAssignmentCommandParser implements Parser<FindAssignmentCommand
         if (argMultimap.getValue(CliSyntax.PREFIX_DATETIME).isPresent()) {
             // If using d/ prefix, no other text should be present
             if (!preamble.isEmpty()) {
-                throw new ParseException(FindAssignmentCommand.MESSAGE_USAGE);
+                throw new ParseException(
+                        String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindAssignmentCommand.MESSAGE_USAGE));
             }
             String deadlineValue = argMultimap.getValue(CliSyntax.PREFIX_DATETIME).get().trim();
             if (deadlineValue.isEmpty()) {
-                throw new ParseException(FindAssignmentCommand.MESSAGE_USAGE);
+                throw new ParseException(
+                        String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindAssignmentCommand.MESSAGE_USAGE));
             }
             predicate = new AssignmentDeadlineContainsKeywordPredicate(deadlineValue);
         } else {
@@ -50,7 +52,8 @@ public class FindAssignmentCommandParser implements Parser<FindAssignmentCommand
             }
             // Reject unrecognized prefixes (e.g., p/, e/, c/, etc.)
             if (preamble.contains("/")) {
-                throw new ParseException(FindAssignmentCommand.MESSAGE_USAGE);
+                throw new ParseException(
+                        String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindAssignmentCommand.MESSAGE_USAGE));
             }
             predicate = new AssignmentNameContainsKeywordsPredicate(preamble);
         }
