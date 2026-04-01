@@ -159,6 +159,13 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void setAssignment(Assignment target, Assignment editedAssignment) {
+        Objects.requireNonNull(target);
+        Objects.requireNonNull(editedAssignment);
+        this.addressBook.setAssignment(target, editedAssignment);
+    }
+
+    @Override
     public void addContactAssignment(ContactAssignment ca) {
         Objects.requireNonNull(ca);
         if (this.addressBook.hasContactAssignment(ca)) {

@@ -183,6 +183,20 @@ Classes used by multiple components are in the `cpp.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### Delete command
+
+The `delete` command supports deleting contacts, assignments, and class groups through a single command word. `DeleteCommandParser` acts as a dispatcher: it inspects which prefix is present in the user input (`ct/` for contacts, `ass/` for assignments, `c/` for class groups) and constructs the corresponding subcommand (`DeleteContactCommand`, `DeleteAssignmentCommand`, or `DeleteClassGroupCommand`).
+
+The sequence diagram below illustrates the interactions within the `Logic` component for the command `delete c/CS2103T10`:
+
+<puml src="diagrams/DeleteClassGroupSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete c/CS2103T10` Command" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+
+</box>
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
