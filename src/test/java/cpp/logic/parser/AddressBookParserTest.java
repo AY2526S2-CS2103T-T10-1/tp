@@ -66,6 +66,14 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_addAlias() throws Exception {
+        Contact contact = new ContactBuilder().build();
+        AddContactCommand command = (AddContactCommand) this.parser
+                .parseCommand(ContactUtil.getAddContactAliasCommand(contact));
+        Assertions.assertEquals(new AddContactCommand(contact), command);
+    }
+
+    @Test
     public void parseCommand_clear() throws Exception {
         Assertions.assertTrue(this.parser.parseCommand(ClearCommand.COMMAND_WORD) instanceof ClearCommand);
         Assertions.assertTrue(this.parser.parseCommand(ClearCommand.COMMAND_WORD + " 3") instanceof ClearCommand);

@@ -79,6 +79,7 @@ public class AddressBookParser {
         switch (commandWord) {
 
         case AddContactCommand.COMMAND_WORD:
+        case AddContactCommand.COMMAND_WORD_ALIAS:
             return new AddContactCommandParser().parse(arguments);
 
         case EditContactCommand.COMMAND_WORD:

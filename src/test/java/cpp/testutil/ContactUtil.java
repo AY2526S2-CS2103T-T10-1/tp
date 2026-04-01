@@ -21,6 +21,14 @@ public class ContactUtil {
     }
 
     /**
+     * Returns an add command string for adding the {@code contact} using the
+     * command alias.
+     */
+    public static String getAddContactAliasCommand(Contact contact) {
+        return AddContactCommand.COMMAND_WORD_ALIAS + " " + ContactUtil.getContactDetails(contact);
+    }
+
+    /**
      * Returns the part of command string for the given {@code contact}'s details.
      */
     public static String getContactDetails(Contact contact) {
