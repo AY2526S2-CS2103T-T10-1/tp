@@ -972,7 +972,7 @@ Finds and displays assignments based on the specified criteria. You can search b
 
 **Format:**
 
-1. `findass ass/SEARCH_STRING` — search by assignment name
+1. `findass ass/ASSIGNMENT_NAME_SEARCH_STRING` — search by assignment name
 1. `findass d/DEADLINE` — search by assignment deadline
 
 <br>
@@ -1257,8 +1257,8 @@ If you encounter other issues, please open a GitHub Issue in the [project reposi
 | **List Contacts**         | `list contacts`                                                                                                                                                                                                                                                    |
 | **List Classes**          | `list classes`                                                                                                                                                                                                                                                     |
 | **List Assignments**      | `list assignments`                                                                                                                                                                                                                                                 |
-| **Find Contact**          | `findcontact (findct) KEYWORD [MORE_KEYWORDS]...` or `findcontact p/PHONE_NUMBER` or `findcontact e/EMAIL`<br> e.g., `findcontact alice` or `findct p/91234567` or `findcontact e/alice@gmail.com`                                                                 |
-| **Find Assignment**       | `findass SEARCH_STRING` or `findass d/DEADLINE`<br> e.g., `findass CS2103` or `findass d/31-12-2024`                                                                                                                                                               |
+| **Find Contact**          | `findcontact n/NAME_KEYWORDS...` e.g., `findcontact n/alice bob`<br>`findcontact p/PHONE_NUMBER`e.g., `findcontact p/91234567`<br>`findcontact e/EMAIL` e.g., `findcontact e/alice@gmail.com`                                                                      |
+| **Find Assignment**       | `findass ass/ASSIGNMENT_NAME_SEARCH_STRING` e.g., `findass ass/Assignment 1`<br>`findass d/DEADLINE` e.g., `findass d/31-12-2024`  or `findass d/31-12-2024 23:59`                                                                                                 |
 | **Edit**                  | `edit INDEX [n/CONTACT_NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                                                                                                               |
 | **Delete**                | `delete ct/CONTACT_INDICES...` e.g., `delete ct/3`<br>`delete ass/ASSIGNMENT_NAME` e.g., `delete ass/Assignment 1`<br>`delete c/CLASS_NAME` e.g., `delete c/CS2103T T14`                                                                                           |
 | **Clear**                 | `clear`                                                                                                                                                                                                                                                            |

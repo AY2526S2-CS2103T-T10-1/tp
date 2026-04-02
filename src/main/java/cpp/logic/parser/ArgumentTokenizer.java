@@ -37,6 +37,21 @@ public class ArgumentTokenizer {
     }
 
     /**
+     * Tokenizes an arguments string and returns an {@code ArgumentMultimap} object
+     * that maps prefixes to their respective untrimmed argument values. Only the
+     * given prefixes will be recognized in the arguments string.
+     *
+     * @param argsString Arguments string of the form:
+     *                   {@code preamble <prefix>value <prefix>value ...}
+     * @param prefixes   Prefixes to tokenize the arguments string with
+     * @return ArgumentMultimap object that maps prefixes to their arguments
+     */
+    public static ArgumentMultimap untrimmedTokenize(String argsString, Prefix... prefixes) {
+        List<PrefixPosition> positions = ArgumentTokenizer.findAllPrefixPositions(argsString, prefixes);
+        return ArgumentTokenizer.extractArgumentsUntrimmed(argsString, positions);
+    }
+
+    /**
      * Finds all zero-based prefix positions in the given arguments string.
      *
      * @param argsString Arguments string of the form:
@@ -124,6 +139,45 @@ public class ArgumentTokenizer {
     }
 
     /**
+     * Extracts prefixes and their untrimmed argument values, and returns an
+     * {@code ArgumentMultimap} object that maps the
+     * extracted prefixes to their respective arguments. Prefixes are extracted
+     * based on their zero-based positions in
+     * {@code argsString}.
+     *
+     * @param argsString      Arguments string of the form:
+     *                        {@code preamble <prefix>value <prefix>value ...}
+     * @param prefixPositions Zero-based positions of all prefixes in
+     *                        {@code argsString}
+     * @return ArgumentMultimap object that maps prefixes to their arguments
+     */
+    private static ArgumentMultimap extractArgumentsUntrimmed(String argsString, List<PrefixPosition> prefixPositions) {
+
+        // Sort by start position
+        prefixPositions.sort((prefix1, prefix2) -> prefix1.getStartPosition() - prefix2.getStartPosition());
+
+        // Insert a PrefixPosition to represent the preamble
+        PrefixPosition preambleMarker = new PrefixPosition(new Prefix(""), 0);
+        prefixPositions.add(0, preambleMarker);
+
+        // Add a dummy PrefixPosition to represent the end of the string
+        PrefixPosition endPositionMarker = new PrefixPosition(new Prefix(""), argsString.length());
+        prefixPositions.add(endPositionMarker);
+
+        // Map prefixes to their argument values (if any)
+        ArgumentMultimap argMultimap = new ArgumentMultimap();
+        for (int i = 0; i < prefixPositions.size() - 1; i++) {
+            // Extract and store prefixes and their arguments
+            Prefix argPrefix = prefixPositions.get(i).getPrefix();
+            String argValue = ArgumentTokenizer.extractArgumentValueUntrimmed(argsString, prefixPositions.get(i),
+                    prefixPositions.get(i + 1));
+            argMultimap.put(argPrefix, argValue);
+        }
+
+        return argMultimap;
+    }
+
+    /**
      * Returns the trimmed value of the argument in the arguments string specified
      * by {@code currentPrefixPosition}.
      * The end position of the value is determined by {@code nextPrefixPosition}.
@@ -137,6 +191,22 @@ public class ArgumentTokenizer {
         String value = argsString.substring(valueStartPos, nextPrefixPosition.getStartPosition());
 
         return value.trim();
+    }
+
+    /**
+     * Returns the untrimmed value of the argument in the arguments string specified
+     * by {@code currentPrefixPosition}.
+     * The end position of the value is determined by {@code nextPrefixPosition}.
+     */
+    private static String extractArgumentValueUntrimmed(String argsString,
+            PrefixPosition currentPrefixPosition,
+            PrefixPosition nextPrefixPosition) {
+        Prefix prefix = currentPrefixPosition.getPrefix();
+
+        int valueStartPos = currentPrefixPosition.getStartPosition() + prefix.getPrefix().length();
+        String value = argsString.substring(valueStartPos, nextPrefixPosition.getStartPosition());
+
+        return value;
     }
 
     /**

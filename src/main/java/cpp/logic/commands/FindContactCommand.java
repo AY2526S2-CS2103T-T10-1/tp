@@ -30,11 +30,15 @@ public class FindContactCommand extends Command {
             + ": Finds all contacts whose name contains any of the specified keywords or whose phone/email "
             + "match exactly (case-insensitive) and displays them as a list with index numbers.\n"
             + "Alias: " + FindContactCommand.COMMAND_WORD_ALIAS + "\n"
-            + "Parameters: [KEYWORDS...] ["
-            + CliSyntax.PREFIX_PHONE + "PHONE_NUMBER] [" + CliSyntax.PREFIX_EMAIL + "EMAIL]\n"
-            + "Exactly one of [KEYWORDS...], " + CliSyntax.PREFIX_PHONE + "PHONE_NUMBER], or [" + CliSyntax.PREFIX_EMAIL
-            + "EMAIL] must be provided.\n"
-            + "Example: " + FindContactCommand.COMMAND_WORD + " alice bob\n"
+            + "Parameters: ["
+            + CliSyntax.PREFIX_NAME + "NAME_KEYWORDS...] ["
+            + CliSyntax.PREFIX_PHONE + "PHONE_NUMBER] ["
+            + CliSyntax.PREFIX_EMAIL + "EMAIL]\n"
+            + "Exactly one of ["
+            + CliSyntax.PREFIX_NAME + "NAME_KEYWORDS...], ["
+            + CliSyntax.PREFIX_PHONE + "PHONE_NUMBER], or ["
+            + CliSyntax.PREFIX_EMAIL + "EMAIL] must be provided.\n"
+            + "Example: " + FindContactCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_NAME + "alice bob\n"
             + "Example: " + FindContactCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_PHONE + "91234567\n"
             + "Example: " + FindContactCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_EMAIL + "alice@gmail.com";
 

@@ -21,13 +21,24 @@ public class FindClassCommandParser implements Parser<FindClassCommand> {
      */
     @Override
     public FindClassCommand parse(String args) throws ParseException {
-        String trimmedArgs = args.trim();
-        if (trimmedArgs.isEmpty()) {
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, CliSyntax.PREFIX_CLASS);
+
+        argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_CLASS);
+
+        if (!argMultimap.getPreamble().trim().isEmpty()) {
             throw new ParseException(
                     String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindClassCommand.MESSAGE_USAGE));
         }
 
-        String[] nameKeywords = trimmedArgs.split("\\s+");
+        if (!argMultimap.getValue(CliSyntax.PREFIX_CLASS).isPresent()) {
+            throw new ParseException(
+                    String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindClassCommand.MESSAGE_USAGE));
+        }
+
+        String classString = argMultimap.getValue(CliSyntax.PREFIX_CLASS).get().trim();
+        ParserUtil.parseClassGroupName(classString);
+
+        String[] nameKeywords = classString.split("\\s+");
 
         return new FindClassCommand(new ClassNameContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
     }

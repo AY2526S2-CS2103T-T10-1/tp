@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import cpp.commons.util.ToStringBuilder;
 import cpp.logic.Messages;
+import cpp.logic.parser.CliSyntax;
 import cpp.model.Model;
 import cpp.model.assignment.AssignmentSearchPredicate;
 
@@ -26,10 +27,14 @@ public class FindAssignmentCommand extends Command {
     public static final String MESSAGE_USAGE = FindAssignmentCommand.COMMAND_WORD
             + ": Finds all assignments whose names contain the specified search string (case-insensitive) or "
             + "whose deadlines match exactly and displays them as a list with index numbers.\n"
-            + "Parameters: [SEARCH_STRING]  [d/DEADLINE]\n"
-            + "Exactly one of [SEARCH_STRING] or [d/DEADLINE] must be provided.\n"
-            + "Example: " + FindAssignmentCommand.COMMAND_WORD + " Assignment 1\n"
-            + "Example: " + FindAssignmentCommand.COMMAND_WORD + " d/31-12-2024";
+            + "Parameters: ["
+            + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT_NAME_SEARCH_STRING] ["
+            + CliSyntax.PREFIX_DATETIME + "DEADLINE]\n"
+            + "Exactly one of ["
+            + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT_NAME_SEARCH_STRING] or ["
+            + CliSyntax.PREFIX_DATETIME + "DEADLINE] must be provided.\n"
+            + "Example: " + FindAssignmentCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_ASSIGNMENT + "Assignment 1\n"
+            + "Example: " + FindAssignmentCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_DATETIME + "31-12-2024";
 
     private final AssignmentSearchPredicate predicate;
 
