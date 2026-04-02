@@ -1,0 +1,34 @@
+' Combined UML for Assignment-related classes
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
+
+Class Assignment {
+  -id
+  -name
+  -deadline
+}
+
+Class AssignmentManager {
+}
+
+Class UniqueAssignmentList {
+}
+
+Class UniqueContactAssignmentList {
+}
+
+Class ContactAssignment {
+}
+
+AssignmentManager "1" o-- "*" ContactAssignment : > manages
+UniqueContactAssignmentList "1" o-- "*" ContactAssignment : > contains
+UniqueAssignmentList "1" o-- "*" Assignment : > contains
+ContactAssignment "*" --- "1" Assignment
+ContactAssignment "*" --- "1" Contact
+ContactAssignment "1" --> "1" SubmissionInfo
+ContactAssignment "1" --> "1" GradeInfo
+
+@enduml
