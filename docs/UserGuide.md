@@ -313,8 +313,8 @@ Adds a contact to the address book.
 * `addcontact n/Betsy Crowe e/betsycrowe@example.com a/Betsy Street, Block 123, #06-07 p/1234567` <br>
   Creates a contact with the name "Betsy Crowe", phone number "1234567", email "betsycrowe<span></span>@example.com", address "Betsy Street, Block 123, #06-07"
 
-* `addcontact n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 c/CS2103T-T10-1 ass/Assignment 1 t/friends t/owesMoney`<br>
-  Creates a contact with the name "John Doe", phone number "98765432", email "johnd<span></span>@example.com", address "311, Clementi Ave 2, #02-25", allocated to class group "CS2103T-T10-1" and assignment "Assignment 1", with tags "friends" and "owesMoney".
+* `addcontact n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 c/CS2103T T10 1 ass/Assignment 1 t/friends t/owesMoney`<br>
+  Creates a contact with the name "John Doe", phone number "98765432", email "johnd<span></span>@example.com", address "311, Clementi Ave 2, #02-25", allocated to class group "CS2103T T10 1" and assignment "Assignment 1", with tags "friends" and "owesMoney".
 
   [IMAGE TO BE ADDED]
 
@@ -513,11 +513,11 @@ Adds a class to the address book.
 
 **Examples:**
 
-* `addclass c/CS2103T-T10-1`<br>
-  Creates a class with the name "CS2103T-T10-1".
+* `addclass c/CS2103T T10 1`<br>
+  Creates a class with the name "CS2103T T10 1".
 
-* `list contacts` followed by `addclass c/CS2103T-T10-1 ct/1 2 3`<br>
-  Creates a class with the name "CS2103T-T10-1" allocated to the 1st, 2nd, and 3rd contacts.
+* `list contacts` followed by `addclass c/CS2103T T10 1 ct/1 2 3`<br>
+  Creates a class with the name "CS2103T T10 1" allocated to the 1st, 2nd, and 3rd contacts.
 
   [IMAGE TO BE ADDED]
 
@@ -547,11 +547,11 @@ Allocates a class to specific contacts.
 
 **Examples:**
 
-* `list contacts` followed by `allocclass c/CS2103T-T10-1 ct/1`<br>
-  Allocates the class "CS2103T-T10-1" to only the 1st contact in the list.
+* `list contacts` followed by `allocclass c/CS2103T T10 1 ct/1`<br>
+  Allocates the class "CS2103T T10 1" to only the 1st contact in the list.
 
-* `list contacts` followed by `allocclass c/CS2103T-T10-1 ct/1 2 3`<br>
-  Allocates the class "CS2103T-T10-1" to the 1st, 2nd, and 3rd contacts in the list.
+* `list contacts` followed by `allocclass c/CS2103T T10 1 ct/1 2 3`<br>
+  Allocates the class "CS2103T T10 1" to the 1st, 2nd, and 3rd contacts in the list.
 
   [IMAGE TO BE ADDED]
 
@@ -581,11 +581,11 @@ Unallocates a class from specific contacts.
 
 **Examples:**
 
-* `list contacts` followed by `unallocclass c/CS2103T-T10-1 ct/1`<br>
-  Unallocates the class "CS2103T-T10-1" from only the 1st contact in the list.
+* `list contacts` followed by `unallocclass c/CS2103T T10 1 ct/1`<br>
+  Unallocates the class "CS2103T T10 1" from only the 1st contact in the list.
 
-* `list contacts` followed by `unallocclass c/CS2103T-T10-1 ct/1 2 3`<br>
-  Unallocates the class "CS2103T-T10-1" from the 1st, 2nd, and 3rd contacts in the list.
+* `list contacts` followed by `unallocclass c/CS2103T T10 1 ct/1 2 3`<br>
+  Unallocates the class "CS2103T T10 1" from the 1st, 2nd, and 3rd contacts in the list.
 
   [IMAGE TO BE ADDED]
 
@@ -630,16 +630,16 @@ Adds an assignment to the address book.
 * `addass ass/Assignment 1 d/01-12-2023 23:59`<br>
   Creates an assignment with the name "Assignment 1" and deadline "1 Dec 2023 23:59".
 
-* `addass ass/Assignment 2 d/15-12-2023 23:59 c/CS2103T-T10-1`<br>
-  Creates an assignment with the name "Assignment 2" and deadline "15 Dec 2023 23:59", allocated to all contacts belonging to class "CS2103T-T10-1".
+* `addass ass/Assignment 2 d/15-12-2023 23:59 c/CS2103T T10 1`<br>
+  Creates an assignment with the name "Assignment 2" and deadline "15 Dec 2023 23:59", allocated to all contacts belonging to class "CS2103T T10 1".
 
 * `list contacts` followed by `addass ass/Assignment 3 d/30-12-2023 23:59 ct/1 2 3`<br>
   Creates an assignment with the name "Assignment 3" and deadline "30 Dec 2023 23:59", allocated to the 1st, 2nd, and 3rd contacts in the list.
 
-* `list contacts` followed by `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T-T10-1 ct/4 5`<br>
-  Creates an assignment with the name "Assignment 4" and deadline "15 Jan 2024 23:59", allocated to the 4th and 5th contacts in the list, as well as all contacts belonging to class "CS2103T-T10-1".
+* `list contacts` followed by `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T T10 1 ct/4 5`<br>
+  Creates an assignment with the name "Assignment 4" and deadline "15 Jan 2024 23:59", allocated to the 4th and 5th contacts in the list, as well as all contacts belonging to class "CS2103T T10 1".
 
-  The screenshot below illustrates the last example, where the class "CS2103T-T10-1" consists of contacts 2-5.\
+  The screenshot below illustrates the last example, where the class "CS2103T T10 1" consists of contacts 2-5.\
   ![Creating and allocating Assignment 4](images/addass-result.png)
 
 ### Allocating assignments to contacts: `allocass`
@@ -685,13 +685,13 @@ Allocates an assignment to specific contacts.
 * `allocass ass/Assignment 1 ct/1 2 3`<br>
   Allocates the "Assignment 1" to the 1st, 2nd, and 3rd contacts in the list.
 
-* `allocass ass/Assignment 2 c/CS2103T-T10-1`<br>
-  Allocates the "Assignment 2" to all contacts in the "CS2103T-T10-1" class.
+* `allocass ass/Assignment 2 c/CS2103T T10 1`<br>
+  Allocates the "Assignment 2" to all contacts in the "CS2103T T10 1" class.
 
-* `allocass ass/Assignment 3 c/CS2103T-T10-1 ct/1 2 3`<br>
-  Allocates the "Assignment 3" to the 1st, 2nd, and 3rd contacts in the list, as well as all contacts belonging to class "CS2103T-T10-1".
+* `allocass ass/Assignment 3 c/CS2103T T10 1 ct/1 2 3`<br>
+  Allocates the "Assignment 3" to the 1st, 2nd, and 3rd contacts in the list, as well as all contacts belonging to class "CS2103T T10 1".
 
-  The screenshot below illustrates the last example, where the class "CS2103T-T10-1" contains contacts 2-5, and contact 3 was already allocated the assignment.<br>
+  The screenshot below illustrates the last example, where the class "CS2103T T10 1" contains contacts 2-5, and contact 3 was already allocated the assignment.<br>
   ![Allocating Assignment 3](images/allocass-result.png)
 
 ### Unallocating assignments from contacts: `unallocass`
@@ -737,13 +737,13 @@ Unallocates an assignment from specific contacts.
 * `unallocass ass/Assignment 1 ct/1 2 3`<br>
   Unallocates the "Assignment 1" from the 1st, 2nd, and 3rd contacts in the list.
 
-* `unallocass ass/Assignment 2 c/CS2103T-T10-1`<br>
-  Unallocates the "Assignment 2" from all contacts in the "CS2103T-T10-1" class.
+* `unallocass ass/Assignment 2 c/CS2103T T10 1`<br>
+  Unallocates the "Assignment 2" from all contacts in the "CS2103T T10 1" class.
 
-* `unallocass ass/Assignment 3 c/CS2103T-T10-1 ct/1 2 3`<br>
-  Unallocates the "Assignment 3" from the 1st, 2nd, and 3rd contacts in the list, as well as all contacts belonging to class "CS2103T-T10-1".
+* `unallocass ass/Assignment 3 c/CS2103T T10 1 ct/1 2 3`<br>
+  Unallocates the "Assignment 3" from the 1st, 2nd, and 3rd contacts in the list, as well as all contacts belonging to class "CS2103T T10 1".
 
-  The screenshot below illustrates the last example, where the class "CS2103T-T10-1" contains contacts 2-5, and only contacts 1, 2, 4, and 5 had the assignment allocated.<br>
+  The screenshot below illustrates the last example, where the class "CS2103T T10 1" contains contacts 2-5, and only contacts 1, 2, 4, and 5 had the assignment allocated.<br>
   ![Unallocating Assignment 3](images/unallocass-result.png)
 
 ### Clearing all entries : `clear`
@@ -819,14 +819,14 @@ If you encounter other issues, please raise a ticket with the project maintainer
 
 | Action                    | Format, Examples                                                                                                                                                                                                                                           |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Add Contact**           | `addcontact n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [c/CLASS_NAME] [ass/ASSIGNMENT_NAME] [t/TAG]...` <br> e.g., `addcontact n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 c/CS2103T-T10-1 ass/Assignment 1 t/friend t/colleague` |
+| **Add Contact**           | `addcontact n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [c/CLASS_NAME] [ass/ASSIGNMENT_NAME] [t/TAG]...` <br> e.g., `addcontact n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 c/CS2103T T10 1 ass/Assignment 1 t/friend t/colleague` |
 | **Clear**                 | `clear`                                                                                                                                                                                                                                                    |
-| **Add Class**             | `addclass c/CLASS_NAME [ct/CONTACT_INDICES...]` <br> e.g., `addclass c/CS2103T-T10-1 ct/1 2 3`                                                                                                                                                             |
-| **Allocate Class**        | `allocclass c/CLASS_NAME ct/CONTACT_INDICES...` <br> e.g., `allocclass c/CS2103T-T10-1 ct/1 2 3`                                                                                                                                                           |
-| **Unallocate Class**      | `unallocclass c/CLASS_NAME ct/CONTACT_INDICES...` <br> e.g., `unallocclass c/CS2103T-T10-1 ct/1 2 3`                                                                                                                                                       |
-| **Add Assignment**        | `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T-T10-1 ct/4 5`                                                                                              |
-| **Allocate Assignment**   | `allocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `allocass ass/Assignment 3 c/CS2103T-T10-1 ct/1 2 3`                                                                                                                      |
-| **Unallocate Assignment** | `unallocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `unallocass ass/Assignment 3 c/CS2103T-T10-1 ct/1 2 3`                                                                                                                  |
+| **Add Class**             | `addclass c/CLASS_NAME [ct/CONTACT_INDICES...]` <br> e.g., `addclass c/CS2103T T10 1 ct/1 2 3`                                                                                                                                                             |
+| **Allocate Class**        | `allocclass c/CLASS_NAME ct/CONTACT_INDICES...` <br> e.g., `allocclass c/CS2103T T10 1 ct/1 2 3`                                                                                                                                                           |
+| **Unallocate Class**      | `unallocclass c/CLASS_NAME ct/CONTACT_INDICES...` <br> e.g., `unallocclass c/CS2103T T10 1 ct/1 2 3`                                                                                                                                                       |
+| **Add Assignment**        | `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T T10 1 ct/4 5`                                                                                              |
+| **Allocate Assignment**   | `allocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `allocass ass/Assignment 3 c/CS2103T T10 1 ct/1 2 3`                                                                                                                      |
+| **Unallocate Assignment** | `unallocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `unallocass ass/Assignment 3 c/CS2103T T10 1 ct/1 2 3`                                                                                                                  |
 | **Delete**                | `delete ct/CONTACT_INDICES...` e.g., `delete ct/3`<br>`delete ass/ASSIGNMENT_NAME` e.g., `delete ass/Assignment 1`<br>`delete c/CLASS_NAME` e.g., `delete c/CS2103T T14`                                                                                   |
 | **Edit**                  | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                                                                                                               |
 | **Find**                  | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                                                                                                                 |
