@@ -276,7 +276,7 @@ Adds a contact to the address book.
 
 * Creates a contact with the specified `CONTACT_NAME`, `PHONE_NUMBER`, `EMAIL` and `ADDRESS`.
 
-* The `CONTACT_NAME` provided must only contain alphanumeric characters and spaces only. It cannot be blank.
+* The `CONTACT_NAME` provided must only contain alphanumeric characters and spaces. It cannot be blank.
 
 * The `CONTACT_NAME` must be unique across all contacts (case-insensitive).
 
@@ -329,7 +329,7 @@ Adds a class to the address book.
 
 **Format:** `addclass c/CLASS_NAME [ct/CONTACT_INDICES...]`
 
-* Creates a class with the specified `CLASS_NAME`. The `CLASS_NAME` must be unique and should not match the name of any existing class (case-insensitive).
+* Creates a class with the specified `CLASS_NAME`. The `CLASS_NAME` must only contain alphanumeric characters and spaces. It cannot be blank, must be unique, and should not match the name of any existing class (case-insensitive).
 
 * `ct/CONTACT_INDICES...` is optional and can be used to allocate the class to specific contacts upon creation. If the `ct/` prefix is included, at least 1 contact index must be specified.
 
@@ -435,7 +435,9 @@ Adds an assignment to the address book.
 
 **Format:** `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]`
 
-* Creates an assignment with the specified `ASSIGNMENT_NAME` and `DEADLINE`. The `ASSIGNMENT_NAME` must be unique and should not match the name of any existing assignment (case-insensitive).
+* Creates an assignment with the specified `ASSIGNMENT_NAME` and `DEADLINE`.
+
+* The `ASSIGNMENT_NAME` must only contain alphanumeric characters and spaces. It cannot be blank, must be unique, and should not match the name of any existing assignment (case-insensitive).
 
 * The `DEADLINE` provided must be in the format `dd-MM-yyyy HH:mm`.
 
@@ -908,13 +910,13 @@ Finds and displays contacts based on the specified criteria. You can search by c
 
 **Format:**
 
-1. `findcontact KEYWORDS...` — search by name using keywords (default)
+1. `findcontact n/NAME_KEYWORDS...` — search by name using keywords (default)
 1. `findcontact p/PHONE_NUMBER` — search by phone number (exact match)
 1. `findcontact e/EMAIL` — search by email address (exact match)
 
 <br>
 
-* **Name search (default):** The command will find contacts whose names contain ANY of the specified keywords (case-insensitive). Keywords are separated by spaces. For example, `findcontact alice bob` will return all contacts whose name contains "alice" OR "bob".
+* **Name search (n/):** The command will find contacts whose names contain ANY of the specified keywords (case-insensitive). Keywords are separated by spaces. For example, `findcontact n/alice bob` will return all contacts whose name contains "alice" OR "bob".
 
 * **Phone search (p/):** Searches for contacts by exact phone number match. The entire phone number must match exactly. Example: `findcontact p/91234567` will find the contact with phone number 91234567.
 
@@ -930,13 +932,13 @@ Finds and displays contacts based on the specified criteria. You can search by c
 
 **Warnings:**
 
-* Do not mix prefixes with plain keywords. For example, `findcontact alice p/91234567` is invalid. Use either plain keywords or a prefix, but not both.
+* Each prefix (n/, p/, e/) must have a value. Using a prefix with no value (e.g., `findcontact p/`) will result in an error.
 
-* Each prefix (p/, e/) must have a value. Using a prefix with no value (e.g., `findcontact p/`) will result in an error.
+* Invalid contact names will not be allowed. For a detailed list of criteria for valid contact names, please refer to the feature documentation on [**Adding a contact: addcontact**](#adding-a-contact-addcontact).
 
 * For phone and email searches, the entire value must match exactly. Partial matches will not return results.
 
-* You cannot use unrecognized prefixes like `c/`, `ass/`, or `n/`. The system will reject commands with invalid prefixes.
+* You cannot use unrecognized prefixes like `c/`, `ass/`, or `d/`. The system will reject commands with invalid prefixes.
 
 </box>
 
@@ -952,10 +954,10 @@ Finds and displays contacts based on the specified criteria. You can search by c
 
 **Examples:**
 
-* `findcontact alice`
+* `findcontact n/alice`
   Finds all contacts whose name contains "alice" (case-insensitive).
 
-* `findct john doe`
+* `findct n/john doe`
   Using the abbreviated command, finds all contacts whose name contains "john" or "doe".
 
 * `findcontact p/91234567`
@@ -970,16 +972,18 @@ Finds and displays assignments based on the specified criteria. You can search b
 
 **Format:**
 
-1. `findass SEARCH_STRING` — search by assignment name
+1. `findass ass/SEARCH_STRING` — search by assignment name
 1. `findass d/DEADLINE` — search by assignment deadline
 
 <br>
 
-* **Name search (default):** The command will find assignments whose names contain the specified text. For example, `findass CS2103` will find all assignments whose name contains "CS2103". All consecutive spaces will be replaced by a single space. For example, `findass   Assignment <5 SPACES> 1` will find all assignments whose name contains "Assignment 1".
+* **Name search (ass/):** The command will find assignments whose names contain the specified text. For example, `findass ass/CS2103` will find all assignments whose name contains "CS2103". All consecutive spaces will be replaced by a single space. For example, `findass ass/Assignment <5 SPACES> 1` will find all assignments whose name contains "Assignment 1".
 
 * **Deadline search (d/):** Searches for assignments by exact deadline match. The deadline value must match exactly in one of the supported formats. Example: `findass d/31-12-2024` will only find assignments with a deadline on 31st December 2024 (date-only format).
 
 * `DEADLINE` provided can be of the format `dd-MM-yyyy` — date only (e.g., `31-12-2024`) or `dd-MM-yyyy HH:mm` — date with time (e.g., `31-12-2024 23:59`)
+
+* You cannot use multiple search types in one command. For example, `findass ass/Assignment 1 d/31-12-2024` is invalid. Choose one search method per command.
 
 * The tab will automatically switch to the `Assignments` tab upon successful execution.
 
@@ -989,15 +993,13 @@ Finds and displays assignments based on the specified criteria. You can search b
 
 **Warnings:**
 
-* You cannot combine text with the deadline prefix. For example, `findass CS2103 d/31-12-2024` is invalid. Use either a plain name search or the d/ prefix, but not both.
+* Invalid assignment names will not be allowed. For a detailed list of criteria for valid assignment names, please refer to the feature documentation on [**Adding assignments: addass**](#adding-assignments-addass).
 
 * The deadline prefix (d/) must have a valid date value in the correct format. Using a prefix with no date (e.g., `findass d/`) will result in an error. Invalid date formats will also be rejected.
 
 * For deadline searches, the time may be omitted. For example, if an assignment has a deadline of `31-12-2024 23:59`, searching with `findass d/31-12-2024` will also match it.
 
 * You cannot use unrecognized prefixes like `p/`, `e/`, `c/`, or `n/`. The system will reject commands with invalid prefixes.
-
-* Name searches cannot contain "/" characters. For example, `findass CS2103/T10-1` is invalid. The system will reject names containing "/" to prevent confusion with prefixes.
 
 </box>
 
@@ -1009,7 +1011,7 @@ Finds and displays assignments based on the specified criteria. You can search b
 
 **Examples:**
 
-* `findass Assignment`
+* `findass ass/Assignment`
   Finds all assignments whose name contains "assignment" (case-insensitive).
 
 * `findass d/31-12-2024`
