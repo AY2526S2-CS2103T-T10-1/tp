@@ -28,9 +28,11 @@ import cpp.model.util.ClassGroupUtil;
 public class AllocateClassGroupCommand extends Command {
 
     public static final String COMMAND_WORD = "allocclass";
+    public static final String COMMAND_WORD_ALIAS = "allocc";
 
     public static final String MESSAGE_USAGE = AllocateClassGroupCommand.COMMAND_WORD
             + ": Allocates contact(s) to a class group.\n"
+            + "Alias: " + AllocateClassGroupCommand.COMMAND_WORD_ALIAS + "\n"
             + "Parameters: "
             + CliSyntax.PREFIX_CLASS + "CLASS_NAME "
             + CliSyntax.PREFIX_CONTACT + "CONTACT_INDICES...\n"

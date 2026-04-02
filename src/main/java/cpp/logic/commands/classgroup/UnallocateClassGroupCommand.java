@@ -27,9 +27,11 @@ import cpp.model.util.ClassGroupUtil;
 public class UnallocateClassGroupCommand extends Command {
 
     public static final String COMMAND_WORD = "unallocclass";
+    public static final String COMMAND_WORD_ALIAS = "unallocc";
 
     public static final String MESSAGE_USAGE = UnallocateClassGroupCommand.COMMAND_WORD
             + ": Unallocates contact(s) from a class group.\n"
+            + "Alias: " + UnallocateClassGroupCommand.COMMAND_WORD_ALIAS + "\n"
             + "Parameters: "
             + CliSyntax.PREFIX_CLASS + "CLASS_NAME "
             + CliSyntax.PREFIX_CONTACT + "CONTACT_INDICES...\n"

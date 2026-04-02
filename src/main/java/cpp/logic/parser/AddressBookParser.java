@@ -137,12 +137,15 @@ public class AddressBookParser {
             return new UngradeAssignmentCommandParser().parse(arguments);
 
         case AddClassGroupCommand.COMMAND_WORD:
+        case AddClassGroupCommand.COMMAND_WORD_ALIAS:
             return new AddClassGroupCommandParser().parse(arguments);
 
         case AllocateClassGroupCommand.COMMAND_WORD:
+        case AllocateClassGroupCommand.COMMAND_WORD_ALIAS:
             return new AllocateClassGroupCommandParser().parse(arguments);
 
         case UnallocateClassGroupCommand.COMMAND_WORD:
+        case UnallocateClassGroupCommand.COMMAND_WORD_ALIAS:
             return new UnallocateClassGroupCommandParser().parse(arguments);
 
         default:

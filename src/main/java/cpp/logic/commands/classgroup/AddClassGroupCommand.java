@@ -21,8 +21,11 @@ import cpp.model.contact.Contact;
 public class AddClassGroupCommand extends Command {
 
     public static final String COMMAND_WORD = "addclass";
+    public static final String COMMAND_WORD_ALIAS = "addc";
 
-    public static final String MESSAGE_USAGE = AddClassGroupCommand.COMMAND_WORD + ": Defines a new class grouping.\n"
+    public static final String MESSAGE_USAGE = AddClassGroupCommand.COMMAND_WORD
+            + ": Adds a new class grouping.\n"
+            + "Alias: " + AddClassGroupCommand.COMMAND_WORD_ALIAS + "\n"
             + "Parameters: "
             + CliSyntax.PREFIX_CLASS + "CLASS_NAME "
             + "[" + CliSyntax.PREFIX_CONTACT + "CONTACT_INDICES...]\n"
