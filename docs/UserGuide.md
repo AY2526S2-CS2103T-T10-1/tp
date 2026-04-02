@@ -343,7 +343,7 @@ Adds a class to the address book.
 
 * If any of the parameters are invalid, the command will also fail and no class is created.
 
-* The contact indices specified refer to the currently displayed contact list after filtering (e.g., after a `find` command). It is recommended to run `list contacts` before this command to ensure the correct contact indices are used.
+* The contact indices specified refer to the currently displayed contact list after filtering (e.g., after a `findcontact` command). It is recommended to run `list contacts` before this command to ensure the correct contact indices are used.
 
 </box>
 
@@ -375,7 +375,7 @@ Allocates a class to specific contacts.
 
 * If any of the parameters are invalid, the command will also fail and no allocation is done.
 
-* The contact indices specified refer to the currently displayed contact list after filtering (e.g., after a `find` command). It is recommended to run `list contacts` before this command to ensure the correct contact indices are used.
+* The contact indices specified refer to the currently displayed contact list after filtering (e.g., after a `findcontact` command). It is recommended to run `list contacts` before this command to ensure the correct contact indices are used.
 
 * Reallocating a class to a contact that already belongs to that class will not cause any changes to the contact's class memberships. However, if no successful allocations are performed at the end of the command, the command will fail and the user will see an error message specifying the issue.
 
@@ -409,7 +409,7 @@ Unallocates a class from specific contacts.
 
 * If any of the parameters are invalid, the command will also fail and no allocation is done.
 
-* The contact indices specified refer to the currently displayed contact list after filtering (e.g., after a `find` command). It is recommended to run `list contacts` before this command to ensure the correct contact indices are used.
+* The contact indices specified refer to the currently displayed contact list after filtering (e.g., after a `findcontact` command). It is recommended to run `list contacts` before this command to ensure the correct contact indices are used.
 
 * Unallocating a class from a contact that does not belong to that class will not cause any changes to the contact's class memberships. However, if no successful unallocations are performed at the end of the command, the command will fail and the user will see an error message specifying the issue.
 
