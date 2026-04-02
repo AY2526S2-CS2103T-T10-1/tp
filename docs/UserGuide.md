@@ -910,7 +910,7 @@ Finds and displays contacts based on the specified criteria. You can search by c
 
 **Format:**
 
-1. `findcontact n/NAME_KEYWORDS...` — search by name using keywords (keyword match)
+1. `findcontact n/CONTACT_NAME_KEYWORDS...` — search by name using keywords (keyword match)
 1. `findcontact p/PHONE_NUMBER` — search by phone number (exact match)
 1. `findcontact e/EMAIL` — search by email address (exact match)
 
@@ -1297,7 +1297,7 @@ If you encounter other issues, please open a GitHub Issue in the [project reposi
 | **List Contacts**         | `list contacts`                                                                                                                                                                                                                                                    |
 | **List Classes**          | `list classes`                                                                                                                                                                                                                                                     |
 | **List Assignments**      | `list assignments`                                                                                                                                                                                                                                                 |
-| **Find Contact**          | `findcontact n/NAME_KEYWORDS...` e.g., `findcontact n/alice bob`<br>`findcontact p/PHONE_NUMBER` e.g., `findcontact p/91234567`<br>`findcontact e/EMAIL` e.g., `findcontact e/alice@gmail.com`                                                                     |
+| **Find Contact**          | `findcontact n/CONTACT_NAME_KEYWORDS...` e.g., `findcontact n/alice bob`<br>`findcontact p/PHONE_NUMBER` e.g., `findcontact p/91234567`<br>`findcontact e/EMAIL` e.g., `findcontact e/alice@gmail.com`                                                             |
 | **Find Class**            | `findclass c/CLASS_NAME_KEYWORDS...` e.g., `findclass c/CS2103T CS2103`                                                                                                                                                                                            |
 | **Find Assignment**       | `findass ass/ASSIGNMENT_NAME_SEARCH_STRING` e.g., `findass ass/Assignment 1`<br>`findass d/DEADLINE` e.g., `findass d/31-12-2024`  or `findass d/31-12-2024 23:59`                                                                                                 |
 | **Edit**                  | `edit INDEX [n/CONTACT_NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                                                                                                               |
