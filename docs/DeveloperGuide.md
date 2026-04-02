@@ -605,6 +605,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   * 1b1. System repeats Steps 2 and 3 for all assignments.
 
 <!-- Start of non MVP feature use cases -->
+
 **The use cases below are for features that are not part of the MVP, but are proposed to be implemented if time permits.**
 
 #### Use Case 14: Find a Contact
@@ -756,12 +757,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### Non-Functional Requirements
 
 1. Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-1. Should be able to hold up to 1000 contacts without a noticeable sluggishness in performance for typical usage.
+1. Should be able to hold up to 1000 contacts, 500 classes, and 500 assignments without a noticeable performance degradation or sluggishness during in performance for typical usage.
 1. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 1. Should respond to user commands within 2 seconds to ensure a smooth user experience.
-1. Should be capable of handling up to 50 classes and 500 assignments without noticeable reduction in performance for typical usage.
 1. Should launch and load existing data within 5 seconds.
-1. Should gracefully handle invalid inputs by providing clear, red-colored error messages instructing the user on the correct format.
+1. Should handle invalid inputs by highlighting the command input in red with an error message describing the issue and, where applicable, the correct format or usage.
 1. Should work well for standard screen resolutions of 1920x1080 and higher (at 100% and 125% screen scales), and must remain fully usable for resolutions of 1280x720 and higher (at 150% screen scale).
 1. Data should be stored locally in a human-editable text file (JSON) without the use of any Database Management System.
 1. Should automatically save data to the hard disk after any command that modifies the state to prevent data loss.
