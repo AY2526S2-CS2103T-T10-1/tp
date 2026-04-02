@@ -742,7 +742,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 1. Should respond to user commands within 2 seconds to ensure a smooth user experience.
 1. Should launch and load existing data within 5 seconds.
-1. Should handle invalid inputs by highlighting the command input in red with an error message describing the issue and, where applicable, the correct format or usage
+1. Should handle invalid inputs by highlighting the command input in red with an error message describing the issue and, where applicable, the correct format or usage.
 1. Should work well for standard screen resolutions of 1920x1080 and higher (at 100% and 125% screen scales), and must remain fully usable for resolutions of 1280x720 and higher (at 150% screen scale).
 1. Data should be stored locally in a human-editable text file (JSON) without the use of any Database Management System.
 1. Should automatically save data to the hard disk after any command that modifies the state to prevent data loss.
