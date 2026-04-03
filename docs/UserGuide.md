@@ -906,9 +906,115 @@ Shows a list of all assignments in the address book.
 
 TO BE UPDATED.
 
-### [TO BE UPDATED] Editing a contact : `edit`
+### Editing a contact : `editcontact`
 
-TO BE UPDATED.
+Edits the details of an existing contact in the address book.
+
+**Format:** `editcontact INDEX [n/CONTACT_NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`
+
+* Edits the contact at the specified `INDEX`. The index refers to the index number shown in the displayed contact list.
+
+* The index **must be a positive integer** 1, 2, 3, …​
+
+* At least one optional field must be provided.
+
+* Existing values will be overwritten by the input values.
+
+* When editing tags, all existing tags are removed and replaced with the new tags provided. To remove all tags, provide `t/` with no value.
+
+* The `CONTACT_NAME` provided must only contain alphanumeric characters and spaces. It cannot be blank.
+
+* The `PHONE_NUMBER` provided must only contain numeric digits (0-9) and be a minimum of 3 digits long.
+
+* The `EMAIL` provided must be in the format `local-part@domain`.
+
+* The `ADDRESS` provided can contain any characters and cannot be blank.
+
+<box type="warning" seamless>
+
+**Warning:** Editing a contact's name or phone number may result in a duplicate contact if the new combination already exists in the address book. The command will fail if a duplicate is detected.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** Use `list contacts` before editing to confirm the correct index. You can also use `findcontact` to narrow the list first.
+
+</box>
+
+**Examples:**
+
+* `editcontact 1 p/91234567 e/johndoe@example.com` edits the phone number and email of the 1st contact in the displayed list.
+
+* `editcontact 2 n/Betsy Crower t/` edits the name of the 2nd contact and clears all existing tags.
+
+### Editing a class : `editclass`
+
+Edits the name of an existing class in the address book.
+
+**Format:** `editclass INDEX c/CLASS_NAME`
+
+* Edits the class at the specified `INDEX`. The index refers to the index number shown in the displayed class list.
+
+* The index **must be a positive integer** 1, 2, 3, …​
+
+* The new `CLASS_NAME` must be unique and must not match the name of any existing class (case-insensitive).
+
+* All contacts previously allocated to this class remain allocated after the rename.
+
+<box type="warning" seamless>
+
+**Warning:** Editing a class name is permanent and will be reflected across all contact allocations. Ensure the new name is correct before confirming.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** Use `list classes` before editing to confirm the correct index.
+
+</box>
+
+**Examples:**
+
+* `editclass 1 c/CS2103T T10 2` renames the 1st class in the displayed list to `CS2103T T10 2`.
+
+* `editclass 2 c/Tutorial Group B` renames the 2nd class to `Tutorial Group B`.
+
+### Editing an assignment : `editass`
+
+Edits the details of an existing assignment in the address book.
+
+**Format:** `editass INDEX [ass/ASSIGNMENT_NAME] [d/DEADLINE]`
+
+* Edits the assignment at the specified `INDEX`. The index refers to the index number shown in the displayed assignment list.
+
+* The index **must be a positive integer** 1, 2, 3, …​
+
+* At least one optional field must be provided.
+
+* Existing values will be overwritten by the input values.
+
+* The `DEADLINE` provided must be in the format `dd-MM-yyyy HH:mm`.
+
+* The new `ASSIGNMENT_NAME` must be unique and must not match the name of any existing assignment (case-insensitive).
+
+<box type="warning" seamless>
+
+**Warning:** Editing an assignment's name or deadline does not affect existing submission or grading records, but may cause confusion if students have already submitted. Ensure the edit is intentional.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** Use `list assignments` before editing to confirm the correct index.
+
+</box>
+
+**Examples:**
+
+* `editass 1 ass/Assignment 1234 d/20-12-2026 23:59` edits the name and deadline of the 1st assignment.
+
+* `editass 2 d/01-01-2027 00:00` edits only the deadline of the 2nd assignment.
 
 ### Deleting contacts, assignments, or classes : `delete`
 
@@ -1144,7 +1250,9 @@ If you encounter other issues, please open a GitHub Issue in the [project reposi
 | **List Classes**          | `list classes`                                                                                                                                                                                                                                                     |
 | **List Assignments**      | `list assignments`                                                                                                                                                                                                                                                 |
 | **Find**                  | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                                                                                                                         |
-| **Edit**                  | `edit INDEX [n/CONTACT_NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                                                                                                               |
+| **Edit Contact**          | `editcontact INDEX [n/CONTACT_NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...` <br> e.g., `editcontact 2 n/James Lee e/jameslee@example.com`                                                                                                               |
+| **Edit Class**            | `editclass INDEX c/CLASS_NAME` <br> e.g., `editclass 1 c/CS2103T T10 2`                                                                                                                                                                                           |
+| **Edit Assignment**       | `editass INDEX [ass/ASSIGNMENT_NAME] [d/DEADLINE]` <br> e.g., `editass 1 ass/Assignment 2 d/20-12-2026 23:59`                                                                                                                                                      |
 | **Delete**                | `delete ct/CONTACT_INDICES...` e.g., `delete ct/3`<br>`delete ass/ASSIGNMENT_NAME` e.g., `delete ass/Assignment 1`<br>`delete c/CLASS_NAME` e.g., `delete c/CS2103T T14`                                                                                           |
 | **Clear**                 | `clear`                                                                                                                                                                                                                                                            |
 | **Exit**                  | `exit`                                                                                                                                                                                                                                                             |
