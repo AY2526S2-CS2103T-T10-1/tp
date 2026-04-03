@@ -27,11 +27,13 @@ import cpp.model.tag.Tag;
 public class EditContactCommand extends Command {
 
     public static final String COMMAND_WORD = "editcontact";
+    public static final String COMMAND_WORD_ALIAS = "editct";
 
     public static final String MESSAGE_USAGE = EditContactCommand.COMMAND_WORD
             + ": Edits the details of the contact identified "
             + "by the index number used in the displayed contact list. "
             + "Existing values will be overwritten by the input values.\n"
+            + "Alias: " + EditContactCommand.COMMAND_WORD_ALIAS + "\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + CliSyntax.PREFIX_NAME + "CONTACT_NAME] "
             + "[" + CliSyntax.PREFIX_PHONE + "PHONE_NUMBER] "

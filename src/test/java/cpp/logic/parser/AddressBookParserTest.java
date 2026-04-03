@@ -32,6 +32,7 @@ import cpp.logic.commands.assignment.UngradeAssignmentCommand;
 import cpp.logic.commands.assignment.UnsubmitAssignmentCommand;
 import cpp.logic.commands.classgroup.AddClassGroupCommand;
 import cpp.logic.commands.classgroup.AllocateClassGroupCommand;
+import cpp.logic.commands.classgroup.DeleteClassGroupCommand;
 import cpp.logic.commands.classgroup.EditClassGroupCommand;
 import cpp.logic.commands.classgroup.UnallocateClassGroupCommand;
 import cpp.logic.parser.exceptions.ParseException;
@@ -71,6 +72,43 @@ public class AddressBookParserTest {
         AddContactCommand command = (AddContactCommand) this.parser
                 .parseCommand(ContactUtil.getAddContactAliasCommand(contact));
         Assertions.assertEquals(new AddContactCommand(contact), command);
+    }
+
+    @Test
+    public void parseCommand_editContactAlias() throws Exception {
+        Contact contact = new ContactBuilder().build();
+        EditContactDescriptor descriptor = new EditContactDescriptorBuilder(contact).build();
+        EditContactCommand command = (EditContactCommand) this.parser.parseCommand(EditContactCommand.COMMAND_WORD_ALIAS
+                + " " + TypicalIndexes.INDEX_FIRST_CONTACT.getOneBased() + " "
+                + ContactUtil.getEditContactDescriptorDetails(descriptor));
+        Assertions.assertEquals(new EditContactCommand(TypicalIndexes.INDEX_FIRST_CONTACT, descriptor), command);
+    }
+
+    @Test
+    public void parseCommand_editClassAlias() throws Exception {
+        ClassGroup classGroup = new ClassGroupBuilder().build();
+        EditClassGroupCommand command = (EditClassGroupCommand) this.parser.parseCommand(
+                EditClassGroupCommand.COMMAND_WORD_ALIAS + " "
+                + TypicalIndexes.INDEX_FIRST_CONTACT.getOneBased() + " "
+                + CliSyntax.PREFIX_CLASS + classGroup.getName().fullName);
+        Assertions.assertEquals(
+                new EditClassGroupCommand(TypicalIndexes.INDEX_FIRST_CONTACT, classGroup.getName()), command);
+    }
+
+    @Test
+    public void parseCommand_deleteContactAlias() throws Exception {
+        DeleteContactCommand command = (DeleteContactCommand) this.parser.parseCommand(
+                DeleteContactCommand.COMMAND_WORD_ALIAS + " "
+                + TypicalIndexes.INDEX_FIRST_CONTACT.getOneBased());
+        Assertions.assertEquals(new DeleteContactCommand(List.of(TypicalIndexes.INDEX_FIRST_CONTACT)), command);
+    }
+
+    @Test
+    public void parseCommand_deleteClassAlias() throws Exception {
+        ClassGroup classGroup = new ClassGroupBuilder().build();
+        DeleteClassGroupCommand command = (DeleteClassGroupCommand) this.parser.parseCommand(
+                DeleteClassGroupCommand.COMMAND_WORD_ALIAS + " " + classGroup.getName().fullName);
+        Assertions.assertEquals(new DeleteClassGroupCommand(classGroup.getName()), command);
     }
 
     @Test

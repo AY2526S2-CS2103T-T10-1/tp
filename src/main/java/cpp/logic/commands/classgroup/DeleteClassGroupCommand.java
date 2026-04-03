@@ -17,6 +17,7 @@ import cpp.model.util.ClassGroupUtil;
  */
 public class DeleteClassGroupCommand extends DeleteCommand {
 
+    public static final String COMMAND_WORD_ALIAS = "deletec";
     public static final String MESSAGE_DELETE_CLASS_GROUP_SUCCESS = "Deleted Class Group: %1$s";
 
     private final ClassGroupName targetName;

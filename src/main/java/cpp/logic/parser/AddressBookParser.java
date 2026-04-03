@@ -10,6 +10,7 @@ import cpp.logic.commands.AddContactCommand;
 import cpp.logic.commands.ClearCommand;
 import cpp.logic.commands.Command;
 import cpp.logic.commands.DeleteCommand;
+import cpp.logic.commands.DeleteContactCommand;
 import cpp.logic.commands.EditContactCommand;
 import cpp.logic.commands.ExitCommand;
 import cpp.logic.commands.FindAssignmentCommand;
@@ -27,6 +28,7 @@ import cpp.logic.commands.assignment.UngradeAssignmentCommand;
 import cpp.logic.commands.assignment.UnsubmitAssignmentCommand;
 import cpp.logic.commands.classgroup.AddClassGroupCommand;
 import cpp.logic.commands.classgroup.AllocateClassGroupCommand;
+import cpp.logic.commands.classgroup.DeleteClassGroupCommand;
 import cpp.logic.commands.classgroup.EditClassGroupCommand;
 import cpp.logic.commands.classgroup.UnallocateClassGroupCommand;
 import cpp.logic.parser.assignment.AddAssignmentCommandParser;
@@ -83,9 +85,11 @@ public class AddressBookParser {
             return new AddContactCommandParser().parse(arguments);
 
         case EditContactCommand.COMMAND_WORD:
+        case EditContactCommand.COMMAND_WORD_ALIAS:
             return new EditContactCommandParser().parse(arguments);
 
         case EditClassGroupCommand.COMMAND_WORD:
+        case EditClassGroupCommand.COMMAND_WORD_ALIAS:
             return new EditClassGroupCommandParser().parse(arguments);
 
         case EditAssignmentCommand.COMMAND_WORD:
@@ -93,6 +97,12 @@ public class AddressBookParser {
 
         case DeleteCommand.COMMAND_WORD:
             return new DeleteCommandParser().parse(arguments);
+
+        case DeleteContactCommand.COMMAND_WORD_ALIAS:
+            return new DeleteCommandParser().parse(" " + CliSyntax.PREFIX_CONTACT.getPrefix() + arguments);
+
+        case DeleteClassGroupCommand.COMMAND_WORD_ALIAS:
+            return new DeleteCommandParser().parse(" " + CliSyntax.PREFIX_CLASS.getPrefix() + arguments);
 
         case ClearCommand.COMMAND_WORD:
             return new ClearCommand();
