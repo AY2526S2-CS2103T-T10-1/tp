@@ -17,7 +17,6 @@ import cpp.model.contact.Contact;
  */
 public class DeleteContactCommand extends DeleteCommand {
 
-    public static final String COMMAND_WORD_ALIAS = "deletect";
     public static final String MESSAGE_DELETE_CONTACT_SUCCESS = "Deleted Contact: %1$s";
 
     private final List<Index> targetIndices;
