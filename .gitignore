@@ -29,3 +29,5 @@ docs/_markbind/logs/
 
 # Buildship Prefs
 org.eclipse.buildship.core.prefs
+.gstack/
+.worktrees/
