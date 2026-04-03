@@ -13,7 +13,8 @@
 
 ## **Acknowledgements**
 
-_{ list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well }_
+1. SE-EDU's [AddressBook-Level3](https://github.com/se-edu/addressbook-level3) was used as a base for our project, and we have adapted and extended it to suit our needs.
+1. GitHub Copilot was heavily used to assist in writing test code across all new components.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -123,11 +124,11 @@ How the parsing works:
 
 #### Model — current design
 
-<puml src="diagrams/ModelClassDiagram.puml" width="900" />
+<puml src="diagrams/ModelClassDiagram.puml" width="1100" />
 
 **Model (current design):** shows `AddressBook` and its relations to the 3 main entities: `Contact`, `ClassGroup`, and `Assignment` through the `Unique{Entity}List` counterparts. The `Model` component also includes a `UserPref` class to store user preferences (e.g., file path of the address book data, GUI settings).
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 #### Contacts view
 
@@ -135,15 +136,15 @@ How the parsing works:
 
 **Contacts view:** highlights classes and contact-related entities.
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 #### Classes view
 
-<puml src="diagrams/ModelClassDiagramClassGroups.puml" width="450" />
+<puml src="diagrams/ModelClassDiagramClassGroups.puml" width="500" />
 
 **ClassGroup view:** highlights classes and class group-related entities.
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 #### Assignments view
 
@@ -151,7 +152,7 @@ How the parsing works:
 
 **Assignments view:** highlights classes and assignment-related entities and their relations to `Contact`.
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 The `Model` component,
 
@@ -165,7 +166,7 @@ The `Model` component,
 
 **API** : [`Storage.java`](https://github.com/AY2526S2-CS2103T-T10-1/tp/tree/master/src/main/java/cpp/storage/Storage.java)
 
-<puml src="diagrams/StorageClassDiagram.puml" width="900" />
+<puml src="diagrams/StorageClassDiagram.puml" width="1100" />
 
 The `Storage` component,
 
@@ -183,13 +184,31 @@ Classes used by multiple components are in the `cpp.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### Delete command
+### ClassGroup management
 
-The `delete` command supports deleting contacts, assignments, and class groups through a single command word. `DeleteCommandParser` acts as a dispatcher: it inspects which prefix is present in the user input (`ct/` for contacts, `ass/` for assignments, `c/` for class groups) and constructs the corresponding subcommand (`DeleteContactCommand`, `DeleteAssignmentCommand`, or `DeleteClassGroupCommand`).
+The `Model` component manages `ClassGroup` entities using `UniqueClassGroupList`. This enforces uniqueness constraints and provides methods to add, delete, and update the entities.
+
+Within the `ClassGroup` entities, the `Contact` entities that belong to the class are stored as a set of `String`s representing the `Contact`'s `id` field. This design allows us to easily make edits to contacts without having to worry about updating the `ClassGroup` entities, improving the efficiency of `edit` operations.
+
+### Assignment management
+
+The `Model` component manages `Assignment` entities using `UniqueAssignmentList`. This enforces uniqueness constraints and provides methods to add, delete, and update the entities.
+
+`Assignment` entities adopt a different approach, by introducing a separate association class `ContactAssignment` to represent the association between a `Contact` and an `Assignment`. This allows us to easily manage the submission status and grading details including the score of an assignment for each contact, without having to modify the `Contact` or `Assignment` entities themselves. These functionalities are abstracted out into the `AssignmentManager` class, which manages the `ContactAssignment` entities, and provides methods to add, delete, update, and retrieve the entities efficiently.
+
+Similar to the `ClassGroup` design, the `ContactAssignment` class also stores the `Contact`'s `id` field instead of a reference to the `Contact` object itself, for easier management of edits to `Contact`s. `ContactAssignment` objects also store the `Assignment`'s `id` field so that any edits to the `Assignment` can be easily managed as well.
+
+A separate `UniqueContactAssignmentList` is used to manage the list of `ContactAssignment`s, and enforce uniqueness constraints for them.
+
+<puml src="diagrams/AssignmentsCombinedDiagram.puml" width="600" />
+
+### Delete enhancements
+
+The `delete` command now supports deleting contacts, assignments, and class groups through a single command word. `DeleteCommandParser` acts as a dispatcher: it inspects which prefix is present in the user input (`ct/` for contacts, `ass/` for assignments, `c/` for class groups) and constructs the corresponding subcommand (`DeleteContactCommand`, `DeleteAssignmentCommand`, or `DeleteClassGroupCommand`).
 
 The sequence diagram below illustrates the interactions within the `Logic` component for the command `delete c/CS2103T10`:
 
-<puml src="diagrams/DeleteClassGroupSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete c/CS2103T10` Command" />
+<puml src="diagrams/DeleteClassGroupSequenceDiagram.puml" width="900"/>
 
 <box type="info" seamless>
 
@@ -280,18 +299,14 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 * **Alternative 1 (current choice):** Saves the entire address book.
   * Pros: Easy to implement.
+
   * Cons: May have performance issues in terms of memory usage.
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the contact being deleted).
+  * Pros: Will use less memory (e.g. for `delete`, just save the contact, class, or assignment being deleted).
+
   * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -779,44 +794,173 @@ testers are expected to do more _exploratory_ testing.
 
 </box>
 
-### Launch and shutdown
+### Adding classes
 
-1. Initial launch
+1. Adding a class group and checking that it is added successfully
 
-   1. Download the jar file and copy into an empty folder
+    * Prerequisites: The class group "Class 1" does not exist in the address book, and the user is currently on the Classes tab in the GUI.
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+    * Test case: `addclass c/Class 1`
 
-1. Saving window preferences
+        Expected outcome:
 
-   1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+        ```text
+        New class group added: Class 1
+        ```
 
-   1. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
+1. Adding a class group that already exists
 
-1. _{ more test cases ... }_
+    * Prerequisites: The class group "Class 1" already exists in the address book.
 
-### Deleting a contact
+    * Test case: `addclass c/Class 1`
 
-1. Deleting a contact while all contacts are being shown
+        Expected outcome:
 
-   1. Prerequisites: List all contacts using the `list` command. Multiple contacts in the list.
+        ```text
+        This class group already exists in the address book
+        ```
 
-   1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+### Adding assignments
 
-   1. Test case: `delete 0`<br>
-      Expected: No contact is deleted. Error details shown in the status message. Status bar remains the same.
+1. Adding an assignment and checking that it is added successfully
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+    * Prerequisites: The assignment "Assignment 1" does not exist in the address book, and the user is currently on the Assignments tab in the GUI.
 
-1. _{ more test cases ... }_
+    * Test case: `addass ass/Assignment 1 d/12-12-2026 23:59`
 
-### Saving data
+        Expected outcome:
 
-1. Dealing with missing/corrupted data files
+        ```text
+        New assignment added: Assignment 1; Deadline: 12-12-2026 23:59
+        ```
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+1. Adding an assignment that already exists
 
-1. _{ more test cases ... }_
+    * Prerequisites: The assignment "Assignment 1" already exists in the address book.
+
+    * Test case: `addass ass/Assignment 1 d/12-12-2026 23:59`
+
+        Expected outcome:
+
+        ```text
+        This assignment already exists in the address book
+        ```
+
+### Grading assignments
+
+1. Grading an assignment before it is submitted should fail
+
+   * Prerequisites: The assignment "Assignment 1" exists in the address book, and the contact with index 1 (Alex Yeoh) is allocated the assignment but has not submitted it.
+
+   * Test case: `grade ass/Assignment 1 ct/1 s/90.654`
+
+        Expected outcome:
+
+        ```text
+        Failed to grade any contacts for the assignment.
+        Contacts not graded (already graded): None
+        Contacts not graded (not submitted yet): Alex Yeoh
+        Contacts not graded (not allocated the assignment): None
+        Contacts not graded (grade time before submission time): None
+        ```
+
+1. Grading a submitted assignment
+
+    * Prerequisites: The assignment "Assignment 1" exists in the address book, and the contact with index 1 (Alex Yeoh) is allocated the assignment and has submitted it.
+
+    * Test case: `grade ass/Assignment 1 ct/1 s/90.654`
+
+        Expected outcome:
+
+        ```text
+        Graded assignment: Assignment 1; Deadline: 12-12-2026 23:59 on <Date and time at which command is executed> for 1 contact(s) with score 90.7.
+        Contacts graded: Alex Yeoh
+        Contacts not graded (already graded): None
+        Contacts not graded (not submitted yet): None
+        Contacts not graded (not allocated the assignment): None
+        Contacts not graded (grade time before submission time): None
+        ```
+
+## **Appendix: Effort**
+
+The difficulty level of CPP is estimated to be around a moderate level. Extensive features have been introduced to CPP in a short amount of time.
+
+Some achievements of our team include the introduction of 2 entirely new entities (Classes and Assignments) to the address book, which took a significant amount of effort to implement, given the complexity of integrating them into the existing system which resulted in many areas of development.
+
+We also introduced various features related to them, such as the ability to allocate and unallocate classes and assignments, update submission status and grading details for each contact's assignment submission, and view the details of each contact, class, and assignment.
+
+Other features that modified to fit our new design include the `edit` command, which now allows editing of class and assignment details, and the `delete` command, which now also deletes the associated classes and assignments for a contact.
+
+The GUI had to be modified to accommodate the new entities, to be able to display the details of each contact, class, and assignment, and to provide a way for users to navigate between the different tabs. The `list` and `find` (now `findcontact`, `findclass`, `findass`) commands also had a rework to be able to list and filter the different entities based on the current tab.
+
+To make the user experience smoother, we also implemented various features such as allocation options during contact, class, and assignment creation.
+
+Overall, the introduction of the new entities and their associated features required a significant amount of effort in terms of design, implementation, and testing, covering a wide range of areas in the codebase and requiring 21091 lines of code changes (accurate as of 29-03-2026).
+
+## **Appendix: Planned Enhancements**
+
+Team size: 5
+
+1. **Filtering contacts by their submission and grading status for a specific assignment**
+
+   * **Description**: Allow users to filter contacts based on their submission and grading status for a specific assignment. For example, users can filter to see only those contacts who have submitted an assignment but have not been graded yet.
+
+   * **Proposed implementation**: Introduce new filter options in the `view` command that allow users to specify the assignment and the desired submission/grading status. The system will then display the filtered list of contacts accordingly.
+
+   * **Example usage**:
+
+       * Command: `view ass/Assignment 1 sub/true grade/false`
+
+       * Expected outcome: List of contacts who have submitted the assignment but have not been graded yet.
+
+1. **Sorting contacts by their scores for a specific assignment**
+
+    * **Description**: Allow users to sort contacts based on their scores for a specific assignment.
+
+    * **Proposed implementation**: Introduce a new sort option in the `view` command that allows users to specify the assignment and the sorting criteria (e.g., ascending or descending order of scores). The system will then display the list of contacts accordingly.
+
+    * **Example usage**:
+
+        * Command: `view ass/Assignment 1 sort/score asc`
+
+        * Expected outcome: List of contacts sorted by their scores for the specified assignment in ascending order.
+
+1. **Archiving contacts, classes, and assignments**
+
+    * **Description**: Allows users to archive unused contacts, classes, and assignments, so that they can focus on the currently relevant ones.
+
+    * **Proposed implementation**: Introduce a new `archive` command that allows users to move contacts, classes, and assignments to an archive state, making them hidden from the default view.
+
+    * **Example usage**:
+
+        * Command: `archive ct/1` or `archive c/Class 1` or `archive ass/Assignment 1`
+
+        * Expected outcome: The specified contact, class, or assignment is moved to the archive state and hidden from the default view.
+
+1. **Taking attendance for classes**
+
+    * **Description**: Allows users to mark the attendance of contacts for specific classes.
+
+    * **Proposed implementation**: Introduce a new `attend` and `absent` command that allows users to mark the attendance of contacts for a specific class.
+
+    * **Example usage**:
+
+        * Command: `attend c/Class 1 ct/1 2 3 4 5`
+
+        * Expected outcome: The specified contacts with index 1, 2, 3, 4, 5 are marked as present for the given class.
+
+        * Command: `absent c/Class 1 ct/6 7 8 9 10`
+
+        * Expected outcome: The specified contacts with index 6, 7, 8, 9, 10 are marked as absent for the given class.
+
+1. **Exporting data as a CSV file**
+
+    * **Description**: Allows users to export the data in the address book to a file.
+
+    * **Proposed implementation**: Introduce a new `export` command that allows users to export the data in the address book to a CSV file.
+
+    * **Example usage**:
+
+        * Command: `export f/contacts.csv`
+
+        * Expected outcome: The data in the address book is exported to a file named `contacts.csv`, with the contacts, classes, and assignments organized in a structured format.

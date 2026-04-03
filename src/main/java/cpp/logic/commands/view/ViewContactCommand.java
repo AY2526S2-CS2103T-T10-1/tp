@@ -18,7 +18,7 @@ import cpp.model.contact.Contact;
  */
 public class ViewContactCommand extends ViewCommand {
 
-    public static final String MESSAGE_SUCCESS = "Viewed Contact:\n%1$s";
+    public static final String MESSAGE_SUCCESS = "Viewing details of Contact:\n%1$s";
 
     private final Index targetIndex;
 

@@ -49,7 +49,7 @@ public class AddAssignmentCommand extends Command {
             New assignment added: %1$s
             Allocated assignment to %2$s contact(s).
             Contacts allocated: %3$s""";
-    public static final String MESSAGE_DUPLICATE_ASSIGNMENT = "This assignment already exists in the assignment list";
+    public static final String MESSAGE_DUPLICATE_ASSIGNMENT = "This assignment already exists in the address book";
 
     private final Assignment toAdd;
     private final List<Index> contactIndices;

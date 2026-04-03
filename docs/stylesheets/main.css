@@ -167,16 +167,19 @@ h1 {
 }
 
 h2 {
-    color: #f58944ff;
+    /* color: #f58944ff; */
+    color: #4C1D95;
     margin: 30px 0 25px 0;
 }
 
 h3 {
-    color: #e08e37ff;
+    /* color: #e08e37ff; */
+    color: #7C3AED;
     margin: 30px 0 15px 0;
 }
 h4 {
-    color: #f5a25dff;
+    /* color: #f5a25dff; */
+    color: #A78BFA;
     margin: 20px 0 10px 0;
 }
 h5,

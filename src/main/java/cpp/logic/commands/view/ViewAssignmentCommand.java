@@ -18,7 +18,7 @@ import cpp.model.util.AssignmentUtil;
  */
 public class ViewAssignmentCommand extends ViewCommand {
 
-    public static final String MESSAGE_SUCCESS = "Displayed details of assignment: %1$s";
+    public static final String MESSAGE_SUCCESS = "Viewing details of Assignment: %1$s";
 
     private final AssignmentName targetName;
 

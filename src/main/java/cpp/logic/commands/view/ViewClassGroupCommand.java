@@ -19,7 +19,7 @@ import cpp.model.util.ClassGroupUtil;
  */
 public class ViewClassGroupCommand extends ViewCommand {
 
-    public static final String MESSAGE_SUCCESS = "Viewed Class Group: %1$s";
+    public static final String MESSAGE_SUCCESS = "Viewing details of Class Group: %1$s";
 
     private final ClassGroupName classGroupName;
 

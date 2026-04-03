@@ -19,7 +19,7 @@
 Follow the steps in the following guide precisely. Things will not work out if you deviate in some steps.
 </box>
 
-First, **fork** this repo, and **clone** the fork into your computer.
+First, **fork** this [repo](https://github.com/AY2526S2-CS2103T-T10-1/tp), and **clone** the fork into your computer.
 
 If you plan to use Intellij IDEA (highly recommended):
 
