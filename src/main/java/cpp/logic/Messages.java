@@ -30,6 +30,8 @@ public class Messages {
     public static final String MESSAGE_CLASS_GROUPS_LISTED_OVERVIEW = "%1$d class groups listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS = """
             Multiple values specified for the following single-valued field(s): """;
+    public static final String MESSAGE_DEADLINE_START_AFTER_END = """
+            The start deadline cannot be after the end deadline.""";
 
     /**
      * Returns an error message indicating the duplicate prefixes.

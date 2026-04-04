@@ -3,6 +3,37 @@
     background-color: #383838; /* Used in the default.html file */
 }
 
+.main-tab-pane {
+    -fx-background-color: transparent;
+    -fx-gap: 5;
+}
+
+.main-tab {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 5 10 5 10;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.main-tab:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.main-tab:selected {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #3e7b91 transparent;
+    -fx-border-width: 0 0 2 0 !important;
+}
+
+.main-tab:hover {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #3e7b91 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
 .label {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";
@@ -120,6 +151,18 @@
     -fx-text-fill: white;
 }
 
+.view_cell_big_label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+}
+
+.view_cell_small_label {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13px;
+    -fx-text-fill: white;
+}
+
 .cell_big_label {
     -fx-font-family: "Segoe UI Semibold";
     -fx-font-size: 16px;
@@ -140,6 +183,15 @@
      -fx-background-color: derive(#1d1d1d, 20%);
      -fx-border-color: derive(#1d1d1d, 10%);
      -fx-border-top-width: 1px;
+}
+
+.pane-with-white-border {
+     -fx-border-color: derive(#ffffff, 10%);
+     -fx-border-top-width: 1px;
+}
+
+.card-alt {
+    -fx-background-color: #515658;
 }
 
 .status-bar {

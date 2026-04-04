@@ -38,8 +38,10 @@ public class FindAssignmentCommandParserTest {
     @Test
     public void parse_emptyDeadlineValue_throwsParseException() {
         // empty deadline value should throw error
-        CommandParserTestUtil.assertParseFailure(this.parser, " d/",
-                ParserUtil.MESSAGE_INVALID_DATETIME);
+        CommandParserTestUtil.assertParseFailure(this.parser, " ds/",
+                ParserUtil.MESSAGE_INVALID_DATE_OR_DATETIME);
+        CommandParserTestUtil.assertParseFailure(this.parser, " de/",
+                ParserUtil.MESSAGE_INVALID_DATE_OR_DATETIME);
     }
 
     @Test

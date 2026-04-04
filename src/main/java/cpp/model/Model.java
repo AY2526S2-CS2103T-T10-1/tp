@@ -2,13 +2,18 @@ package cpp.model;
 
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.function.Predicate;
 
 import cpp.commons.core.GuiSettings;
 import cpp.model.assignment.Assignment;
 import cpp.model.assignment.ContactAssignment;
+import cpp.model.assignment.ContactAssignmentWithAssignment;
+import cpp.model.assignment.ContactAssignmentWithContact;
 import cpp.model.classgroup.ClassGroup;
 import cpp.model.contact.Contact;
+import cpp.model.view.ViewState;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
 
 /**
@@ -158,6 +163,11 @@ public interface Model {
     void ungrade(Assignment assignment, Contact contact);
 
     /**
+     * Returns all contact assignments linked to the given contact.
+     */
+    List<ContactAssignment> getContactAssignmentsForContact(Contact contact);
+
+    /**
      * Returns true if a class group with the same identity as {@code classGroup}
      * exists in the class group list.
      */
@@ -204,4 +214,51 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredClassGroupList(Predicate<ClassGroup> predicate);
+
+    /**
+     * Set the current viewed contact in the model.
+     */
+    void viewContact(Contact contact);
+
+    /**
+     * Set the current viewed class group in the model.
+     */
+    void viewClassGroup(ClassGroup classGroup);
+
+    /**
+     * Set the current viewed assignment in the model.
+     */
+    void viewAssignment(Assignment assignment);
+
+    /**
+     * Clears any currently viewed assignment.
+     */
+    void clearViewState();
+
+    /**
+     * Returns the contact assignments paired with their corresponding Assignments
+     * for the given Contact.
+     */
+    List<ContactAssignmentWithAssignment> getContactAssignmentsWithAssignmentsForContact(Contact contact);
+
+    /**
+     * Returns the class groups containing the given contact.
+     */
+    List<ClassGroup> getClassGroupsForContact(Contact contact);
+
+    /**
+     * Returns the contact assignments paired with their corresponding contacts for
+     * the given assignment.
+     */
+    List<ContactAssignmentWithContact> getContactAssignmentsWithContactsForAssignment(Assignment assignment);
+
+    /**
+     * Returns the contacts assigned to the given class group.
+     */
+    List<Contact> getContactsInClassGroup(ClassGroup classGroup);
+
+    /**
+     * Observable property for the current view state.
+     */
+    ReadOnlyObjectProperty<ViewState> getViewStateProperty();
 }

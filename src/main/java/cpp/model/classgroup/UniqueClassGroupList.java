@@ -30,6 +30,15 @@ public class UniqueClassGroupList implements Iterable<ClassGroup> {
             .unmodifiableObservableList(this.internalList);
 
     /**
+     * Returns true if the list contains a class group with the same id as
+     * {@code id}.
+     */
+    public boolean containsId(String id) {
+        Objects.requireNonNull(id);
+        return this.internalList.stream().anyMatch(cg -> cg.getId().equals(id));
+    }
+
+    /**
      * Returns true if the list contains an equivalent class group as the given
      * argument (by name).
      */

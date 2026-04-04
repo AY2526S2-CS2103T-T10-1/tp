@@ -2,6 +2,8 @@ package cpp.model.contact;
 
 import java.util.List;
 
+import cpp.commons.util.ToStringBuilder;
+
 /**
  * Tests that a {@code Contact}'s {@code Email} matches exactly with the given
  * keyword (case-insensitive).
@@ -35,7 +37,7 @@ public class ContactEmailMatchesKeywordsPredicate implements ContactSearchPredic
 
     @Override
     public String toString() {
-        return new cpp.commons.util.ToStringBuilder(this)
+        return new ToStringBuilder(this)
                 .add("keywords", this.keywords)
                 .toString();
     }

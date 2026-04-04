@@ -227,6 +227,15 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Returns true if a class group with the same id as {@code id} exists in the
+     * address book.
+     */
+    public boolean hasClassGroupId(String id) {
+        Objects.requireNonNull(id);
+        return this.classGroups.containsId(id);
+    }
+
+    /**
      * Returns true if a class group with the same identity as {@code classGroup}
      * exists in the address book.
      */

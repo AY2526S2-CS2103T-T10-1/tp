@@ -16,9 +16,8 @@ import cpp.model.assignment.AssignmentSearchPredicate;
  * <br>
  * - Name search: finds assignments whose names contain the specified search
  * string (case-insensitive, substring match).<br>
- * - Deadline search: finds assignments whose deadline matches the specified
- * value exactly (supports dd-MM-yyyy and dd-MM-yyyy HH:mm
- * formats).
+ * - Deadline search: finds assignments whose deadline falls within the
+ * specified date/time range.
  */
 public class FindAssignmentCommand extends Command {
 
@@ -26,15 +25,18 @@ public class FindAssignmentCommand extends Command {
 
     public static final String MESSAGE_USAGE = FindAssignmentCommand.COMMAND_WORD
             + ": Finds all assignments whose names contain the specified search string (case-insensitive) or "
-            + "whose deadlines match exactly and displays them as a list with index numbers.\n"
-            + "Parameters: ["
-            + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT_NAME_SEARCH_STRING] ["
-            + CliSyntax.PREFIX_DATETIME + "DEADLINE]\n"
-            + "Exactly one of ["
-            + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT_NAME_SEARCH_STRING] or ["
-            + CliSyntax.PREFIX_DATETIME + "DEADLINE] must be provided.\n"
+            + "whose deadlines fall within the specified range (inclusive) "
+            + "and displays them as a list with index numbers.\n"
+            + "Deadline can be of the format dd-MM-yyyy or dd-MM-yyyy HH:mm.\n"
+            + "Parameters (Option 1): " + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT_NAME_SEARCH_STRING\n"
+            + "Parameters (Option 2): [" + CliSyntax.PREFIX_DATETIME_START + "DEADLINE_START] ["
+            + CliSyntax.PREFIX_DATETIME_END + "DEADLINE_END]\n"
+            + "Only one option can be used at a time. For Option 2, at least one of ["
+            + CliSyntax.PREFIX_DATETIME_START + "DEADLINE_START] or ["
+            + CliSyntax.PREFIX_DATETIME_END + "DEADLINE_END] must be provided.\n"
             + "Example: " + FindAssignmentCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_ASSIGNMENT + "Assignment 1\n"
-            + "Example: " + FindAssignmentCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_DATETIME + "31-12-2024";
+            + "Example: " + FindAssignmentCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_DATETIME_START + "01-01-2025 "
+            + CliSyntax.PREFIX_DATETIME_END + "31-12-2025 23:59";
 
     private final AssignmentSearchPredicate predicate;
 

@@ -3,6 +3,7 @@ package cpp.logic;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.logging.Logger;
 
 import cpp.commons.core.GuiSettings;
@@ -15,9 +16,13 @@ import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.Model;
 import cpp.model.ReadOnlyAddressBook;
 import cpp.model.assignment.Assignment;
+import cpp.model.assignment.ContactAssignmentWithAssignment;
+import cpp.model.assignment.ContactAssignmentWithContact;
 import cpp.model.classgroup.ClassGroup;
 import cpp.model.contact.Contact;
+import cpp.model.view.ViewState;
 import cpp.storage.Storage;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
 
 /**
@@ -97,5 +102,37 @@ public class LogicManager implements Logic {
     @Override
     public void setGuiSettings(GuiSettings guiSettings) {
         this.model.setGuiSettings(guiSettings);
+    }
+
+    @Override
+    public List<ContactAssignmentWithContact> getContactAssignmentsWithContactsForAssignment(
+            Assignment assignment) {
+        return this.model.getContactAssignmentsWithContactsForAssignment(assignment);
+    }
+
+    @Override
+    public List<ContactAssignmentWithAssignment> getContactAssignmentsWithAssignmentsForContact(
+            Contact contact) {
+        return this.model.getContactAssignmentsWithAssignmentsForContact(contact);
+    }
+
+    @Override
+    public List<ClassGroup> getClassGroupsForContact(Contact contact) {
+        return this.model.getClassGroupsForContact(contact);
+    }
+
+    @Override
+    public List<Contact> getContactsInClassGroup(ClassGroup classGroup) {
+        return this.model.getContactsInClassGroup(classGroup);
+    }
+
+    @Override
+    public void clearViewState() {
+        this.model.clearViewState();
+    }
+
+    @Override
+    public ReadOnlyObjectProperty<ViewState> getViewStateProperty() {
+        return this.model.getViewStateProperty();
     }
 }

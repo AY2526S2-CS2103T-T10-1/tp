@@ -2,6 +2,7 @@ package cpp.testutil;
 
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.function.Predicate;
 
 import cpp.commons.core.GuiSettings;
@@ -10,8 +11,12 @@ import cpp.model.ReadOnlyAddressBook;
 import cpp.model.ReadOnlyUserPrefs;
 import cpp.model.assignment.Assignment;
 import cpp.model.assignment.ContactAssignment;
+import cpp.model.assignment.ContactAssignmentWithAssignment;
+import cpp.model.assignment.ContactAssignmentWithContact;
 import cpp.model.classgroup.ClassGroup;
 import cpp.model.contact.Contact;
+import cpp.model.view.ViewState;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
 
 /**
@@ -139,6 +144,11 @@ public class ModelStub implements Model {
     }
 
     @Override
+    public List<ContactAssignment> getContactAssignmentsForContact(Contact contact) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
     public boolean hasClassGroup(ClassGroup classGroup) {
         throw new AssertionError("This method should not be called.");
     }
@@ -175,6 +185,59 @@ public class ModelStub implements Model {
 
     @Override
     public void updateFilteredClassGroupList(Predicate<ClassGroup> predicate) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void viewAssignment(Assignment assignment) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void viewContact(Contact contact) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void viewClassGroup(ClassGroup classGroup) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    /** Clears any currently viewed assignment. */
+    @Override
+    public void clearViewState() {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    /** Returns the contact assignments for the given assignment. */
+    @Override
+    public List<ContactAssignmentWithContact> getContactAssignmentsWithContactsForAssignment(
+            Assignment assignment) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    /** Returns the contact assignments for the given contact. */
+    @Override
+    public List<ContactAssignmentWithAssignment> getContactAssignmentsWithAssignmentsForContact(
+            Contact contact) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    /** Returns the class groups containing the given contact. */
+    @Override
+    public List<ClassGroup> getClassGroupsForContact(Contact contact) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    /** Returns a list of contacts in the given class group. */
+    @Override
+    public List<Contact> getContactsInClassGroup(ClassGroup classGroup) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    /** Observable property for the current view state. */
+    @Override
+    public ReadOnlyObjectProperty<ViewState> getViewStateProperty() {
         throw new AssertionError("This method should not be called.");
     }
 }
