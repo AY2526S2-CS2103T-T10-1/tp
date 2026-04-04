@@ -5,12 +5,15 @@ import java.util.Comparator;
 import cpp.model.contact.Contact;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
 /**
  * An UI component that displays information of a {@code Contact}.
+ *
+ * @author ZSYUYIIE
  */
 public class ContactCard extends UiPart<Region> {
 
@@ -42,6 +45,8 @@ public class ContactCard extends UiPart<Region> {
     private Label email;
     @FXML
     private FlowPane tags;
+    @FXML
+    private Tooltip nameTooltip;
 
     /**
      * Creates a {@code ContactCode} with the given {@code Contact} and index to
@@ -55,6 +60,7 @@ public class ContactCard extends UiPart<Region> {
         this.phone.setText(contact.getPhone().value);
         this.address.setText(contact.getAddress().value);
         this.email.setText(contact.getEmail().value);
+        this.nameTooltip.setText(contact.getName().fullName);
         contact.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> this.tags.getChildren().add(new Label(tag.tagName)));
