@@ -86,10 +86,9 @@ public class UniqueContactView extends UiPart<Region> {
         if (!safeClassGroups.isEmpty() && this.classGroupListPanel != null) {
             this.contactClassGroupsPlaceholder.getChildren().clear();
         }
-        if (!safeClassGroups.isEmpty()) {
-            this.classGroupListPanel = new ClassGroupListPanel(observableClassGroups);
-            this.contactClassGroupsPlaceholder.getChildren().add(this.classGroupListPanel.getRoot());
-        }
+
+        this.classGroupListPanel = new ClassGroupListPanel(observableClassGroups);
+        this.contactClassGroupsPlaceholder.getChildren().add(this.classGroupListPanel.getRoot());
 
         if (safeCas.isEmpty()) {
             this.contactAssignmentsPlaceholder.getChildren().clear();
@@ -97,12 +96,12 @@ public class UniqueContactView extends UiPart<Region> {
 
         ObservableList<ContactAssignmentWithAssignment> observableCas = FXCollections
                 .observableArrayList(safeCas);
+
         if (!safeCas.isEmpty() && this.assignmentListPanel != null) {
             this.contactAssignmentsPlaceholder.getChildren().clear();
         }
-        if (!safeCas.isEmpty()) {
-            this.assignmentListPanel = new ContactAssignmentAssignmentListPanel(observableCas);
-            this.contactAssignmentsPlaceholder.getChildren().add(this.assignmentListPanel.getRoot());
-        }
+
+        this.assignmentListPanel = new ContactAssignmentAssignmentListPanel(observableCas);
+        this.contactAssignmentsPlaceholder.getChildren().add(this.assignmentListPanel.getRoot());
     }
 }
