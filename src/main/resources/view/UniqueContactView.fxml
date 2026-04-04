@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:id="root" styleClass="pane-with-white-border">
+    <VBox alignment="CENTER_LEFT" minHeight="105" spacing="4" styleClass="card-alt">
+        <padding>
+            <Insets top="5" right="5" bottom="5" left="15" />
+        </padding>
+        <Label fx:id="contactName" styleClass="view_cell_big_label" />
+        <Label fx:id="contactPhone" styleClass="view_cell_small_label" />
+        <Label fx:id="contactEmail" styleClass="view_cell_small_label" />
+        <Label fx:id="contactAddress" styleClass="view_cell_small_label" />
+    </VBox>
+    <StackPane fx:id="contactClassGroupsPlaceholder" VBox.vgrow="ALWAYS" />
+    <StackPane fx:id="contactAssignmentsPlaceholder" VBox.vgrow="ALWAYS" />
+</VBox>

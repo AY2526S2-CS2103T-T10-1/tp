@@ -12,7 +12,7 @@ public class HelpCommandTest {
     @Test
     public void execute_help_success() {
         CommandResult expectedCommandResult = new CommandResult(HelpCommand.SHOWING_HELP_MESSAGE,
-                CommandResult.ListView.NONE, true, false);
+                CommandResult.ListView.NONE, CommandResult.ViewType.NONE, true, false);
         CommandTestUtil.assertCommandSuccess(new HelpCommand(), this.model, expectedCommandResult, this.expectedModel);
     }
 }

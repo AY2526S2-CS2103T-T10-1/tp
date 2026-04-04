@@ -4,5 +4,5 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" styleClass="pane-with-white-border">
-  <ListView fx:id="assignmentListView" VBox.vgrow="ALWAYS" />
+  <ListView fx:id="contactAssignmentListView" VBox.vgrow="ALWAYS" />
 </VBox>

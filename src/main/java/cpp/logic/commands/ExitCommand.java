@@ -13,7 +13,8 @@ public class ExitCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) {
-        return new CommandResult(ExitCommand.MESSAGE_EXIT_ACKNOWLEDGEMENT, CommandResult.ListView.NONE, false, true);
+        return new CommandResult(ExitCommand.MESSAGE_EXIT_ACKNOWLEDGEMENT, CommandResult.ListView.NONE,
+                CommandResult.ViewType.NONE, false, true);
     }
 
 }

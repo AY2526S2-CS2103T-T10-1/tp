@@ -3,6 +3,7 @@ package cpp.ui;
 import cpp.model.assignment.Assignment;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
@@ -22,6 +23,9 @@ public class AssignmentListPanel extends UiPart<Region> {
     public AssignmentListPanel(ObservableList<Assignment> assignmentList) {
         super(AssignmentListPanel.FXML);
         this.assignmentListView.setItems(assignmentList);
+        Label assignmentPlaceholder = new Label("No assignments found.");
+        assignmentPlaceholder.setStyle("-fx-text-fill: #b4b4b4;");
+        this.assignmentListView.setPlaceholder(assignmentPlaceholder);
         this.assignmentListView.setCellFactory(listView -> new AssignmentListViewCell());
     }
 

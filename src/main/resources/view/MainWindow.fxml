@@ -14,7 +14,7 @@
 <?import javafx.scene.control.TabPane?>
 
 <fx:root type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-         title="ClassroomPlusPlus" minWidth="450" minHeight="600" onCloseRequest="#handleExit">
+         title="ClassroomPlusPlus" minWidth="450" minHeight="700" onCloseRequest="#handleExit">
   <icons>
     <Image url="@/images/cpp-icon.png" />
   </icons>
@@ -41,29 +41,31 @@
           </padding>
         </StackPane>
 
-        <StackPane VBox.vgrow="NEVER" fx:id="resultDisplayPlaceholder" styleClass="pane-with-border"
-                   minHeight="100">
-          <padding>
-            <Insets top="5" right="10" bottom="5" left="10" />
-          </padding>
-        </StackPane>
+          <StackPane id="resultDisplayPlaceholder" VBox.vgrow="NEVER" fx:id="resultDisplayPlaceholder" styleClass="pane-with-border"
+                minHeight="200" maxHeight="200" style="-fx-padding: 0 10 0 10;">
+          </StackPane>
 
         <StackPane fx:id="listPanelPlaceholder" VBox.vgrow="ALWAYS">
-            <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" styleClass="main-tab-pane">
             <tabs>
-                <Tab fx:id="contactsTab" text="Contacts">
+                <Tab fx:id="contactsTab" text="Contacts" styleClass="main-tab">
                 <content>
                     <StackPane fx:id="contactListPanelPlaceholder" />
                 </content>
                 </Tab>
-                <Tab fx:id="classesTab" text="Classes">
+                <Tab fx:id="classesTab" text="Classes" styleClass="main-tab">
                 <content>
                     <StackPane fx:id="classListPanelPlaceholder" />
                 </content>
                 </Tab>
-                <Tab fx:id="assignmentsTab" text="Assignments">
+                <Tab fx:id="assignmentsTab" text="Assignments" styleClass="main-tab">
                 <content>
                     <StackPane fx:id="assignmentListPanelPlaceholder" />
+                </content>
+                </Tab>
+                <Tab fx:id="viewTab" text="View" styleClass="main-tab">
+                <content>
+                  <StackPane fx:id="viewPanelPlaceholder" />
                 </content>
                 </Tab>
             </tabs>

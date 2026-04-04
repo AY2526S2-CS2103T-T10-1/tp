@@ -13,10 +13,16 @@ import cpp.commons.util.CollectionUtil;
 import cpp.model.assignment.Assignment;
 import cpp.model.assignment.AssignmentManager;
 import cpp.model.assignment.ContactAssignment;
+import cpp.model.assignment.ContactAssignmentWithAssignment;
+import cpp.model.assignment.ContactAssignmentWithContact;
 import cpp.model.assignment.exceptions.ContactAlreadyAllocatedAssignmentException;
 import cpp.model.assignment.exceptions.ContactAssignmentNotFoundException;
 import cpp.model.classgroup.ClassGroup;
 import cpp.model.contact.Contact;
+import cpp.model.util.ClassGroupUtil;
+import cpp.model.view.ViewState;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 
@@ -32,6 +38,7 @@ public class ModelManager implements Model {
     private final FilteredList<Contact> filteredContacts;
     private final FilteredList<Assignment> filteredAssignments;
     private final FilteredList<ClassGroup> filteredClassGroups;
+    private final ReadOnlyObjectWrapper<ViewState> viewState = new ReadOnlyObjectWrapper<>(ViewState.none());
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -99,6 +106,7 @@ public class ModelManager implements Model {
 
     @Override
     public void setAddressBook(ReadOnlyAddressBook addressBook) {
+        this.clearViewState();
         this.addressBook.resetData(addressBook);
     }
 
@@ -121,6 +129,9 @@ public class ModelManager implements Model {
         List<ContactAssignment> caList = this.assignmentManager.getContactAssignmentsForContact(target);
         this.assignmentManager.deregisterContactAssignmentsForContact(target);
         this.addressBook.removeContact(target, caList);
+        if (this.viewState.get().isViewingContact(target)) {
+            this.clearViewState();
+        }
     }
 
     @Override
@@ -134,6 +145,9 @@ public class ModelManager implements Model {
     public void setContact(Contact target, Contact editedContact) {
         CollectionUtil.requireAllNonNull(target, editedContact);
         this.addressBook.setContact(target, editedContact);
+        if (this.viewState.get().isViewingContact(target)) {
+            this.viewContact(editedContact);
+        }
     }
 
     // =========== Assignment-level operations
@@ -156,6 +170,9 @@ public class ModelManager implements Model {
         List<ContactAssignment> caList = this.assignmentManager.getContactAssignmentsForAssignment(target);
         this.assignmentManager.deregisterContactAssignmentsForAssignment(target);
         this.addressBook.removeAssignment(target, caList);
+        if (this.viewState.get().isViewingAssignment(target)) {
+            this.clearViewState();
+        }
     }
 
     @Override
@@ -163,6 +180,9 @@ public class ModelManager implements Model {
         Objects.requireNonNull(target);
         Objects.requireNonNull(editedAssignment);
         this.addressBook.setAssignment(target, editedAssignment);
+        if (this.viewState.get().isViewingAssignment(target)) {
+            this.viewAssignment(editedAssignment);
+        }
     }
 
     @Override
@@ -221,6 +241,9 @@ public class ModelManager implements Model {
         this.assignmentManager.ungrade(assignment.getId(), contact.getId());
     }
 
+    // =========== ClassGroup-level operations
+    // ===============================================================================
+
     @Override
     public boolean hasClassGroup(ClassGroup classGroup) {
         Objects.requireNonNull(classGroup);
@@ -237,11 +260,17 @@ public class ModelManager implements Model {
     public void setClassGroup(ClassGroup target, ClassGroup editedClassGroup) {
         CollectionUtil.requireAllNonNull(target, editedClassGroup);
         this.addressBook.setClassGroup(target, editedClassGroup);
+        if (this.viewState.get().isViewingClassGroup(target)) {
+            this.viewClassGroup(editedClassGroup);
+        }
     }
 
     @Override
     public void deleteClassGroup(ClassGroup target) {
         this.addressBook.removeClassGroup(target);
+        if (this.viewState.get().isViewingClassGroup(target)) {
+            this.clearViewState();
+        }
     }
 
     // =========== Filtered Contact List Accessors
@@ -283,6 +312,70 @@ public class ModelManager implements Model {
     public void updateFilteredClassGroupList(Predicate<ClassGroup> predicate) {
         Objects.requireNonNull(predicate);
         this.filteredClassGroups.setPredicate(predicate);
+    }
+
+    // =========== View state APIs
+    // =============================================================
+
+    @Override
+    public void viewContact(Contact contact) {
+        Objects.requireNonNull(contact);
+        this.viewState.set(ViewState.ofContact(contact));
+    }
+
+    @Override
+    public void viewClassGroup(ClassGroup classGroup) {
+        Objects.requireNonNull(classGroup);
+        this.viewState.set(ViewState.ofClassGroup(classGroup));
+    }
+
+    @Override
+    public void viewAssignment(Assignment assignment) {
+        Objects.requireNonNull(assignment);
+        this.viewState.set(ViewState.ofAssignment(assignment));
+    }
+
+    @Override
+    public void clearViewState() {
+        this.viewState.set(ViewState.none());
+    }
+
+    @Override
+    public List<ContactAssignmentWithContact> getContactAssignmentsWithContactsForAssignment(
+            Assignment assignment) {
+        Objects.requireNonNull(assignment);
+        return this.assignmentManager.getContactAssignmentsWithContactsForAssignment(assignment,
+                this.addressBook.getContactList());
+    }
+
+    @Override
+    public List<ContactAssignmentWithAssignment> getContactAssignmentsWithAssignmentsForContact(Contact contact) {
+        Objects.requireNonNull(contact);
+        return this.assignmentManager.getContactAssignmentsWithAssignmentsForContact(contact,
+                this.addressBook.getAssignmentList());
+    }
+
+    @Override
+    public List<ClassGroup> getClassGroupsForContact(Contact contact) {
+        Objects.requireNonNull(contact);
+        return ClassGroupUtil.getClassGroupsForContact(contact, this.addressBook.getClassGroupList());
+    }
+
+    @Override
+    public List<ContactAssignment> getContactAssignmentsForContact(Contact contact) {
+        Objects.requireNonNull(contact);
+        return this.assignmentManager.getContactAssignmentsForContact(contact);
+    }
+
+    @Override
+    public List<Contact> getContactsInClassGroup(ClassGroup classGroup) {
+        Objects.requireNonNull(classGroup);
+        return ClassGroupUtil.getContactsInClassGroup(this.addressBook.getContactList(), classGroup);
+    }
+
+    @Override
+    public ReadOnlyObjectProperty<ViewState> getViewStateProperty() {
+        return this.viewState.getReadOnlyProperty();
     }
 
     @Override
