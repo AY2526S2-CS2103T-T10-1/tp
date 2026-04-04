@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -25,11 +24,7 @@
             <Region fx:constant="USE_PREF_SIZE" />
           </minWidth>
         </Label>
-        <Label fx:id="name" text="\$name" styleClass="cell_big_label">
-          <tooltip>
-            <Tooltip fx:id="nameTooltip" text="" />
-          </tooltip>
-        </Label>
+        <Label fx:id="name" text="\$name" styleClass="cell_big_label" />
       </HBox>
     </VBox>
   </GridPane>

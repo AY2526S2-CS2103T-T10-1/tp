@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import cpp.model.assignment.Assignment;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
@@ -27,8 +26,6 @@ public class AssignmentCard extends UiPart<Region> {
     private Label id;
     @FXML
     private Label deadline;
-    @FXML
-    private Tooltip nameTooltip;
 
     /**
      * Creates an {@code AssignmentCard} with the given {@code Assignment} and index
@@ -40,6 +37,5 @@ public class AssignmentCard extends UiPart<Region> {
         this.id.setText(displayedIndex + ". ");
         this.name.setText(assignment.getName().fullName);
         this.deadline.setText(assignment.getDeadline().format(AssignmentCard.FORMATTER));
-        this.nameTooltip.setText(assignment.getName().fullName);
     }
 }
