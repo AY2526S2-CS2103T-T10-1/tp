@@ -970,7 +970,7 @@ Finds and displays classes based on the specified criteria. You can search by cl
 
 **Format:** `findclass c/CLASS_NAME_KEYWORDS...`
 
-* **Name search `c/`:** The command will find classes whose names contain **any** of the specified keywords (case-insensitive). Keywords are separated by spaces. For example, `findclass c/CS2103 Class` will return all classes whose name contains "CS2103" OR "Class".
+* **Name search `c/`:** The command will find classes whose names contain **any** of the specified keywords (case-insensitive). Keywords are separated by spaces. For example, `findclass c/CS2103 Class` will return all classes whose name contains "CS2103" or "Class".
 
 * The tab will automatically switch to the `Classes` tab upon successful execution.
 
@@ -1000,7 +1000,7 @@ Finds and displays classes based on the specified criteria. You can search by cl
   Finds all classes whose name contains "CS2103" (case-insensitive).
 
 * `findclass c/Tutorial Class`<br>
-  Finds all classes whose name contains "Tutorial" OR "Class" (case-insensitive).
+  Finds all classes whose name contains "Tutorial" or "Class" (case-insensitive).
 
 ### Finding assignments : `findass`
 
