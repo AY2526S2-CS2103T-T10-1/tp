@@ -1,7 +1,7 @@
 package cpp.storage;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,8 +17,6 @@ import cpp.model.assignment.AssignmentName;
 class JsonAdaptedAssignment {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Assignment's %s field is missing!";
-
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     private final String id;
     private final String name;
@@ -41,7 +39,8 @@ class JsonAdaptedAssignment {
     public JsonAdaptedAssignment(Assignment source) {
         this.id = source.getId();
         this.name = source.getName().fullName;
-        this.deadline = source.getDeadline().format(JsonAdaptedAssignment.FORMATTER);
+        this.deadline = source.getDeadline().atZone(ParserUtil.getDefaultZone()).withZoneSameInstant(ZoneId.of("GMT"))
+                .format(ParserUtil.DATETIME_FORMATTER);
     }
 
     /**
@@ -70,7 +69,8 @@ class JsonAdaptedAssignment {
         }
         final LocalDateTime modelDeadline;
         try {
-            modelDeadline = ParserUtil.parseDeadline(this.deadline);
+            modelDeadline = ParserUtil.parseDeadline(this.deadline).atZone(ZoneId.of("GMT"))
+                    .withZoneSameInstant(ParserUtil.getDefaultZone()).toLocalDateTime();
         } catch (Exception e) {
             throw new IllegalValueException("Invalid date and time format. Please use the format: dd-MM-yyyy HH:mm");
         }
