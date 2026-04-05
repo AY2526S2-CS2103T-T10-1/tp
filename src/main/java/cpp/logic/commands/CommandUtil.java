@@ -19,11 +19,18 @@ public class CommandUtil {
     public static void checkContactIndices(List<Contact> lastShownContactList, List<Index> contactIndices)
             throws CommandException {
 
-        for (Index idx : contactIndices) {
-            if (idx.getZeroBased() >= lastShownContactList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX);
-            }
+        if (lastShownContactList.isEmpty()) {
+            throw new CommandException(Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX
+                    + '\n'
+                    + Messages.EMPTY_CONTACT_LIST);
         }
 
+        for (Index idx : contactIndices) {
+            if (idx.getZeroBased() >= lastShownContactList.size()) {
+                throw new CommandException(Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX
+                        + '\n'
+                        + String.format(Messages.MESSAGE_VALID_INDEX_BOUNDS, lastShownContactList.size()));
+            }
+        }
     }
 }
