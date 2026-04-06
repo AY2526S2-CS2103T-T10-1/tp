@@ -1155,7 +1155,7 @@ Edits the details of an existing contact in the address book.
 
 * Editing a contact's name to match another existing contact's name (case-insensitive) is disallowed, and the command will fail if you attempt to do so. For example, if there is already a contact named "Alice Tan", you cannot edit another contact's name to "alice tan" or "ALICE TAN".
 
-* Editing a contact's details while you are in a filtered list view (e.g. after using `findcontact`) may cause confusion as the list may change to match the predicates of the filtered view. It is recommended to use `list contacts`, or `findcontact` with a predicate that is not among the fields you wish to edit, if you wish to see the results of your edit command in the full contact list.
+* Editing a contact's details while you are in a filtered list view (e.g. after using `findcontact`) may cause confusion as the list may change to match the predicates applied on the filtered view. It is recommended to use `list contacts`, or `findcontact` with a predicate that is not among the fields you wish to edit, if you wish to see the results of your edit command in the displayed contact list.
 
 </box>
 
@@ -1181,19 +1181,23 @@ Edits the name of an existing class in the address book.
 
 * The index **must be a positive integer** 1, 2, 3, …​
 
-* The new `CLASS_NAME` must be unique and must not match the name of any existing class (case-insensitive).
+* The new `CLASS_NAME` cannot be blank, and must not match the name of any other existing class (case-insensitive).
 
-* All contacts previously allocated to this class remain allocated after the rename.
+* All contacts previously allocated to this class will remain allocated after the edit.
 
 <box type="warning" seamless>
 
-**Warning:** Editing a class name is permanent and will be reflected across all contact allocations. Ensure the new name is correct before confirming.
+**Warnings:**
+
+* Editing a class name is permanent and will be reflected across all contact allocations. Ensure the new name is correct before confirming the edit.
+
+* Editing a class name while you are in a filtered list view (e.g. after using `findclass`) may cause confusion as the list may change to match the predicates applied on the filtered view. It is recommended to use `list classes` if you wish to see the results of your edit command in the displayed class list.
 
 </box>
 
 <box type="tip" seamless>
 
-**Tip:** Use `list classes` before editing to confirm the correct index.
+**Tip:** Ensure that you are in the correct tab view by using `list classes` before editing to confirm the correct index. You can also use `findclass` to narrow the list first.
 
 </box>
 
@@ -1217,19 +1221,25 @@ Edits the details of an existing assignment in the address book.
 
 * Existing values will be overwritten by the input values.
 
+* The new `ASSIGNMENT_NAME` cannot be blank, and must not match the name of any existing assignment (case-insensitive).
+
 * The `DEADLINE` provided must be in the format `dd-MM-yyyy HH:mm`.
 
-* The new `ASSIGNMENT_NAME` must be unique and must not match the name of any existing assignment (case-insensitive).
+* Editing an assignment's name or deadline will not affect any existing submission or grading records associated with the assignment
 
 <box type="warning" seamless>
 
-**Warning:** Editing an assignment's name or deadline does not affect existing submission or grading records, but may cause confusion if students have already submitted. Ensure the edit is intentional.
+**Warning:**
+
+* Editing an assignment's name or deadline is permanent and will be reflected across all contact allocations. Ensure the new name is correct before confirming the edit.
+
+* Editing an assignment's details while you are in a filtered list view (e.g. after using `findass`) may cause confusion as the list may change to match the predicates applied on the filtered view. It is recommended to use `list assignments` if you wish to see the results of your edit command in the displayed assignment list.
 
 </box>
 
 <box type="tip" seamless>
 
-**Tip:** Use `list assignments` before editing to confirm the correct index.
+**Tip:** Ensure that you are in the correct tab view by using `list assignments` before editing to confirm the correct index. You can also use `findass` to narrow the list first.
 
 </box>
 
