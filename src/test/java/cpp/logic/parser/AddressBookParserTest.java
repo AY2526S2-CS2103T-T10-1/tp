@@ -18,6 +18,7 @@ import cpp.logic.commands.DeleteContactCommand;
 import cpp.logic.commands.EditContactCommand;
 import cpp.logic.commands.EditContactCommand.EditContactDescriptor;
 import cpp.logic.commands.ExitCommand;
+import cpp.logic.commands.FindClassCommand;
 import cpp.logic.commands.FindContactCommand;
 import cpp.logic.commands.HelpCommand;
 import cpp.logic.commands.ListCommand;
@@ -74,6 +75,27 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_editContactAlias() throws Exception {
+        Contact contact = new ContactBuilder().build();
+        EditContactDescriptor descriptor = new EditContactDescriptorBuilder(contact).build();
+        EditContactCommand command = (EditContactCommand) this.parser.parseCommand(EditContactCommand.COMMAND_WORD_ALIAS
+                + " " + TypicalIndexes.INDEX_FIRST_CONTACT.getOneBased() + " "
+                + ContactUtil.getEditContactDescriptorDetails(descriptor));
+        Assertions.assertEquals(new EditContactCommand(TypicalIndexes.INDEX_FIRST_CONTACT, descriptor), command);
+    }
+
+    @Test
+    public void parseCommand_editClassAlias() throws Exception {
+        ClassGroup classGroup = new ClassGroupBuilder().build();
+        EditClassGroupCommand command = (EditClassGroupCommand) this.parser.parseCommand(
+                EditClassGroupCommand.COMMAND_WORD_ALIAS + " "
+                + TypicalIndexes.INDEX_FIRST_CONTACT.getOneBased() + " "
+                + CliSyntax.PREFIX_CLASS + classGroup.getName().fullName);
+        Assertions.assertEquals(
+                new EditClassGroupCommand(TypicalIndexes.INDEX_FIRST_CONTACT, classGroup.getName()), command);
+    }
+
+    @Test
     public void parseCommand_clear() throws Exception {
         Assertions.assertTrue(this.parser.parseCommand(ClearCommand.COMMAND_WORD) instanceof ClearCommand);
         Assertions.assertTrue(this.parser.parseCommand(ClearCommand.COMMAND_WORD + " 3") instanceof ClearCommand);
@@ -106,8 +128,25 @@ public class AddressBookParserTest {
     public void parseCommand_find() throws Exception {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
         FindContactCommand command = (FindContactCommand) this.parser.parseCommand(
-                FindContactCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
+                FindContactCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_NAME
+                        + keywords.stream().collect(Collectors.joining(" ")));
         Assertions.assertEquals(new FindContactCommand(new ContactNameContainsKeywordsPredicate(keywords)), command);
+    }
+
+    @Test
+    public void parseCommand_findAbbreviation() throws Exception {
+        // Test FindContactCommand abbreviation
+        List<String> keywords = Arrays.asList("foo", "bar", "baz");
+        FindContactCommand command = (FindContactCommand) this.parser.parseCommand(
+                FindContactCommand.COMMAND_WORD_ALIAS + " " + CliSyntax.PREFIX_NAME
+                        + keywords.stream().collect(Collectors.joining(" ")));
+        Assertions.assertEquals(new FindContactCommand(new ContactNameContainsKeywordsPredicate(keywords)), command);
+
+        // Test FindClassCommand abbreviation
+        FindClassCommand classCommand = (FindClassCommand) this.parser.parseCommand(
+                FindClassCommand.COMMAND_WORD_ALIAS + " " + CliSyntax.PREFIX_CLASS
+                        + "CS2103T");
+        Assertions.assertTrue(classCommand instanceof FindClassCommand);
     }
 
     @Test

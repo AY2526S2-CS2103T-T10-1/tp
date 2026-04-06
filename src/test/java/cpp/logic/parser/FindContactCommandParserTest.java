@@ -20,13 +20,23 @@ public class FindContactCommandParserTest {
 
     @Test
     public void parse_validArgs_returnsFindCommand() {
-        // no leading and trailing whitespaces
+        // no trailing whitespaces
         FindContactCommand expectedFindCommand = new FindContactCommand(
                 new ContactNameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
-        CommandParserTestUtil.assertParseSuccess(this.parser, "Alice Bob", expectedFindCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, " n/Alice Bob", expectedFindCommand);
 
         // multiple whitespaces between keywords
-        CommandParserTestUtil.assertParseSuccess(this.parser, " \n Alice \n \t Bob  \t", expectedFindCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, " \n n/Alice \n \t Bob  \t", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_unrecognizedPrefix_throwsParseException() {
+        // unrecognized prefixes in preamble should throw error
+        CommandParserTestUtil.assertParseFailure(this.parser, "c/Contact",
+                String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindContactCommand.MESSAGE_USAGE));
+
+        CommandParserTestUtil.assertParseFailure(this.parser, "ass/Assignment",
+                String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindContactCommand.MESSAGE_USAGE));
     }
 
 }

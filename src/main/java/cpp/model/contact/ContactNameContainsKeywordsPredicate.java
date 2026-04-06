@@ -1,7 +1,6 @@
 package cpp.model.contact;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 import cpp.commons.util.StringUtil;
 import cpp.commons.util.ToStringBuilder;
@@ -10,7 +9,7 @@ import cpp.commons.util.ToStringBuilder;
  * Tests that a {@code Contact}'s {@code Name} matches any of the keywords
  * given.
  */
-public class ContactNameContainsKeywordsPredicate implements Predicate<Contact> {
+public class ContactNameContainsKeywordsPredicate implements ContactSearchPredicate {
     private final List<String> keywords;
 
     public ContactNameContainsKeywordsPredicate(List<String> keywords) {

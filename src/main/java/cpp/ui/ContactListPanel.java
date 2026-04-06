@@ -3,6 +3,7 @@ package cpp.ui;
 import cpp.model.contact.Contact;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
@@ -22,6 +23,9 @@ public class ContactListPanel extends UiPart<Region> {
     public ContactListPanel(ObservableList<Contact> contactList) {
         super(ContactListPanel.FXML);
         this.contactListView.setItems(contactList);
+        Label contactPlaceholder = new Label("No contacts found.");
+        contactPlaceholder.setStyle("-fx-text-fill: #b4b4b4;");
+        this.contactListView.setPlaceholder(contactPlaceholder);
         this.contactListView.setCellFactory(listView -> new ContactListViewCell());
     }
 

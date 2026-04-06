@@ -83,7 +83,7 @@ class JsonSerializableAddressBook {
         AddressBook addressBook = new AddressBook();
         for (JsonAdaptedContact jsonAdaptedContact : this.contacts) {
             Contact contact = jsonAdaptedContact.toModelType();
-            if (addressBook.hasContact(contact)) {
+            if (addressBook.hasContact(contact) || addressBook.hasContactId(contact.getId())) {
                 throw new IllegalValueException(JsonSerializableAddressBook.MESSAGE_DUPLICATE_CONTACT);
             }
             addressBook.addContact(contact);
@@ -91,7 +91,7 @@ class JsonSerializableAddressBook {
 
         for (JsonAdaptedAssignment jsonAdaptedAssignment : this.assignments) {
             Assignment assignment = jsonAdaptedAssignment.toModelType();
-            if (addressBook.hasAssignment(assignment)) {
+            if (addressBook.hasAssignment(assignment) || addressBook.hasAssignmentId(assignment.getId())) {
                 throw new IllegalValueException(JsonSerializableAddressBook.MESSAGE_DUPLICATE_ASSIGNMENT);
             }
             addressBook.addAssignment(assignment);
@@ -107,7 +107,7 @@ class JsonSerializableAddressBook {
 
         for (JsonAdaptedClassGroup jsonAdaptedClassGroup : this.classGroups) {
             ClassGroup classGroup = jsonAdaptedClassGroup.toModelType();
-            if (addressBook.hasClassGroup(classGroup)) {
+            if (addressBook.hasClassGroup(classGroup) || addressBook.hasClassGroupId(classGroup.getId())) {
                 throw new IllegalValueException(JsonSerializableAddressBook.MESSAGE_DUPLICATE_CLASS_GROUP);
             }
             addressBook.addClassGroup(classGroup);

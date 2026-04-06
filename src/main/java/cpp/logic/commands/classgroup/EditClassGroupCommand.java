@@ -21,10 +21,12 @@ import cpp.model.util.ClassGroupUtil;
 public class EditClassGroupCommand extends Command {
 
     public static final String COMMAND_WORD = "editclass";
+    public static final String COMMAND_WORD_ALIAS = "editc";
 
     public static final String MESSAGE_USAGE = EditClassGroupCommand.COMMAND_WORD
             + ": Edits the name of the class group identified "
             + "by the index number used in the displayed class group list.\n"
+            + "Alias: " + EditClassGroupCommand.COMMAND_WORD_ALIAS + "\n"
             + "Parameters: INDEX (must be a positive integer) "
             + CliSyntax.PREFIX_CLASS + "CLASS_NAME\n"
             + "Example: " + EditClassGroupCommand.COMMAND_WORD + " 1 "

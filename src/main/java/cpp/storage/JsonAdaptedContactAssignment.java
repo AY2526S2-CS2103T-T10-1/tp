@@ -1,6 +1,7 @@
 package cpp.storage;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,6 +23,13 @@ class JsonAdaptedContactAssignment {
     public static final String INVALID_ASSIGNMENT_ID_MESSAGE = """
             Assignment with id %s does not exist in the address book""";
     public static final String INVALID_CONTACT_ID_MESSAGE = "Contact with id %s does not exist in the address book";
+    public static final String INVALID_DATE_MESSAGE = """
+            Invalid date and time format %s. \
+            Please use the format: dd-MM-yyyy HH:mm and ensure that the date and time is not in the future.""";
+    public static final String INVALID_SUBMITTED_MESSAGE = """
+            Invalid submitted status %s. Please use 'true' or 'false'.""";
+    public static final String INVALID_GRADED_MESSAGE = """
+            Invalid graded status %s. Please use 'true' or 'false'.""";
 
     private final String assignmentId;
     private final String contactId;
@@ -56,11 +64,13 @@ class JsonAdaptedContactAssignment {
         this.contactId = source.getContactId();
         this.isSubmitted = String.valueOf(source.isSubmitted());
         this.submissionDate = source.getSubmissionDate() != null
-                ? source.getSubmissionDate().format(ParserUtil.DATETIME_FORMATTER)
+                ? source.getSubmissionDate().atZone(ParserUtil.getDefaultZone()).withZoneSameInstant(ZoneId.of("GMT"))
+                        .format(ParserUtil.DATETIME_FORMATTER)
                 : null;
         this.isGraded = String.valueOf(source.isGraded());
         this.gradingDate = source.getGradingDate() != null
-                ? source.getGradingDate().format(ParserUtil.DATETIME_FORMATTER)
+                ? source.getGradingDate().atZone(ParserUtil.getDefaultZone()).withZoneSameInstant(ZoneId.of("GMT"))
+                        .format(ParserUtil.DATETIME_FORMATTER)
                 : null;
         this.score = String.valueOf(source.getScore());
     }
@@ -98,25 +108,31 @@ class JsonAdaptedContactAssignment {
         final LocalDateTime modelSubmissionDate;
         try {
             if (this.submissionDate != null) {
-                modelSubmissionDate = ParserUtil.parseDateTime(this.submissionDate);
+                modelSubmissionDate = ParserUtil.parseGmtDateTime(this.submissionDate);
             } else {
                 modelSubmissionDate = null;
             }
         } catch (ParseException e) {
-            throw new IllegalValueException(String.format(JsonAdaptedContactAssignment.MISSING_FIELD_MESSAGE_FORMAT,
-                    "submissionDate"));
+            throw new IllegalValueException(String.format(JsonAdaptedContactAssignment.INVALID_DATE_MESSAGE,
+                    this.submissionDate));
         }
         if (this.isSubmitted != null && !this.isSubmitted.toLowerCase().equals("true")
                 && !this.isSubmitted.toLowerCase().equals("false")) {
-            throw new IllegalValueException(String.format(JsonAdaptedContactAssignment.MISSING_FIELD_MESSAGE_FORMAT,
-                    "isSubmitted"));
+            throw new IllegalValueException(String.format(JsonAdaptedContactAssignment.INVALID_SUBMITTED_MESSAGE,
+                    this.isSubmitted));
         }
         if (!SubmissionInfo.isValidSubmissionInfo(Boolean.parseBoolean(
                 this.isSubmitted), modelSubmissionDate)) {
             throw new IllegalValueException(String.format(JsonAdaptedContactAssignment.MISSING_FIELD_MESSAGE_FORMAT,
-                    "submissionDate"));
+                    "submissionDate or isSubmitted"));
         }
         modelSubmissionInfo = new SubmissionInfo(Boolean.parseBoolean(this.isSubmitted), modelSubmissionDate);
+
+        if (this.isGraded != null && !this.isGraded.toLowerCase().equals("true")
+                && !this.isGraded.toLowerCase().equals("false")) {
+            throw new IllegalValueException(String.format(JsonAdaptedContactAssignment.INVALID_GRADED_MESSAGE,
+                    this.isGraded));
+        }
 
         final GradeInfo modelGradeInfo;
         if (this.isGraded == null) {
@@ -129,13 +145,13 @@ class JsonAdaptedContactAssignment {
         final LocalDateTime modelGradingDate;
         try {
             if (this.gradingDate != null) {
-                modelGradingDate = ParserUtil.parseDateTime(this.gradingDate);
+                modelGradingDate = ParserUtil.parseGmtDateTime(this.gradingDate);
             } else {
                 modelGradingDate = null;
             }
         } catch (ParseException e) {
-            throw new IllegalValueException(String.format(JsonAdaptedContactAssignment.MISSING_FIELD_MESSAGE_FORMAT,
-                    "gradingDate"));
+            throw new IllegalValueException(String.format(JsonAdaptedContactAssignment.INVALID_DATE_MESSAGE,
+                    this.gradingDate));
         }
         try {
             final float parsedScore = ParserUtil.parseScore(this.score);

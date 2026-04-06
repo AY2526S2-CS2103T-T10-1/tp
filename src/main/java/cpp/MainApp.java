@@ -2,6 +2,7 @@ package cpp;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -13,6 +14,7 @@ import cpp.commons.util.ConfigUtil;
 import cpp.commons.util.StringUtil;
 import cpp.logic.Logic;
 import cpp.logic.LogicManager;
+import cpp.logic.parser.ParserUtil;
 import cpp.model.AddressBook;
 import cpp.model.Model;
 import cpp.model.ModelManager;
@@ -48,7 +50,8 @@ public class MainApp extends Application {
 
     @Override
     public void init() throws Exception {
-        MainApp.logger.info("=============================[ Initializing AddressBook ]===========================");
+        MainApp.logger
+                .info("=============================[ Initializing ClassroomPlusPlus ]===========================");
         super.init();
 
         AppParameters appParameters = AppParameters.parse(this.getParameters());
@@ -57,6 +60,7 @@ public class MainApp extends Application {
 
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(this.config.getUserPrefsFilePath());
         UserPrefs userPrefs = this.initPrefs(userPrefsStorage);
+        ParserUtil.setDefaultZone(ZoneOffset.ofHours(userPrefs.getTimeZoneOffset()));
         AddressBookStorage addressBookStorage = new JsonAddressBookStorage(userPrefs.getAddressBookFilePath());
         this.storage = new StorageManager(addressBookStorage, userPrefsStorage);
 
