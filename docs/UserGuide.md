@@ -276,7 +276,7 @@ Adds a contact to the address book.
 
 * Creates a contact with the specified `CONTACT_NAME`, `PHONE_NUMBER`, `EMAIL` and `ADDRESS`.
 
-* The `CONTACT_NAME` provided must only contain alphanumeric characters and spaces only. It cannot be blank.
+* The `CONTACT_NAME` provided must only contain alphanumeric characters and spaces. It cannot be blank.
 
 * The `CONTACT_NAME` must be unique across all contacts (case-insensitive).
 
@@ -329,7 +329,7 @@ Adds a class to the address book.
 
 **Format:** `addclass c/CLASS_NAME [ct/CONTACT_INDICES...]`
 
-* Creates a class with the specified `CLASS_NAME`. The `CLASS_NAME` must be unique and should not match the name of any existing class (case-insensitive).
+* Creates a class with the specified `CLASS_NAME`. The `CLASS_NAME` must only contain alphanumeric characters and spaces. It cannot be blank, must be unique, and should not match the name of any existing class (case-insensitive).
 
 * `ct/CONTACT_INDICES...` is optional and can be used to allocate the class to specific contacts upon creation. If the `ct/` prefix is included, at least 1 contact index must be specified.
 
@@ -435,7 +435,9 @@ Adds an assignment to the address book.
 
 **Format:** `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]`
 
-* Creates an assignment with the specified `ASSIGNMENT_NAME` and `DEADLINE`. The `ASSIGNMENT_NAME` must be unique and should not match the name of any existing assignment (case-insensitive).
+* Creates an assignment with the specified `ASSIGNMENT_NAME` and `DEADLINE`.
+
+* The `ASSIGNMENT_NAME` must only contain alphanumeric characters and spaces. It cannot be blank, must be unique, and should not match the name of any existing assignment (case-insensitive).
 
 * The `DEADLINE` provided must be in the format `dd-MM-yyyy HH:mm`.
 
@@ -474,16 +476,16 @@ Adds an assignment to the address book.
 **Examples:**
 
 * `addass ass/Assignment 1 d/01-12-2023 23:59`<br>
-  Creates an assignment with the name "Assignment 1" and deadline "1 Dec 2023 23:59".
+  Creates an assignment with the name "Assignment 1" and deadline "1 Dec 2023 11.59pm".
 
 * `addass ass/Assignment 2 d/15-12-2023 23:59 c/CS2103T T10 1`<br>
-  Creates an assignment with the name "Assignment 2" and deadline "15 Dec 2023 23:59", allocated to all contacts belonging to class "CS2103T T10 1".
+  Creates an assignment with the name "Assignment 2" and deadline "15 Dec 2023 11.59pm", allocated to all contacts belonging to class "CS2103T T10 1".
 
 * `list contacts` followed by `addass ass/Assignment 3 d/30-12-2023 23:59 ct/1 2 3`<br>
-  Creates an assignment with the name "Assignment 3" and deadline "30 Dec 2023 23:59", allocated to the 1st, 2nd, and 3rd contacts in the list.
+  Creates an assignment with the name "Assignment 3" and deadline "30 Dec 2023 11.59pm", allocated to the 1st, 2nd, and 3rd contacts in the list.
 
 * `list contacts` followed by `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T T10 1 ct/4 5`<br>
-  Creates an assignment with the name "Assignment 4" and deadline "15 Jan 2024 23:59", allocated to the 4th and 5th contacts in the list, as well as all contacts belonging to class "CS2103T T10 1".
+  Creates an assignment with the name "Assignment 4" and deadline "15 Jan 2024 11.59pm", allocated to the 4th and 5th contacts in the list, as well as all contacts belonging to class "CS2103T T10 1".
 
   The screenshot below illustrates the last example, where the class "CS2103T T10 1" consists of contacts 2-5.\
   ![Creating and allocating Assignment 4](images/addass-result.png)
@@ -858,7 +860,7 @@ Shows a list of all contacts in the address book.
 
 <box type="tip" seamless>
 
-**Tip:** You may also click on the tabs to switch between Contacts, Classes, and Assignments. Note that this will not affect any existing filters on the displayed lists, unlike the `list <TAB>` command which will clear all filters and show all items in that category.
+**Tip:** You may also click on the tabs to switch between `Contacts`, `Classes`, and `Assignments`. Note that this will not affect any existing filters on the displayed lists, unlike the `list <TAB>` command which will clear all filters and show all items in that category.
 
 </box>
 
@@ -878,7 +880,7 @@ Shows a list of all classes in the address book.
 
 <box type="tip" seamless>
 
-**Tip:** You may also click on the tabs to switch between Contacts, Classes, and Assignments. Note that this will not affect any existing filters on the displayed lists, unlike the `list <TAB>` command which will clear all filters and show all items in that category.
+**Tip:** You may also click on the tabs to switch between `Contacts`, `Classes`, and `Assignments`. Note that this will not affect any existing filters on the displayed lists, unlike the `list <TAB>` command which will clear all filters and show all items in that category.
 
 </box>
 
@@ -898,13 +900,230 @@ Shows a list of all assignments in the address book.
 
 <box type="tip" seamless>
 
-**Tip:** You may also click on the tabs to switch between Contacts, Classes, and Assignments. Note that this will not affect any existing filters on the displayed lists, unlike the `list <TAB>` command which will clear all filters and show all items in that category.
+**Tip:** You may also click on the tabs to switch between `Contacts`, `Classes`, and `Assignments`. Note that this will not affect any existing filters on the displayed lists, unlike the `list <TAB>` command which will clear all filters and show all items in that category.
 
 </box>
 
-### [TO BE UPDATED] Locating contacts by name: `find`
+### Finding contacts : `findcontact`
 
-TO BE UPDATED.
+Finds and displays contacts based on the specified criteria. You can search by contact name (keyword match), or by phone number/email (exact match). Matching is case-insensitive.
+
+**Format:**
+
+1. `findcontact n/CONTACT_NAME_KEYWORDS...` — search by name using keywords (keyword match)
+1. `findcontact p/PHONE_NUMBER` — search by phone number (exact match)
+1. `findcontact e/EMAIL` — search by email address (exact match)
+
+* **Name search `n/`:** The command will find contacts whose names contain **any** of the specified keywords (case-insensitive). Keywords are separated by spaces. For example, `findcontact n/alice bob` will return all contacts whose name contains "alice" or "bob".
+
+* **Phone search `p/`:** Searches for contacts by exact phone number match. The entire phone number must match exactly.
+
+* **Email search `e/`:** Searches for contacts by exact email address match (case-insensitive). The entire email must match exactly.
+
+* You cannot use multiple search types in one command. For example, `findcontact p/91234567 e/alice@gmail.com` is invalid. Choose one search method per command.
+
+* The tab will automatically switch to the `Contacts` tab upon successful execution.
+
+* The search results will remain filtered until you run another command that filters the list (e.g., another `findcontact` command) or use `list contacts` to show all contacts again.
+
+<box type="warning" seamless>
+
+**Warnings:**
+
+* Each prefix (`n/`,`p/`,`e/`) must have a value. Using a prefix with no value (e.g.,`findcontact p/`) will result in an error.
+
+* Invalid contact names will not be allowed. For a detailed list of criteria for valid contact names, please refer to the feature documentation on [**Adding a contact**](#adding-a-contact-addcontact).
+
+* For phone and email searches, the entire value must match exactly. Partial matches will not return results.
+
+* You cannot use unrecognized prefixes like `c/`, `ass/`, or `d/`. The system will reject commands with invalid prefixes.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tips:**
+
+* If you would like to preserve the current filter but switch to a different tab, you may manually click on the `Classes` or `Assignments` tab. Note that clicking on the tabs will not clear existing filters, so you can still see the filtered contacts when you switch back to the `Contacts` tab.
+
+* You may shorten `findcontact` to `findct` for quicker access. The same rules and formats apply.
+
+</box>
+
+**Examples:**
+
+* `findcontact n/alice`<br>
+  Finds all contacts whose name contains "alice" (case-insensitive).
+
+* `findct n/john doe`<br>
+  Using the abbreviated command, finds all contacts whose name contains "john" or "doe".
+
+* `findcontact p/91234567`<br>
+  Finds all contacts with phone number 91234567.
+
+* `findcontact e/alice@gmail.com`<br>
+  Finds all contacts with email <alice@gmail.com>.
+
+### Finding classes : `findclass`
+
+Finds and displays classes based on the specified criteria. You can search by class name (keyword match). Matching is case-insensitive.
+
+**Format:** `findclass c/CLASS_NAME_KEYWORDS...`
+
+* **Name search `c/`:** The command will find classes whose names contain **any** of the specified keywords (case-insensitive). Keywords are separated by spaces. For example, `findclass c/CS2103 Class` will return all classes whose name contains "CS2103" or "Class".
+
+* The tab will automatically switch to the `Classes` tab upon successful execution.
+
+* The search results will remain filtered until you run another command that filters the list (e.g., another `findclass` command) or use `list classes` to show all classes again.
+
+<box type="warning" seamless>
+
+**Warnings:**
+
+* Invalid class names will not be allowed. For a detailed list of criteria for valid class names, please refer to the feature documentation on [**Adding classes**](#adding-classes-addclass).
+
+* `CLASS_NAME_KEYWORDS` must not be empty. Using the `c/` prefix with no value (e.g., `findclass c/`) will result in an error, and no filter is applied.
+
+* You cannot use unrecognized prefixes like `n/`, `p/`, `e/`, `d/`, or `ass/`. The system will reject commands with invalid prefixes.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** If you would like to preserve the current filter but switch to a different tab, you may manually click on the `Contacts` or `Assignments` tab. Note that clicking on the tabs will not clear existing filters, so you can still see the filtered classes when you switch back to the `Classes` tab.
+
+</box>
+
+**Examples:**
+
+* `findclass c/CS2103`<br>
+  Finds all classes whose name contains "CS2103" (case-insensitive).
+
+* `findclass c/Tutorial Class`<br>
+  Finds all classes whose name contains "Tutorial" or "Class" (case-insensitive).
+
+### Finding assignments : `findass`
+
+Finds and displays assignments based on the specified criteria. You can search by assignment name (substring match) or by assignment deadline (range match). Matching is case-insensitive.
+
+**Format:**
+
+1. `findass ass/ASSIGNMENT_NAME_SEARCH_STRING` — search by assignment name
+1. `findass [ds/DEADLINE_START] [de/DEADLINE_END]` — search by assignment deadline
+
+* **Name search `ass/`:** The command will find assignments whose names contain the specified text. For example, `findass ass/CS2103` will find all assignments whose name contains "CS2103".
+
+* All consecutive spaces will be replaced by a single space, and any leading or trailing spaces will be retained. For example, `findass ass/<4 SPACES> Assignment <5 SPACES> 1 <3 SPACES>` will find all assignments whose name contains " Assignment 1 ". With this search string, "Assignment 1" will not be displayed, but "sample assignment 1 worksheet" will be displayed.
+
+* **Deadline search `ds/` and `de/`:** Searches for assignments by deadline range (inclusive of start and end points). The deadline values must match exactly one of the supported formats below. At least one of `[ds/DEADLINE_START]` or `[de/DEADLINE_END]` must be provided. Omission of the `[ds/DEADLINE_START]` or `[de/DEADLINE_END]` indicates no lower or upper bound for the search, respectively.
+
+* `DEADLINE` provided can be of the format `dd-MM-yyyy` — date only (e.g., `31-12-2024`) or `dd-MM-yyyy HH:mm` — date with time (e.g., `31-12-2024 23:59`). When `dd-MM-yyyy` is provided for the start deadline, it is treated as the beginning of the day (12am). However, it will be treated as the end of the day (11.59pm) for end deadline.
+
+* You cannot use multiple search types in one command. For example, `findass ass/Assignment 1 ds/31-12-2024` is invalid. Choose one search method per command.
+
+* The tab will automatically switch to the `Assignments` tab upon successful execution.
+
+* The search results will remain filtered until you run another command that filters the list (e.g., another `findass` command) or use `list assignments` to show all assignments again.
+
+<box type="warning" seamless>
+
+**Warnings:**
+
+* Invalid assignment names will not be allowed. For a detailed list of criteria for valid assignment names, please refer to the feature documentation on [**Adding assignments**](#adding-assignments-addass).
+
+* The deadline prefixes (ds/ and de/) must have a valid date value in the correct format. Using a prefix with no date (e.g., `findass ds/`) will result in an error. Invalid date formats or start dates after end dates will also be rejected.
+
+* For deadline searches, the time may be omitted. For example, if an assignment has a deadline of `31-12-2024 23:59`, searching with `findass ds/31-12-2024` will also match it.
+
+* Any time values provided will be treated as the time in the timezone set in `preferences.json`. By default, this is set to GMT +8, but you can change it to your local timezone if needed. Acceptable values range from -18 to 18, and any invalid or missing timezone values will default to GMT +8.
+
+* You cannot use unrecognized prefixes like `p/`, `e/`, `c/`, or `n/`. The system will reject commands with invalid prefixes.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tips:**
+
+* You can use spaces in your search string for more specific results. While `findass ass/Assignment` returns any assignment containing "Assignment", adding a space (e.g., `findass ass/Assignment <1 SPACE>`) allows you to target multi-word titles like "Assignment XYZ."
+
+* If you would like to preserve the current filter but switch to a different tab, you may manually click on the `Contacts` or `Classes` tab. Note that clicking on the tabs will not clear existing filters, so you can still see the filtered assignments when you switch back to the `Assignments` tab.
+
+</box>
+
+**Examples:**
+
+* `findass ass/Assignment`<br>
+  Finds all assignments whose name contains "assignment" (case-insensitive).
+
+* `findass ds/31-12-2024`<br>
+  Finds all assignments with a deadline of 31 December 2024 12am or later.
+
+* `findass de/15-01-2025`<br>
+  Finds all assignments with a deadline of 15 January 2025 11.59pm or earlier.
+
+* `findass ds/31-12-2024 15:00 de/15-01-2025 20:00`<br>
+  Finds all assignments with a deadline between 31 December 2024 3pm and 15 January 2025 8pm.
+
+### Viewing full details of a contact/class/assignment: `view`
+
+Shows the full details of a contact, class, or assignment.
+
+#### View contact details
+
+**Format:** `view ct/CONTACT_INDEX`
+
+* Shows the full details of the contact at the specified `CONTACT_INDEX`.
+
+* The index refers to the index number shown in the displayed contact list.
+
+* The index **must be a positive integer** 1, 2, 3, …​
+
+* If the specified index does not exist in the displayed contact list, the command will fail and display an error message.
+
+<box type="warning" seamless>
+
+**Warning:** Unlike previous listed commands, this `ct/` prefix requires exactly one contact index to be provided. If you provide more than one index (e.g., `view ct/1 2`), the command will fail and no detailed view of the contact will be displayed.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** In the detailed view, you can see the contact's name, phone number, email, classes they belong to, assignments allocated to them, and the submission and grading status for each allocated assignment. Any changes made to the contact's details, class memberships, or assignment allocations will be reflected in real-time in the detailed view as well.
+
+</box>
+
+#### View class details
+
+**Format:** `view c/CLASS_NAME`
+
+* Shows the full details of the class with the specified `CLASS_NAME`.
+
+* `CLASS_NAME` must match the name of an existing class (case-insensitive).
+
+* If the specified class does not exist, the command will fail and display an error message.
+
+<box type="tip" seamless>
+
+**Tip:** In the detailed view, you can see the class name, and the list of contacts allocated to it. Any changes made to the class details or contact memberships will be reflected in real-time in the detailed view as well.
+
+</box>
+
+#### View assignment details
+
+**Format:** `view ass/ASSIGNMENT_NAME`
+
+* Shows the full details of the assignment with the specified `ASSIGNMENT_NAME`.
+
+* `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+
+* If the specified assignment does not exist, the command will fail and display an error message.
+
+<box type="tip" seamless>
+
+**Tip:** In the detailed view, you can see the assignment's name, deadline, and the list of contacts allocated to it together with their submission and grading status. Any changes made to the assignment details, submission or grading status, and contact allocations will be reflected in real-time in the detailed view as well.
+
+</box>
 
 ### [TO BE UPDATED] Editing a contact : `edit`
 
@@ -1035,6 +1254,8 @@ CPP data is saved automatically in `[JAR file location]/data/addressbook.json`. 
 
 **Warnings:**
 
+* You should only make edits to `addressbook.json` when the application is closed. Any edits made while the application is running will not be saved.
+
 * If your changes to the data file make its format invalid, CPP will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.
 
 * Certain edits can cause CPP to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
@@ -1042,7 +1263,11 @@ CPP data is saved automatically in `[JAR file location]/data/addressbook.json`. 
 
 ### Editing the preferences file
 
-CPP preferences are saved in `[JAR file location]/preferences.json`. This should only be used to modify the timezone setting, which is used to determine the deadlines and submission/grading dates shown in the app. By default, this is set to GMT +8, but you can change it to your local timezone if needed. Acceptable values range from -18 to 18, and any invalid or missing timezone values will default to GMT +8.
+CPP preferences are saved in `[JAR file location]/preferences.json`. This should only be used to modify the timezone setting, which is used to determine the deadlines and submission/grading dates shown in the app.
+
+By default, this is set to GMT +8, but you can change it to your local timezone if needed. Acceptable values range from -18 to 18, and any invalid or missing timezone values will default to GMT +8.
+
+You should only make edits to `preferences.json` when the application is closed. Any edits made while the application is running will not be saved.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -1136,14 +1361,17 @@ If you encounter other issues, please open a GitHub Issue in the [project reposi
 | **Add Assignment**        | `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T T10 1 ct/4 5`                                                                                                      |
 | **Allocate Assignment**   | `allocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `allocass ass/Assignment 3 c/CS2103T T10 1 ct/1 2 3`                                                                                                                              |
 | **Unallocate Assignment** | `unallocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `unallocass ass/Assignment 3 c/CS2103T T10 1 ct/1 2 3`                                                                                                                          |
-| **Submit Assignment**     | `submit ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...] [d/SUBMISSION_DATE]`                                                                                                                                                                            |
-| **Unsubmit Assignment**   | `unsubmit ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]`                                                                                                                                                                                              |
-| **Grade Assignment**      | `grade ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...] s/SCORE [d/GRADING_DATE]`                                                                                                                                                                        |
-| **Ungrade Assignment**    | `ungrade ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]`                                                                                                                                                                                               |
+| **Submit Assignment**     | `submit ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...] [d/SUBMISSION_DATE]` <br> e.g., `submit ass/Assignment 3 c/CS2103T10 ct/1 2 3 d/21-02-2026 23:50`                                                                                               |
+| **Unsubmit Assignment**   | `unsubmit ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `unsubmit ass/Assignment 3 c/CS2103T10 ct/1 2 3`                                                                                                                                  |
+| **Grade Assignment**      | `grade ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...] s/SCORE [d/GRADING_DATE]` <br> e.g., `grade ass/Assignment 3 c/CS2103T10 ct/1 2 3 s/67.9 d/21-02-2026 23:50`                                                                                     |
+| **Ungrade Assignment**    | `ungrade ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `ungrade ass/Assignment 3 c/CS2103T10 ct/1 2 3`                                                                                                                                    |
 | **List Contacts**         | `list contacts`                                                                                                                                                                                                                                                    |
 | **List Classes**          | `list classes`                                                                                                                                                                                                                                                     |
 | **List Assignments**      | `list assignments`                                                                                                                                                                                                                                                 |
-| **Find**                  | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                                                                                                                         |
+| **Find Contact**          | `findcontact n/CONTACT_NAME_KEYWORDS...` e.g., `findcontact n/alice bob`<br>`findcontact p/PHONE_NUMBER` e.g., `findcontact p/91234567`<br>`findcontact e/EMAIL` e.g., `findcontact e/alice@gmail.com`                                                             |
+| **Find Class**            | `findclass c/CLASS_NAME_KEYWORDS...` e.g., `findclass c/CS2103T CS2103`                                                                                                                                                                                            |
+| **Find Assignment**       | `findass ass/ASSIGNMENT_NAME_SEARCH_STRING` e.g., `findass ass/Assignment 1`<br>`findass [ds/DEADLINE_START] [de/DEADLINE_END]` e.g., `findass ds/31-12-2024`  or `findass ds/31-12-2024 23:59 de/02-01-2025 23:59`                                                |
+| **View Details**          | `view ct/CONTACT_INDEX` e.g., `view ct/2`<br>`view c/CLASS_NAME` e.g., `view c/CS2103T T10 1`<br>`view ass/ASSIGNMENT_NAME` e.g., `view ass/Assignment 1`                                                                                                          |
 | **Edit**                  | `edit INDEX [n/CONTACT_NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                                                                                                               |
 | **Delete**                | `delete ct/CONTACT_INDICES...` e.g., `delete ct/3`<br>`delete ass/ASSIGNMENT_NAME` e.g., `delete ass/Assignment 1`<br>`delete c/CLASS_NAME` e.g., `delete c/CS2103T T14`                                                                                           |
 | **Clear**                 | `clear`                                                                                                                                                                                                                                                            |

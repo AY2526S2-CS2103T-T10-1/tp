@@ -34,10 +34,18 @@ public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
     public static final String MESSAGE_EMPTY_INDICES = "Contact indices should not be blank.";
+    public static final String MESSAGE_INVALID_DATE_OR_DATETIME = """
+            Invalid date or date and time format.\
+            Please use the format: dd-MM-yyyy for dates or dd-MM-yyyy HH:mm for date and time.
+            """;
     public static final String MESSAGE_INVALID_DATETIME = """
             Invalid date and time format. Please use the format: dd-MM-yyyy HH:mm""";
     public static final String MESSAGE_INVALID_FUTURE_DATETIME = "Date and time cannot be in the future.";
-    public static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    public static final String DATETIME_FORMAT_STRING = "dd-MM-yyyy HH:mm";
+    public static final String DATE_FORMAT_STRING = "dd-MM-yyyy";
+    public static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter
+            .ofPattern(ParserUtil.DATETIME_FORMAT_STRING);
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(ParserUtil.DATE_FORMAT_STRING);
     private static ZoneId defaultZone = ZoneId.of("GMT+8");
 
     /**
@@ -153,7 +161,7 @@ public class ParserUtil {
         try {
             parsedDateTime = LocalDateTime.parse(trimmedDatetime, ParserUtil.DATETIME_FORMATTER);
         } catch (DateTimeParseException e) {
-            throw new ParseException("Invalid date and time format. Please use the format: dd-MM-yyyy HH:mm");
+            throw new ParseException(ParserUtil.MESSAGE_INVALID_DATETIME);
         }
         return parsedDateTime;
     }

@@ -3,6 +3,7 @@ package cpp.ui;
 import cpp.model.classgroup.ClassGroup;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
@@ -22,6 +23,9 @@ public class ClassGroupListPanel extends UiPart<Region> {
     public ClassGroupListPanel(ObservableList<ClassGroup> classGroupList) {
         super(ClassGroupListPanel.FXML);
         this.classGroupListView.setItems(classGroupList);
+        Label classGroupPlaceholder = new Label("No classes found.");
+        classGroupPlaceholder.setStyle("-fx-text-fill: #b4b4b4;");
+        this.classGroupListView.setPlaceholder(classGroupPlaceholder);
         this.classGroupListView.setCellFactory(listView -> new ClassGroupListViewCell());
     }
 

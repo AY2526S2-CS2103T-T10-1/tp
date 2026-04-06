@@ -1,6 +1,7 @@
 package cpp.logic;
 
 import java.nio.file.Path;
+import java.util.List;
 
 import cpp.commons.core.GuiSettings;
 import cpp.logic.commands.CommandResult;
@@ -8,8 +9,12 @@ import cpp.logic.commands.exceptions.CommandException;
 import cpp.logic.parser.exceptions.ParseException;
 import cpp.model.ReadOnlyAddressBook;
 import cpp.model.assignment.Assignment;
+import cpp.model.assignment.ContactAssignmentWithAssignment;
+import cpp.model.assignment.ContactAssignmentWithContact;
 import cpp.model.classgroup.ClassGroup;
 import cpp.model.contact.Contact;
+import cpp.model.view.ViewState;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
 
 /**
@@ -56,4 +61,39 @@ public interface Logic {
      * Set the user prefs' GUI settings.
      */
     void setGuiSettings(GuiSettings guiSettings);
+
+    /**
+     * Returns a list of contact-assignment DTOs pairing contact-assignment and
+     * contact for the given assignment.
+     */
+    List<ContactAssignmentWithContact> getContactAssignmentsWithContactsForAssignment(
+            Assignment assignment);
+
+    /**
+     * Returns a list of contact-assignment DTOs pairing contact-assignment and
+     * assignment for the given contact.
+     */
+    List<ContactAssignmentWithAssignment> getContactAssignmentsWithAssignmentsForContact(
+            Contact contact);
+
+    /**
+     * Returns class groups containing the given contact.
+     */
+    List<ClassGroup> getClassGroupsForContact(Contact contact);
+
+    /**
+     * Returns a list of contacts in the given class group.
+     */
+    List<Contact> getContactsInClassGroup(ClassGroup classGroup);
+
+    /**
+     * Clears the currently viewed assignment, if any.
+     */
+    void clearViewState();
+
+    /**
+     * Returns the central view state property that the UI can listen to for
+     * reactive updates.
+     */
+    ReadOnlyObjectProperty<ViewState> getViewStateProperty();
 }

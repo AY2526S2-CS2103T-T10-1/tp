@@ -1,14 +1,12 @@
 package cpp.model.assignment;
 
-import java.util.function.Predicate;
-
 import cpp.commons.util.ToStringBuilder;
 
 /**
  * Tests that an {@code Assignment}'s {@code Name} contains the given search
  * string.
  */
-public class AssignmentNameContainsKeywordsPredicate implements Predicate<Assignment> {
+public class AssignmentNameContainsKeywordsPredicate implements AssignmentSearchPredicate {
     private final String searchString;
 
     public AssignmentNameContainsKeywordsPredicate(String searchString) {

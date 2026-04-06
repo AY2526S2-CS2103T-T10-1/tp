@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import cpp.commons.util.ToStringBuilder;
 import cpp.logic.Messages;
+import cpp.logic.parser.CliSyntax;
 import cpp.model.Model;
 import cpp.model.classgroup.ClassNameContainsKeywordsPredicate;
 
@@ -15,12 +16,14 @@ import cpp.model.classgroup.ClassNameContainsKeywordsPredicate;
 public class FindClassCommand extends Command {
 
     public static final String COMMAND_WORD = "findclass";
+    public static final String COMMAND_WORD_ALIAS = "findc";
 
     public static final String MESSAGE_USAGE = FindClassCommand.COMMAND_WORD
             + ": Finds all class groups whose names contain any of "
             + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
-            + "Example: " + FindClassCommand.COMMAND_WORD + " cs2103 cs2102";
+            + "Alias: " + FindClassCommand.COMMAND_WORD_ALIAS + "\n"
+            + "Parameters: " + CliSyntax.PREFIX_CLASS + "CLASS_NAME_KEYWORDS...\n"
+            + "Example: " + FindClassCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_CLASS + "cs2103 cs2102";
 
     private final ClassNameContainsKeywordsPredicate predicate;
 

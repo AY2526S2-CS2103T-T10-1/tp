@@ -16,10 +16,20 @@ public class CommandResult {
         CONTACTS, ASSIGNMENTS, CLASSGROUPS, NONE
     }
 
+    /**
+     * Enum representing a unique view to be shown.
+     */
+    public enum ViewType {
+        CONTACT, ASSIGNMENT, CLASSGROUP, NONE
+    }
+
     private final String feedbackToUser;
 
     /** The list view to be shown to the user. */
     private final ListView listView;
+
+    /** The unique view to be shown (if any). */
+    private final ViewType viewType;
 
     /** Help information should be shown to the user. */
     private final boolean showHelp;
@@ -30,9 +40,11 @@ public class CommandResult {
     /**
      * Constructs a {@code CommandResult} with the specified fields.
      */
-    public CommandResult(String feedbackToUser, ListView listView, boolean showHelp, boolean exit) {
+    public CommandResult(String feedbackToUser, ListView listView, ViewType viewType, boolean showHelp,
+            boolean exit) {
         this.feedbackToUser = Objects.requireNonNull(feedbackToUser);
         this.listView = Objects.requireNonNull(listView);
+        this.viewType = Objects.requireNonNull(viewType);
         this.showHelp = showHelp;
         this.exit = exit;
     }
@@ -42,7 +54,7 @@ public class CommandResult {
      * and other fields set to their default value. ListView defaults to NONE.
      */
     public CommandResult(String feedbackToUser) {
-        this(feedbackToUser, ListView.NONE, false, false);
+        this(feedbackToUser, ListView.NONE, ViewType.NONE, false, false);
     }
 
     /**
@@ -51,7 +63,14 @@ public class CommandResult {
      * and other fields set to their default value.
      */
     public CommandResult(String feedbackToUser, ListView listView) {
-        this(feedbackToUser, listView, false, false);
+        this(feedbackToUser, listView, ViewType.NONE, false, false);
+    }
+
+    /**
+     * Constructs a CommandResult with a specific unique view type.
+     */
+    public CommandResult(String feedbackToUser, ViewType viewType) {
+        this(feedbackToUser, ListView.NONE, viewType, false, false);
     }
 
     public String getFeedbackToUser() {
@@ -60,6 +79,10 @@ public class CommandResult {
 
     public ListView getListView() {
         return this.listView;
+    }
+
+    public ViewType getViewType() {
+        return this.viewType;
     }
 
     public boolean isShowHelp() {
@@ -84,13 +107,14 @@ public class CommandResult {
         CommandResult otherCommandResult = (CommandResult) other;
         return this.feedbackToUser.equals(otherCommandResult.feedbackToUser)
                 && this.listView == otherCommandResult.listView
+                && this.viewType == otherCommandResult.viewType
                 && this.showHelp == otherCommandResult.showHelp
                 && this.exit == otherCommandResult.exit;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.feedbackToUser, this.listView, this.showHelp, this.exit);
+        return Objects.hash(this.feedbackToUser, this.listView, this.viewType, this.showHelp, this.exit);
     }
 
     @Override
@@ -98,6 +122,7 @@ public class CommandResult {
         return new ToStringBuilder(this)
                 .add("feedbackToUser", this.feedbackToUser)
                 .add("listView", this.listView)
+                .add("viewType", this.viewType)
                 .add("showHelp", this.showHelp)
                 .add("exit", this.exit)
                 .toString();
