@@ -45,7 +45,7 @@ public class AllocateAssignmentCommand extends Command {
             + "At least one of " + CliSyntax.PREFIX_CLASS + " or " + CliSyntax.PREFIX_CONTACT + " must be provided.\n"
             + "Example: " + AllocateAssignmentCommand.COMMAND_WORD + " "
             + CliSyntax.PREFIX_ASSIGNMENT + "Assignment 1 "
-            + CliSyntax.PREFIX_CLASS + "CS2103T10 "
+            + CliSyntax.PREFIX_CLASS + "CS2103T T10 1 "
             + CliSyntax.PREFIX_CONTACT + "1 2 3";
 
     public static final String MESSAGE_SUCCESS = """

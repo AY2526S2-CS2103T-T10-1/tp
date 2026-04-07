@@ -36,7 +36,7 @@ public class UnallocateClassGroupCommand extends Command {
             + CliSyntax.PREFIX_CLASS + "CLASS_NAME "
             + CliSyntax.PREFIX_CONTACT + "CONTACT_INDICES...\n"
             + "Example: " + UnallocateClassGroupCommand.COMMAND_WORD + " "
-            + CliSyntax.PREFIX_CLASS + "CS2103T10 "
+            + CliSyntax.PREFIX_CLASS + "CS2103T T10 1 "
             + CliSyntax.PREFIX_CONTACT + "1 2 3";
 
     public static final String MESSAGE_SUCCESS = """

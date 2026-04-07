@@ -19,6 +19,6 @@ public abstract class DeleteCommand extends Command {
             + "Exactly one prefix must be specified.\n"
             + "Examples: " + DeleteCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_CONTACT + "1 2 3, "
             + DeleteCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_ASSIGNMENT + "Assignment 1, "
-            + DeleteCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_CLASS + "CS2103T10";
+            + DeleteCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_CLASS + "CS2103T T10 1";
 
 }

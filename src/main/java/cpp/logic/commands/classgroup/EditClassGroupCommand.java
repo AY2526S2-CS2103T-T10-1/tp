@@ -31,7 +31,7 @@ public class EditClassGroupCommand extends Command {
             + "Parameters: INDEX (must be a positive integer) "
             + CliSyntax.PREFIX_CLASS + "CLASS_NAME\n"
             + "Example: " + EditClassGroupCommand.COMMAND_WORD + " 1 "
-            + CliSyntax.PREFIX_CLASS + "CS2103T11";
+            + CliSyntax.PREFIX_CLASS + "CS2103T10";
 
     public static final String MESSAGE_EDIT_CLASS_GROUP_SUCCESS = "Edited Class Group: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.\n"

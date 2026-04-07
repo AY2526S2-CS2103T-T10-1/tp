@@ -20,5 +20,5 @@ public abstract class ViewCommand extends Command {
             + "Exactly one prefix must be specified.\n"
             + "Examples: " + ViewCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_CONTACT + "1, "
             + ViewCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_ASSIGNMENT + "Assignment 1, "
-            + ViewCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_CLASS + "CS2103T10";
+            + ViewCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_CLASS + "CS2103T T10 1";
 }

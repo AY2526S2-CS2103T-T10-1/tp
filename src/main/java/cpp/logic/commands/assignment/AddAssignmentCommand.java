@@ -41,7 +41,7 @@ public class AddAssignmentCommand extends Command {
             + "Example: " + AddAssignmentCommand.COMMAND_WORD + " "
             + CliSyntax.PREFIX_ASSIGNMENT + "Assignment 1 "
             + CliSyntax.PREFIX_DATETIME + "21-02-2026 23:59 "
-            + CliSyntax.PREFIX_CLASS + "CS2103T10 "
+            + CliSyntax.PREFIX_CLASS + "CS2103T T10 1 "
             + CliSyntax.PREFIX_CONTACT + "1 2 3";
 
     public static final String MESSAGE_SUCCESS = "New assignment added: %1$s";
