@@ -52,7 +52,7 @@ The bulk of the app's work is done by the following four components:
 
 **How the architecture components interact with each other**
 
-The _Sequence Diagram_ below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+The _Sequence Diagram_ below shows how the components interact with each other for the scenario where the user issues the command `delete ct/1`.
 
 <puml src="diagrams/ArchitectureSequenceDiagram.puml" width="574" />
 
@@ -92,9 +92,9 @@ Here's a (partial) class diagram of the `Logic` component:
 
 <puml src="diagrams/LogicClassDiagram.puml" width="550"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
+The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete ct/1")` API call as an example.
 
-<puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete 1` Command" />
+<puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete ct/1` Command" />
 
 <box type="info" seamless>
 
@@ -104,7 +104,7 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 How the `Logic` component works:
 
 1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
-1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
+1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteContactCommand`) which is executed by the `LogicManager`.
 1. The command can communicate with the `Model` when it is executed (e.g. to delete a contact).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
@@ -238,7 +238,7 @@ Step 1. The user launches the application for the first time. The `VersionedAddr
 
 <puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
 
-Step 2. The user executes `delete 5` command to delete the 5th contact in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `delete ct/5` command to delete the 5th contact in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete ct/5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
 
 <puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
 
@@ -356,10 +356,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | user                                        | find contacts by a specific field                  |                                                                            |
 | `* * *`  | user                                        | add contacts                                       | easily retrieve them                                                       |
 | `* * *`  | user                                        | see all the assignments/contacts/classes           | keep track of what has been created                                        |
-| `* * *`  | busy user                                   | add deadlines/events                               | keep track of my things easily                                             |
+| `* *`    | busy user                                   | add deadlines/events                               | keep track of my things easily                                             |
 | `* * *`  | teacher managing many students              | organize my students into separate groups by class | easily identify which students belong to which class                       |
 | `* * *`  | teacher                                     | see all assignment status for each student         | keep track of every individual's performance                               |
-| `* * *`  | teacher changing classes every year         | easily delete/archive multiple old contacts        | keep only the contacts I need accessible                                   |
+| `* * *`  | teacher changing classes every year         | easily delete multiple old contacts                | keep only the contacts I need accessible                                   |
 | `* * *`  | CLI user                                    | quickly exit the program                           | don't have to waste time clicking the close button                         |
 | `* *`    | user                                        | hide private contact details                       | minimize chance of someone else seeing them by accident                    |
 | `* *`    | user pursuing efficiency                    | sort contacts by date accessed                     | easily find the most recently contacted contacts                           |
@@ -370,8 +370,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | careless user                               | undo my actions                                    | correct mistakes without losing my work                                    |
 | `* *`    | form teacher                                | retrieve emails of a specific group                | blast announcements via email without manual entry                         |
 | `* *`    | teacher managing committees                 | assign custom tags (e.g., "Prefect")               | filter students by extra-curricular roles                                  |
+| `* *`    | normal user                                 | edit contact details                               | keep my contact information up to date                                     |
+| `* *`    | teacher                                     | mark an assignment as submitted for a student      | track which students have handed in their work                             |
+| `* *`    | teacher                                     | unmark a submission for a student                  | correct accidental submission records                                      |
+| `* *`    | teacher                                     | grade an assignment for a student                  | record the student's score for that assignment                             |
+| `* *`    | teacher                                     | remove a grade for a student                       | correct grading mistakes                                                   |
 | `*`      | user with many contacts in the address book | sort contacts by name                              | locate a contact easily                                                    |
-| `*`      | normal user                                 | edit contact details                               | keep my contact information up to date                                     |
 | `*`      | forgetful user                              | have reminders for my deadlines                    | do not forget my tasks                                                     |
 | `*`      | busy user                                   | view all events/deadlines in a calendar view       | see my schedule at a glance                                                |
 
