@@ -1125,9 +1125,135 @@ Shows the full details of a contact, class, or assignment.
 
 </box>
 
-### [TO BE UPDATED] Editing a contact : `edit`
+### Editing a contact : `editcontact`
 
-TO BE UPDATED.
+Edits the details of an existing contact in the address book.
+
+**Format:** `editcontact INDEX [n/CONTACT_NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`
+
+* Edits the contact at the specified `INDEX`. The index refers to the index number shown in the displayed contact list.
+
+* The index **must be a positive integer** 1, 2, 3, …​
+
+* At least one optional field must be provided.
+
+* Existing values will be overwritten by the input values.
+
+* When editing tags, all existing tags are removed and replaced with the new tags provided. To remove all tags, provide `t/` with no value.
+
+* The `CONTACT_NAME` provided must only contain alphanumeric characters and spaces. It cannot be blank, and must also not match the name of any other existing contact (case-insensitive).
+
+* The `PHONE_NUMBER` provided must only contain numeric digits (0-9) and be a minimum of 3 digits long.
+
+* The `EMAIL` provided must be in the format `local-part@domain`.
+
+* The `ADDRESS` provided can contain any characters and cannot be blank.
+
+<box type="warning" seamless>
+
+**Warnings:**
+
+* Editing a contact's name to match another existing contact's name (case-insensitive) is disallowed, and the command will fail if you attempt to do so. For example, if there is already a contact named "Alice Tan", you cannot edit another contact's name to "alice tan" or "ALICE TAN".
+
+* Editing a contact's details while you are in a filtered list view (e.g. after using `findcontact`) may cause confusion as the list may change to match the filters applied previously. After an edit, you should use `list contacts` or `findcontact` with an updated filter if you want to see the edited entry.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** Ensure that you are in the correct tab view by using `list contacts` before editing to confirm the correct index. You can also use `findcontact` to narrow the list first.
+
+</box>
+
+**Examples:**
+
+* `list contacts` followed by `editcontact 1 p/91234567 e/johndoe@example.com`<br>
+Edits the phone number and email of the 1st contact in the displayed list to "91234567" and "<johndoe@example.com>" respectively.
+
+* `findcontact n/Bets` followed by `editcontact 1 n/Betsy Crower t/`<br>
+Edits the name of the 1st contact in the filtered list to "Betsy Crower" and clears all existing tags.
+
+### Editing a class : `editclass`
+
+Edits the name of an existing class in the address book.
+
+**Format:** `editclass INDEX c/CLASS_NAME`
+
+* Edits the class at the specified `INDEX`. The index refers to the index number shown in the displayed class list.
+
+* The index **must be a positive integer** 1, 2, 3, …​
+
+* The new `CLASS_NAME` cannot be blank, and must not match the name of any other existing class (case-insensitive).
+
+* All contacts previously allocated to this class will remain allocated after the edit.
+
+<box type="warning" seamless>
+
+**Warnings:**
+
+* Editing a class name is permanent and will be reflected across all contact allocations. Ensure the new name is correct before confirming the edit.
+
+* Editing a class name while you are in a filtered list view (e.g. after using `findclass`) may cause confusion as the list may change to match the filters applied previously. After an edit, you should use `list classes` or `findclass` with an updated filter if you want to see the edited entry.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** Ensure that you are in the correct tab view by using `list classes` before editing to confirm the correct index. You can also use `findclass` to narrow the list first.
+
+</box>
+
+**Examples:**
+
+* `list classes` followed by `editclass 1 c/CS2103T T10 2`<br>
+Renames the 1st class in the displayed class list to `CS2103T T10 2`.
+
+* `findclass c/Tutorial Group A` followed by `editclass 1 c/Tutorial Group B`<br>
+Renames the 1st class in the filtered list to `Tutorial Group B`.
+
+### Editing an assignment : `editass`
+
+Edits the details of an existing assignment in the address book.
+
+**Format:** `editass INDEX [ass/ASSIGNMENT_NAME] [d/DEADLINE]`
+
+* Edits the assignment at the specified `INDEX`. The index refers to the index number shown in the displayed assignment list.
+
+* The index **must be a positive integer** 1, 2, 3, …​
+
+* At least one optional field must be provided.
+
+* Existing values will be overwritten by the input values.
+
+* The new `ASSIGNMENT_NAME` cannot be blank, and must not match the name of any existing assignment (case-insensitive).
+
+* The `DEADLINE` provided must be in the format `dd-MM-yyyy HH:mm`.
+
+* Editing an assignment's name or deadline will not affect any existing submission or grading records associated with the assignment
+
+<box type="warning" seamless>
+
+**Warnings:**
+
+* Editing an assignment's name or deadline is permanent and will be reflected across all contact allocations. Ensure the new name is correct before confirming the edit.
+
+* Editing an assignment's details while you are in a filtered list view (e.g. after using `findass`) may cause confusion as the list may change to match the filters applied previously. After an edit, you should use `list assignments` or `findass` with an updated filter if you want to see the edited entry.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** Ensure that you are in the correct tab view by using `list assignments` before editing to confirm the correct index. You can also use `findass` to narrow the list first.
+
+</box>
+
+**Examples:**
+
+* `list assignments` followed by `editass 1 ass/Assignment 1234 d/20-12-2026 23:59`<br>
+Edits the name and deadline of the 1st assignment in the displayed assignment list to "Assignment 1234" and 20 December 2026 11.59pm respectively.
+
+* `findass ass/Assignment 1` followed by `editass 1 d/01-01-2027 00:00`<br>
+Edits only the deadline of the 1st assignment in the filtered list to 1 January 2027 12am.
 
 ### Deleting contacts, assignments, or classes : `delete`
 
@@ -1372,7 +1498,9 @@ If you encounter other issues, please open a GitHub Issue in the [project reposi
 | **Find Class**            | `findclass c/CLASS_NAME_KEYWORDS...` e.g., `findclass c/CS2103T CS2103`                                                                                                                                                                                            |
 | **Find Assignment**       | `findass ass/ASSIGNMENT_NAME_SEARCH_STRING` e.g., `findass ass/Assignment 1`<br>`findass [ds/DEADLINE_START] [de/DEADLINE_END]` e.g., `findass ds/31-12-2024`  or `findass ds/31-12-2024 23:59 de/02-01-2025 23:59`                                                |
 | **View Details**          | `view ct/CONTACT_INDEX` e.g., `view ct/2`<br>`view c/CLASS_NAME` e.g., `view c/CS2103T T10 1`<br>`view ass/ASSIGNMENT_NAME` e.g., `view ass/Assignment 1`                                                                                                          |
-| **Edit**                  | `edit INDEX [n/CONTACT_NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                                                                                                               |
+| **Edit Contact**          | `editcontact INDEX [n/CONTACT_NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...` <br> e.g., `editcontact 2 n/James Lee e/jameslee@example.com`                                                                                                               |
+| **Edit Class**            | `editclass INDEX c/CLASS_NAME` <br> e.g., `editclass 1 c/CS2103T T10 2`                                                                                                                                                                                            |
+| **Edit Assignment**       | `editass INDEX [ass/ASSIGNMENT_NAME] [d/DEADLINE]` <br> e.g., `editass 1 ass/Assignment 2 d/20-12-2026 23:59`                                                                                                                                                      |
 | **Delete**                | `delete ct/CONTACT_INDICES...` e.g., `delete ct/3`<br>`delete ass/ASSIGNMENT_NAME` e.g., `delete ass/Assignment 1`<br>`delete c/CLASS_NAME` e.g., `delete c/CS2103T T14`                                                                                           |
 | **Clear**                 | `clear`                                                                                                                                                                                                                                                            |
 | **Exit**                  | `exit`                                                                                                                                                                                                                                                             |
