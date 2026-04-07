@@ -220,6 +220,97 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 </box>
 
+### List feature
+
+The `list` command displays all contacts, assignments, or class groups to the user. This command is implemented using a family of subcommands: `ListContactCommand`, `ListAssignmentCommand`, and `ListClassCommand`, all extending the abstract `ListCommand` class.
+
+When a user executes `list contacts`, the following sequence occurs:
+
+1. `ListContactCommandParser` parses the command and creates a `ListContactCommand` with a predicate that shows all contacts (`PREDICATE_SHOW_ALL_CONTACTS`).
+1. The `LogicManager` executes the `ListContactCommand`.
+1. The command calls `model.updateFilteredContactList(PREDICATE_SHOW_ALL_CONTACTS)` to update the filtered list in the model.
+1. The `Model` updates its observable `FilteredList<Contact>`, which automatically triggers UI updates via JavaFX data binding.
+1. A `CommandResult` is returned with `ListView.CONTACTS`, directing the UI to display the contact list panel.
+
+**UI Integration:**
+
+The UI layer handles list display through a hierarchy of components:
+
+* `MainWindow` contains three list panel placeholders: `contactListPanelPlaceholder`, `assignmentListPanelPlaceholder`, and `classListPanelPlaceholder`.
+* `ContactListPanel`, `AssignmentListPanel`, and `ClassGroupListPanel` each accept an `ObservableList<T>` and render it as a list of individual cards through a JavaFX `ListView`.
+* Each card (e.g., `ContactCard`, `AssignmentCard`, `ClassGroupCard`) displays the entity with its index and details.
+* The `CommandResult.ListView` enum controls which panel is displayed to the user.
+
+**Design:**
+
+Both `list` and find-related commands use predicates to filter data, providing a consistent approach to data manipulation. The observable lists in JavaFX automatically update the UI whenever the filtered list changes, eliminating the need for manual UI refresh calls.
+
+### Find feature
+
+The find-related commands allow users to search for contacts, assignments, or class groups using various search criteria. Three separate find commands are implemented: `findcontact` (`findct`), `findass`, and `findclass` (`findc`), each supporting different search modes and predicates.
+
+#### FindContactCommand (`findcontact` / `findct`)
+
+`FindContactCommand` (alias: `findct`) supports three search modes:
+
+* **Name Search** (`n/NAME_KEYWORDS...`): Keyword-based matching (case-insensitive) with OR logic for multiple keywords. Uses `ContactNameContainsKeywordsPredicate`.
+* **Phone Search** (`p/PHONE_NUMBER`): Exact phone number match. Uses `ContactPhoneMatchesKeywordsPredicate`.
+* **Email Search** (`e/EMAIL`): Exact email address match (case-insensitive). Uses `ContactEmailMatchesKeywordsPredicate`.
+
+Exactly one of the three search modes must be specified per command.
+
+#### FindAssignmentCommand (`findass`)
+
+`FindAssignmentCommand` supports two search modes:
+
+* **Name Search** (`ass/ASSIGNMENT_NAME_SEARCH_STRING`): Substring matching (case-insensitive). Uses `AssignmentNameContainsKeywordsPredicate`.
+* **Deadline Search** (`dt_start/DEADLINE` and/or `dt_end/DEADLINE`): Date range matching supporting formats `dd-MM-yyyy` or `dd-MM-yyyy HH:mm`. Uses `AssignmentDeadlineInRangePredicate`.
+
+Exactly one of the two search modes must be specified per command. For deadline search, at least one of `dt_start/` or `dt_end/` must be provided.
+
+#### FindClassCommand (`findclass` / `findc`)
+
+`FindClassCommand` (alias: `findc`) supports one search mode:
+
+* **Name Search** (`c/CLASS_NAME_KEYWORDS...`): Keyword-based matching (case-insensitive) with OR logic for multiple keywords. Uses `ClassNameContainsKeywordsPredicate`.
+
+#### Parsing and Execution
+
+Each `Find*CommandParser` is responsible for:
+
+1. Validating that exactly one search mode is specified (enforced through mutually exclusive prefix checks).
+1. Parsing the search criteria into the appropriate format.
+1. Creating the corresponding predicate object.
+1. Returning a `Find*Command` with the predicate.
+
+When a user executes `findcontact n/alice bob`:
+
+1. `FindContactCommandParser` identifies the name search mode and extracts keywords ["alice", "bob"].
+1. It creates a `ContactNameContainsKeywordsPredicate` with these keywords.
+1. A `FindContactCommand` is instantiated with this predicate.
+1. The `LogicManager` executes the command, which calls `model.updateFilteredContactList(predicate)`.
+1. The `Model` updates its `FilteredList<Contact>`, automatically triggering UI refresh through JavaFX observables.
+1. A `CommandResult` with `ListView.CONTACTS` directs the UI to display the filtered contact list.
+
+#### Predicate Implementation
+
+Each predicate implements the `Predicate<T>` interface to evaluate whether an entity matches the search criteria:
+
+* `ContactNameContainsKeywordsPredicate`: Checks if the contact's name contains any of the keywords (case-insensitive).
+* `ContactPhoneMatchesKeywordsPredicate`: Checks if the contact's phone matches exactly.
+* `ContactEmailMatchesKeywordsPredicate`: Checks if the contact's email matches exactly (case-insensitive).
+* `AssignmentNameContainsKeywordsPredicate`: Checks if the assignment name contains the search string as a substring (case-insensitive).
+* `AssignmentDeadlineInRangePredicate`: Checks if the assignment deadline falls within the specified date/time range, supporting partial matching (e.g., `31-12-2024` matches `31-12-2024 23:59`).
+* `ClassNameContainsKeywordsPredicate`: Checks if the class name contains any of the keywords (case-insensitive).
+
+#### Design Considerations
+
+* **Command Separation**: Each entity type (Contact, Assignment, ClassGroup) has its own find command (`findcontact`, `findass`, `findclass`), making the API clear and preventing confusion about which command to use.
+* **Constraint Enforcement**: Parsers ensure only one search mode is used per command through mutual exclusivity checks.
+* **Flexible Search Modes**: Different entity types support different search modes based on their properties (e.g., assignments support deadline search, which contacts do not).
+* **Case Sensitivity**: Name-based searches are case-insensitive for better user experience, while phone searches are exact to ensure accuracy.
+* **Consistent Pattern**: All find commands follow the same predicate-based filtering pattern, maintaining architectural consistency with the list commands.
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
