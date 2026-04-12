@@ -13,10 +13,10 @@ public class AssignmentName {
             Names should only contain alphanumeric characters and spaces. Special characters such as hyphens (-), forward slashes (/), and parentheses () are allowed. The name should not be blank""";
 
     /*
-     * The first character of the address must not be a whitespace,
-     * otherwise " " (a blank string) becomes a valid input.
+     * The first character of the address can be alphanumeric or a special character (/, -, ().
+     * This allows patterns like "s/o" and "-name" while preventing blank strings.
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} /\\-()]*";
+    public static final String VALIDATION_REGEX = "[\\p{Alnum}/\\-()][\\p{Alnum} /\\-()]*";
 
     public final String fullName;
 
