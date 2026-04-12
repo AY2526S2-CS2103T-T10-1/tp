@@ -46,16 +46,16 @@ public class GradeAssignmentCommand extends Command {
             + "If no grading date is provided, the current date and time will be used.\n"
             + "Parameters: "
             + CliSyntax.PREFIX_ASSIGNMENT + "ASSIGNMENT_NAME "
+            + CliSyntax.PREFIX_SCORE + "SCORE "
             + "[" + CliSyntax.PREFIX_CLASS + "CLASS_NAME] "
             + "[" + CliSyntax.PREFIX_CONTACT + "CONTACT_INDICES...] "
-            + CliSyntax.PREFIX_SCORE + "SCORE "
             + "[" + CliSyntax.PREFIX_DATETIME + "GRADING_DATE]\n"
             + "At least one of " + CliSyntax.PREFIX_CLASS + " or " + CliSyntax.PREFIX_CONTACT + " must be provided.\n"
             + "Example: " + GradeAssignmentCommand.COMMAND_WORD + " "
             + CliSyntax.PREFIX_ASSIGNMENT + "Assignment 1 "
+            + CliSyntax.PREFIX_SCORE + "67.9 "
             + CliSyntax.PREFIX_CLASS + "CS2103T T10 1 "
             + CliSyntax.PREFIX_CONTACT + "1 2 3 "
-            + CliSyntax.PREFIX_SCORE + "67.9 "
             + CliSyntax.PREFIX_DATETIME + "21-02-2026 23:50";
 
     public static final String MESSAGE_SUCCESS = """
