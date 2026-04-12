@@ -11,7 +11,11 @@ import cpp.commons.util.AppUtil;
 public class ContactName {
 
     public static final String MESSAGE_CONSTRAINTS = """
-            Names should only contain alphanumeric characters and spaces. Special characters such as hyphens (-), forward slashes (/), and parentheses () are allowed to support naming conventions like hyphenated names (Anne-Marie), son/daughter indicators (s/o, d/o), and ethnic names in brackets (Tan Ah Beng (Alan)). The name should not be blank""";
+            Names should only contain alphanumeric characters and spaces. Special characters
+            such as hyphens (-), forward slashes (/), and parentheses () are allowed to support
+            naming conventions like hyphenated names (Anne-Marie), son/daughter indicators
+            (s/o, d/o), and ethnic names in brackets (Tan Ah Beng (Alan)). The name should
+            not be blank""";
 
     /*
      * Names must:
@@ -22,7 +26,8 @@ public class ContactName {
      * - Slashes only allowed in patterns: s/o, S/O, d/o, D/O
      * - Parentheses must contain at least one alphanumeric character
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}]([\\p{Alnum} ]|(?<=[sSdD])/[oO]|-(?=[\\p{Alnum}])|\\([\\p{Alnum} ]*[\\p{Alnum}][\\p{Alnum} ]*\\))*";
+    public static final String VALIDATION_REGEX = "[\\p{Alnum}]([\\p{Alnum} ]"
+            + "|(?<=[sSdD])/[oO]|-(?=[\\p{Alnum}])|\\([\\p{Alnum} ]*[\\p{Alnum}][\\p{Alnum} ]*\\))*";
 
     public final String fullName;
 

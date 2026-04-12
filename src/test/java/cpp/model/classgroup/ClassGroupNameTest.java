@@ -25,9 +25,11 @@ public class ClassGroupNameTest {
         Assertions.assertTrue(ClassGroupName.isValidName("12345")); // numbers only
         Assertions.assertTrue(ClassGroupName.isValidName("Group A")); // with capital letters
         Assertions.assertTrue(ClassGroupName.isValidName("Advanced Software Engineering Group 3")); // long name
-        Assertions.assertTrue(ClassGroupName.isValidName("CS2103-T10")); // with hyphen between characters
+        Assertions.assertTrue(ClassGroupName.isValidName("CS2103-T10")); // with hyphen
         Assertions.assertTrue(ClassGroupName.isValidName("Group (A)")); // with brackets
         Assertions.assertTrue(ClassGroupName.isValidName("Tutorial (Mon-Wed)")); // with hyphen and brackets
+        Assertions.assertTrue(ClassGroupName.isValidName("Group-")); // hyphen at end
+        Assertions.assertTrue(ClassGroupName.isValidName("Group/")); // slash at end
     }
 
     @Test
@@ -37,8 +39,7 @@ public class ClassGroupNameTest {
         Assertions.assertFalse(ClassGroupName.isValidName("^")); // only non-alphanumeric characters
         Assertions.assertFalse(ClassGroupName.isValidName("Group@1")); // contains non-alphanumeric characters
         Assertions.assertFalse(ClassGroupName.isValidName("-Group")); // hyphen at start
-        Assertions.assertFalse(ClassGroupName.isValidName("Group-")); // hyphen at end
-        Assertions.assertFalse(ClassGroupName.isValidName("(Group)")); // starts with bracket
+        Assertions.assertFalse(ClassGroupName.isValidName("/Group")); // slash at start
     }
 
     @Test

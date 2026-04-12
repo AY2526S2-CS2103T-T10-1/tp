@@ -10,18 +10,15 @@ import cpp.commons.util.AppUtil;
 public class ClassGroupName {
 
     public static final String MESSAGE_CONSTRAINTS = """
-            Names should only contain alphanumeric characters and spaces. Special characters such as hyphens (-), forward slashes (/), and parentheses () are allowed to support naming conventions like hyphenated names and ethnic names in brackets. The name should not be blank""";
+            Names should only contain alphanumeric characters and spaces. Special characters
+            such as hyphens (-), forward slashes (/), and parentheses () are allowed. The name
+            should not be blank""";
 
     /*
-     * Names must:
-     * - Start with an alphanumeric character
-     * - Contain only alphanumeric, spaces, hyphens (between alphanumeric),
-     * parentheses (with content), and s/o, d/o patterns
-     * - Hyphens must be between two alphanumeric characters (not at start/end)
-     * - Slashes only allowed in patterns: s/o, S/O, d/o, D/O
-     * - Parentheses must contain at least one alphanumeric character
+     * The first character of the address must not be a whitespace,
+     * otherwise " " (a blank string) becomes a valid input.
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}]([\\p{Alnum} ]|(?<=[sSdD])/[oO]|-(?=[\\p{Alnum}])|\\([\\p{Alnum} ]*[\\p{Alnum}][\\p{Alnum} ]*\\))*";
+    public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} /\\-()]*";
 
     public final String fullName;
 
