@@ -95,7 +95,7 @@ public class AllocateClassGroupCommand extends Command {
         }
 
         return new CommandResult(
-                String.format(AllocateClassGroupCommand.MESSAGE_SUCCESS, this.classGroupName.fullName,
+                String.format(AllocateClassGroupCommand.MESSAGE_SUCCESS, classGroupToAllocate.getName().fullName,
                         this.successfulAllocationCount, this.successfulContactAllocations.toString(),
                         this.unsuccessfulContactAllocations.toString()));
     }

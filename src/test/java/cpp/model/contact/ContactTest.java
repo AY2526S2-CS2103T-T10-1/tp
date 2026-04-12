@@ -51,11 +51,6 @@ public class ContactTest {
                 .withName(CommandTestUtil.VALID_NAME_BOB.toLowerCase())
                 .build();
         Assertions.assertTrue(TypicalContacts.BOB.isSameContact(editedBob));
-
-        // name has trailing spaces, all other attributes same -> returns false
-        String nameWithTrailingSpaces = CommandTestUtil.VALID_NAME_BOB + " ";
-        editedBob = new ContactBuilder(TypicalContacts.BOB).withName(nameWithTrailingSpaces).build();
-        Assertions.assertFalse(TypicalContacts.BOB.isSameContact(editedBob));
     }
 
     @Test

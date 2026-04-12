@@ -55,12 +55,13 @@ public class ClassGroupName {
         }
 
         ClassGroupName otherName = (ClassGroupName) other;
-        return this.fullName.toLowerCase().equals(otherName.fullName.toLowerCase());
+        return this.fullName.toLowerCase().replaceAll("\\s+", "")
+                .equals(otherName.fullName.toLowerCase().replaceAll("\\s+", ""));
     }
 
     @Override
     public int hashCode() {
-        return this.fullName.toLowerCase().hashCode();
+        return this.fullName.toLowerCase().replaceAll("\\s+", "").hashCode();
     }
 
 }
