@@ -46,6 +46,10 @@ UniqueAssignmentList --> "~* all" Assignment
 UniqueContactAssignmentList --> "~* all" ContactAssignment
 UniqueClassGroupList --> "~* all" ClassGroup
 
+' Contact  -- "*" Assignment :assignedTo <
+' (Contact, Assignment) .. ContactAssignment
+' ClassGroup --> "*" Contact :has >
+
 Contact -[hidden]up--> I
 UniqueContactList -[hidden]right-> I
 

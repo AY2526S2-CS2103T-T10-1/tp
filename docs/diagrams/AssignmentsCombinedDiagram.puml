@@ -26,8 +26,8 @@ Class ContactAssignment {
 AssignmentManager "1" o-- "*" ContactAssignment : > manages
 UniqueContactAssignmentList "1" o-- "*" ContactAssignment : > contains
 UniqueAssignmentList "1" o-- "*" Assignment : > contains
-ContactAssignment "*" --- "1" Assignment
-ContactAssignment "*" --- "1" Contact
+Contact  -- "*" Assignment :assignedTo <
+(Contact, Assignment) .. ContactAssignment
 ContactAssignment "1" --> "1" SubmissionInfo
 ContactAssignment "1" --> "1" GradeInfo
 
