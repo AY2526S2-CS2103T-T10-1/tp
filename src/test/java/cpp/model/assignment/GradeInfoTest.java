@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import cpp.commons.exceptions.IllegalValueException;
+
 public class GradeInfoTest {
 
     @Test
@@ -31,39 +33,39 @@ public class GradeInfoTest {
     public void createFromStorage_gradedButNotSubmitted_throwsIllegalArgumentException() {
         SubmissionInfo si = new SubmissionInfo(false, null);
         LocalDateTime grading = LocalDateTime.now();
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> GradeInfo.createFromStorage(true, grading, 50f, si));
+        Assertions.assertThrows(IllegalValueException.class,
+                () -> GradeInfo.createFromStorage(true, grading, "50", si));
     }
 
     @Test
     public void createFromStorage_gradedWithNullDate_throwsIllegalArgumentException() {
         SubmissionInfo si = new SubmissionInfo(true, LocalDateTime.now());
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> GradeInfo.createFromStorage(true, null, 50f, si));
+        Assertions.assertThrows(IllegalValueException.class,
+                () -> GradeInfo.createFromStorage(true, null, "50", si));
     }
 
     @Test
     public void createFromStorage_ungradedWithNonNullDate_throwsIllegalArgumentException() {
         SubmissionInfo si = new SubmissionInfo(true, LocalDateTime.now());
         LocalDateTime grading = LocalDateTime.now();
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> GradeInfo.createFromStorage(false, grading, 0f, si));
+        Assertions.assertThrows(IllegalValueException.class,
+                () -> GradeInfo.createFromStorage(false, grading, "0", si));
     }
 
     @Test
     public void createFromStorage_negativeScore_throwsIllegalArgumentException() {
         SubmissionInfo si = new SubmissionInfo(true, LocalDateTime.now());
         LocalDateTime grading = LocalDateTime.now();
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> GradeInfo.createFromStorage(true, grading, -1f, si));
+        Assertions.assertThrows(IllegalValueException.class,
+                () -> GradeInfo.createFromStorage(true, grading, "-1", si));
     }
 
     @Test
     public void createFromStorage_scoreTooLarge_throwsIllegalArgumentException() {
         SubmissionInfo si = new SubmissionInfo(true, LocalDateTime.now());
         LocalDateTime grading = LocalDateTime.now();
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> GradeInfo.createFromStorage(true, grading, 101f, si));
+        Assertions.assertThrows(IllegalValueException.class,
+                () -> GradeInfo.createFromStorage(true, grading, "100.0000000001", si));
     }
 
     @Test
@@ -71,16 +73,8 @@ public class GradeInfoTest {
         LocalDateTime submission = LocalDateTime.now();
         LocalDateTime grading = submission.minusDays(1);
         SubmissionInfo si = new SubmissionInfo(true, submission);
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> GradeInfo.createFromStorage(true, grading, 50f, si));
-    }
-
-    @Test
-    public void isValidGradeInfo_gradedButNotSubmitted_returnsFalse() {
-        LocalDateTime submission = LocalDateTime.now();
-        LocalDateTime grading = submission.plusHours(1);
-        SubmissionInfo si = new SubmissionInfo(false, null);
-        Assertions.assertEquals(false, GradeInfo.isValidGradeInfo(true, grading, 50f, si));
+        Assertions.assertThrows(IllegalValueException.class,
+                () -> GradeInfo.createFromStorage(true, grading, "50", si));
     }
 
     @Test

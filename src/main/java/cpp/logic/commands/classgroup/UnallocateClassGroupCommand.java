@@ -97,7 +97,8 @@ public class UnallocateClassGroupCommand extends Command {
         }
 
         return new CommandResult(
-                String.format(UnallocateClassGroupCommand.MESSAGE_SUCCESS, this.classGroupName.fullName,
+                String.format(UnallocateClassGroupCommand.MESSAGE_SUCCESS,
+                        classGroupToUnallocate.getName().fullName,
                         this.successfulUnallocationCount, this.successfulContactUnallocations.toString(),
                         this.unsuccessfulContactUnallocations.toString()));
     }

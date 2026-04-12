@@ -61,7 +61,7 @@ class JsonAdaptedAssignment {
         if (!AssignmentName.isValidName(this.name)) {
             throw new IllegalValueException(AssignmentName.MESSAGE_CONSTRAINTS);
         }
-        final AssignmentName modelName = new AssignmentName(this.name);
+        final AssignmentName modelName = ParserUtil.parseAssignmentName(this.name);
 
         if (this.deadline == null) {
             throw new IllegalValueException(String.format(JsonAdaptedAssignment.MISSING_FIELD_MESSAGE_FORMAT,

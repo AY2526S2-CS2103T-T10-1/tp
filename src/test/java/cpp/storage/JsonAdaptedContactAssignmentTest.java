@@ -224,8 +224,9 @@ public class JsonAdaptedContactAssignmentTest {
         JsonAdaptedContactAssignment json = new JsonAdaptedContactAssignment(
                 JsonAdaptedContactAssignmentTest.VALID_ASSIGNMENT_ID, JsonAdaptedContactAssignmentTest.VALID_CONTACT_ID,
                 "true", null, "false", null, "0");
-        String expectedMessage = String.format(JsonAdaptedContactAssignment.MISSING_FIELD_MESSAGE_FORMAT,
-                "submissionDate or isSubmitted");
+        String expectedMessage = """
+                Invalid submission status. The ContactAssignment has a submission date but is not marked as submitted, \
+                or is marked as submitted but does not have a submission date.""";
         Assert.assertThrows(IllegalValueException.class, expectedMessage, () -> json.toModelType(addressBook));
 
         expectedMessage = String.format(JsonAdaptedContactAssignment.INVALID_DATE_MESSAGE,
@@ -250,7 +251,7 @@ public class JsonAdaptedContactAssignmentTest {
         JsonAdaptedContactAssignment json = new JsonAdaptedContactAssignment(
                 JsonAdaptedContactAssignmentTest.VALID_ASSIGNMENT_ID, JsonAdaptedContactAssignmentTest.VALID_CONTACT_ID,
                 "true", JsonAdaptedContactAssignmentTest.submissionDateString, "true", null, "50");
-        String expectedMessage = GradeInfo.INVALID_GRADE_STRING;
+        String expectedMessage = "gradingDate cannot be null if the assignment is graded";
         Assert.assertThrows(IllegalValueException.class, expectedMessage, () -> json.toModelType(addressBook));
 
         expectedMessage = String.format(JsonAdaptedContactAssignment.INVALID_DATE_MESSAGE, "123");
@@ -274,7 +275,7 @@ public class JsonAdaptedContactAssignmentTest {
                 JsonAdaptedContactAssignmentTest.VALID_ASSIGNMENT_ID, JsonAdaptedContactAssignmentTest.VALID_CONTACT_ID,
                 "true", JsonAdaptedContactAssignmentTest.submissionDateString, "true",
                 invalidGradingDateString, "50");
-        String expectedMessage2 = String.format(GradeInfo.INVALID_GRADE_STRING);
+        String expectedMessage2 = "gradingDate cannot be before submissionDate";
         Assert.assertThrows(IllegalValueException.class, expectedMessage2, () -> json3.toModelType(addressBook2));
     }
 
@@ -292,7 +293,7 @@ public class JsonAdaptedContactAssignmentTest {
         JsonAdaptedContactAssignment json = new JsonAdaptedContactAssignment(
                 JsonAdaptedContactAssignmentTest.VALID_ASSIGNMENT_ID, JsonAdaptedContactAssignmentTest.VALID_CONTACT_ID,
                 "false", null, "true", JsonAdaptedContactAssignmentTest.gradingDateString, "50");
-        String expectedMessage = GradeInfo.INVALID_GRADE_STRING;
+        String expectedMessage = "isGraded cannot be true if the assignment is not submitted";
         Assert.assertThrows(IllegalValueException.class, expectedMessage, () -> json.toModelType(addressBook));
     }
 

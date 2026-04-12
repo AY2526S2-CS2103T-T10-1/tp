@@ -30,6 +30,9 @@ class JsonAdaptedContactAssignment {
             Invalid submitted status %s. Please use 'true' or 'false'.""";
     public static final String INVALID_GRADED_MESSAGE = """
             Invalid graded status %s. Please use 'true' or 'false'.""";
+    public static final String INVALID_SUBMISSION_STATUS = """
+            Invalid submission status. The ContactAssignment has a submission date but is not marked as submitted, \
+            or is marked as submitted but does not have a submission date.""";
 
     private final String assignmentId;
     private final String contactId;
@@ -123,8 +126,7 @@ class JsonAdaptedContactAssignment {
         }
         if (!SubmissionInfo.isValidSubmissionInfo(Boolean.parseBoolean(
                 this.isSubmitted), modelSubmissionDate)) {
-            throw new IllegalValueException(String.format(JsonAdaptedContactAssignment.MISSING_FIELD_MESSAGE_FORMAT,
-                    "submissionDate or isSubmitted"));
+            throw new IllegalValueException(JsonAdaptedContactAssignment.INVALID_SUBMISSION_STATUS);
         }
         modelSubmissionInfo = new SubmissionInfo(Boolean.parseBoolean(this.isSubmitted), modelSubmissionDate);
 
@@ -153,19 +155,8 @@ class JsonAdaptedContactAssignment {
             throw new IllegalValueException(String.format(JsonAdaptedContactAssignment.INVALID_DATE_MESSAGE,
                     this.gradingDate));
         }
-        try {
-            final float parsedScore = ParserUtil.parseScore(this.score);
-            if (!GradeInfo.isValidGradeInfo(Boolean.parseBoolean(this.isGraded), modelGradingDate,
-                    parsedScore,
-                    modelSubmissionInfo)) {
-                throw new IllegalValueException(GradeInfo.INVALID_GRADE_STRING);
-            }
-
-            modelGradeInfo = GradeInfo.createFromStorage(Boolean.parseBoolean(this.isGraded), modelGradingDate,
-                    parsedScore, modelSubmissionInfo);
-        } catch (ParseException e) {
-            throw new IllegalValueException(e.getMessage());
-        }
+        modelGradeInfo = GradeInfo.createFromStorage(Boolean.parseBoolean(this.isGraded), modelGradingDate,
+                this.score, modelSubmissionInfo);
 
         return new ContactAssignment(this.assignmentId, this.contactId, modelSubmissionInfo.isSubmitted(),
                 modelSubmissionDate, modelGradeInfo.isGraded(), modelGradingDate, modelGradeInfo.getScore());
