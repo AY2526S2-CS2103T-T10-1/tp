@@ -75,7 +75,7 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/AY2
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `ContactListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S2-CS2103T-T10-1/tp/tree/master/src/main/java/cpp/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S2-CS2103T-T10-1/tp/tree/master/src/main/resources/view/MainWindow.fxml)
+The `UI` component uses the JavaFX UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S2-CS2103T-T10-1/tp/tree/master/src/main/java/cpp/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S2-CS2103T-T10-1/tp/tree/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
@@ -202,7 +202,7 @@ A separate `UniqueContactAssignmentList` is used to manage the list of `ContactA
 
 <puml src="diagrams/AssignmentsCombinedDiagram.puml" width="600" />
 
-As you might already have noticed, `ContactAssignment` objects do not store any information about classes. We chose this design to allow users to have greater control over the contacts who are allocated assignments. For example, a user can choose to assign an assignment to the entire class initially and choose to unallocate it from certain contacts later on, without having to worry about the class information being stored in the `ContactAssignment` objects.
+As you might already have noticed, `ContactAssignment` objects do not store any information about classes. We chose this design to allow users to have greater control over the contacts who are allocated assignments. For example, a user can choose to allocate an assignment to the entire class initially and choose to unallocate it from certain contacts later on, without having to worry about the class information being stored in the `ContactAssignment` objects.
 
 As a result of this design, any class group operations will not affect the `ContactAssignment` entities. Hence, users will have to manually allocate or unallocate assignments to contacts when they allocate or unallocate contacts from class groups. We believe this is a reasonable trade-off to give users more control over the assignment allocation.
 
@@ -219,6 +219,119 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 
 </box>
+
+### List feature
+
+The `list` command displays all contacts, assignments, or class groups to the user. This command is implemented using a family of subcommands: `ListContactCommand`, `ListAssignmentCommand`, and `ListClassCommand`, all extending the abstract `ListCommand` class.
+
+When a user executes `list contacts`, the following sequence occurs:
+
+1. `ListCommandParser` parses the `contacts` subcommand and creates a `ListContactCommand`.
+1. The `LogicManager` executes the `ListContactCommand`.
+1. The command calls `model.updateFilteredContactList(Model.PREDICATE_SHOW_ALL_CONTACTS)` to update the filtered list in the model.
+1. The `Model` updates its observable `FilteredList<Contact>`, which automatically triggers UI updates via JavaFX data binding.
+1. A `CommandResult` is returned with `ListView.CONTACTS`, directing the UI to display the contact list panel.
+
+The sequence diagram below illustrates the interactions within the `Logic` component, taking `list contacts` as an example.
+
+<puml src="diagrams/ListSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `list contacts` Command" />
+
+**UI Integration:**
+
+The UI layer handles list display through a hierarchy of components:
+
+* `MainWindow` contains three list panel placeholders: `contactListPanelPlaceholder`, `assignmentListPanelPlaceholder`, and `classListPanelPlaceholder`.
+* `ContactListPanel`, `AssignmentListPanel`, and `ClassGroupListPanel` each accept an `ObservableList<T>` and render it as a list of individual cards through a JavaFX `ListView`.
+* Each card (e.g., `ContactCard`, `AssignmentCard`, `ClassGroupCard`) displays the entity with its index and details.
+* The `CommandResult.ListView` enum controls which panel is displayed to the user.
+
+The class diagram below illustrates the structure of the UI components involved in displaying list data.
+
+<puml src="diagrams/ListUiClassDiagram.puml" alt="UI Components Structure for List Feature" />
+
+**Design:**
+
+Both `list` and find-related commands use predicates to filter data, providing a consistent approach to data manipulation. The observable lists in JavaFX automatically update the UI whenever the filtered list changes, eliminating the need for manual UI refresh calls.
+
+### Find feature
+
+The find-related commands allow users to search for contacts, assignments, or class groups using various search criteria. Three separate find commands are implemented: `findcontact` (`findct`), `findass`, and `findclass` (`findc`), each supporting different search modes and predicates.
+
+Here is a class diagram showing the structure of the Find command hierarchy:
+
+<puml src="diagrams/FindCommandClassDiagram.puml" alt="Class Diagram for Find Commands" />
+
+#### FindContactCommand (`findcontact` / `findct`)
+
+`FindContactCommand` (alias: `findct`) supports three search modes:
+
+* **Name Search** (`n/NAME_KEYWORDS...`): Keyword-based matching (case-insensitive) with OR logic for multiple keywords. Uses `ContactNameContainsKeywordsPredicate`.
+* **Phone Search** (`p/PHONE_NUMBER`): Exact phone number match. Uses `ContactPhoneMatchesKeywordsPredicate`.
+* **Email Search** (`e/EMAIL`): Exact email address match (case-insensitive). Uses `ContactEmailMatchesKeywordsPredicate`.
+
+Exactly one of the three search modes must be specified per command.
+
+#### FindAssignmentCommand (`findass`)
+
+`FindAssignmentCommand` supports two search modes:
+
+* **Name Search** (`ass/ASSIGNMENT_NAME_SEARCH_STRING`): Substring matching (case-insensitive). Uses `AssignmentNameContainsKeywordsPredicate`.
+* **Deadline Search** (`ds/DEADLINE` and/or `de/DEADLINE`): Date range matching supporting formats `dd-MM-yyyy` or `dd-MM-yyyy HH:mm`. Uses `AssignmentDeadlineInRangePredicate`.
+
+Exactly one of the two search modes must be specified per command. For deadline search, at least one of `ds/` or `de/` must be provided.
+
+#### FindClassCommand (`findclass` / `findc`)
+
+`FindClassCommand` (alias: `findc`) supports one search mode:
+
+* **Name Search** (`c/CLASS_NAME_KEYWORDS...`): Keyword-based matching (case-insensitive) with OR logic for multiple keywords. Uses `ClassNameContainsKeywordsPredicate`.
+
+#### Parsing and Execution
+
+Each `Find*CommandParser` is responsible for:
+
+1. Validating that exactly one search mode is specified (enforced through mutually exclusive prefix checks).
+1. Parsing the search criteria into the appropriate format.
+1. Creating the corresponding predicate object.
+1. Returning a `Find*Command` with the predicate.
+
+When a user executes `findcontact n/alice bob`:
+
+1. `FindContactCommandParser` identifies the name search mode and extracts keywords ["alice", "bob"].
+1. It creates a `ContactNameContainsKeywordsPredicate` with these keywords.
+1. A `FindContactCommand` is instantiated with this predicate.
+1. The `LogicManager` executes the command, which calls `model.updateFilteredContactList(predicate)`.
+1. The `Model` updates its `FilteredList<Contact>`, automatically triggering UI refresh through JavaFX observables.
+1. A `CommandResult` with `ListView.CONTACTS` directs the UI to display the filtered contact list.
+
+The sequence diagram below illustrates the interactions within the `Logic` component for the `findcontact n/alice` command:
+
+<puml src="diagrams/FindContactSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `findcontact n/alice` Command" />
+
+#### Predicate Implementation
+
+Each predicate implements the `Predicate<T>` interface to evaluate whether an entity matches the search criteria:
+
+* `ContactNameContainsKeywordsPredicate`: Checks if the contact's name contains any of the keywords (case-insensitive).
+* `ContactPhoneMatchesKeywordsPredicate`: Checks if the contact's phone matches exactly.
+* `ContactEmailMatchesKeywordsPredicate`: Checks if the contact's email matches exactly (case-insensitive).
+* `AssignmentNameContainsKeywordsPredicate`: Checks if the assignment name contains the search string as a substring (case-insensitive).
+* `AssignmentDeadlineInRangePredicate`: Checks if the assignment deadline falls within the specified date/time range, supporting partial matching (e.g., `31-12-2024` matches `31-12-2024 23:59`).
+* `ClassNameContainsKeywordsPredicate`: Checks if the class name contains any of the keywords (case-insensitive).
+
+#### Design Considerations
+
+* **Command Separation**: Each entity type (Contact, Assignment, ClassGroup) has its own find command (`findcontact`, `findass`, `findclass`), making the API clear and preventing confusion about which command to use.
+* **Constraint Enforcement**: Parsers ensure only one search mode is used per command through mutual exclusivity checks.
+* **Flexible Search Modes**: Different entity types support different search modes based on their properties (e.g., assignments support deadline search, which contacts do not).
+* **Case Sensitivity**: Name-based searches are case-insensitive for better user experience, while phone searches are exact to ensure accuracy.
+* **Consistent Pattern**: All find commands follow the same predicate-based filtering pattern, maintaining architectural consistency with the list commands.
+
+**UI Integration for Find:**
+
+The find commands uses the same UI components as the list commands. Results are displayed through `ContactListPanel`, `AssignmentListPanel`, and `ClassGroupListPanel`, which render the filtered data as lists of cards. This reuse ensures a consistent user experience between list and find operations.
+
+<puml src="diagrams/FindUiClassDiagram.puml" alt="UI Components Structure for Find Feature" />
 
 ### \[Proposed\] Undo/redo feature
 
@@ -353,24 +466,26 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | new user                                    | see usage instructions                             | refer to instructions when I forget how to use the App                     |
 | `* * *`  | user                                        | delete a contact                                   | remove entries that I no longer need                                       |
 | `* * *`  | user                                        | find a contact by name                             | locate details of contacts without having to go through the entire list    |
-| `* * *`  | user                                        | find contacts by a specific field                  |                                                                            |
+| `* * *`  | user                                        | find contacts by a specific field                  | narrow down my search to quickly locate the right contact                  |
 | `* * *`  | user                                        | add contacts                                       | easily retrieve them                                                       |
 | `* * *`  | user                                        | see all the assignments/contacts/classes           | keep track of what has been created                                        |
 | `* *`    | busy user                                   | add deadlines/events                               | keep track of my things easily                                             |
 | `* * *`  | teacher managing many students              | organize my students into separate groups by class | easily identify which students belong to which class                       |
 | `* * *`  | teacher                                     | see all assignment status for each student         | keep track of every individual's performance                               |
 | `* * *`  | teacher changing classes every year         | easily delete multiple old contacts                | keep only the contacts I need accessible                                   |
-| `* * *`  | CLI user                                    | quickly exit the program                           | don't have to waste time clicking the close button                         |
+| `* * *`  | CLI user                                    | quickly exit the program                           | avoid wasting time clicking the close button                               |
 | `* *`    | user                                        | hide private contact details                       | minimize chance of someone else seeing them by accident                    |
 | `* *`    | user pursuing efficiency                    | sort contacts by date accessed                     | easily find the most recently contacted contacts                           |
 | `* *`    | forgetful teacher                           | find students even when I mistype their names      | easily find them even if I don't remember the exact spelling of their name |
 | `* *`    | user with multiple devices                  | export and import selected contacts                | easily switch between devices                                              |
 | `* *`    | meticulous teacher                          | add private notes (e.g., allergies)                | recall critical student welfare details                                    |
-| `* *`    | user                                        | retrieve my input history                          | don't have to retype the entire command when I make a small typo           |
+| `* *`    | user                                        | retrieve my input history                          | avoid retyping the entire command when I make a small typo                 |
 | `* *`    | careless user                               | undo my actions                                    | correct mistakes without losing my work                                    |
 | `* *`    | form teacher                                | retrieve emails of a specific group                | blast announcements via email without manual entry                         |
 | `* *`    | teacher managing committees                 | assign custom tags (e.g., "Prefect")               | filter students by extra-curricular roles                                  |
 | `* *`    | normal user                                 | edit contact details                               | keep my contact information up to date                                     |
+| `* *`    | teacher                                     | edit class details                                 | keep class information up to date                                          |
+| `* *`    | teacher                                     | edit assignment details                            | keep assignment information up to date                                     |
 | `* *`    | teacher                                     | mark an assignment as submitted for a student      | track which students have handed in their work                             |
 | `* *`    | teacher                                     | unmark a submission for a student                  | correct accidental submission records                                      |
 | `* *`    | teacher                                     | grade an assignment for a student                  | record the student's score for that assignment                             |
@@ -387,15 +502,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User requests to `addcontact` a contact with fields (Name, Phone, Email, Address, Class name, Assignment name).
+1. User requests to add a contact with fields (_Name_, _Phone_, _Email_, _Address_, _Class name_, _Assignment name_, _Tags_).
 1. System <u>[shows updated contact list (Use Case 2)](#use-case-2-list-contacts)</u>.
 1. Use case ends.
 
 **Extensions**
 
-* 1a. User left optional fields blank (e.g. Class name, Assignment name).
+* 1a. User left 1 or more optional fields blank (e.g. _Class name_, _Assignment name_, _Tags_).
   * 1a1. System accepts the input and proceeds.
-* 1b. A contact with the same name and phone number exists in contact list.
+* 1b. A contact with the same name exists in contact list.
   * 1b1. System shows an error message.
   * 1b2. Use case ends.
 * 1c. Invalid or missing fields.
@@ -412,15 +527,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 2a. No contacts exist in the list.
-  * 2a1. System shows an empty list with a message indicating that no contacts exist.
+* 1a. No contacts exist in the list.
+  * 1a1. System shows an empty list with a label indicating that no contacts exist.
+  * 1a2. Use case ends.
 
 #### Use Case 3: Add a New Class
 
 **MSS**
 
-1. User requests to add a class with fields (Class name).
-1. System <u>[shows class list (Use Case 4)](#use-case-4-list-classes)</u>.
+1. User requests to add a class with fields (_Class name_, _Contact indices_).
+1. System updates the list of known classes with the new class, allocating the specified contacts to it.
 1. Use case ends.
 
 **Extensions**
@@ -428,9 +544,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1a. A class with the same name exists in class list.
   * 1a1. System shows an error message.
   * 1a2. Use case ends.
-* 1b. Invalid or missing fields.
-  * 1b1. System shows an error message.
-  * 1b2. Use case ends.
+* 1b. User left optional _Contact indices_ field blank.
+  * 1b1. System accepts the input and proceeds, creating the class with no contacts allocated to it.
+* 1c. Invalid or missing fields.
+  * 1c1. System shows an error message.
+  * 1c2. Use case ends.
 
 #### Use Case 4: List Classes
 
@@ -442,16 +560,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 2a. No classes exist in the list.
-  * 2a1. System shows an empty list with a message indicating that no classes exist.
-  * 2a2. Use case ends.
+* 1a. No classes exist in the list.
+  * 1a1. System shows an empty list with a label indicating that no classes exist.
+  * 1a2. Use case ends.
 
-#### Use Case 5: Assign a Contact to a Class
+#### Use Case 5: Allocate Contacts to a Class
 
 **MSS**
 
-1. User requests to assign a contact to a class.
-1. System assigns the contact to the class.
+1. User requests to allocate contact(s) to a class.
+1. System allocates the contact(s) to the class.
 1. Use case ends.
 
 **Extensions**
@@ -459,17 +577,20 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1a. Invalid contact or class.
   * 1a1. System shows an error message.
   * 1a2. Use case ends.
-* 1b. Contact is already assigned to the class.
-  * 1b1. System shows an error message.
+* 1b. Contact is already allocated to the class.
+  * 1b1. System proceeds with Step 2 without the contact.
   * 1b2. Use case ends.
+* 2a. No contacts are allocated to the class.
+  * 2a1. System shows an error message.
+  * 2a2. Use case ends.
 
-#### Use Case 6: Remove a Contact from a Class
+#### Use Case 6: Unallocate Contacts from a Class
 
 **MSS**
 
-1. User <u>[views the list of contacts assigned to a class (Use Case 18)](#use-case-18-view-a-class)</u>.
-1. User requests to remove a contact from the class.
-1. System removes the contact from the class.
+1. User <u>[views the list of contacts allocated to a class (Use Case 21)](#use-case-21-view-a-class)</u>.
+1. User requests to unallocate a contact from the class.
+1. System unallocates the contact from the class.
 1. Use case ends.
 
 **Extensions**
@@ -477,27 +598,30 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 2a. Invalid contact or class.
   * 2a1. System shows an error message.
   * 2a2. Use case ends.
-* 2b. Contact is not assigned to the class.
-  * 2b1. System shows an error message.
+* 2b. Contact is not allocated to the class.
+  * 2b1. System proceeds with Step 3 without the contact.
   * 2b2. Use case ends.
+* 3a. No contacts are unallocated from the class.
+  * 3a1. System shows an error message.
+  * 3a2. Use case ends.
 
 #### Use Case 7: Add a New Assignment
 
 **MSS**
 
-1. User requests to add an assignment with fields (Assignment name, Deadline, Class name, Contact indices).
-1. System <u>[shows updated assignment list (Use Case 8)](#use-case-8-list-assignments)</u>.
+1. User requests to add an assignment with fields (_Assignment name_, _Deadline_, _Class name_, _Contact indices_).
+1. System updates the list of known assignments with the new assignment, allocating it to the specified contacts and any contacts in the specified class.
 1. Use case ends.
 
 **Extensions**
 
-* 1a. A assignment with the same name exists in assignment list.
+* 1a. An assignment with the same name exists in assignment list.
   * 1a1. System shows an error message.
   * 1a2. Use case ends.
 * 1b. Invalid or missing fields.
   * 1b1. System shows an error message.
   * 1b2. Use case ends.
-* 1c. User left optional fields blank (e.g. Class name, Contact indices).
+* 1c. User left optional fields blank (e.g. _Class name_, _Contact indices_).
   * 1c1. System accepts the input and proceeds.
 
 #### Use Case 8: List Assignments
@@ -510,62 +634,69 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 2a. No assignments exist in the list.
-  * 2a1. System shows an empty list with a message indicating that no assignments exist.
-  * 2a2. Use case ends.
+* 1a. No assignments exist in the list.
+  * 1a1. System shows an empty list with a label indicating that no assignments exist.
+  * 1a2. Use case ends.
 
-#### Use Case 9: Assign an Assignment
+#### Use Case 9: Allocate an Assignment
 
 **MSS**
 
-1. User requests to assign an assignment with fields (Assignment name, Class name, Contact indices).
-1. System assigns the assignment to the contacts.
+1. User requests to allocate an assignment with fields (_Assignment name_, _Class name_, _Contact indices_).
+1. System allocates the assignment to the contacts.
 1. Use case ends.
 
 **Extensions**
 
-* 1a. Invalid assignment or contacts.
+* 1a. Invalid assignment, class, or contacts.
   * 1a1. System shows an error message.
   * 1a2. Use case ends.
-* 1b. Assignment is already assigned to one of the contacts.
-  * 1b1. System proceeds with Step 3.
-* 1c. User left Class name field blank.
-  * 1c1. System proceeds with Step 3, assigning only to contacts specified.
-* 1d. User left Contact indices field blank.
-  * 1d1. System proceeds with Step 3, assigning to all contacts in the specified class.
+* 1b. Assignment is already allocated to one of the contacts.
+  * 1b1. System proceeds with Step 2 without the contact.
+* 1c. User left only the _Class name_ field blank.
+  * 1c1. System proceeds with Step 2, allocating only to contacts specified.
+* 1d. User left only the _Contact indices_ field blank.
+  * 1d1. System proceeds with Step 2, allocating to all contacts in the specified class.
+* 1e. User left both _Class name_ and _Contact indices_ fields blank.
+  * 1e1. System shows an error message.
+  * 1e2. Use case ends.
+* 2a. No contacts are allocated the assignment.
+  * 2a1. System shows an error message.
+  * 2a2. Use case ends.
 
-#### Use Case 10: Unassign an Assignment
+#### Use Case 10: Unallocate an Assignment
 
 **MSS**
 
-1. User <u>[views the list of contacts assigned to an assignment (Use Case 19)](#use-case-19-view-an-assignment)</u>.
-1. User requests to unassign an assignment with fields (Assignment name, Class name, Contact indices).
-1. System unassigns the assignment from the contacts.
+1. User <u>[views the list of contacts allocated to an assignment (Use Case 22)](#use-case-22-view-an-assignment)</u>.
+1. User requests to unallocate an assignment with fields (_Assignment name_, _Class name_, _Contact indices_).
+1. System unallocates the assignment from the contacts.
 1. Use case ends.
 
 **Extensions**
 
-* 2a. Invalid assignment, classname, or contacts.
+* 2a. Invalid assignment, class, or contacts.
   * 2a1. System shows an error message.
   * 2a2. Use case ends.
-* 2b. Assignment is not assigned to one of the contacts.
+* 2b. Assignment is not allocated to one of the contacts.
   * 2b1. System proceeds with Step 3 without the contact.
-* 2c. User left Class name field blank.
-  * 2c1. System proceeds with Step 3, unassigning only from contacts specified.
-* 2d. User left Contact indices field blank.
-  * 2d1. System proceeds with Step 3, unassigning from all contacts in the specified class.
-* 2e. User left both Class name and Contact indices fields blank.
-  * 2e1. System proceeds with Step 3, unassigning from all contacts assigned to the assignment.
-* 2f. No contacts are assigned to the assignment.
-  * 2f1. System shows an error message.
-  * 2f2. Use case ends.
+* 2c. User left only the _Class name_ field blank.
+  * 2c1. System proceeds with Step 3, unallocating only from contacts specified.
+* 2d. User left only the _Contact indices_ field blank.
+  * 2d1. System proceeds with Step 3, unallocating from all contacts in the specified class.
+* 2e. User left both _Class name_ and _Contact indices_ fields blank.
+  * 2e1. System shows an error message.
+  * 2e2. Use case ends.
+* 3a. No contacts are unallocated the assignment.
+  * 3a1. System shows an error message.
+  * 3a2. Use case ends.
 
-#### Use Case 11: Delete a Contact
+#### Use Case 11: Delete Contacts
 
 **MSS**
 
-1. User requests to delete a contact.
-1. System removes the contact from the contact list, any classes and assignments it is assigned to.
+1. User requests to delete contact(s).
+1. System removes the contact(s) from the contact list, unallocating them from any classes and assignments they are allocated to.
 1. Use case ends.
 
 **Extensions**
@@ -573,15 +704,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1a. Invalid contact.
   * 1a1. System shows an error message.
   * 1a2. Use case ends.
-* 1b. User specified multiple contacts to delete.
-  * 1b1. System repeats Steps 2 and 3 for all specified contacts.
 
 #### Use Case 12: Delete a Class
 
 **MSS**
 
 1. User requests to delete a class.
-1. System removes the class from the class list, and from any students belonging to the class.
+1. System removes the class from the class list, and unallocates any students belonging to the class.
 1. Use case ends.
 
 **Extensions**
@@ -590,14 +719,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   * 1a1. System shows an error message.
   * 1a2. Use case ends.
 * 1b. User specified multiple classes to delete.
-  * 1b1. System repeats Steps 2 and 3 for all classes.
+  * 1b1. System shows an error message.
+  * 1b2. Use case ends.
 
 #### Use Case 13: Delete an Assignment
 
 **MSS**
 
 1. User requests to delete an assignment.
-1. System removes the assignment from the assignment list, and from any students who have it assigned.
+1. System removes the assignment from the assignment list, and from any students who have it allocated.
 1. Use case ends.
 
 **Extensions**
@@ -606,30 +736,87 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   * 1a1. System shows an error message.
   * 1a2. Use case ends.
 * 1b. User specified multiple assignments to delete.
-  * 1b1. System repeats Steps 2 and 3 for all assignments.
+  * 1b1. System shows an error message.
+  * 1b2. Use case ends.
 
-<!-- Start of non MVP feature use cases -->
-
-**The use cases below are for features that are not part of the MVP, but are proposed to be implemented if time permits.**
-
-#### Use Case 14: Find a Contact
+#### Use Case 14: Edit a Contact
 
 **MSS**
 
-1. User requests to find contacts by name, phone, class, or email.
+1. User requests to edit a contact with updated fields (_Name_, _Phone_, _Email_, _Address_, _Tags_).
+1. System updates the contact with the new details.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. Invalid contact.
+  * 1a1. System shows an error message.
+  * 1a2. Use case ends.
+* 1b. No fields provided to edit.
+  * 1b1. System shows an error message.
+  * 1b2. Use case ends.
+* 1c. Invalid field format.
+  * 1c1. System shows an error message.
+  * 1c2. Use case ends.
+
+#### Use Case 15: Edit a Class
+
+**MSS**
+
+1. User requests to edit a class with an updated name.
+1. System updates the class with the new name.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. Invalid class.
+  * 1a1. System shows an error message.
+  * 1a2. Use case ends.
+* 1b. No fields provided to edit.
+  * 1b1. System shows an error message.
+  * 1b2. Use case ends.
+* 1c. A class with the new name already exists.
+  * 1c1. System shows an error message.
+  * 1c2. Use case ends.
+
+#### Use Case 16: Edit an Assignment
+
+**MSS**
+
+1. User requests to edit an assignment with updated fields (_Name_, _Deadline_).
+1. System updates the assignment with the new details.
+1. Use case ends.
+
+**Extensions**
+
+* 1a. Invalid assignment.
+  * 1a1. System shows an error message.
+  * 1a2. Use case ends.
+* 1b. No fields provided to edit.
+  * 1b1. System shows an error message.
+  * 1b2. Use case ends.
+* 1c. Invalid field format (e.g. invalid deadline).
+  * 1c1. System shows an error message.
+  * 1c2. Use case ends.
+
+#### Use Case 17: Find a Contact
+
+**MSS**
+
+1. User requests to find contacts by name, phone, or email.
 1. System displays the matching contacts.
 1. Use case ends.
 
 **Extensions**
 
 * 1a. No contacts match the search query.
-  * 1a1. System shows an empty list with a message indicating no matches found.
+  * 1a1. System shows an empty list with a label indicating no matches found.
   * 1a2. Use case ends.
 * 1b. Invalid search query (e.g. invalid field, or missing search keyword).
   * 1b1. System shows an error message.
   * 1b2. Use case ends.
 
-#### Use Case 15: Find a Class
+#### Use Case 18: Find a Class
 
 **MSS**
 
@@ -640,10 +827,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Extensions**
 
 * 1a. No classes match the search query.
-  * 1a1. System shows an empty list with a message indicating no matches found.
+  * 1a1. System shows an empty list with a label indicating no matches found.
   * 1a2. Use case ends.
+* 1b. Invalid search query (e.g. invalid field, or missing search keyword).
+  * 1b1. System shows an error message.
+  * 1b2. Use case ends.
 
-#### Use Case 16: Find an Assignment
+#### Use Case 19: Find an Assignment
 
 **MSS**
 
@@ -654,19 +844,19 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Extensions**
 
 * 1a. No assignments match the search query.
-  * 1a1. System shows an empty list with a message indicating no matches found.
+  * 1a1. System shows an empty list with a label indicating no matches found.
   * 1a2. Use case ends.
 * 1b. Invalid search query (e.g. invalid field, or missing search keyword).
   * 1b1. System shows an error message.
   * 1b2. Use case ends.
 
-#### Use Case 17: View a Contact
+#### Use Case 20: View a Contact
 
 **MSS**
 
 1. User <u>[views the list of contacts (Use Case 2)](#use-case-2-list-contacts)</u>.
 1. User requests to view a contact.
-1. System displays the contact details, including any assignments and their deadlines assigned to the contact.
+1. System displays the contact details, including any assignments and classes allocated to the contact.
 1. Use case ends.
 
 **Extensions**
@@ -674,8 +864,17 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 2a. Invalid contact.
   * 2a1. System shows an error message.
   * 2a2. Use case ends.
+* 2b. Contact has no classes allocated but has assignments allocated.
+  * 2b1. System displays the contact details including any assignments allocated, but with a label indicating that the contact is not allocated to any classes.
+  * 2b2. Use case ends.
+* 2c. Contact has no assignments allocated but has classes allocated.
+  * 2c1. System displays the contact details including any classes allocated, but with a label indicating that the contact is not allocated to any assignments.
+  * 2c2. Use case ends.
+* 2d. Contact has no classes or assignments allocated.
+  * 2d1. System displays the contact details with labels indicating that the contact is not allocated to any classes or assignments.
+  * 2d2. Use case ends.
 
-#### Use Case 18: View a Class
+#### Use Case 21: View a Class
 
 **MSS**
 
@@ -689,8 +888,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 2a. Invalid class.
   * 2a1. System shows an error message.
   * 2a2. Use case ends.
+* 2b. Class has no contacts allocated.
+  * 2b1. System displays the class details with a label indicating that no contacts are allocated to the class.
+  * 2b2. Use case ends.
 
-#### Use Case 19: View an Assignment
+#### Use Case 22: View an Assignment
 
 **MSS**
 
@@ -704,13 +906,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 2a. Invalid assignment.
   * 2a1. System shows an error message.
   * 2a2. Use case ends.
+* 2b. Assignment has no contacts allocated.
+  * 2b1. System displays the assignment details with a label indicating that no contacts are allocated to the assignment.
+  * 2b2. Use case ends.
 
-#### Use Case 20: Update Submission Status of an Assignment
+#### Use Case 23: Update Submission Status of an Assignment
 
 **MSS**
 
-1. User requests to update a contact's submission status for an assignment.
-1. System updates the assignment's submission status for the contact.
+1. User requests to update contacts' submission statuses for an assignment.
+1. System updates the assignment's submission status for the contact(s).
 1. Use case ends.
 
 **Extensions**
@@ -718,16 +923,25 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1a. Invalid contact or assignment.
   * 1a1. System shows an error message.
   * 1a2. Use case ends.
-* 1b. Contact is not assigned the assignment.
-  * 1b1. System shows an error message.
+* 1b. Contact is not allocated the assignment.
+  * 1b1. System proceeds with Step 2 without the contact.
   * 1b2. Use case ends.
+* 1c. Invalid new submission status for a contact (e.g., submitting when already submitted, unsubmitting when not submitted).
+  * 1c1. System proceeds with Step 2 without the contact.
+  * 1c2. Use case ends.
+* 2a. No contacts' submission statuses are updated.
+  * 2a1. System shows an error message.
+  * 2a2. Use case ends.
+* 2b. A contact's assignment submission has already been graded for unsubmitting.
+  * 2b1. System also <u>[ungrades the assignment (Use Case 25)](#use-case-25-ungrade-an-assignment)</u> for the contact.
+  * 2b2. System proceeds with Step 2 for the remaining contacts.
 
-#### Use Case 21: Mark an Assignment
+#### Use Case 24: Grade an Assignment
 
 **MSS**
 
-1. User requests to mark an assignment for a contact with a score.
-1. System marks the assignment as graded for the contact and sets the score.
+1. User requests to grade an assignment for contact(s) with a score and grading time.
+1. System grades the assignment for the contact(s) and sets the score.
 1. Use case ends.
 
 **Extensions**
@@ -736,17 +950,36 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   * 1a1. System shows an error message.
   * 1a2. Use case ends.
 * 1b. Assignment is already graded for the contact.
-  * 1b1. System continues with Step 3, overwriting the previous score.
+  * 1b1. System proceeds with Step 2 without the contact.
+  * 1b2. Use case ends.
 * 1c. Invalid score.
   * 1c1. System shows an error message.
   * 1c2. Use case ends.
+* 1d. Contact is not allocated the assignment.
+  * 1d1. System proceeds with Step 2 without the contact.
+  * 1d2. Use case ends.
+* 1e. Contact has not submitted the assignment.
+  * 1e1. System proceeds with Step 2 without the contact.
+  * 1e2. Use case ends.
+* 1f. Grading time is before submission time for the contact.
+  * 1f1. System proceeds with Step 2 without the contact.
+  * 1f2. Use case ends.
+* 1g. Grading time is in the future.
+  * 1g1. System shows an error message.
+  * 1g2. Use case ends.
+* 1h. Grading time is not specified.
+  * 1h1. System uses the current time as the grading time.
+  * 1h2. System proceeds with Step 2.
+* 2a. No contacts' assignment is graded.
+  * 2a1. System shows an error message.
+  * 2a2. Use case ends.
 
-#### Use Case 22: Unmark an Assignment
+#### Use Case 25: Ungrade an Assignment
 
 **MSS**
 
-1. User requests to unmark an assignment for a contact.
-1. System ungrades the assignment for the contact and removes the score.
+1. User requests to ungrade an assignment for contact(s).
+1. System ungrades the assignment for the contact(s) and removes the score and grading information.
 1. Use case ends.
 
 **Extensions**
@@ -754,14 +987,23 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1a. Invalid assignment or contact.
   * 1a1. System shows an error message.
   * 1a2. Use case ends.
-* 1b. Assignment is not marked for the contact.
-  * 1b1. System shows an error message.
+* 1b. Assignment is not graded for the contact.
+  * 1b1. System proceeds with Step 2 without the contact.
   * 1b2. Use case ends.
+* 1c. Contact is not allocated the assignment.
+  * 1c1. System proceeds with Step 2 without the contact.
+  * 1c2. Use case ends.
+* 1d. Contact has not submitted the assignment.
+  * 1d1. System proceeds with Step 2 without the contact.
+  * 1d2. Use case ends.
+* 2a. No contacts' assignment is ungraded.
+  * 2a1. System shows an error message.
+  * 2a2. Use case ends.
 
 ### Non-Functional Requirements
 
-1. Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-1. Should be able to hold up to 1000 contacts, 500 classes, and 500 assignments without a noticeable performance degradation or sluggishness during in performance for typical usage.
+1. Should work on any _mainstream OS_ as long as it has Java 17 or above installed.
+1. Should be able to hold up to 1000 contacts, 500 classes, and 500 assignments without a noticeable performance degradation or sluggishness during typical usage.
 1. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 1. Should respond to user commands within 2 seconds to ensure a smooth user experience.
 1. Should launch and load existing data within 5 seconds.
@@ -772,9 +1014,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
-* **Assignment**: A task created by the user containing minimally a deadline, and may include submission status and grading. Can be assigned to _Classes_ and _Contacts_.
+* **Assignment**: A task created by the user containing minimally a deadline, and may include submission status and grading. Can be allocated to _Classes_ and _Contacts_.
 * **Class**: A user-defined group of contacts.
-* **CLI (Command Line Interface)**: The text-based interface through which users interact with the system by typing command.
+* **CLI (Command Line Interface)**: The text-based interface through which users interact with the system by typing commands.
 * **Command**: A text-based instruction entered into the CLI that triggers a system action.
 * **Contact**: An individual entry of a student or teacher, containing minimally a name, phone number, email address, and may include _Classes_ and _Assignments_.
 * **Deadline**: Time and date specifying the due date of an _Assignment_.
@@ -783,8 +1025,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **Index**:  The number shown beside an item in the currently displayed list.
 * **Invalid**: Violates one or more specified formats or constraints defined by the system.
 * **JSON (JavaScript Object Notation)**: The human-readable file format used to automatically save and load application data locally.
-* **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Mainstream OS**: Windows, Linux, Unix, macOS
 * **Submission status**: The state of an _Assignment_ for a specified _Contact_ (e.g. not submitted, submitted).
 * **Tags**: A user-defined, optional label attached to a _Contact_ for categorization and filtering (e.g. "Prefect").
 * **Valid**: Satisfies all specified format and constraints defined by the system.

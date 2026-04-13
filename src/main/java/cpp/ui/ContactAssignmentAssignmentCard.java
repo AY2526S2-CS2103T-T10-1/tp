@@ -50,13 +50,13 @@ public class ContactAssignmentAssignmentCard extends UiPart<Region> {
                 : "Deadline: " + assignment.getDeadline().format(ParserUtil.DATETIME_FORMATTER));
 
         if (ca.isSubmitted()) {
-            this.submitted.setText("Submitted on " + ca.getSubmissionDate().format(ParserUtil.DATETIME_FORMATTER));
+            this.submitted.setText("Submitted: " + ca.getSubmissionDate().format(ParserUtil.DATETIME_FORMATTER));
         } else {
             this.submitted.setText("Not Submitted");
         }
 
         if (ca.isGraded()) {
-            String gradedText = "Graded on " + ca.getGradingDate().format(ParserUtil.DATETIME_FORMATTER);
+            String gradedText = "Graded: " + ca.getGradingDate().format(ParserUtil.DATETIME_FORMATTER);
             this.graded.setText(gradedText);
             this.score.setText(String.format("Score: %.1f", ca.getScore()));
         } else {

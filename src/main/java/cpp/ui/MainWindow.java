@@ -20,6 +20,7 @@ import cpp.model.classgroup.ClassGroup;
 import cpp.model.contact.Contact;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -92,9 +93,6 @@ public class MainWindow extends UiPart<Stage> {
     @FXML
     private Tab assignmentsTab;
 
-    @FXML
-    private Tab viewTab;
-
     /**
      * Creates a {@code MainWindow} with the given {@code Stage} and {@code Logic}.
      */
@@ -107,7 +105,8 @@ public class MainWindow extends UiPart<Stage> {
 
         // Configure the UI
         GuiSettings guiSettings = logic.getGuiSettings();
-        if (guiSettings.getWindowHeight() < 700 || guiSettings.getWindowWidth() < 450) {
+        if (guiSettings.getWindowHeight() < GuiSettings.DEFAULT_HEIGHT
+                || guiSettings.getWindowWidth() < GuiSettings.DEFAULT_WIDTH) {
             logic.setGuiSettings(new GuiSettings());
         }
         this.setWindowDefaultSize(logic.getGuiSettings());
@@ -168,38 +167,21 @@ public class MainWindow extends UiPart<Stage> {
         this.assignmentListPanelPlaceholder.getChildren().add(this.assignmentListPanel.getRoot());
         this.classListPanelPlaceholder.getChildren().add(this.classGroupListPanel.getRoot());
 
-        // set up assignment view panel inside the view tab placeholder; hide tab
-        // initially
+        // set up assignment, contact, and class group view panels for persistent view
         this.assignmentViewPanel = new UniqueAssignmentView();
-        this.viewPanelPlaceholder.getChildren().add(this.assignmentViewPanel.getRoot());
-
-        // set up contact view panel inside the view tab placeholder; hide tab initially
         this.contactViewPanel = new UniqueContactView();
-
-        // set up class group view panel inside the view tab placeholder
         this.classGroupViewPanel = new UniqueClassGroupView();
 
         // register known view panels
         this.viewPanels.put(ViewType.CONTACT, this.contactViewPanel);
         this.viewPanels.put(ViewType.ASSIGNMENT, this.assignmentViewPanel);
         this.viewPanels.put(ViewType.CLASSGROUP, this.classGroupViewPanel);
-
-        // remove the view tab so it is hidden until a view command adds it back
-        this.mainTabPane.getTabs().remove(this.viewTab);
-
-        // When user manually clicks any other tab, clear viewed object and hide view
-        // tab.
-        this.mainTabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
-            if (newTab != null && newTab != this.viewTab) {
-                this.logic.clearViewState();
-                this.hideViewTab();
-            }
-        });
+        this.clearViewPanel();
 
         // Listen to the central view state so unique views update reactively.
         this.logic.getViewStateProperty().addListener((obs, oldState, newState) -> {
             if (newState == null || newState.getType() == ViewType.NONE) {
-                this.hideViewTab();
+                this.clearViewPanel();
                 this.currentViewType = ViewType.NONE;
                 this.currentViewPayload = null;
                 return;
@@ -266,15 +248,12 @@ public class MainWindow extends UiPart<Stage> {
         switch (listView) {
         case CONTACTS:
             this.mainTabPane.getSelectionModel().select(this.contactsTab);
-            this.hideViewTab();
             break;
         case ASSIGNMENTS:
             this.mainTabPane.getSelectionModel().select(this.assignmentsTab);
-            this.hideViewTab();
             break;
         case CLASSGROUPS:
             this.mainTabPane.getSelectionModel().select(this.classesTab);
-            this.hideViewTab();
             break;
         case NONE:
         default:
@@ -300,7 +279,7 @@ public class MainWindow extends UiPart<Stage> {
      */
     private void showViewForCurrentState() {
         if (this.currentViewType == null || this.currentViewType == ViewType.NONE) {
-            this.hideViewTab();
+            this.clearViewPanel();
             return;
         }
 
@@ -312,10 +291,6 @@ public class MainWindow extends UiPart<Stage> {
                         .getContactAssignmentsWithContactsForAssignment(ass);
                 this.assignmentViewPanel.setAssignment(ass, cas);
                 this.viewPanelPlaceholder.getChildren().setAll(this.assignmentViewPanel.getRoot());
-                if (!this.mainTabPane.getTabs().contains(this.viewTab)) {
-                    this.mainTabPane.getTabs().add(this.viewTab);
-                }
-                this.mainTabPane.getSelectionModel().select(this.viewTab);
             }
             break;
         case CONTACT:
@@ -326,10 +301,6 @@ public class MainWindow extends UiPart<Stage> {
                 List<ClassGroup> classGroups = this.logic.getClassGroupsForContact(ct);
                 this.contactViewPanel.setContact(ct, cas, classGroups);
                 this.viewPanelPlaceholder.getChildren().setAll(this.contactViewPanel.getRoot());
-                if (!this.mainTabPane.getTabs().contains(this.viewTab)) {
-                    this.mainTabPane.getTabs().add(this.viewTab);
-                }
-                this.mainTabPane.getSelectionModel().select(this.viewTab);
             }
             break;
         case CLASSGROUP:
@@ -338,28 +309,21 @@ public class MainWindow extends UiPart<Stage> {
                 List<Contact> cts = this.logic.getContactsInClassGroup(cg);
                 this.classGroupViewPanel.setClassGroup(cg, cts);
                 this.viewPanelPlaceholder.getChildren().setAll(this.classGroupViewPanel.getRoot());
-                if (!this.mainTabPane.getTabs().contains(this.viewTab)) {
-                    this.mainTabPane.getTabs().add(this.viewTab);
-                }
-                this.mainTabPane.getSelectionModel().select(this.viewTab);
             }
             break;
         default:
-            this.hideViewTab();
+            this.clearViewPanel();
             break;
         }
     }
 
-    private void hideViewTab() {
-        if (this.mainTabPane.getTabs().contains(this.viewTab)) {
-            this.mainTabPane.getTabs().remove(this.viewTab);
-        }
+    private void clearViewPanel() {
+        Label viewPlaceholder = new Label("Use the view command to see more details!");
+        viewPlaceholder.setStyle("-fx-text-fill: #b4b4b4;");
+        this.viewPanelPlaceholder.getChildren().setAll(viewPlaceholder);
     }
 
     private void refreshCurrentViewIfVisible() {
-        if (!this.mainTabPane.getTabs().contains(this.viewTab)) {
-            return;
-        }
 
         switch (this.currentViewType) {
         case ASSIGNMENT:

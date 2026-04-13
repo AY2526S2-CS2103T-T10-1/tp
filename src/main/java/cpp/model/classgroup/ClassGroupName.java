@@ -10,7 +10,7 @@ import cpp.commons.util.AppUtil;
 public class ClassGroupName {
 
     public static final String MESSAGE_CONSTRAINTS = """
-            Names should only contain alphanumeric characters and spaces, and it should not be blank""";
+            Class names should only contain alphanumeric characters and spaces, and it should not be blank""";
 
     /*
      * The first character of the address must not be a whitespace,
@@ -55,12 +55,13 @@ public class ClassGroupName {
         }
 
         ClassGroupName otherName = (ClassGroupName) other;
-        return this.fullName.toLowerCase().equals(otherName.fullName.toLowerCase());
+        return this.fullName.toLowerCase().replaceAll("\\s+", "")
+                .equals(otherName.fullName.toLowerCase().replaceAll("\\s+", ""));
     }
 
     @Override
     public int hashCode() {
-        return this.fullName.toLowerCase().hashCode();
+        return this.fullName.toLowerCase().replaceAll("\\s+", "").hashCode();
     }
 
 }

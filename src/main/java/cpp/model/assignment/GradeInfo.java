@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import cpp.commons.exceptions.IllegalValueException;
 import cpp.logic.parser.ParserUtil;
 
 /**
@@ -41,41 +42,35 @@ public final class GradeInfo {
 
     /**
      * Creates a GradeInfo when loading from storage. This strictly validates
-     * invariants and throws {@link IllegalArgumentException} on invalid data.
+     * invariants and throws {@link IllegalValueException} on invalid data.
      */
-    public static GradeInfo createFromStorage(boolean isGraded, LocalDateTime gradingDate, float score,
-            SubmissionInfo submissionInfo) {
-        if (!GradeInfo.isValidGradeInfo(isGraded, gradingDate, score, submissionInfo)) {
-            throw new IllegalArgumentException(GradeInfo.INVALID_GRADE_STRING);
-        }
-        return new GradeInfo(isGraded, gradingDate, score, submissionInfo);
-    }
-
-    /**
-     * Checks whether the given grading details satisfy the invariants for a valid
-     * GradeInfo.
-     */
-    public static boolean isValidGradeInfo(boolean isGraded, LocalDateTime gradingDate, float score,
-            SubmissionInfo submissionInfo) {
+    public static GradeInfo createFromStorage(boolean isGraded, LocalDateTime gradingDate, String scoreString,
+            SubmissionInfo submissionInfo) throws IllegalValueException {
         if (isGraded && !submissionInfo.isSubmitted()) {
-            return false;
+            throw new IllegalValueException("isGraded cannot be true if the assignment is not submitted");
         }
         if (isGraded && gradingDate == null) {
-            return false;
+            throw new IllegalValueException("gradingDate cannot be null if the assignment is graded");
         }
         if (!isGraded && gradingDate != null) {
-            return false;
+            throw new IllegalValueException("gradingDate must be null if the assignment is not graded");
         }
-        if (!GradeInfo.isValidScore(new BigDecimal(score))) {
-            return false;
+        BigDecimal score;
+        try {
+            score = new BigDecimal(scoreString);
+        } catch (NumberFormatException e) {
+            throw new IllegalValueException(GradeInfo.INVALID_SCORE_STRING);
         }
-        if (!isGraded && score != 0.0f) {
-            return false;
+        if (!GradeInfo.isValidScore(score)) {
+            throw new IllegalValueException(GradeInfo.INVALID_SCORE_STRING);
+        }
+        if (!isGraded && score.compareTo(BigDecimal.ZERO) != 0) {
+            throw new IllegalValueException("score must be 0 when ungraded");
         }
         if (isGraded && submissionInfo.isSubmitted() && gradingDate.isBefore(submissionInfo.getSubmissionDate())) {
-            return false;
+            throw new IllegalValueException("gradingDate cannot be before submissionDate");
         }
-        return true;
+        return new GradeInfo(isGraded, gradingDate, ParserUtil.parseScore(scoreString), submissionInfo);
     }
 
     public static boolean isValidScore(BigDecimal score) {

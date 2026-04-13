@@ -14,7 +14,7 @@
 <?import javafx.scene.control.TabPane?>
 
 <fx:root type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-         title="ClassroomPlusPlus" minWidth="450" minHeight="700" onCloseRequest="#handleExit">
+         title="ClassroomPlusPlus" minWidth="1200" minHeight="700" onCloseRequest="#handleExit">
   <icons>
     <Image url="@/images/cpp-icon.png" />
   </icons>
@@ -45,32 +45,30 @@
                 minHeight="200" maxHeight="200" style="-fx-padding: 0 10 0 10;">
           </StackPane>
 
-        <StackPane fx:id="listPanelPlaceholder" VBox.vgrow="ALWAYS">
+        <SplitPane VBox.vgrow="ALWAYS">
+          <StackPane fx:id="listPanelPlaceholder">
             <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" styleClass="main-tab-pane">
-            <tabs>
+              <tabs>
                 <Tab fx:id="contactsTab" text="Contacts" styleClass="main-tab">
-                <content>
+                  <content>
                     <StackPane fx:id="contactListPanelPlaceholder" />
-                </content>
+                  </content>
                 </Tab>
                 <Tab fx:id="classesTab" text="Classes" styleClass="main-tab">
-                <content>
+                  <content>
                     <StackPane fx:id="classListPanelPlaceholder" />
-                </content>
+                  </content>
                 </Tab>
                 <Tab fx:id="assignmentsTab" text="Assignments" styleClass="main-tab">
-                <content>
+                  <content>
                     <StackPane fx:id="assignmentListPanelPlaceholder" />
-                </content>
+                  </content>
                 </Tab>
-                <Tab fx:id="viewTab" text="View" styleClass="main-tab">
-                <content>
-                  <StackPane fx:id="viewPanelPlaceholder" />
-                </content>
-                </Tab>
-            </tabs>
+              </tabs>
             </TabPane>
-        </StackPane>
+          </StackPane>
+          <StackPane fx:id="viewPanelPlaceholder" />
+        </SplitPane>
 
         <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
       </VBox>

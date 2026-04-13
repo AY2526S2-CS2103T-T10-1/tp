@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import cpp.commons.exceptions.IllegalValueException;
+import cpp.logic.parser.ParserUtil;
 import cpp.model.classgroup.ClassGroup;
 import cpp.model.classgroup.ClassGroupName;
 import cpp.model.classgroup.exceptions.ContactAlreadyAllocatedClassGroupException;
@@ -63,7 +64,7 @@ class JsonAdaptedClassGroup {
             throw new IllegalValueException("A class group's contactIds field is missing.");
         }
 
-        final ClassGroupName modelName = new ClassGroupName(this.name);
+        final ClassGroupName modelName = ParserUtil.parseClassGroupName(this.name);
 
         ClassGroup classGroup = new ClassGroup(this.id, modelName);
         for (String contactId : this.contactIds) {

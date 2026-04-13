@@ -1,0 +1,38 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor LOGIC_COLOR_T4
+skinparam classBackgroundColor LOGIC_COLOR
+
+package Logic <<Rectangle>> {
+
+package "Parser Classes" as ParserClasses{
+
+}
+
+Class "{abstract}\nCommand" as Command
+Class Find_Command
+}
+
+package Model <<Rectangle>> {
+Class HiddenModel #FFFFFF
+}
+
+Find_Command -up-|> Command
+ParserClasses ..> Find_Command : creates
+Find_Command .down.> Model
+Find_Command .up.> CommandResult : creates
+
+note right of Find_Command
+    Find*Command = FindContactCommand,
+    FindAssignmentCommand, FindClassCommand
+    Each uses corresponding predicates:
+    - ContactNameContainsKeywordsPredicate
+    - ContactPhoneMatchesKeywordsPredicate
+    - ContactEmailMatchesKeywordsPredicate
+    - AssignmentNameContainsKeywordsPredicate
+    - AssignmentDeadlineInRangePredicate
+    - ClassNameContainsKeywordsPredicate
+end note
+
+@enduml

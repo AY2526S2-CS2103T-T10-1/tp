@@ -106,6 +106,24 @@ public class DeleteContactCommandTest {
     }
 
     @Test
+    public void execute_duplicateIndices_deletesOnceAndShowsMessage() {
+        Contact contactToDelete = this.model.getFilteredContactList()
+                .get(TypicalIndexes.INDEX_FIRST_CONTACT.getZeroBased());
+        DeleteContactCommand deleteCommand = new DeleteContactCommand(
+                List.of(TypicalIndexes.INDEX_FIRST_CONTACT,
+                        TypicalIndexes.INDEX_FIRST_CONTACT,
+                        TypicalIndexes.INDEX_FIRST_CONTACT));
+
+        String expectedMessage = String.format(DeleteContactCommand.MESSAGE_DELETE_CONTACT_SUCCESS,
+                Messages.format(contactToDelete));
+
+        ModelManager expectedModel = new ModelManager(this.model.getAddressBook(), new UserPrefs());
+        expectedModel.deleteContact(contactToDelete);
+
+        CommandTestUtil.assertCommandSuccess(deleteCommand, this.model, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void equals() {
         DeleteContactCommand deleteFirstCommand = new DeleteContactCommand(
                 List.of(TypicalIndexes.INDEX_FIRST_CONTACT));

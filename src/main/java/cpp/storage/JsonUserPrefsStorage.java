@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import cpp.commons.core.LogsCenter;
 import cpp.commons.exceptions.DataLoadingException;
+import cpp.commons.util.FileUtil;
 import cpp.commons.util.JsonUtil;
 import cpp.model.ReadOnlyUserPrefs;
 import cpp.model.UserPrefs;
@@ -54,6 +55,7 @@ public class JsonUserPrefsStorage implements UserPrefsStorage {
 
     @Override
     public void saveUserPrefs(ReadOnlyUserPrefs userPrefs) throws IOException {
+        FileUtil.createIfMissing(this.filePath);
         JsonUtil.saveJsonFile(userPrefs, this.filePath);
     }
 
