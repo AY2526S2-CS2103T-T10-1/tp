@@ -53,14 +53,16 @@ public class FindContactCommandParser implements Parser<FindContactCommand> {
         if (hasPhonePrefix) {
             String phoneValue = argMultimap.getValue(CliSyntax.PREFIX_PHONE).get().trim();
             if (!phoneValue.matches("\\d+")) {
-                throw new ParseException("Phone number search string must contain 1 or more digits.");
+                throw new ParseException(
+                        "Phone number search string must contain 1 or more digits and cannot contain spaces.");
             }
             predicate = new ContactPhoneMatchesKeywordsPredicate(phoneValue);
         } else if (hasEmailPrefix) {
             String emailValue = argMultimap.getValue(CliSyntax.PREFIX_EMAIL).get().trim();
             if (!emailValue.matches("[A-Za-z0-9+_.@-]+")) {
-                throw new ParseException(
-                        "Email search string must contain 1 or more letters, digits, +, _, ., @, -");
+                throw new ParseException("""
+                        Email search string must contain 1 or more letters, digits, +, _, ., @, - \
+                        and cannot contain spaces.""");
             }
             predicate = new ContactEmailMatchesKeywordsPredicate(emailValue);
         } else if (hasNamePrefix) {
