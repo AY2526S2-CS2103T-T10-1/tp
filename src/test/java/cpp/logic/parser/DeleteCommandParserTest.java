@@ -43,6 +43,12 @@ public class DeleteCommandParserTest {
     }
 
     @Test
+    public void parse_nonEmptyPreamble_throwsParseException() {
+        CommandParserTestUtil.assertParseFailure(this.parser, "junk ct/1",
+                String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+    }
+
+    @Test
     public void parse_invalidContactIndex_throwsParseException() {
         CommandParserTestUtil.assertParseFailure(this.parser, " ct/abc",
                 ParserUtil.MESSAGE_INVALID_INDEX);

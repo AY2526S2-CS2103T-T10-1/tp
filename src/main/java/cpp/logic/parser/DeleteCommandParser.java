@@ -23,6 +23,11 @@ public class DeleteCommandParser implements Parser<Command> {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
                 CliSyntax.PREFIX_CONTACT, CliSyntax.PREFIX_ASSIGNMENT, CliSyntax.PREFIX_CLASS);
 
+        if (!argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(
+                    String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        }
+
         argMultimap.verifyNoDuplicatePrefixesFor(
                 CliSyntax.PREFIX_CONTACT, CliSyntax.PREFIX_ASSIGNMENT, CliSyntax.PREFIX_CLASS);
 
