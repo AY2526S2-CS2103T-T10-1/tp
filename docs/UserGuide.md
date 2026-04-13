@@ -477,7 +477,7 @@ Adds an assignment to the address book.
 
 * Creates an assignment with the specified `ASSIGNMENT_NAME` and `DEADLINE`.
 
-* The `ASSIGNMENT_NAME` must only contain alphanumeric characters and spaces. It cannot be blank, must be unique, and should not match the name of any existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` must only contain alphanumeric characters and spaces. It cannot be blank, must be unique, and should not match the name of any existing assignment (case-insensitive). If you wish to add multiple different assignments with the same name but for different classes, you are advised to disambiguate them manually.
 
 * The `DEADLINE` provided must be in the format `dd-MM-yyyy HH:mm`.
 
