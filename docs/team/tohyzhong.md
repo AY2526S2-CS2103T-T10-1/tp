@@ -5,6 +5,10 @@
 
 ## Project: Classroom Plus Plus
 
+**Developer's name:** Yi Zhong
+
+**Role(s):** Project Lead, DG Manager, PE-D Bug Triage Co-lead
+
 Classroom Plus Plus is a desktop teaching management application used to manage contacts and assignments. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 20 kLoC. This is around 10 kLoC more than the original AddressBook-Level3 codebase, which is around 10 kLoC.
 
 Of the 10385 lines of functional code in the project, I have contributed 6530 lines (inclusive of ~200 lines of reformatting lines).
@@ -53,7 +57,7 @@ Given below are my contributions to the project.
   * Set up repository-wide code formatting and markdown linting + formatting
   * Maintained bulk of issue trackers together with [Blerargh](./blerargh.md)
   * Updated all non-code documentation (e.g. README, project site) to reflect the new project name and features
-  * Reviewed and merged [53 pull requests](https://github.com/AY2526S2-CS2103T-T10-1/tp/issues?q=is%3Apr%20state%3Aclosed%20reviewed-by%3Atohyzhong%20sort%3Acomments-desc) from other team members out of the 103 PRs closed
+  * Reviewed and merged [56 pull requests](https://github.com/AY2526S2-CS2103T-T10-1/tp/issues?q=is%3Apr%20state%3Aclosed%20reviewed-by%3Atohyzhong%20sort%3Acomments-desc) from other team members out of the 108 PRs closed
   * Went through all bug reports in PE-D with [Blerargh](./blerargh.md), and organised the bug reports by removing duplicates and assigning them
   * Added code coverage, CI, and deployment status badges to the README file and project site
 
