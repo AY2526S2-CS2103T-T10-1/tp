@@ -1,0 +1,70 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":FindContactCommandParser" as FindContactCommandParser LOGIC_COLOR
+participant "f:FindContactCommand" as FindContactCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("findcontact n/alice")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("findcontact n/alice")
+activate AddressBookParser
+
+create FindContactCommandParser
+AddressBookParser -> FindContactCommandParser
+activate FindContactCommandParser
+
+FindContactCommandParser --> AddressBookParser
+deactivate FindContactCommandParser
+
+AddressBookParser -> FindContactCommandParser : parse("n/alice")
+activate FindContactCommandParser
+
+create FindContactCommand
+FindContactCommandParser -> FindContactCommand
+activate FindContactCommand
+
+FindContactCommand --> FindContactCommandParser :
+deactivate FindContactCommand
+
+FindContactCommandParser --> AddressBookParser : f
+deactivate FindContactCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+FindContactCommandParser -[hidden]-> AddressBookParser
+destroy FindContactCommandParser
+
+AddressBookParser --> LogicManager : f
+deactivate AddressBookParser
+
+LogicManager -> FindContactCommand : execute(m)
+activate FindContactCommand
+
+FindContactCommand -> Model : updateFilteredContactList(predicate)
+activate Model
+
+Model --> FindContactCommand
+deactivate Model
+
+create CommandResult
+FindContactCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> FindContactCommand
+deactivate CommandResult
+
+FindContactCommand --> LogicManager : r
+deactivate FindContactCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml

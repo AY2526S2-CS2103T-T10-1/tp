@@ -1,0 +1,70 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":ListCommandParser" as ListCommandParser LOGIC_COLOR
+participant "l:ListContactCommand" as ListContactCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("list contacts")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("list contacts")
+activate AddressBookParser
+
+create ListCommandParser
+AddressBookParser -> ListCommandParser
+activate ListCommandParser
+
+ListCommandParser --> AddressBookParser
+deactivate ListCommandParser
+
+AddressBookParser -> ListCommandParser : parse("contacts")
+activate ListCommandParser
+
+create ListContactCommand
+ListCommandParser -> ListContactCommand
+activate ListContactCommand
+
+ListContactCommand --> ListCommandParser :
+deactivate ListContactCommand
+
+ListCommandParser --> AddressBookParser : l
+deactivate ListCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+ListCommandParser -[hidden]-> AddressBookParser
+destroy ListCommandParser
+
+AddressBookParser --> LogicManager : l
+deactivate AddressBookParser
+
+LogicManager -> ListContactCommand : execute(m)
+activate ListContactCommand
+
+ListContactCommand -> Model : updateFilteredContactList(Model.PREDICATE_SHOW_ALL_CONTACTS)
+activate Model
+
+Model --> ListContactCommand
+deactivate Model
+
+create CommandResult
+ListContactCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> ListContactCommand
+deactivate CommandResult
+
+ListContactCommand --> LogicManager : r
+deactivate ListContactCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml

@@ -54,6 +54,8 @@
         "classgroup-management": "ClassGroup management",
         "assignment-management": "Assignment management",
         "delete-enhancements": "Delete enhancements",
+        "list-feature": "List feature",
+        "find-feature": "Find feature",
         "proposed-undo-redo-feature": "[Proposed] Undo/redo feature",
         "documentation-logging-testing-configuration-dev-ops": "Documentation, logging, testing, configuration, dev-ops",
         "appendix-requirements": "Appendix: Requirements",
