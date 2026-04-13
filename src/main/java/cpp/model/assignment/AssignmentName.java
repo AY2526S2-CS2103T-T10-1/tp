@@ -11,10 +11,15 @@ public class AssignmentName {
 
     public static final String MESSAGE_CONSTRAINTS = """
             Assignment names must contain only alphanumeric characters, spaces, hyphens, and parentheses.
+            The assignment name should not be blank.
             Hyphens "-" must be between two alphanumeric characters.
             Open parenthesis "(" cannot be at the start of the name, and must have a closing parenthesis ")".
-            There can only be alphanumeric characters inside the parentheses (no nesting allowed), \
-            and there must be at least 1 alphanumeric character.\nThe name should not be blank.""";
+            Parentheses must:
+                - Not be at the start of the name
+                - Contain only spaces and alphanumeric characters, with at least 1 alphanumeric character
+                - Be properly closed (No nesting allowed)
+                - Open parenthesis "(" must be immediately followed by an alphanumeric character
+                - Closing parenthesis ")" must be immediately preceded by an alphanumeric character.""";
 
     /*
      * Assignment names must:
@@ -27,7 +32,7 @@ public class AssignmentName {
             [\\p{Alnum}](\
             [\\p{Alnum} ]\
             |(?<=[\\p{Alnum}])-(?=[\\p{Alnum}])\
-            |\\([\\p{Alnum} ]*[\\p{Alnum}][\\p{Alnum} ]*\\))*""";
+            |\\([\\p{Alnum}]([\\p{Alnum} ]*[\\p{Alnum}])?\\))*""";
 
     public final String fullName;
 
