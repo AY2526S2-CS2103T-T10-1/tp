@@ -1,7 +1,5 @@
 package cpp.logic.parser;
 
-import java.util.Arrays;
-
 import org.junit.jupiter.api.Test;
 
 import cpp.logic.Messages;
@@ -22,11 +20,13 @@ public class FindContactCommandParserTest {
     public void parse_validArgs_returnsFindCommand() {
         // no trailing whitespaces
         FindContactCommand expectedFindCommand = new FindContactCommand(
-                new ContactNameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
+                new ContactNameContainsKeywordsPredicate("Alice Bob"));
         CommandParserTestUtil.assertParseSuccess(this.parser, " n/Alice Bob", expectedFindCommand);
 
+        expectedFindCommand = new FindContactCommand(
+                new ContactNameContainsKeywordsPredicate(" Alice Bob "));
         // multiple whitespaces between keywords
-        CommandParserTestUtil.assertParseSuccess(this.parser, " \n n/Alice \n \t Bob  \t", expectedFindCommand);
+        CommandParserTestUtil.assertParseSuccess(this.parser, " \n n/ Alice \n \t Bob  \t", expectedFindCommand);
     }
 
     @Test

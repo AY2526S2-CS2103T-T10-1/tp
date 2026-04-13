@@ -79,7 +79,10 @@ public class FindAssignmentCommandParser implements Parser<FindAssignmentCommand
         } else if (hasAssignmentPrefix) {
             String assignmentSubstring = argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get().replaceAll("\\s+",
                     " ");
-            ParserUtil.parseAssignmentName(assignmentSubstring);
+            if (!assignmentSubstring.matches("[A-Za-z0-9()\\- ]+")) {
+                throw new ParseException(
+                        "Assignment name search string must contain 1 or more letters, digits, -, (, ), and spaces");
+            }
             predicate = new AssignmentNameContainsKeywordsPredicate(assignmentSubstring);
 
         } else {

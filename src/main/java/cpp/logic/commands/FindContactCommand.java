@@ -27,17 +27,17 @@ public class FindContactCommand extends Command {
     public static final String COMMAND_WORD_ALIAS = "findct";
 
     public static final String MESSAGE_USAGE = FindContactCommand.COMMAND_WORD
-            + ": Finds all contacts whose name contains any of the specified keywords or whose phone/email "
-            + "match exactly (case-insensitive) and displays them as a list with index numbers.\n"
+            + ": Finds all contacts whose names, classes, or emails contains the specified search string "
+            + "(case-insensitive) and displays them as a list with index numbers.\n"
             + "Alias: " + FindContactCommand.COMMAND_WORD_ALIAS + "\n"
             + "Parameters: ["
-            + CliSyntax.PREFIX_NAME + "CONTACT_NAME_KEYWORDS...] ["
-            + CliSyntax.PREFIX_PHONE + "PHONE_NUMBER] ["
-            + CliSyntax.PREFIX_EMAIL + "EMAIL]\n"
+            + CliSyntax.PREFIX_NAME + "CONTACT_NAME_SEARCH_STRING...] ["
+            + CliSyntax.PREFIX_PHONE + "PHONE_NUMBER_SEARCH_STRING] ["
+            + CliSyntax.PREFIX_EMAIL + "EMAIL_SEARCH_STRING]\n"
             + "Exactly one of ["
-            + CliSyntax.PREFIX_NAME + "CONTACT_NAME_KEYWORDS...], ["
-            + CliSyntax.PREFIX_PHONE + "PHONE_NUMBER], or ["
-            + CliSyntax.PREFIX_EMAIL + "EMAIL] must be provided.\n"
+            + CliSyntax.PREFIX_NAME + "CONTACT_NAME_SEARCH_STRING...], ["
+            + CliSyntax.PREFIX_PHONE + "PHONE_NUMBER_SEARCH_STRING], or ["
+            + CliSyntax.PREFIX_EMAIL + "EMAIL_SEARCH_STRING] must be provided.\n"
             + "Example: " + FindContactCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_NAME + "alice bob\n"
             + "Example: " + FindContactCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_PHONE + "91234567\n"
             + "Example: " + FindContactCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_EMAIL + "alice@gmail.com";

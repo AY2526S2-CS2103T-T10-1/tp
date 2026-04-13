@@ -84,6 +84,5 @@
         "md045": false,
         "md025": false,
         "md036": false
-    },
-    "java.configuration.updateBuildConfiguration": "interactive"
+    }
 }

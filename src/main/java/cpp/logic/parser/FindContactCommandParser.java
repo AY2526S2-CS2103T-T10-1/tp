@@ -1,7 +1,5 @@
 package cpp.logic.parser;
 
-import java.util.Arrays;
-
 import cpp.logic.Messages;
 import cpp.logic.commands.FindContactCommand;
 import cpp.logic.parser.exceptions.ParseException;
@@ -29,8 +27,8 @@ public class FindContactCommandParser implements Parser<FindContactCommand> {
      */
     @Override
     public FindContactCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_PHONE,
-                CliSyntax.PREFIX_EMAIL);
+        ArgumentMultimap argMultimap = ArgumentTokenizer
+                .untrimmedTokenize(args, CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_PHONE, CliSyntax.PREFIX_EMAIL);
 
         argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_PHONE, CliSyntax.PREFIX_EMAIL);
 
@@ -54,17 +52,25 @@ public class FindContactCommandParser implements Parser<FindContactCommand> {
 
         if (hasPhonePrefix) {
             String phoneValue = argMultimap.getValue(CliSyntax.PREFIX_PHONE).get().trim();
-            ParserUtil.parsePhone(phoneValue);
-            predicate = new ContactPhoneMatchesKeywordsPredicate(Arrays.asList(phoneValue));
+            if (!phoneValue.matches("\\d+")) {
+                throw new ParseException("Phone number search string must contain 1 or more digits.");
+            }
+            predicate = new ContactPhoneMatchesKeywordsPredicate(phoneValue);
         } else if (hasEmailPrefix) {
             String emailValue = argMultimap.getValue(CliSyntax.PREFIX_EMAIL).get().trim();
-            ParserUtil.parseEmail(emailValue);
-            predicate = new ContactEmailMatchesKeywordsPredicate(Arrays.asList(emailValue));
+            if (!emailValue.matches("[A-Za-z0-9+_.@-]+")) {
+                throw new ParseException(
+                        "Email search string must contain 1 or more letters, digits, +, _, ., @, -");
+            }
+            predicate = new ContactEmailMatchesKeywordsPredicate(emailValue);
         } else if (hasNamePrefix) {
-            String nameValue = argMultimap.getValue(CliSyntax.PREFIX_NAME).get().trim();
-            ParserUtil.parseName(nameValue);
-            String[] nameKeywords = nameValue.split("\\s+");
-            predicate = new ContactNameContainsKeywordsPredicate(Arrays.asList(nameKeywords));
+            String nameValue = argMultimap.getValue(CliSyntax.PREFIX_NAME).get().replaceAll("\\s+", " ");
+            if (!nameValue.matches("(?i)([A-Za-z0-9()\\- ]|s/o|d/o)+")) {
+                throw new ParseException("""
+                        Contact name search string must contain 1 or more letters, digits, -, (, ), \
+                        s/o (case-insensitive), d/o (case-insensitive), and spaces""");
+            }
+            predicate = new ContactNameContainsKeywordsPredicate(nameValue);
         } else {
             throw new ParseException(
                     String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindContactCommand.MESSAGE_USAGE));

@@ -107,11 +107,11 @@ public class AddressBookParser {
 
         case FindContactCommand.COMMAND_WORD:
         case FindContactCommand.COMMAND_WORD_ALIAS:
-            return new FindContactCommandParser().parse(arguments);
+            return new FindContactCommandParser().parse(untrimmedArguments);
 
         case FindClassCommand.COMMAND_WORD:
         case FindClassCommand.COMMAND_WORD_ALIAS:
-            return new FindClassCommandParser().parse(arguments);
+            return new FindClassCommandParser().parse(untrimmedArguments);
 
         case FindAssignmentCommand.COMMAND_WORD:
             return new FindAssignmentCommandParser().parse(untrimmedArguments);
@@ -179,30 +179,29 @@ public class AddressBookParser {
         // Currently, this function only considers non-alias command words for
         // suggestions to avoid confusion. If alias suggestions are desired, they can be
         // added here.
-        String[] validCommands = {
-            AddContactCommand.COMMAND_WORD,
-            EditContactCommand.COMMAND_WORD,
-            EditClassGroupCommand.COMMAND_WORD,
-            EditAssignmentCommand.COMMAND_WORD,
-            DeleteCommand.COMMAND_WORD,
-            ClearCommand.COMMAND_WORD,
-            FindContactCommand.COMMAND_WORD,
-            FindClassCommand.COMMAND_WORD,
-            FindAssignmentCommand.COMMAND_WORD,
-            ListCommand.COMMAND_WORD,
-            ExitCommand.COMMAND_WORD,
-            HelpCommand.COMMAND_WORD,
-            AddAssignmentCommand.COMMAND_WORD,
-            AllocateAssignmentCommand.COMMAND_WORD,
-            UnallocateAssignmentCommand.COMMAND_WORD,
-            SubmitAssignmentCommand.COMMAND_WORD,
-            UnsubmitAssignmentCommand.COMMAND_WORD,
-            GradeAssignmentCommand.COMMAND_WORD,
-            UngradeAssignmentCommand.COMMAND_WORD,
-            AddClassGroupCommand.COMMAND_WORD,
-            AllocateClassGroupCommand.COMMAND_WORD,
-            UnallocateClassGroupCommand.COMMAND_WORD,
-            ViewCommand.COMMAND_WORD
+        String[] validCommands = { AddContactCommand.COMMAND_WORD,
+                EditContactCommand.COMMAND_WORD,
+                EditClassGroupCommand.COMMAND_WORD,
+                EditAssignmentCommand.COMMAND_WORD,
+                DeleteCommand.COMMAND_WORD,
+                ClearCommand.COMMAND_WORD,
+                FindContactCommand.COMMAND_WORD,
+                FindClassCommand.COMMAND_WORD,
+                FindAssignmentCommand.COMMAND_WORD,
+                ListCommand.COMMAND_WORD,
+                ExitCommand.COMMAND_WORD,
+                HelpCommand.COMMAND_WORD,
+                AddAssignmentCommand.COMMAND_WORD,
+                AllocateAssignmentCommand.COMMAND_WORD,
+                UnallocateAssignmentCommand.COMMAND_WORD,
+                SubmitAssignmentCommand.COMMAND_WORD,
+                UnsubmitAssignmentCommand.COMMAND_WORD,
+                GradeAssignmentCommand.COMMAND_WORD,
+                UngradeAssignmentCommand.COMMAND_WORD,
+                AddClassGroupCommand.COMMAND_WORD,
+                AllocateClassGroupCommand.COMMAND_WORD,
+                UnallocateClassGroupCommand.COMMAND_WORD,
+                ViewCommand.COMMAND_WORD
         };
         String closestMatch = null;
         int minDistance = Integer.MAX_VALUE;

@@ -1,8 +1,5 @@
 package cpp.model.contact;
 
-import java.util.List;
-
-import cpp.commons.util.StringUtil;
 import cpp.commons.util.ToStringBuilder;
 
 /**
@@ -10,16 +7,15 @@ import cpp.commons.util.ToStringBuilder;
  * given.
  */
 public class ContactNameContainsKeywordsPredicate implements ContactSearchPredicate {
-    private final List<String> keywords;
+    private final String searchString;
 
-    public ContactNameContainsKeywordsPredicate(List<String> keywords) {
-        this.keywords = keywords;
+    public ContactNameContainsKeywordsPredicate(String searchString) {
+        this.searchString = searchString;
     }
 
     @Override
     public boolean test(Contact contact) {
-        return this.keywords.stream()
-                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(contact.getName().fullName, keyword));
+        return contact.getName().fullName.toLowerCase().contains(this.searchString.toLowerCase());
     }
 
     @Override
@@ -34,11 +30,11 @@ public class ContactNameContainsKeywordsPredicate implements ContactSearchPredic
         }
 
         ContactNameContainsKeywordsPredicate pred = (ContactNameContainsKeywordsPredicate) other;
-        return this.keywords.equals(pred.keywords);
+        return this.searchString.equals(pred.searchString);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("keywords", this.keywords).toString();
+        return new ToStringBuilder(this).add("searchString", this.searchString).toString();
     }
 }

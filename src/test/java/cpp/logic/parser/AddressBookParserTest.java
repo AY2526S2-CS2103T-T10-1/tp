@@ -130,7 +130,8 @@ public class AddressBookParserTest {
         FindContactCommand command = (FindContactCommand) this.parser.parseCommand(
                 FindContactCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_NAME
                         + keywords.stream().collect(Collectors.joining(" ")));
-        Assertions.assertEquals(new FindContactCommand(new ContactNameContainsKeywordsPredicate(keywords)), command);
+        Assertions.assertEquals(new FindContactCommand(new ContactNameContainsKeywordsPredicate("foo bar baz")),
+                command);
     }
 
     @Test
@@ -140,7 +141,8 @@ public class AddressBookParserTest {
         FindContactCommand command = (FindContactCommand) this.parser.parseCommand(
                 FindContactCommand.COMMAND_WORD_ALIAS + " " + CliSyntax.PREFIX_NAME
                         + keywords.stream().collect(Collectors.joining(" ")));
-        Assertions.assertEquals(new FindContactCommand(new ContactNameContainsKeywordsPredicate(keywords)), command);
+        Assertions.assertEquals(new FindContactCommand(new ContactNameContainsKeywordsPredicate("foo bar baz")),
+                command);
 
         // Test FindClassCommand abbreviation
         FindClassCommand classCommand = (FindClassCommand) this.parser.parseCommand(

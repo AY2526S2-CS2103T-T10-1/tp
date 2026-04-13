@@ -1,7 +1,6 @@
 package cpp.logic.commands;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
@@ -133,7 +132,7 @@ public class CommandTestUtil {
 
         Contact contact = model.getFilteredContactList().get(targetIndex.getZeroBased());
         final String[] splitName = contact.getName().fullName.split("\\s+");
-        model.updateFilteredContactList(new ContactNameContainsKeywordsPredicate(Arrays.asList(splitName[0])));
+        model.updateFilteredContactList(new ContactNameContainsKeywordsPredicate(splitName[0]));
 
         Assertions.assertEquals(1, model.getFilteredContactList().size());
     }

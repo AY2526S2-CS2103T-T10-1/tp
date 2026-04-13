@@ -11,20 +11,25 @@ import cpp.commons.util.AppUtil;
 public class ContactName {
 
     public static final String MESSAGE_CONSTRAINTS = """
-            Names should only contain alphanumeric\
-             characters and spaces.
-            Names must start with an alphabetic character.
-            Forward slashes are only allowed in s/o or d/o patterns (case-insensitive).
-            The name should not be blank.""";
+            Contact names must start with an alphabetic character, and only contain alphanumeric characters, \
+            spaces, s/o or d/o patterns, hyphens, and parentheses.
+            Forward slashes "/" are only allowed in "s/o" or "d/o" patterns (case-insensitive).
+            Hyphens "-" must be between two alphanumeric characters (not at the start or end).
+            Open parenthesis "(" cannot be at the start of the name, and must have a closing parenthesis ")".
+            There can only be alphanumeric characters inside the parentheses, \
+            and there must be at least 1 alphanumeric character.\nThe name should not be blank.""";
 
     /*
      * Names must:
      * - Start with an alphabetic character [A-Za-z]
-     * - Contain only alphanumeric, spaces, and s/o, d/o patterns
-     * - Slashes only allowed in patterns: s/o, S/O, d/o, D/O (case-insensitive)
-     * - Hyphens and parentheses are not allowed
+     * - Contain only alphanumeric, spaces, s/o, d/o, hyphens, and parentheses
+     * - Slashes only allowed in patterns: s/o, d/o (case-insensitive)
+     * - Hyphens must be between two alphanumeric characters (not at start/end)
+     * - Parentheses must contain at least one alphanumeric character and be closed
+     * (not at start)
      */
-    public static final String VALIDATION_REGEX = "[A-Za-z]([\\p{Alnum} ]|(?<=[sSdD])/[oO])*";
+    public static final String VALIDATION_REGEX = "[A-Za-z]([\\p{Alnum} ]"
+            + "|(?<=[sSdD])/[oO]|-(?=[\\p{Alnum}])|\\([\\p{Alnum} ]*[\\p{Alnum}][\\p{Alnum} ]*\\))*";
 
     public final String fullName;
 

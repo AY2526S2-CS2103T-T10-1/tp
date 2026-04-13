@@ -3,7 +3,6 @@ package cpp.model;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -377,8 +376,8 @@ public class ModelManagerTest {
         Assertions.assertFalse(this.modelManager.equals(new ModelManager(differentAddressBook2, userPrefs)));
 
         // different filteredList -> returns false
-        String[] keywords = TypicalContacts.ALICE.getName().fullName.split("\\s+");
-        this.modelManager.updateFilteredContactList(new ContactNameContainsKeywordsPredicate(Arrays.asList(keywords)));
+        String[] aliceName = TypicalContacts.ALICE.getName().fullName.split("\\s+");
+        this.modelManager.updateFilteredContactList(new ContactNameContainsKeywordsPredicate(aliceName[0]));
         Assertions.assertFalse(this.modelManager.equals(new ModelManager(addressBook, userPrefs)));
 
         // resets modelManager to initial state for upcoming tests

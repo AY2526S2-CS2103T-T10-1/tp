@@ -1,7 +1,5 @@
 package cpp.model.contact;
 
-import java.util.List;
-
 import cpp.commons.util.ToStringBuilder;
 
 /**
@@ -9,16 +7,15 @@ import cpp.commons.util.ToStringBuilder;
  * keyword (case-insensitive).
  */
 public class ContactEmailMatchesKeywordsPredicate implements ContactSearchPredicate {
-    private final List<String> keywords;
+    private final String searchString;
 
-    public ContactEmailMatchesKeywordsPredicate(List<String> keywords) {
-        this.keywords = keywords;
+    public ContactEmailMatchesKeywordsPredicate(String searchString) {
+        this.searchString = searchString;
     }
 
     @Override
     public boolean test(Contact contact) {
-        return this.keywords.stream()
-                .anyMatch(keyword -> contact.getEmail().value.equalsIgnoreCase(keyword));
+        return contact.getEmail().value.toLowerCase().contains(this.searchString.toLowerCase());
     }
 
     @Override
@@ -32,13 +29,13 @@ public class ContactEmailMatchesKeywordsPredicate implements ContactSearchPredic
         }
 
         ContactEmailMatchesKeywordsPredicate otherPredicate = (ContactEmailMatchesKeywordsPredicate) other;
-        return this.keywords.equals(otherPredicate.keywords);
+        return this.searchString.equals(otherPredicate.searchString);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("keywords", this.keywords)
+                .add("searchString", this.searchString)
                 .toString();
     }
 }

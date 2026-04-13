@@ -10,13 +10,21 @@ import cpp.commons.util.AppUtil;
 public class ClassGroupName {
 
     public static final String MESSAGE_CONSTRAINTS = """
-            Class names should only contain alphanumeric characters and spaces, and it should not be blank""";
+            Class names must contain only alphanumeric characters, spaces, hyphens, and parentheses.
+            Hyphens "-" must be between two alphanumeric characters (not at the start or end).
+            Open parenthesis "(" cannot be at the start of the name, and must have a closing parenthesis ")".
+            There can only be alphanumeric characters inside the parentheses, \
+            and there must be at least 1 alphanumeric character.\nThe name should not be blank.""";
 
     /*
-     * The first character of the address must not be a whitespace,
-     * otherwise " " (a blank string) becomes a valid input.
+     * Class names must:
+     * - Contain only alphanumeric, spaces, hyphens, and parentheses
+     * - Hyphens must be between two alphanumeric characters (not at start/end)
+     * - Parentheses must contain at least one alphanumeric character and be closed
+     * (not at start)
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
+    public static final String VALIDATION_REGEX = "[\\p{Alnum}]([\\p{Alnum} ]"
+            + "|-(?=[\\p{Alnum}])|\\([\\p{Alnum} ]*[\\p{Alnum}][\\p{Alnum} ]*\\))*";
 
     public final String fullName;
 

@@ -1,9 +1,7 @@
 package cpp.model.classgroup;
 
-import java.util.List;
 import java.util.function.Predicate;
 
-import cpp.commons.util.StringUtil;
 import cpp.commons.util.ToStringBuilder;
 
 /**
@@ -11,16 +9,15 @@ import cpp.commons.util.ToStringBuilder;
  * given.
  */
 public class ClassNameContainsKeywordsPredicate implements Predicate<ClassGroup> {
-    private final List<String> keywords;
+    private final String searchString;
 
-    public ClassNameContainsKeywordsPredicate(List<String> keywords) {
-        this.keywords = keywords;
+    public ClassNameContainsKeywordsPredicate(String searchString) {
+        this.searchString = searchString;
     }
 
     @Override
     public boolean test(ClassGroup classGroup) {
-        return this.keywords.stream()
-                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(classGroup.getName().fullName, keyword));
+        return classGroup.getName().fullName.toLowerCase().contains(this.searchString.toLowerCase());
     }
 
     @Override
@@ -35,11 +32,11 @@ public class ClassNameContainsKeywordsPredicate implements Predicate<ClassGroup>
         }
 
         ClassNameContainsKeywordsPredicate pred = (ClassNameContainsKeywordsPredicate) other;
-        return this.keywords.equals(pred.keywords);
+        return this.searchString.equals(pred.searchString);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("keywords", this.keywords).toString();
+        return new ToStringBuilder(this).add("searchString", this.searchString).toString();
     }
 }

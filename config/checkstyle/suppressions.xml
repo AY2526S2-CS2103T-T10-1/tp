@@ -8,4 +8,5 @@
   <suppress checks="JavadocType" files=".*Test\.java"/>
   <suppress checks="MissingJavadocMethodCheck" files=".*Test\.java"/>
   <suppress checks="SeparatorWrap" files=".*Test\.java"/>
+  <suppress checks="Indentation" files=".*\\main\\java\\cpp\\logic\\parser\\AddressBookParser\.java"/>
 </suppressions>

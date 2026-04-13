@@ -1,7 +1,5 @@
 package cpp.logic.parser;
 
-import java.util.Arrays;
-
 import cpp.logic.Messages;
 import cpp.logic.commands.FindClassCommand;
 import cpp.logic.parser.exceptions.ParseException;
@@ -21,7 +19,7 @@ public class FindClassCommandParser implements Parser<FindClassCommand> {
      */
     @Override
     public FindClassCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, CliSyntax.PREFIX_CLASS);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.untrimmedTokenize(args, CliSyntax.PREFIX_CLASS);
 
         argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_CLASS);
 
@@ -35,12 +33,13 @@ public class FindClassCommandParser implements Parser<FindClassCommand> {
                     String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, FindClassCommand.MESSAGE_USAGE));
         }
 
-        String classString = argMultimap.getValue(CliSyntax.PREFIX_CLASS).get().trim();
-        ParserUtil.parseClassGroupName(classString);
+        String classString = argMultimap.getValue(CliSyntax.PREFIX_CLASS).get().replaceAll("\\s+", " ");
+        if (!classString.matches("[A-Za-z0-9()\\- ]+")) {
+            throw new ParseException(
+                    "Class name search string must contain 1 or more letters, digits, -, (, ), and spaces");
+        }
 
-        String[] nameKeywords = classString.split("\\s+");
-
-        return new FindClassCommand(new ClassNameContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
+        return new FindClassCommand(new ClassNameContainsKeywordsPredicate(classString));
     }
 
 }
