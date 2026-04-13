@@ -9,18 +9,20 @@ Classroom Plus Plus is a desktop teaching management application used to manage 
 
 Given below are my contributions to the project.
 
-* **New Feature**:
+* **New Feature**: (To be added)
 
-* **Code contributed**: [RepoSense link]()
+* **Code contributed**: [RepoSense link]() (To be added)
 
-* **Project management**:
+* **Project management**: (To be added)
 
-* **Enhancements to existing features**:
+* **Enhancements to existing features**: (To be added)
 
 * **Documentation**:
+  * User Guide:
+    * (To be added)
+  * Developer Guide:
+    * (To be added)
 
-* **Community**:
+* **Community**: (To be added)
 
-* **Tools**:
-
-* _{you can add/remove categories in the list above}_
+* **Tools**: (To be added)
