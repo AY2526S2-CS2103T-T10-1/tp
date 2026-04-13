@@ -57,7 +57,7 @@ public class AddAssignmentCommandParser implements Parser<AddAssignmentCommand> 
 
         if (ParserUtil.arePrefixesPresent(argMultimap, CliSyntax.PREFIX_CLASS)) {
             String classGroupString = argMultimap.getValue(CliSyntax.PREFIX_CLASS).orElse("");
-            ClassGroupName classGroupName = ParserUtil.parseClassGroupName(classGroupString);
+            ClassGroupName classGroupName = ParserUtil.parseClassGroupName(classGroupString, true);
             return new AddAssignmentCommand(assignment, contactIndices, classGroupName);
         }
 

@@ -42,7 +42,7 @@ public class UngradeAssignmentCommandParser implements Parser<UngradeAssignmentC
                 CliSyntax.PREFIX_CLASS);
 
         AssignmentName assignmentName = ParserUtil
-                .parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get());
+                .parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get(), true);
 
         List<Index> contactIndices = List.of();
         if (hasContact) {
@@ -52,7 +52,7 @@ public class UngradeAssignmentCommandParser implements Parser<UngradeAssignmentC
 
         if (hasClass) {
             String classGroupString = argMultimap.getValue(CliSyntax.PREFIX_CLASS).orElse("");
-            ClassGroupName classGroupName = ParserUtil.parseClassGroupName(classGroupString);
+            ClassGroupName classGroupName = ParserUtil.parseClassGroupName(classGroupString, true);
             return new UngradeAssignmentCommand(assignmentName, contactIndices, classGroupName);
         }
 

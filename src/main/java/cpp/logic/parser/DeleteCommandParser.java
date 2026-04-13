@@ -57,7 +57,7 @@ public class DeleteCommandParser implements Parser<Command> {
      */
     private DeleteAssignmentCommand parseDeleteAssignment(ArgumentMultimap argMultimap) throws ParseException {
         AssignmentName name = ParserUtil.parseAssignmentName(
-                argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get());
+                argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get(), true);
         return new DeleteAssignmentCommand(name);
     }
 
@@ -67,7 +67,7 @@ public class DeleteCommandParser implements Parser<Command> {
      */
     private DeleteClassGroupCommand parseDeleteClassGroup(ArgumentMultimap argMultimap) throws ParseException {
         ClassGroupName name = ParserUtil.parseClassGroupName(
-                argMultimap.getValue(CliSyntax.PREFIX_CLASS).get());
+                argMultimap.getValue(CliSyntax.PREFIX_CLASS).get(), true);
         return new DeleteClassGroupCommand(name);
     }
 

@@ -235,6 +235,22 @@ public class ParserUtil {
     }
 
     /**
+     * Parses a {@code String name} into a {@code AssignmentName}. If isSpaceless is
+     * true, all spaces will be removed from the trimmed name before validation.
+     */
+    public static AssignmentName parseAssignmentName(String string, boolean isSpaceless) throws ParseException {
+        Objects.requireNonNull(string);
+        String trimmedName = string.trim().replaceAll("\\s+", " ");
+        if (isSpaceless) {
+            trimmedName = trimmedName.replaceAll(" ", "");
+        }
+        if (!AssignmentName.isValidName(trimmedName)) {
+            throw new ParseException(AssignmentName.MESSAGE_CONSTRAINTS);
+        }
+        return new AssignmentName(trimmedName);
+    }
+
+    /**
      * Parses a {@code String score} into a {@code float}.
      */
     public static float parseScore(String scoreString) throws ParseException {
@@ -259,6 +275,18 @@ public class ParserUtil {
     public static ClassGroupName parseClassGroupName(String string) throws ParseException {
         Objects.requireNonNull(string);
         String trimmedName = string.trim().replaceAll("\\s+", " ");
+        if (!ClassGroupName.isValidName(trimmedName)) {
+            throw new ParseException(ClassGroupName.MESSAGE_CONSTRAINTS);
+        }
+        return new ClassGroupName(trimmedName);
+    }
+
+    public static ClassGroupName parseClassGroupName(String string, boolean isSpaceless) throws ParseException {
+        Objects.requireNonNull(string);
+        String trimmedName = string.trim().replaceAll("\\s+", " ");
+        if (isSpaceless) {
+            trimmedName = trimmedName.replaceAll(" ", "");
+        }
         if (!ClassGroupName.isValidName(trimmedName)) {
             throw new ParseException(ClassGroupName.MESSAGE_CONSTRAINTS);
         }

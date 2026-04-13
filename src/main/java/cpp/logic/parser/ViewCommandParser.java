@@ -56,7 +56,7 @@ public class ViewCommandParser implements Parser<ViewCommand> {
      */
     private ViewCommand parseViewAssignment(ArgumentMultimap argMultimap) throws ParseException {
         AssignmentName name = ParserUtil.parseAssignmentName(
-                argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get());
+                argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get(), true);
         return new ViewAssignmentCommand(name);
     }
 
@@ -65,7 +65,7 @@ public class ViewCommandParser implements Parser<ViewCommand> {
      */
     private ViewCommand parseViewClassGroup(ArgumentMultimap argMultimap) throws ParseException {
         ClassGroupName name = ParserUtil.parseClassGroupName(
-                argMultimap.getValue(CliSyntax.PREFIX_CLASS).get());
+                argMultimap.getValue(CliSyntax.PREFIX_CLASS).get(), true);
         return new ViewClassGroupCommand(name);
     }
 

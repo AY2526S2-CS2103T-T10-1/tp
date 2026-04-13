@@ -45,7 +45,7 @@ public class GradeAssignmentCommandParser implements Parser<GradeAssignmentComma
                 CliSyntax.PREFIX_CLASS, CliSyntax.PREFIX_SCORE, CliSyntax.PREFIX_DATETIME);
 
         AssignmentName assignmentName = ParserUtil
-                .parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get());
+                .parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get(), true);
 
         LocalDateTime gradingDate = ParserUtil.parseDateTime(argMultimap.getValue(CliSyntax.PREFIX_DATETIME)
                 .orElseGet(() -> LocalDateTime.now(ParserUtil.getDefaultZone()).format(ParserUtil.DATETIME_FORMATTER)));
@@ -60,7 +60,7 @@ public class GradeAssignmentCommandParser implements Parser<GradeAssignmentComma
 
         if (hasClass) {
             String classGroupString = argMultimap.getValue(CliSyntax.PREFIX_CLASS).orElse("");
-            ClassGroupName classGroupName = ParserUtil.parseClassGroupName(classGroupString);
+            ClassGroupName classGroupName = ParserUtil.parseClassGroupName(classGroupString, true);
             return new GradeAssignmentCommand(assignmentName, contactIndices, classGroupName, score, gradingDate);
         }
 

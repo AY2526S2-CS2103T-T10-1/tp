@@ -49,12 +49,12 @@ public class AddContactCommandParser implements Parser<AddContactCommand> {
 
         String classGroupNameValue = argMultimap.getValue(CliSyntax.PREFIX_CLASS).orElse(null);
         ClassGroupName classGroupName = classGroupNameValue != null
-                ? ParserUtil.parseClassGroupName(classGroupNameValue)
+                ? ParserUtil.parseClassGroupName(classGroupNameValue, true)
                 : null;
 
         String assignmentNameValue = argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).orElse(null);
         AssignmentName assignmentName = assignmentNameValue != null
-                ? ParserUtil.parseAssignmentName(assignmentNameValue)
+                ? ParserUtil.parseAssignmentName(assignmentNameValue, true)
                 : null;
 
         Set<Tag> tagList = argMultimap.getValue(CliSyntax.PREFIX_TAG).isPresent()

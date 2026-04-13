@@ -38,7 +38,7 @@ public class UnsubmitAssignmentCommandParser implements Parser<UnsubmitAssignmen
                 CliSyntax.PREFIX_CONTACT);
 
         AssignmentName assignmentName = ParserUtil
-                .parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get());
+                .parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get(), true);
 
         List<Index> contactIndices = List.of();
         if (hasContact) {
@@ -48,7 +48,7 @@ public class UnsubmitAssignmentCommandParser implements Parser<UnsubmitAssignmen
 
         if (hasClass) {
             String classGroupString = argMultimap.getValue(CliSyntax.PREFIX_CLASS).orElse("");
-            ClassGroupName classGroupName = ParserUtil.parseClassGroupName(classGroupString);
+            ClassGroupName classGroupName = ParserUtil.parseClassGroupName(classGroupString, true);
             return new UnsubmitAssignmentCommand(assignmentName, contactIndices, classGroupName);
         }
 

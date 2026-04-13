@@ -34,7 +34,7 @@ public class UnallocateClassGroupCommandParser implements Parser<UnallocateClass
         argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_CLASS, CliSyntax.PREFIX_CONTACT);
 
         ClassGroupName classGroupName = ParserUtil
-                .parseClassGroupName(argMultimap.getValue(CliSyntax.PREFIX_CLASS).get());
+                .parseClassGroupName(argMultimap.getValue(CliSyntax.PREFIX_CLASS).get(), true);
         String contactString = argMultimap.getValue(CliSyntax.PREFIX_CONTACT).orElse("");
         List<Index> contactIndices = ParserUtil.parseContactIndices(contactString);
 

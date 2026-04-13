@@ -43,7 +43,7 @@ public class SubmitAssignmentCommandParser implements Parser<SubmitAssignmentCom
                 CliSyntax.PREFIX_CONTACT, CliSyntax.PREFIX_DATETIME);
 
         AssignmentName assignmentName = ParserUtil
-                .parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get());
+                .parseAssignmentName(argMultimap.getValue(CliSyntax.PREFIX_ASSIGNMENT).get(), true);
 
         LocalDateTime submissionDate = ParserUtil.parseDateTime(argMultimap.getValue(CliSyntax.PREFIX_DATETIME)
                 .orElseGet(() -> LocalDateTime.now(ParserUtil.getDefaultZone()).format(ParserUtil.DATETIME_FORMATTER)));
@@ -56,7 +56,7 @@ public class SubmitAssignmentCommandParser implements Parser<SubmitAssignmentCom
 
         if (hasClass) {
             String classGroupString = argMultimap.getValue(CliSyntax.PREFIX_CLASS).orElse("");
-            ClassGroupName classGroupName = ParserUtil.parseClassGroupName(classGroupString);
+            ClassGroupName classGroupName = ParserUtil.parseClassGroupName(classGroupString, true);
             return new SubmitAssignmentCommand(assignmentName, contactIndices, classGroupName, submissionDate);
         }
 
