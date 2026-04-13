@@ -78,4 +78,14 @@ public class JsonAdaptedClassGroupTest {
         String expectedMessage = "Duplicate contactId found during allocation.";
         Assert.assertThrows(IllegalValueException.class, expectedMessage, () -> json.toModelType(addressBook));
     }
+
+    @Test
+    public void toModelType_contactIdDoesNotExist_throwsIllegalValueException() {
+        AddressBook addressBook = new AddressBook();
+        String[] nonExistentContactIds = new String[] { "NonExistentContactId" };
+        JsonAdaptedClassGroup json = new JsonAdaptedClassGroup(JsonAdaptedClassGroupTest.VALID_ID,
+                JsonAdaptedClassGroupTest.VALID_NAME, nonExistentContactIds);
+        String expectedMessage = "Contact with id NonExistentContactId does not exist in the address book";
+        Assert.assertThrows(IllegalValueException.class, expectedMessage, () -> json.toModelType(addressBook));
+    }
 }
