@@ -276,7 +276,17 @@ Adds a contact to the address book.
 
 * Creates a contact with the specified `CONTACT_NAME`, `PHONE_NUMBER`, `EMAIL` and `ADDRESS`.
 
-* The `CONTACT_NAME` provided must only contain alphanumeric characters and spaces. It cannot be blank.
+* The `CONTACT_NAME` provided must contain only alphanumeric characters, spaces, `s/o` or `d/o` patterns, hyphens `-`, and parentheses `()`.
+
+  * Forward slashes `/` are only allowed in `s/o` or `d/o` patterns (case-insensitive).
+
+  * Hyphens `-` must be between two alphanumeric characters (not at the start or end).
+
+  * Open parenthesis `(` cannot be at the start of the name, and must have a closing parenthesis `)`.
+
+  * There can only be alphanumeric characters inside the parentheses, and there must be at least 1 alphanumeric character.
+
+  * The name should not be blank.
 
 * Unique contacts will be identified with a combination of their `CONTACT_NAME` and `TAGS`. If you need to add multiple contacts with the same name, it is recommended to disambiguate them using different tags.
 
@@ -1225,7 +1235,7 @@ Edits the details of an existing contact in the address book.
 
 * When editing tags, all existing tags are removed and replaced with the new tags provided. To remove all tags, provide `t/` with no value.
 
-* The `CONTACT_NAME` provided must only contain alphanumeric characters and spaces, and it cannot be blank.
+* The `CONTACT_NAME` provided must be valid according to the criteria specified in the feature documentation on [**Adding a contact**](#adding-a-contact-addcontact).
 
 * Matching for `CONTACT_NAME` will be space-less and case insensitive. For example, "Alex Yeoh" will be treated the same as "alexyeoh".
 
