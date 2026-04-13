@@ -23,8 +23,11 @@ public class AssignmentName {
      * - Parentheses must contain at least one alphanumeric character and be closed
      * (not at start)
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}]([\\p{Alnum} ]"
-            + "|-(?=[\\p{Alnum}])|\\([\\p{Alnum} ]*[\\p{Alnum}][\\p{Alnum} ]*\\))*";
+    public static final String VALIDATION_REGEX = """
+            [\\p{Alnum}](\
+            [\\p{Alnum} ]\
+            |(?<=[\\p{Alnum}])-(?=[\\p{Alnum}])\
+            |\\([\\p{Alnum} ]*[\\p{Alnum}][\\p{Alnum} ]*\\))*""";
 
     public final String fullName;
 
