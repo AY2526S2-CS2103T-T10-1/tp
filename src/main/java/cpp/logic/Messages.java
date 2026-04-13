@@ -27,9 +27,9 @@ public class Messages {
             The class group index provided is invalid!""";
     public static final String MESSAGE_VALID_INDEX_BOUNDS = """
             Index should be a positive integer between 1 and %d inclusive.""";
-    public static final String EMPTY_CONTACT_LIST = "There are no contacts in the address book.";
-    public static final String EMPTY_ASSIGNMENT_LIST = "There are no assignments in the address book.";
-    public static final String EMPTY_CLASS_GROUP_LIST = "There are no class groups in the address book.";
+    public static final String EMPTY_CONTACT_LIST = "There are no contacts listed in the address book.";
+    public static final String EMPTY_ASSIGNMENT_LIST = "There are no assignments listed in the address book.";
+    public static final String EMPTY_CLASS_GROUP_LIST = "There are no class groups listed in the address book.";
     public static final String MESSAGE_ASSIGNMENT_NOT_FOUND = "The assignment provided is not found";
     public static final String MESSAGE_CLASS_GROUP_NOT_FOUND = "The class group provided is not found";
     public static final String MESSAGE_CLASS_GROUP_NO_CONTACTS = "The class group provided has no contacts";
