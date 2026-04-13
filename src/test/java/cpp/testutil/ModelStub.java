@@ -75,7 +75,7 @@ public class ModelStub implements Model {
     }
 
     @Override
-    public boolean hasContactWithName(ContactName name) {
+    public boolean hasMultipleContactsWithName(ContactName name) {
         throw new AssertionError("This method should not be called.");
     }
 

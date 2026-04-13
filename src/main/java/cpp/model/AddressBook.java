@@ -125,9 +125,9 @@ public class AddressBook implements ReadOnlyAddressBook {
      * Returns true if a contact with the same name as {@code name} exists in the
      * address book.
      */
-    public boolean hasContactWithName(ContactName name) {
+    public boolean hasMultipleContactsWithName(ContactName name) {
         Objects.requireNonNull(name);
-        return this.contacts.containsName(name);
+        return this.contacts.containsMultipleContactsWithName(name);
     }
 
     /**

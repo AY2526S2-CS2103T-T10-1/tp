@@ -179,9 +179,9 @@ public class AddContactCommandTest {
         }
 
         @Override
-        public boolean hasContactWithName(ContactName name) {
+        public boolean hasMultipleContactsWithName(ContactName name) {
             Objects.requireNonNull(name);
-            return this.contactsAdded.stream().anyMatch(contact -> contact.getName().equals(name));
+            return this.contactsAdded.stream().filter(contact -> contact.getName().equals(name)).count() > 1;
         }
 
         @Override

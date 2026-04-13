@@ -78,7 +78,7 @@ public interface Model {
      * Returns true if a contact with the same name as {@code name} exists in the
      * address book.
      */
-    boolean hasContactWithName(ContactName name);
+    boolean hasMultipleContactsWithName(ContactName name);
 
     /**
      * Deletes the given contact.

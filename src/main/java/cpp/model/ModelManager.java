@@ -125,9 +125,9 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public boolean hasContactWithName(ContactName name) {
+    public boolean hasMultipleContactsWithName(ContactName name) {
         Objects.requireNonNull(name);
-        return this.addressBook.hasContactWithName(name);
+        return this.addressBook.hasMultipleContactsWithName(name);
     }
 
     @Override

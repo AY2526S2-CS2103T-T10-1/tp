@@ -119,17 +119,16 @@ public class AddContactCommand extends Command {
                     Messages.format(classGroupToAllocate));
         }
 
-        boolean hasDuplicateContactNameWithDifferentTags = model.hasContactWithName(this.toAdd.getName());
-
         model.addContact(this.toAdd);
 
+        boolean hasDuplicateContactNameWithDifferentTags = model.hasMultipleContactsWithName(this.toAdd.getName());
         String resultString = String.format(AddContactCommand.MESSAGE_SUCCESS, Messages.format(this.toAdd),
                 allocatedClassGroupString, allocatedAssignmentString);
         if (hasDuplicateContactNameWithDifferentTags) {
             resultString += """
                     \n\nWarning: A contact with the same name \
                     but different tags already exists in the address book.
-                    Ignore this warning if this is intentional.""";
+                    You may ignore this warning if this is intentional.""";
         }
 
         return new CommandResult(resultString);
