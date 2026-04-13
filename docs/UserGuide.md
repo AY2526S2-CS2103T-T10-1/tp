@@ -217,7 +217,7 @@ In this quick tutorial, we will cover some common tasks such as listing contacts
     findcontact n/dAviD IRFAN
     ```
 
-    Expected: Confirmation message in result display and contact list updated to show only David Li and Irfan Ibrahim.
+    Expected: Confirmation message in result display and contact list updated to show names containing "david irfan" (case-insensitive).
 
     ```text
     2 contacts listed!
@@ -278,7 +278,9 @@ Adds a contact to the address book.
 
 * The `CONTACT_NAME` provided must only contain alphanumeric characters and spaces. It cannot be blank.
 
-* The `CONTACT_NAME` must be unique across all contacts (case-insensitive).
+* Unique contacts will be identified with a combination of their `CONTACT_NAME` and `TAGS`. If you need to add multiple contacts with the same name, it is recommended to disambiguate them using different tags.
+
+* Matching for `CONTACT_NAME` will be space-less and case insensitive. For example, "Alex Yeoh" will be treated the same as "alexyeoh".
 
 * The `PHONE_NUMBER` provided must only contain numeric digits (0-9), be a minimum of 3 digits long, and cannot be blank.
 
@@ -290,9 +292,9 @@ Adds a contact to the address book.
 
 * The `ADDRESS` provided can contain any characters, and cannot be blank.
 
-* `c/CLASS_NAME` is optional and can be used to allocate the specified class to the contact. If the `c/` prefix is included, the `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* `c/CLASS_NAME` is optional and can be used to allocate the specified class to the contact. If the `c/` prefix is included, the `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
-* `ass/ASSIGNMENT_NAME` is optional and can be used to allocate the specified assignment to the contact. If the `ass/` prefix is included, the `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* `ass/ASSIGNMENT_NAME` is optional and can be used to allocate the specified assignment to the contact. If the `ass/` prefix is included, the `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * `t/TAGS...` is optional and can be used to add tags to the contact. Each `TAG` must be a single alphanumeric word (no spaces). While tags are displayed case-sensitive in the app, they are matched case-insensitively for command inputs (e.g., `t/friend` and `t/Friend` will be treated as the same tag). Tags must be unique within each contact (case-insensitive), but there are no restrictions on different contacts having the same tag.
 
@@ -342,7 +344,7 @@ Adds a class to the address book.
 
 **Format:** `addclass c/CLASS_NAME [ct/CONTACT_INDICES...]`
 
-* Creates a class with the specified `CLASS_NAME`. The `CLASS_NAME` must only contain alphanumeric characters and spaces. It cannot be blank, must be unique, and should not match the name of any existing class (case-insensitive).
+* Creates a class with the specified `CLASS_NAME`. The `CLASS_NAME` must only contain alphanumeric characters and spaces. It cannot be blank, must be unique, and should not match the name of any existing class (space-less and case-insensitive matching).
 
 * `ct/CONTACT_INDICES...` is optional and can be used to allocate the class to specific contacts upon creation. If the `ct/` prefix is included, at least 1 contact index must be specified.
 
@@ -385,7 +387,7 @@ Allocates a class to specific contacts.
 
 **Format:** `allocclass c/CLASS_NAME ct/CONTACT_INDICES...`
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * These `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -430,7 +432,7 @@ Unallocates a class from specific contacts.
 
 **Format:** `unallocclass c/CLASS_NAME ct/CONTACT_INDICES...`
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * These `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -477,11 +479,11 @@ Adds an assignment to the address book.
 
 * Creates an assignment with the specified `ASSIGNMENT_NAME` and `DEADLINE`.
 
-* The `ASSIGNMENT_NAME` must only contain alphanumeric characters and spaces. It cannot be blank, must be unique, and should not match the name of any existing assignment (case-insensitive). If you wish to add multiple different assignments with the same name but for different classes, you are advised to disambiguate them manually.
+* The `ASSIGNMENT_NAME` must only contain alphanumeric characters and spaces. It cannot be blank, must be unique, and should not match the name of any existing assignment (space-less and case-insensitive matching). If you wish to add multiple different assignments with the same name but for different classes, you are advised to disambiguate them manually.
 
 * The `DEADLINE` provided must be in the format `dd-MM-yyyy HH:mm`.
 
-* `c/CLASS_NAME` is optional and can be used to allocate the assignment to all contacts in that class. If the `c/` prefix is included, the `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* `c/CLASS_NAME` is optional and can be used to allocate the assignment to all contacts in that class. If the `c/` prefix is included, the `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * `ct/CONTACT_INDICES...` is optional and can be used to allocate the assignment to specific contacts. If the `ct/` prefix is included, at least 1 contact index must be specified.
 
@@ -538,11 +540,11 @@ Allocates an assignment to specific contacts.
 
 * Allocates the assignment to the specified contacts, as well as all contacts in the specified class.
 
-* The `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * At least 1 of `[c/CLASS_NAME]` or `[ct/CONTACT_INDICES...]` must be provided.
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * The `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -594,11 +596,11 @@ Unallocates an assignment from specific contacts.
 
 * Unallocates the assignment from the specified contacts, as well as all contacts in the specified class.
 
-* The `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * At least 1 of `[c/CLASS_NAME]` or `[ct/CONTACT_INDICES...]` must be provided.
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * The `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -652,11 +654,11 @@ Marks a specific assignment as submitted for the specified contacts.
 
 * If the assignment is already submitted for the specified contact, the submission status and submission date will not be updated.
 
-* The `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * At least 1 of `[c/CLASS_NAME]` or `[ct/CONTACT_INDICES...]` must be provided.
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * The `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -716,11 +718,11 @@ Marks a specific assignment as unsubmitted for the specified contacts.
 
 * If the assignment is not submitted for the specified contact, then it will not be updated.
 
-* The `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * At least 1 of `[c/CLASS_NAME]` or `[ct/CONTACT_INDICES...]` must be provided.
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * The `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -774,11 +776,11 @@ Grades a specific assignment for the specified contacts with a score.
 
 * If the assignment is already graded or not submitted for the specified contact, the grading status and grading date will not be updated.
 
-* The `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * At least 1 of `[c/CLASS_NAME]` or `[ct/CONTACT_INDICES...]` must be provided.
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * The `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -844,11 +846,11 @@ Ungrades a specific assignment for the specified contacts.
 
 * If the assignment is not graded for the specified contact, then it will not be updated.
 
-* The `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * At least 1 of `[c/CLASS_NAME]` or `[ct/CONTACT_INDICES...]` must be provided.
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * The `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -1175,7 +1177,7 @@ Shows the full details of a contact, class, or assignment.
 
 * Shows the full details of the class with the specified `CLASS_NAME`.
 
-* `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * If the specified class does not exist, the command will fail and display an error message.
 
@@ -1195,7 +1197,7 @@ Shows the full details of a contact, class, or assignment.
 
 * Shows the full details of the assignment with the specified `ASSIGNMENT_NAME`.
 
-* `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * If the specified assignment does not exist, the command will fail and display an error message.
 
@@ -1223,7 +1225,11 @@ Edits the details of an existing contact in the address book.
 
 * When editing tags, all existing tags are removed and replaced with the new tags provided. To remove all tags, provide `t/` with no value.
 
-* The `CONTACT_NAME` provided must only contain alphanumeric characters and spaces. It cannot be blank, and must also not match the name of any other existing contact (case-insensitive).
+* The `CONTACT_NAME` provided must only contain alphanumeric characters and spaces, and it cannot be blank.
+
+* Matching for `CONTACT_NAME` will be space-less and case insensitive. For example, "Alex Yeoh" will be treated the same as "alexyeoh".
+
+* The edited contact must not have a combination of `CONTACT_NAME` and `TAGS` that is the same as another existing contact (space-less and case-insensitive matching). For example, if there is already a contact named "Alice Tan" with the tag "friend", you cannot edit another contact to have the name "alice tan" with the tag "Friend".
 
 * The `PHONE_NUMBER` provided must only contain numeric digits (0-9) and be a minimum of 3 digits long.
 
@@ -1234,8 +1240,6 @@ Edits the details of an existing contact in the address book.
 <box type="warning" seamless>
 
 **Warnings:**
-
-* Editing a contact's name to match another existing contact's name (case-insensitive) is disallowed, and the command will fail if you attempt to do so. For example, if there is already a contact named "Alice Tan", you cannot edit another contact's name to "alice tan" or "ALICE TAN".
 
 * Editing a contact's details while you are in a filtered list view (e.g. after using `findcontact`) may cause confusion as the list may change to match the filters applied previously. After an edit, you should use `list contacts` or `findcontact` with an updated filter if you want to see the edited entry.
 
@@ -1269,7 +1273,7 @@ Edits the name of an existing class in the address book.
 
 * The index **must be a positive integer** 1, 2, 3, …​
 
-* The new `CLASS_NAME` cannot be blank, and must not match the name of any other existing class (case-insensitive).
+* The new `CLASS_NAME` cannot be blank, and must not match the name of any other existing class (space-less and case-insensitive matching).
 
 * All contacts previously allocated to this class will remain allocated after the edit.
 
@@ -1315,7 +1319,7 @@ Edits the details of an existing assignment in the address book.
 
 * Existing values will be overwritten by the input values.
 
-* The new `ASSIGNMENT_NAME` cannot be blank, and must not match the name of any existing assignment (case-insensitive).
+* The new `ASSIGNMENT_NAME` cannot be blank, and must not match the name of any existing assignment (space-less and case-insensitive matching).
 
 * The `DEADLINE` provided must be in the format `dd-MM-yyyy HH:mm`.
 
@@ -1396,7 +1400,7 @@ Deletes the specified contact(s), assignment, or class from the address book.
 
 * Deletes the class with the given `CLASS_NAME`.
 
-* The name is matched case-insensitively.
+* The name is matched case-insensitively and ignores spaces.
 
 * Deleting a class removes the grouping only and removes all contact allocations to the class. The contacts that were in the class are **not** deleted from the address book.
 
@@ -1430,7 +1434,7 @@ Deletes the specified contact(s), assignment, or class from the address book.
 
 * Deletes the assignment with the given `ASSIGNMENT_NAME`.
 
-* The name is matched case-insensitively.
+* The name is matched case-insensitively and ignores spaces.
 
 * All assignment allocations are removed and their grading records are discarded.
 
