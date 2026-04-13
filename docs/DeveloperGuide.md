@@ -59,7 +59,7 @@ The _Sequence Diagram_ below shows how the components interact with each other f
 Each of the four main components (also shown in the diagram above),
 
 * defines its _API_ in an `interface` with the same name as the Component.
-* implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point.
+* implements its functionality using a concrete `{Component Name}Manager` class which follows the corresponding API `interface` mentioned in the previous point.
 
 For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the implementation of a component), as illustrated in the (partial) class diagram below.
 
@@ -265,9 +265,9 @@ Here is a class diagram showing the structure of the Find command hierarchy:
 
 `FindContactCommand` (alias: `findct`) supports three search modes:
 
-* **Name Search** (`n/NAME_KEYWORDS...`): Keyword-based matching (case-insensitive) with OR logic for multiple keywords. Uses `ContactNameContainsKeywordsPredicate`.
-* **Phone Search** (`p/PHONE_NUMBER`): Exact phone number match. Uses `ContactPhoneMatchesKeywordsPredicate`.
-* **Email Search** (`e/EMAIL`): Exact email address match (case-insensitive). Uses `ContactEmailMatchesKeywordsPredicate`.
+* **Name Search** (`n/CONTACT_NAME_SEARCH_STRING`): Substring-based name matching (case-insensitive). Uses `ContactNameContainsKeywordsPredicate`.
+* **Phone Search** (`p/PHONE_NUMBER_SEARCH_STRING`): Substring-based phone number match. Uses `ContactPhoneMatchesKeywordsPredicate`.
+* **Email Search** (`e/EMAIL_SEARCH_STRING`): Substring-based email address match (case-insensitive). Uses `ContactEmailMatchesKeywordsPredicate`.
 
 Exactly one of the three search modes must be specified per command.
 
@@ -275,7 +275,7 @@ Exactly one of the three search modes must be specified per command.
 
 `FindAssignmentCommand` supports two search modes:
 
-* **Name Search** (`ass/ASSIGNMENT_NAME_SEARCH_STRING`): Substring matching (case-insensitive). Uses `AssignmentNameContainsKeywordsPredicate`.
+* **Name Search** (`ass/ASSIGNMENT_NAME_SEARCH_STRING`): Substring-based matching (case-insensitive). Uses `AssignmentNameContainsKeywordsPredicate`.
 * **Deadline Search** (`ds/DEADLINE` and/or `de/DEADLINE`): Date range matching supporting formats `dd-MM-yyyy` or `dd-MM-yyyy HH:mm`. Uses `AssignmentDeadlineInRangePredicate`.
 
 Exactly one of the two search modes must be specified per command. For deadline search, at least one of `ds/` or `de/` must be provided.
@@ -284,7 +284,7 @@ Exactly one of the two search modes must be specified per command. For deadline 
 
 `FindClassCommand` (alias: `findc`) supports one search mode:
 
-* **Name Search** (`c/CLASS_NAME_KEYWORDS...`): Keyword-based matching (case-insensitive) with OR logic for multiple keywords. Uses `ClassNameContainsKeywordsPredicate`.
+* **Name Search** (`c/CLASS_NAME_SEARCH_STRING`): Substring-based matching (case-insensitive). Uses `ClassNameContainsKeywordsPredicate`.
 
 #### Parsing and Execution
 
@@ -295,10 +295,10 @@ Each `Find*CommandParser` is responsible for:
 1. Creating the corresponding predicate object.
 1. Returning a `Find*Command` with the predicate.
 
-When a user executes `findcontact n/alice bob`:
+When a user executes `findcontact n/alice l`:
 
-1. `FindContactCommandParser` identifies the name search mode and extracts keywords ["alice", "bob"].
-1. It creates a `ContactNameContainsKeywordsPredicate` with these keywords.
+1. `FindContactCommandParser` identifies the name search mode and extracts the substring "alice l".
+1. It creates a `ContactNameContainsKeywordsPredicate` with this substring.
 1. A `FindContactCommand` is instantiated with this predicate.
 1. The `LogicManager` executes the command, which calls `model.updateFilteredContactList(predicate)`.
 1. The `Model` updates its `FilteredList<Contact>`, automatically triggering UI refresh through JavaFX observables.
@@ -312,19 +312,19 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 Each predicate implements the `Predicate<T>` interface to evaluate whether an entity matches the search criteria:
 
-* `ContactNameContainsKeywordsPredicate`: Checks if the contact's name contains any of the keywords (case-insensitive).
-* `ContactPhoneMatchesKeywordsPredicate`: Checks if the contact's phone matches exactly.
-* `ContactEmailMatchesKeywordsPredicate`: Checks if the contact's email matches exactly (case-insensitive).
+* `ContactNameContainsKeywordsPredicate`: Checks if the contact's name contains the search string as a substring (case-insensitive).
+* `ContactPhoneMatchesKeywordsPredicate`: Checks if the contact's phone contains the search string as a substring (case-insensitive).
+* `ContactEmailMatchesKeywordsPredicate`: Checks if the contact's email contains the search string as a substring (case-insensitive).
 * `AssignmentNameContainsKeywordsPredicate`: Checks if the assignment name contains the search string as a substring (case-insensitive).
 * `AssignmentDeadlineInRangePredicate`: Checks if the assignment deadline falls within the specified date/time range, supporting partial matching (e.g., `31-12-2024` matches `31-12-2024 23:59`).
-* `ClassNameContainsKeywordsPredicate`: Checks if the class name contains any of the keywords (case-insensitive).
+* `ClassNameContainsKeywordsPredicate`: Checks if the class name contains the search string as a substring (case-insensitive).
 
 #### Design Considerations
 
 * **Command Separation**: Each entity type (Contact, Assignment, ClassGroup) has its own find command (`findcontact`, `findass`, `findclass`), making the API clear and preventing confusion about which command to use.
 * **Constraint Enforcement**: Parsers ensure only one search mode is used per command through mutual exclusivity checks.
 * **Flexible Search Modes**: Different entity types support different search modes based on their properties (e.g., assignments support deadline search, which contacts do not).
-* **Case Sensitivity**: Name-based searches are case-insensitive for better user experience, while phone searches are exact to ensure accuracy.
+* **Case Sensitivity and Partial Matching**: Searches are case-insensitive and substring-based for better user experience.
 * **Consistent Pattern**: All find commands follow the same predicate-based filtering pattern, maintaining architectural consistency with the list commands.
 
 **UI Integration for Find:**
@@ -812,7 +812,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1a. No contacts match the search query.
   * 1a1. System shows an empty list with a label indicating no matches found.
   * 1a2. Use case ends.
-* 1b. Invalid search query (e.g. invalid field, or missing search keyword).
+* 1b. Invalid search query (e.g. invalid field, or missing search substring).
   * 1b1. System shows an error message.
   * 1b2. Use case ends.
 
@@ -829,7 +829,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1a. No classes match the search query.
   * 1a1. System shows an empty list with a label indicating no matches found.
   * 1a2. Use case ends.
-* 1b. Invalid search query (e.g. invalid field, or missing search keyword).
+* 1b. Invalid search query (e.g. invalid field, or missing search substring).
   * 1b1. System shows an error message.
   * 1b2. Use case ends.
 
@@ -846,7 +846,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1a. No assignments match the search query.
   * 1a1. System shows an empty list with a label indicating no matches found.
   * 1a2. Use case ends.
-* 1b. Invalid search query (e.g. invalid field, or missing search keyword).
+* 1b. Invalid search query (e.g. invalid field, or missing search substring).
   * 1b1. System shows an error message.
   * 1b2. Use case ends.
 
@@ -1138,7 +1138,7 @@ Some achievements of our team include the introduction of 2 entirely new entitie
 
 We also introduced various features related to them, such as the ability to allocate and unallocate classes and assignments, update submission status and grading details for each contact's assignment submission, and view the details of each contact, class, and assignment.
 
-Other features that modified to fit our new design include the `edit` command, which now allows editing of class and assignment details, and the `delete` command, which now also deletes the associated classes and assignments for a contact.
+Other features that were modified to fit our new design include the `edit` command, which now allows editing of class and assignment details, and the `delete` command, which now also deletes the associated classes and assignments for a contact.
 
 The GUI had to be modified to accommodate the new entities, to be able to display the details of each contact, class, and assignment, and to provide a way for users to navigate between the different tabs. The `list` and `find` (now `findcontact`, `findclass`, `findass`) commands also had a rework to be able to list and filter the different entities based on the current tab.
 
