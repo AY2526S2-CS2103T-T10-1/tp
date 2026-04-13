@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import cpp.commons.exceptions.IllegalValueException;
 import cpp.commons.util.JsonUtil;
 import cpp.model.AddressBook;
+import cpp.model.contact.Contact;
 import cpp.testutil.Assert;
+import cpp.testutil.ContactBuilder;
 import cpp.testutil.TypicalAssignments;
 import cpp.testutil.TypicalClassGroups;
 import cpp.testutil.TypicalContacts;
@@ -141,6 +143,15 @@ public class JsonSerializableAddressBookTest {
         AddressBook expected = new AddressBook();
         expected.addClassGroup(TypicalClassGroups.CLASS_GROUP_ONE);
         expected.addClassGroup(TypicalClassGroups.CLASS_GROUP_TWO);
+        Contact expectedContact = new ContactBuilder()
+                .withId("aaaaaaaa-1111-2222-3333-cccccccccccc")
+                .withEmail(TypicalContacts.ALICE.getEmail().toString())
+                .withAddress(TypicalContacts.ALICE.getAddress().toString())
+                .withName(TypicalContacts.ALICE.getName().toString())
+                .withPhone(TypicalContacts.ALICE.getPhone().toString())
+                .withTags("friends")
+                .build();
+        expected.addContact(expectedContact);
         Assertions.assertEquals(addressBookFromFile, expected);
     }
 

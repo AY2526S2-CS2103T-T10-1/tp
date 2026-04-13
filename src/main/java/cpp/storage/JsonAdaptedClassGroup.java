@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import cpp.commons.exceptions.IllegalValueException;
 import cpp.logic.parser.ParserUtil;
+import cpp.model.AddressBook;
 import cpp.model.classgroup.ClassGroup;
 import cpp.model.classgroup.ClassGroupName;
 import cpp.model.classgroup.exceptions.ContactAlreadyAllocatedClassGroupException;
@@ -48,7 +49,7 @@ class JsonAdaptedClassGroup {
      * @throws IllegalValueException if there were any data constraints violated
      *                               in the adapted class group.
      */
-    public ClassGroup toModelType() throws IllegalValueException {
+    public ClassGroup toModelType(AddressBook addressBook) throws IllegalValueException {
         if (this.id == null) {
             throw new IllegalValueException("A class group's id field is missing.");
         }
@@ -68,6 +69,10 @@ class JsonAdaptedClassGroup {
 
         ClassGroup classGroup = new ClassGroup(this.id, modelName);
         for (String contactId : this.contactIds) {
+            if (!addressBook.hasContactId(contactId)) {
+                throw new IllegalValueException(
+                        String.format(JsonAdaptedContactAssignment.INVALID_CONTACT_ID_MESSAGE, contactId));
+            }
             try {
                 classGroup.allocateContact(contactId);
             } catch (ContactAlreadyAllocatedClassGroupException e) {
