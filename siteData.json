@@ -57,7 +57,7 @@
         "list-feature": "List feature",
         "find-feature": "Find feature",
         "proposed-undo-redo-feature": "[Proposed] Undo/redo feature",
-        "documentation-logging-testing-configuration-dev-ops": "Documentation, logging, testing, configuration, dev-ops",
+        "documentation-logging-testing-configuration-devops": "Documentation, Logging, Testing, Configuration, DevOps",
         "appendix-requirements": "Appendix: Requirements",
         "product-scope": "Product scope",
         "user-stories": "User stories",
@@ -173,7 +173,13 @@
       "src": "team/blerargh.md",
       "title": "Terry's Project Portfolio Page",
       "headings": {
-        "project-classroom-plus-plus": "Project: Classroom Plus Plus"
+        "project-classroom-plus-plus": "Project: Classroom Plus Plus",
+        "new-features-implemented": "New Features Implemented",
+        "code-contributed": "Code contributed",
+        "project-management": "Project Management",
+        "enhancements-to-existing-features": "Enhancements to existing features",
+        "documentation": "Documentation",
+        "community": "Community"
       },
       "headingKeywords": {}
     },
