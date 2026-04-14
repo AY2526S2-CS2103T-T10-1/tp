@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -34,17 +35,18 @@ public class ParserUtil {
     public static final String MESSAGE_EMPTY_TAGS = "Tags should not be blank.";
     public static final String MESSAGE_EMPTY_INDICES = "Contact indices should not be blank.";
     public static final String MESSAGE_INVALID_DATE_OR_DATETIME = """
-            Invalid date or date and time format.\
+            Invalid date or date and time format. \
             Please use the format: dd-MM-yyyy for dates or dd-MM-yyyy HH:mm for date and time.
+            The date and time should also be valid calendar dates and times (e.g., 30-02-2026 is not valid).
             """;
     public static final String MESSAGE_INVALID_DATETIME = """
-            Invalid date and time format. Please use the format: dd-MM-yyyy HH:mm""";
+            Invalid date and time format. Please use the format: dd-MM-yyyy HH:mm
+            The date and time should also be valid calendar dates and times (e.g., 30-02-2026 25:61 is not valid).
+            """;
     public static final String MESSAGE_INVALID_FUTURE_DATETIME = "Date and time cannot be in the future.";
-    public static final String DATETIME_FORMAT_STRING = "dd-MM-yyyy HH:mm";
-    public static final String DATE_FORMAT_STRING = "dd-MM-yyyy";
+    public static final String DATETIME_FORMAT_STRING = "dd-MM-uuuu HH:mm";
     public static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter
-            .ofPattern(ParserUtil.DATETIME_FORMAT_STRING);
-    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(ParserUtil.DATE_FORMAT_STRING);
+            .ofPattern(ParserUtil.DATETIME_FORMAT_STRING).withResolverStyle(ResolverStyle.STRICT);
     private static ZoneId defaultZone = ZoneId.of("GMT+8");
 
     /**

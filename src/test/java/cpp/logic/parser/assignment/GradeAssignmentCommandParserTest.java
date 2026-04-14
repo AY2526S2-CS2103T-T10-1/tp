@@ -108,7 +108,7 @@ public class GradeAssignmentCommandParserTest {
                 + TypicalAssignments.ASSIGNMENT_ONE.getName().fullName + " " + CommandTestUtil.CONTACT_INDICES_MULTIPLE
                 + " " + CliSyntax.PREFIX_SCORE + "85" + " " + CliSyntax.PREFIX_DATETIME + "12-13-2020 10:00";
         CommandParserTestUtil.assertParseFailure(this.parser, invalidDatetime,
-                "Invalid date and time format. Please use the format: dd-MM-yyyy HH:mm");
+                ParserUtil.MESSAGE_INVALID_DATETIME);
 
         // two invalid values -> should fail on assignment name first
         String twoInvalid = CommandTestUtil.PREAMBLE_WHITESPACE + " " + CliSyntax.PREFIX_ASSIGNMENT

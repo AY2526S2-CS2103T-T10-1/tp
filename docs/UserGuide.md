@@ -21,7 +21,7 @@ Classroom Plus Plus (CPP) is a desktop application designed for educators to man
 
 * Use [**Features**](#features) to view the full list of features, command reference, and examples.
 
-* Use [**FAQ**](#faq) and [**Known issues**](#known-issues-and-workarounds) when troubleshooting.
+* Refer to the [**FAQ**](#faq) and [**Known issues**](#known-issues-and-workarounds) section when troubleshooting.
 
 * Refer to the [**Command summary**](#command-summary) for a quick reference of all commands and formats.
 
@@ -60,7 +60,7 @@ This quick start assumes you are a teacher who wants to install CPP, open the ap
 
 1. Open File Explorer and navigate to **"This PC"** or **"My Computer"**.
 
-1. Look for the drive where you plan to store the app home (e.g., `C:\` or `D:\`).
+1. Look for the drive where you plan to store the app and its data (e.g., `C:\` or `D:\`).
 
 1. Check the **"Free space"** column for that drive to ensure it has at least `500MB` free.
 
@@ -149,7 +149,7 @@ Within a few seconds the application will appear. The main User Interface (UI) c
 
 ### Quick CLI tutorial (common tasks and expected output)
 
-In this quick tutorial, we will cover some common tasks such as listing contacts, adding a contact, deleting contacts, and finding contacts by name keywords. The expected output shown is based on the default data loaded on first launch. Do paste the commands given in the application's command box and check that the result display and list panel match the expected output given before proceeding to the next command.
+In this quick tutorial, we will cover some common tasks such as listing contacts, adding a contact, deleting contacts, and finding contacts by name substring. The expected output shown is based on the default data loaded on first launch. Do paste the commands given in the application's command box and check that the result display and list panel match the expected output given before proceeding to the next command.
 
 <box type="tip" seamless>
 
@@ -209,18 +209,18 @@ In this quick tutorial, we will cover some common tasks such as listing contacts
     Deleted Contact: Charlotte Oliveiro; Phone: 93210283; Email: charlotte@example.com; Address: Blk 11 Ang Mo Kio Street 74, #11-04; Tags: [neighbours]
     ```
 
-* **Find by name keywords (case-insensitive):**
+* **Find by name substring (case-insensitive):**
 
     Command:
 
     ```text
-    findcontact dAviD IRFAN
+    findcontact n/dAviD L
     ```
 
-    Expected: Confirmation message in result display and contact list updated to show only David Li and Irfan Ibrahim.
+    Expected: Confirmation message in result display and contact list updated to show names containing "david l" (case-insensitive).
 
     ```text
-    2 contacts listed!
+    1 contact(s) listed!
     ```
 
 <box type="warning" seamless>
@@ -276,9 +276,33 @@ Adds a contact to the address book.
 
 * Creates a contact with the specified `CONTACT_NAME`, `PHONE_NUMBER`, `EMAIL` and `ADDRESS`.
 
-* The `CONTACT_NAME` provided must only contain alphanumeric characters and spaces. It cannot be blank.
+* The `CONTACT_NAME` provided must contain only alphanumeric characters, spaces, `s/o` or `d/o` patterns, hyphens `-`, and parentheses `()`, subject to the following constraints:
 
-* The `CONTACT_NAME` must be unique across all contacts (case-insensitive).
+  * `CONTACT_NAME` must start with an alphabetic character.
+
+  * `CONTACT_NAME` must not be blank.
+
+  * Forward slashes `/` are only allowed in `s/o` or `d/o` patterns (case-insensitive), and must follow the pattern `[Name] [s/o or d/o] [Name]`, requiring at least one word before and after the space-delimited separator.
+
+  * `s/o` and `d/o` patterns may only appear once in `CONTACT_NAME`
+
+  * Hyphens `-` must be between two alphanumeric characters.
+
+  * Parentheses must:
+
+    * Not be at the start of the name
+
+    * Contain only spaces and alphanumeric characters, with at least 1 alphanumeric character
+
+    * Be properly closed (No nesting allowed)
+
+    * Open parenthesis `(` must be immediately followed by an alphanumeric character
+
+    * Closing parenthesis `)` must be immediately preceded by an alphanumeric character.
+
+* Unique contacts will be identified with a combination of their `CONTACT_NAME` and `TAGS`. If you need to add multiple contacts with the same name, it is recommended to disambiguate them using different tags.
+
+* Matching for `CONTACT_NAME` will be space-less and case insensitive. For example, "Alex Yeoh" will be treated the same as "alexyeoh".
 
 * The `PHONE_NUMBER` provided must only contain numeric digits (0-9), be a minimum of 3 digits long, and cannot be blank.
 
@@ -290,9 +314,9 @@ Adds a contact to the address book.
 
 * The `ADDRESS` provided can contain any characters, and cannot be blank.
 
-* `c/CLASS_NAME` is optional and can be used to allocate the specified class to the contact. If the `c/` prefix is included, the `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* `c/CLASS_NAME` is optional and can be used to allocate the specified class to the contact. If the `c/` prefix is included, the `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
-* `ass/ASSIGNMENT_NAME` is optional and can be used to allocate the specified assignment to the contact. If the `ass/` prefix is included, the `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* `ass/ASSIGNMENT_NAME` is optional and can be used to allocate the specified assignment to the contact. If the `ass/` prefix is included, the `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * `t/TAGS...` is optional and can be used to add tags to the contact. Each `TAG` must be a single alphanumeric word (no spaces). While tags are displayed case-sensitive in the app, they are matched case-insensitively for command inputs (e.g., `t/friend` and `t/Friend` will be treated as the same tag). Tags must be unique within each contact (case-insensitive), but there are no restrictions on different contacts having the same tag.
 
@@ -324,11 +348,11 @@ Adds a contact to the address book.
 
 **Examples:**
 
-* `addcontact n/Betsy Crowe e/betsycrowe@example.com a/Betsy Street, Block 123, #06-07 p/1234567` <br>
-  Creates a contact with the name "Betsy Crowe", phone number "1234567", email "betsycrowe<span></span>@example.com", address "Betsy Street, Block 123, #06-07"
+* `addcontact n/Betsy-Crowe (Class 2) e/betsycrowe@example.com a/Betsy Street, Block 123, #06-07 p/1234567` <br>
+  Creates a contact with the name "Betsy-Crowe (Class 2)", phone number "1234567", email "betsycrowe<span></span>@example.com", address "Betsy Street, Block 123, #06-07"
 
-* `addcontact n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 c/CS2103T T10 1 ass/Assignment 1 t/friends owesMoney`<br>
-  Creates a contact with the name "John Doe", phone number "98765432", email "johnd<span></span>@example.com", address "311, Clementi Ave 2, #02-25", allocated to class group "CS2103T T10 1" and assignment "Assignment 1", with tags "friends" and "owesMoney".
+* `addcontact n/John s/o Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 c/CS2103T T10 1 ass/Assignment 1 t/friends owesMoney`<br>
+  Creates a contact with the name "John s/o Doe", phone number "98765432", email "johnd<span></span>@example.com", address "311, Clementi Ave 2, #02-25", allocated to class group "CS2103T T10 1" and assignment "Assignment 1", with tags "friends" and "owesMoney".
 
 * `addct n/Jane Lee p/91234567 e/janelee@example.com a/45 Clementi Road t/monitoring remedial`<br>
   Creates a contact using the alias command `addct`, with tags "monitoring" and "remedial".
@@ -342,7 +366,25 @@ Adds a class to the address book.
 
 **Format:** `addclass c/CLASS_NAME [ct/CONTACT_INDICES...]`
 
-* Creates a class with the specified `CLASS_NAME`. The `CLASS_NAME` must only contain alphanumeric characters and spaces. It cannot be blank, must be unique, and should not match the name of any existing class (case-insensitive).
+* Creates a class with the specified `CLASS_NAME`. The `CLASS_NAME` must only contain alphanumeric characters, spaces, hyphens `-`, and parentheses `()`, subject to the following constraints:
+
+  * The class name should not be blank.
+
+  * Hyphens `-` must be between two alphanumeric characters.
+
+  * Parentheses must:
+
+    * Not be at the start of the name
+
+    * Contain only spaces and alphanumeric characters, with at least 1 alphanumeric character
+
+    * Be properly closed (No nesting allowed)
+
+    * Open parenthesis `(` must be immediately followed by an alphanumeric character
+
+    * Closing parenthesis `)` must be immediately preceded by an alphanumeric character.
+
+* `CLASS_NAME` should not match the name of any existing class (space-less and case-insensitive matching). If you wish to add multiple different classes with the same name, you are advised to disambiguate them manually (e.g. with parentheses and/or hyphens).
 
 * `ct/CONTACT_INDICES...` is optional and can be used to allocate the class to specific contacts upon creation. If the `ct/` prefix is included, at least 1 contact index must be specified.
 
@@ -370,8 +412,8 @@ Adds a class to the address book.
 
 **Examples:**
 
-* `addclass c/CS2103T T10 1`<br>
-  Creates a class with the name "CS2103T T10 1".
+* `addclass c/CS2103T-T10-1 (NUS)`<br>
+  Creates a class with the name "CS2103T-T10-1 (NUS)".
 
 * `list contacts` followed by `addclass c/CS2103T T10 1 ct/1 2 3`<br>
   Creates a class with the name "CS2103T T10 1" allocated to the 1st, 2nd, and 3rd contacts.
@@ -385,7 +427,7 @@ Allocates a class to specific contacts.
 
 **Format:** `allocclass c/CLASS_NAME ct/CONTACT_INDICES...`
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * These `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -430,7 +472,7 @@ Unallocates a class from specific contacts.
 
 **Format:** `unallocclass c/CLASS_NAME ct/CONTACT_INDICES...`
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * These `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -438,9 +480,9 @@ Unallocates a class from specific contacts.
 
 **Warnings:**
 
-* If any of the specified contacts or class do not exist, the command will fail and no allocation is done.
+* If any of the specified contacts or class do not exist, the command will fail and no unallocation is done.
 
-* If any of the parameters are invalid, the command will also fail and no allocation is done.
+* If any of the parameters are invalid, the command will also fail and no unallocation is done.
 
 * The contact indices specified refer to the currently displayed contact list after filtering (e.g., after a `findcontact` command). It is recommended to run `list contacts` before this command to ensure the correct contact indices are used.
 
@@ -477,11 +519,29 @@ Adds an assignment to the address book.
 
 * Creates an assignment with the specified `ASSIGNMENT_NAME` and `DEADLINE`.
 
-* The `ASSIGNMENT_NAME` must only contain alphanumeric characters and spaces. It cannot be blank, must be unique, and should not match the name of any existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` must only contain alphanumeric characters, spaces, hyphens `-`, and parentheses `()`, subject to the following constraints:
+
+  * The assignment name should not be blank.
+
+  * Hyphens `-` must be between two alphanumeric characters.
+
+  * Parentheses must:
+
+    * Not be at the start of the name
+
+    * Contain only spaces and alphanumeric characters, with at least 1 alphanumeric character
+
+    * Be properly closed (No nesting allowed)
+
+    * Open parenthesis `(` must be immediately followed by an alphanumeric character
+
+    * Closing parenthesis `)` must be immediately preceded by an alphanumeric character.
+
+* `ASSIGNMENT_NAME` should not match the name of any existing assignment (space-less and case-insensitive matching). If you wish to add multiple different assignments with the same name but for different classes, you are advised to disambiguate them manually (e.g. with parentheses and/or hyphens).
 
 * The `DEADLINE` provided must be in the format `dd-MM-yyyy HH:mm`.
 
-* `c/CLASS_NAME` is optional and can be used to allocate the assignment to all contacts in that class. If the `c/` prefix is included, the `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* `c/CLASS_NAME` is optional and can be used to allocate the assignment to all contacts in that class. If the `c/` prefix is included, the `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * `ct/CONTACT_INDICES...` is optional and can be used to allocate the assignment to specific contacts. If the `ct/` prefix is included, at least 1 contact index must be specified.
 
@@ -515,11 +575,11 @@ Adds an assignment to the address book.
 
 **Examples:**
 
-* `addass ass/Assignment 1 d/01-12-2023 23:59`<br>
-  Creates an assignment with the name "Assignment 1" and deadline "1 Dec 2023 11.59pm".
+* `addass ass/Assignment-1 (CS2103T) d/01-12-2023 23:59`<br>
+  Creates an assignment with the name "Assignment-1 (CS2103T)" and deadline "1 Dec 2023 11.59pm".
 
-* `addass ass/Assignment 2 d/15-12-2023 23:59 c/CS2103T T10 1`<br>
-  Creates an assignment with the name "Assignment 2" and deadline "15 Dec 2023 11.59pm", allocated to all contacts belonging to class "CS2103T T10 1".
+* `addass ass/Assignment 2 d/15-12-2023 23:59 c/CS2103T-T10-1 (NUS)`<br>
+  Creates an assignment with the name "Assignment 2" and deadline "15 Dec 2023 11.59pm", allocated to all contacts belonging to class "CS2103T-T10-1 (NUS)".
 
 * `list contacts` followed by `addass ass/Assignment 3 d/30-12-2023 23:59 ct/1 2 3`<br>
   Creates an assignment with the name "Assignment 3" and deadline "30 Dec 2023 11.59pm", allocated to the 1st, 2nd, and 3rd contacts in the list.
@@ -538,13 +598,15 @@ Allocates an assignment to specific contacts.
 
 * Allocates the assignment to the specified contacts, as well as all contacts in the specified class.
 
-* The `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * At least 1 of `[c/CLASS_NAME]` or `[ct/CONTACT_INDICES...]` must be provided.
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * The `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
+
+* By default, the assignment submission status for each allocated contact will be set to `false`, and it will be associated with a default score of 0.
 
 <box type="warning" seamless>
 
@@ -592,11 +654,11 @@ Unallocates an assignment from specific contacts.
 
 * Unallocates the assignment from the specified contacts, as well as all contacts in the specified class.
 
-* The `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * At least 1 of `[c/CLASS_NAME]` or `[ct/CONTACT_INDICES...]` must be provided.
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * The `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -646,13 +708,15 @@ Marks a specific assignment as submitted for the specified contacts.
 
 * Marks the assignment as submitted for the specified contacts, as well as all contacts in the specified class.
 
+* By default, the grade associated with the submission will remain as 0 until explicitly graded otherwise.
+
 * If the assignment is already submitted for the specified contact, the submission status and submission date will not be updated.
 
-* The `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * At least 1 of `[c/CLASS_NAME]` or `[ct/CONTACT_INDICES...]` must be provided.
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * The `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -712,11 +776,11 @@ Marks a specific assignment as unsubmitted for the specified contacts.
 
 * If the assignment is not submitted for the specified contact, then it will not be updated.
 
-* The `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * At least 1 of `[c/CLASS_NAME]` or `[ct/CONTACT_INDICES...]` must be provided.
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * The `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -749,7 +813,7 @@ Marks a specific assignment as unsubmitted for the specified contacts.
 **Examples:**
 
 * `unsubmit ass/Assignment 1 ct/1 2 3`<br>
-  Marks "Assignment 1" as unsubmitted for the 1st, 2nd, and 3rd contacts in the list
+  Marks "Assignment 1" as unsubmitted for the 1st, 2nd, and 3rd contacts in the list.
 
 * `unsubmit ass/Assignment 2 c/CS2103T T10 1`<br>
   Marks "Assignment 2" as unsubmitted for all contacts belonging to "CS2103T T10 1".
@@ -764,17 +828,17 @@ Marks a specific assignment as unsubmitted for the specified contacts.
 
 Grades a specific assignment for the specified contacts with a score.
 
-**Format:** `grade ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...] s/SCORE [d/GRADING_DATE]`
+**Format:** `grade ass/ASSIGNMENT_NAME s/SCORE [c/CLASS_NAME] [ct/CONTACT_INDICES...] [d/GRADING_DATE]`
 
 * Marks an assignment as graded for the specified contacts, as well as contacts in the specified class, with the specified score and grading date.
 
 * If the assignment is already graded or not submitted for the specified contact, the grading status and grading date will not be updated.
 
-* The `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * At least 1 of `[c/CLASS_NAME]` or `[ct/CONTACT_INDICES...]` must be provided.
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * The `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -840,11 +904,11 @@ Ungrades a specific assignment for the specified contacts.
 
 * If the assignment is not graded for the specified contact, then it will not be updated.
 
-* The `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * At least 1 of `[c/CLASS_NAME]` or `[ct/CONTACT_INDICES...]` must be provided.
 
-* The `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* The `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * The `CONTACT_INDICES...` must contain 1 or more positive integers 1, 2, 3, ..., referring to the index number shown in the displayed contact list.
 
@@ -968,19 +1032,21 @@ Shows a list of all assignments in the address book.
 
 ### Finding contacts : `findcontact`
 
-Finds and displays contacts based on the specified criteria. You can search by contact name (keyword match), or by phone number/email (exact match). Matching is case-insensitive.
+Finds and displays contacts based on the specified criteria. You can search by contact name, by phone number, or by email. Substring matching will be performed, and matching is case-insensitive.
 
 **Format:**
 
-1. `findcontact n/CONTACT_NAME_KEYWORDS...` — search by name using keywords (keyword match)
-1. `findcontact p/PHONE_NUMBER` — search by phone number (exact match)
-1. `findcontact e/EMAIL` — search by email address (exact match)
+1. `findcontact n/CONTACT_NAME_SEARCH_STRING` — search by name
+1. `findcontact p/PHONE_NUMBER_SEARCH_STRING` — search by phone number
+1. `findcontact e/EMAIL_SEARCH_STRING` — search by email address
 
-* **Name search `n/`:** The command will find contacts whose names contain **any** of the specified keywords (case-insensitive). Keywords are separated by spaces. For example, `findcontact n/alice bob` will return all contacts whose name contains "alice" or "bob".
+* **Name search `n/`:** The command will find contacts whose names contain the specified substring (case-insensitive). For example, `findcontact n/alice` will return all contacts whose name contains "alice".
 
-* **Phone search `p/`:** Searches for contacts by exact phone number match. The entire phone number must match exactly.
+* **Phone search `p/`:** Searches for contacts by phone number.
 
-* **Email search `e/`:** Searches for contacts by exact email address match (case-insensitive). The entire email must match exactly.
+* **Email search `e/`:** Searches for contacts by email address. (case-insensitive).
+
+* All consecutive spaces will be replaced by a single space, and any leading or trailing spaces will be retained. For example, `findcontact n/<4 SPACES> Alice <5 SPACES> Smith <3 SPACES>` will find all contacts whose name contains " Alice Smith ". With this search string, "Alice Smith" will not be displayed, but "bob alice smith lang" will be displayed.
 
 * You cannot use multiple search types in one command. For example, `findcontact p/91234567 e/alice@gmail.com` is invalid. Choose one search method per command.
 
@@ -993,12 +1059,6 @@ Finds and displays contacts based on the specified criteria. You can search by c
 **Warnings:**
 
 * Each prefix (`n/`,`p/`,`e/`) must have a value. Using a prefix with no value (e.g.,`findcontact p/`) will result in an error.
-
-* Invalid contact names will not be allowed. For a detailed list of criteria for valid contact names, please refer to the feature documentation on [**Adding a contact**](#adding-a-contact-addcontact).
-
-* For phone and email searches, the entire value must match exactly. Partial matches will not return results.
-
-* You cannot use unrecognized prefixes like `c/`, `ass/`, or `d/`. The system will reject commands with invalid prefixes.
 
 </box>
 
@@ -1018,21 +1078,23 @@ Finds and displays contacts based on the specified criteria. You can search by c
   Finds all contacts whose name contains "alice" (case-insensitive).
 
 * `findct n/john doe`<br>
-  Using the abbreviated command, finds all contacts whose name contains "john" or "doe".
+  Using the abbreviated command, finds all contacts whose name contains "john doe".
 
 * `findcontact p/91234567`<br>
-  Finds all contacts with phone number 91234567.
+  Finds all contacts with phone number containing "91234567".
 
-* `findcontact e/alice@gmail.com`<br>
-  Finds all contacts with email <alice@gmail.com>.
+* `findcontact e/gmail.com`<br>
+  Finds all contacts with email containing "gmail.com".
 
 ### Finding classes : `findclass`
 
-Finds and displays classes based on the specified criteria. You can search by class name (keyword match). Matching is case-insensitive.
+Finds and displays classes based on the specified criteria. You can search by class name (substring match). Matching is case-insensitive.
 
-**Format:** `findclass c/CLASS_NAME_KEYWORDS...`
+**Format:** `findclass c/CLASS_NAME_SEARCH_STRING`
 
-* **Name search `c/`:** The command will find classes whose names contain **any** of the specified keywords (case-insensitive). Keywords are separated by spaces. For example, `findclass c/CS2103 Class` will return all classes whose name contains "CS2103" or "Class".
+* **Name search `c/`:** The command will find classes whose names contain the specified substring (case-insensitive). For example, `findclass c/CS2103` will return all classes whose name contains "CS2103".
+
+* All consecutive spaces will be replaced by a single space, and any leading or trailing spaces will be retained. For example, `findclass c/<4 SPACES> CS2103 <5 SPACES> Tutorial <3 SPACES>` will find all classes whose name contains " CS2103 Tutorial ". With this search string, "CS2103 Tutorial" will not be displayed, but "nus cs2103 tutorial group 10" will be displayed.
 
 * The tab will automatically switch to the `Classes` tab upon successful execution.
 
@@ -1042,11 +1104,7 @@ Finds and displays classes based on the specified criteria. You can search by cl
 
 **Warnings:**
 
-* Invalid class names will not be allowed. For a detailed list of criteria for valid class names, please refer to the feature documentation on [**Adding classes**](#adding-classes-addclass).
-
-* `CLASS_NAME_KEYWORDS` must not be empty. Using the `c/` prefix with no value (e.g., `findclass c/`) will result in an error, and no filter is applied.
-
-* You cannot use unrecognized prefixes like `n/`, `p/`, `e/`, `d/`, or `ass/`. The system will reject commands with invalid prefixes.
+* `CLASS_NAME_SEARCH_STRING` must not be empty. Using the `c/` prefix with no value (e.g., `findclass c/`) will result in an error, and no filter is applied.
 
 </box>
 
@@ -1063,10 +1121,10 @@ Finds and displays classes based on the specified criteria. You can search by cl
 **Examples:**
 
 * `findclass c/CS2103`<br>
-  Finds all classes whose name contains "CS2103" (case-insensitive).
+  Finds all classes whose name contains "CS2103" as a substring (case-insensitive).
 
 * `findclass c/Tutorial Class`<br>
-  Finds all classes whose name contains "Tutorial" or "Class" (case-insensitive).
+  Finds all classes whose name contains "Tutorial Class" as a substring (case-insensitive).
 
 ### Finding assignments : `findass`
 
@@ -1095,15 +1153,11 @@ Finds and displays assignments based on the specified criteria. You can search b
 
 **Warnings:**
 
-* Invalid assignment names will not be allowed. For a detailed list of criteria for valid assignment names, please refer to the feature documentation on [**Adding assignments**](#adding-assignments-addass).
-
 * The deadline prefixes (ds/ and de/) must have a valid date value in the correct format. Using a prefix with no date (e.g., `findass ds/`) will result in an error. Invalid date formats or start dates after end dates will also be rejected.
 
 * For deadline searches, the time may be omitted. For example, if an assignment has a deadline of `31-12-2024 23:59`, searching with `findass ds/31-12-2024` will also match it.
 
 * Any time values provided will be treated as the time in the timezone set in `preferences.json`. By default, this is set to GMT +8, but you can change it to your local timezone if needed. Acceptable values range from -18 to 18, and any invalid or missing timezone values will default to GMT +8.
-
-* You cannot use unrecognized prefixes like `p/`, `e/`, `c/`, or `n/`. The system will reject commands with invalid prefixes.
 
 </box>
 
@@ -1173,7 +1227,7 @@ Shows the full details of a contact, class, or assignment.
 
 * Shows the full details of the class with the specified `CLASS_NAME`.
 
-* `CLASS_NAME` must match the name of an existing class (case-insensitive).
+* `CLASS_NAME` must match the name of an existing class (space-less and case-insensitive matching).
 
 * If the specified class does not exist, the command will fail and display an error message.
 
@@ -1193,7 +1247,7 @@ Shows the full details of a contact, class, or assignment.
 
 * Shows the full details of the assignment with the specified `ASSIGNMENT_NAME`.
 
-* `ASSIGNMENT_NAME` must match the name of an existing assignment (case-insensitive).
+* `ASSIGNMENT_NAME` must match the name of an existing assignment (space-less and case-insensitive matching).
 
 * If the specified assignment does not exist, the command will fail and display an error message.
 
@@ -1221,7 +1275,11 @@ Edits the details of an existing contact in the address book.
 
 * When editing tags, all existing tags are removed and replaced with the new tags provided. To remove all tags, provide `t/` with no value.
 
-* The `CONTACT_NAME` provided must only contain alphanumeric characters and spaces. It cannot be blank, and must also not match the name of any other existing contact (case-insensitive).
+* The `CONTACT_NAME` provided must be valid according to the criteria specified in the feature documentation on [**Adding a contact**](#adding-a-contact-addcontact).
+
+* Matching for `CONTACT_NAME` will be space-less and case insensitive. For example, "Alex Yeoh" will be treated the same as "alexyeoh".
+
+* The edited contact must not have a combination of `CONTACT_NAME` and `TAGS` that is the same as another existing contact (space-less and case-insensitive matching). For example, if there is already a contact named "Alice Tan" with the tag "friend", you cannot edit another contact to have the name "alice tan" with the tag "Friend".
 
 * The `PHONE_NUMBER` provided must only contain numeric digits (0-9) and be a minimum of 3 digits long.
 
@@ -1232,8 +1290,6 @@ Edits the details of an existing contact in the address book.
 <box type="warning" seamless>
 
 **Warnings:**
-
-* Editing a contact's name to match another existing contact's name (case-insensitive) is disallowed, and the command will fail if you attempt to do so. For example, if there is already a contact named "Alice Tan", you cannot edit another contact's name to "alice tan" or "ALICE TAN".
 
 * Editing a contact's details while you are in a filtered list view (e.g. after using `findcontact`) may cause confusion as the list may change to match the filters applied previously. After an edit, you should use `list contacts` or `findcontact` with an updated filter if you want to see the edited entry.
 
@@ -1267,7 +1323,9 @@ Edits the name of an existing class in the address book.
 
 * The index **must be a positive integer** 1, 2, 3, …​
 
-* The new `CLASS_NAME` cannot be blank, and must not match the name of any other existing class (case-insensitive).
+* The `CLASS_NAME` provided must be valid according to the criteria specified in the feature documentation on [**Adding classes**](#adding-classes-addclass).
+
+* Matching for `CLASS_NAME` will be space-less and case insensitive. For example, "CS2103T Tutorial Group 10" will be treated the same as "cs2103ttutorialgroup10".
 
 * All contacts previously allocated to this class will remain allocated after the edit.
 
@@ -1313,7 +1371,9 @@ Edits the details of an existing assignment in the address book.
 
 * Existing values will be overwritten by the input values.
 
-* The new `ASSIGNMENT_NAME` cannot be blank, and must not match the name of any existing assignment (case-insensitive).
+* The `ASSIGNMENT_NAME` provided must be valid according to the criteria specified in the feature documentation on [**Adding assignments**](#adding-assignments-addass).
+
+* Matching for `ASSIGNMENT_NAME` will be space-less and case insensitive. For example, "Assignment 1" will be treated the same as "assignment1".
 
 * The `DEADLINE` provided must be in the format `dd-MM-yyyy HH:mm`.
 
@@ -1384,7 +1444,7 @@ Deletes the specified contact(s), assignment, or class from the address book.
 
 * `list contacts` followed by `delete ct/2` deletes the 2nd contact in the displayed list.
 
-* `findcontact Betsy` followed by `delete ct/1` deletes the 1st contact in the filtered results.
+* `findcontact n/Betsy` followed by `delete ct/1` deletes the 1st contact in the filtered results.
 
 * `delete ct/1 3` deletes the 1st and 3rd contacts shown in the displayed list.
 
@@ -1394,7 +1454,7 @@ Deletes the specified contact(s), assignment, or class from the address book.
 
 * Deletes the class with the given `CLASS_NAME`.
 
-* The name is matched case-insensitively.
+* The name is matched case-insensitively and ignores spaces.
 
 * Deleting a class removes the grouping only and removes all contact allocations to the class. The contacts that were in the class are **not** deleted from the address book.
 
@@ -1428,7 +1488,7 @@ Deletes the specified contact(s), assignment, or class from the address book.
 
 * Deletes the assignment with the given `ASSIGNMENT_NAME`.
 
-* The name is matched case-insensitively.
+* The name is matched case-insensitively and ignores spaces.
 
 * All assignment allocations are removed and their grading records are discarded.
 
@@ -1468,7 +1528,7 @@ Exits the program.
 
 ### Saving the data
 
-CPP data is saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+CPP data is saved in the hard disk automatically after the execution of any valid command. There is no need to save manually.
 
 ### Editing the data file
 
@@ -1548,7 +1608,7 @@ In the meantime, users can manually extract the required data from `addressbook.
 **A**: Make a copy of `data/addressbook.json` and store it in a safe location such as a cloud or external drive. To restore, stop CPP, replace the `addressbook.json` in the app home `data/` folder, then start CPP.
 
 **Q**: How does CPP prevent duplicate entries?\
-**A**: CPP performs basic duplicate detection at entry. The app prevents duplicate names within the same category. While an assignment and a class can share the same name, you cannot have two assignments, two classes, or two contacts with identical names. CPP will reject any duplicate entry within a domain with an explanatory error.
+**A**: CPP performs basic duplicate detection at entry. The app prevents duplicate names within assignments or within classes itself. While an assignment and a class can share the same name, you cannot have two assignments or two classes share the same name. For contacts, CPP prevents duplicate combinations of name and tags, but allows multiple contacts to share the same name as long as their tags differ.
 
 **Q**: Can I export/import data for other systems (e.g., Excel)?\
 **A**: The primary data format used by CPP is JavaScript Object Notation (JSON). We do not support importing from Excel, but users may manually convert their Excel files to JSON format, adhering to the structure and format of the `addressbook.json` file generated on first run. Manual editing of `addressbook.json` is not recommended unless you are comfortable with the JSON format.
@@ -1566,8 +1626,11 @@ In the meantime, users can manually extract the required data from `addressbook.
 1. **Preferences or data corruption**: If `preferences.json` or `addressbook.json` becomes invalid (e.g., partial writes), CPP will start with an empty dataset.<br>
    Workaround: Always keep backups before making changes.
 
-1. **File permission issues (Windows)**: Running the app from a protected folder (e.g., `C:\Program Files`) may prevent writing `data/` or `preferences.json`.<br>
-   Workaround: Run from a user-writable folder (e.g., Documents) or run the terminal as Administrator.
+1. **File permission issues (Windows)**: If you run the app from a protected folder without sufficient permissions, it may crash on startup due to the inability to read/write necessary files.<br>
+   Workaround: Run from a user-writable folder (e.g., Documents).
+
+1. **File overwrite issues with multiple instances**: Running multiple instances of CPP simultaneously can cause conflicts in writing to `addressbook.json` and `preferences.json`, leading to potential data loss.<br>
+   Workaround: Avoid running multiple instances at the same time. Always ensure one instance is closed before starting another.
 
 If you encounter other issues, please open a GitHub Issue in the [project repository](https://github.com/AY2526S2-CS2103T-T10-1/tp/issues) and include `data/addressbook.json` and `preferences.json` in your report for troubleshooting.
 
@@ -1575,32 +1638,32 @@ If you encounter other issues, please open a GitHub Issue in the [project reposi
 
 ## Command summary
 
-| Action                    | Format, Examples                                                                                                                                                                                                                                                  | Command Aliases |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| **Help**                  | `help`                                                                                                                                                                                                                                                            | None            |
-| **Add Contact**           | `addcontact n/CONTACT_NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [c/CLASS_NAME] [ass/ASSIGNMENT_NAME] [t/TAGS...]` <br> e.g., `addcontact n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 c/CS2103T T10 1 ass/Assignment 1 t/friend colleague` | `addct`         |
-| **Add Class**             | `addclass c/CLASS_NAME [ct/CONTACT_INDICES...]` <br> e.g., `addclass c/CS2103T T10 1 ct/1 2 3`                                                                                                                                                                    | `addc`          |
-| **Allocate Class**        | `allocclass c/CLASS_NAME ct/CONTACT_INDICES...` <br> e.g., `allocclass c/CS2103T T10 1 ct/1 2 3`                                                                                                                                                                  | `allocc`        |
-| **Unallocate Class**      | `unallocclass c/CLASS_NAME ct/CONTACT_INDICES...` <br> e.g., `unallocclass c/CS2103T T10 1 ct/1 2 3`                                                                                                                                                              | `unallocc`      |
-| **Add Assignment**        | `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T T10 1 ct/4 5`                                                                                                     | None            |
-| **Allocate Assignment**   | `allocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `allocass ass/Assignment 3 c/CS2103T T10 1 ct/1 2 3`                                                                                                                             | None            |
-| **Unallocate Assignment** | `unallocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `unallocass ass/Assignment 3 c/CS2103T T10 1 ct/1 2 3`                                                                                                                         | None            |
-| **Submit Assignment**     | `submit ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...] [d/SUBMISSION_DATE]` <br> e.g., `submit ass/Assignment 3 c/CS2103 T10 1 ct/1 2 3 d/21-02-2026 23:50`                                                                                           | None            |
-| **Unsubmit Assignment**   | `unsubmit ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `unsubmit ass/Assignment 3 c/CS2103 T10 1 ct/1 2 3`                                                                                                                              | None            |
-| **Grade Assignment**      | `grade ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...] s/SCORE [d/GRADING_DATE]` <br> e.g., `grade ass/Assignment 3 c/CS2103 T10 1 ct/1 2 3 s/67.9 d/21-02-2026 23:50`                                                                                 | None            |
-| **Ungrade Assignment**    | `ungrade ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `ungrade ass/Assignment 3 c/CS2103 T10 1 ct/1 2 3`                                                                                                                                | None            |
-| **List Contacts**         | `list contacts` or `list ct`                                                                                                                                                                                                                                      | None            |
-| **List Classes**          | `list classes` or `list c`                                                                                                                                                                                                                                        | None            |
-| **List Assignments**      | `list assignments` or `list ass`                                                                                                                                                                                                                                  | None            |
-| **Find Contact**          | `findcontact n/CONTACT_NAME_KEYWORDS...` e.g., `findcontact n/alice bob`<br>`findcontact p/PHONE_NUMBER` e.g., `findcontact p/91234567`<br>`findcontact e/EMAIL` e.g., `findcontact e/alice@gmail.com`                                                            | `findct`        |
-| **Find Class**            | `findclass c/CLASS_NAME_KEYWORDS...` e.g., `findclass c/CS2103T CS2103`                                                                                                                                                                                           | `findc`         |
-| **Find Assignment**       | `findass ass/ASSIGNMENT_NAME_SEARCH_STRING` e.g., `findass ass/Assignment 1`<br>`findass [ds/DEADLINE_START] [de/DEADLINE_END]` e.g., `findass ds/31-12-2024`  or `findass ds/31-12-2024 23:59 de/02-01-2025 23:59`                                               | None            |
-| **View Details**          | `view ct/CONTACT_INDEX` e.g., `view ct/2`<br>`view c/CLASS_NAME` e.g., `view c/CS2103T T10 1`<br>`view ass/ASSIGNMENT_NAME` e.g., `view ass/Assignment 1`                                                                                                         | None            |
-| **Edit Contact**          | `editcontact INDEX [n/CONTACT_NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAGS...]` <br> e.g., `editcontact 2 n/James Lee e/jameslee@example.com`                                                                                                             | `editct`        |
-| **Edit Class**            | `editclass INDEX c/CLASS_NAME` <br> e.g., `editclass 1 c/CS2103T T10 2`                                                                                                                                                                                           | `editc`         |
-| **Edit Assignment**       | `editass INDEX [ass/ASSIGNMENT_NAME] [d/DEADLINE]` <br> e.g., `editass 1 ass/Assignment 2 d/20-12-2026 23:59`                                                                                                                                                     | None            |
-| **Delete**                | `delete ct/CONTACT_INDICES...` e.g., `delete ct/3`<br>`delete ass/ASSIGNMENT_NAME` e.g., `delete ass/Assignment 1`<br>`delete c/CLASS_NAME` e.g., `delete c/CS2103 T10 1 T14`                                                                                     | None            |
-| **Clear**                 | `clear`                                                                                                                                                                                                                                                           | None            |
-| **Exit**                  | `exit`                                                                                                                                                                                                                                                            | None            |
+| Action                    | Format, Examples                                                                                                                                                                                                                                                       | Command Aliases |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| **Help**                  | `help`                                                                                                                                                                                                                                                                 | None            |
+| **Add Contact**           | `addcontact n/CONTACT_NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [c/CLASS_NAME] [ass/ASSIGNMENT_NAME] [t/TAGS...]` <br> e.g., `addcontact n/John s/o Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 c/CS2103T T10 1 ass/Assignment 1 t/friends owesMoney` | `addct`         |
+| **Add Class**             | `addclass c/CLASS_NAME [ct/CONTACT_INDICES...]` <br> e.g., `addclass c/CS2103T T10 1 ct/1 2 3`                                                                                                                                                                         | `addc`          |
+| **Allocate Class**        | `allocclass c/CLASS_NAME ct/CONTACT_INDICES...` <br> e.g., `allocclass c/CS2103T T10 1 ct/1 2 3`                                                                                                                                                                       | `allocc`        |
+| **Unallocate Class**      | `unallocclass c/CLASS_NAME ct/CONTACT_INDICES...` <br> e.g., `unallocclass c/CS2103T T10 1 ct/1 2 3`                                                                                                                                                                   | `unallocc`      |
+| **Add Assignment**        | `addass ass/ASSIGNMENT_NAME d/DEADLINE [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `addass ass/Assignment 4 d/15-01-2024 23:59 c/CS2103T T10 1 ct/4 5`                                                                                                          | None            |
+| **Allocate Assignment**   | `allocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `allocass ass/Assignment 3 c/CS2103T T10 1 ct/1 2 3`                                                                                                                                  | None            |
+| **Unallocate Assignment** | `unallocass ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `unallocass ass/Assignment 3 c/CS2103T T10 1 ct/1 2 3`                                                                                                                              | None            |
+| **Submit Assignment**     | `submit ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...] [d/SUBMISSION_DATE]` <br> e.g., `submit ass/Assignment 3 c/CS2103T T10 1 ct/1 2 3 d/21-02-2026 23:50`                                                                                               | None            |
+| **Unsubmit Assignment**   | `unsubmit ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `unsubmit ass/Assignment 3 c/CS2103T T10 1 ct/1 2 3`                                                                                                                                  | None            |
+| **Grade Assignment**      | `grade ass/ASSIGNMENT_NAME s/SCORE [c/CLASS_NAME] [ct/CONTACT_INDICES...] [d/GRADING_DATE]` <br> e.g., `grade ass/Assignment 3 c/CS2103T T10 1 ct/1 2 3 s/67.9 d/21-02-2026 23:50`                                                                                     | None            |
+| **Ungrade Assignment**    | `ungrade ass/ASSIGNMENT_NAME [c/CLASS_NAME] [ct/CONTACT_INDICES...]` <br> e.g., `ungrade ass/Assignment 3 c/CS2103T T10 1 ct/1 2 3`                                                                                                                                    | None            |
+| **List Contacts**         | `list contacts`                                                                                                                                                                                                                                                        | `list ct`       |
+| **List Classes**          | `list classes`                                                                                                                                                                                                                                                         | `list c`        |
+| **List Assignments**      | `list assignments`                                                                                                                                                                                                                                                     | `list ass`      |
+| **Find Contact**          | `findcontact n/CONTACT_NAME_SEARCH_STRING` e.g., `findcontact n/alice s`<br>`findcontact p/PHONE_NUMBER_SEARCH_STRING` e.g., `findcontact p/91234567`<br>`findcontact e/EMAIL_SEARCH_STRING` e.g., `findcontact e/gmail.com`                                           | `findct`        |
+| **Find Class**            | `findclass c/CLASS_NAME_SEARCH_STRING` e.g., `findclass c/CS2103T`                                                                                                                                                                                                     | `findc`         |
+| **Find Assignment**       | `findass ass/ASSIGNMENT_NAME_SEARCH_STRING` e.g., `findass ass/Assignment 1`<br>`findass [ds/DEADLINE_START] [de/DEADLINE_END]` e.g., `findass ds/31-12-2024`  or `findass ds/31-12-2024 23:59 de/02-01-2025 23:59`                                                    | None            |
+| **View Details**          | `view ct/CONTACT_INDEX` e.g., `view ct/2`<br>`view c/CLASS_NAME` e.g., `view c/CS2103T T10 1`<br>`view ass/ASSIGNMENT_NAME` e.g., `view ass/Assignment 1`                                                                                                              | None            |
+| **Edit Contact**          | `editcontact INDEX [n/CONTACT_NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAGS...]` <br> e.g., `editcontact 2 n/James Lee e/jameslee@example.com`                                                                                                                  | `editct`        |
+| **Edit Class**            | `editclass INDEX c/CLASS_NAME` <br> e.g., `editclass 1 c/CS2103T T10 2`                                                                                                                                                                                                | `editc`         |
+| **Edit Assignment**       | `editass INDEX [ass/ASSIGNMENT_NAME] [d/DEADLINE]` <br> e.g., `editass 1 ass/Assignment 2 d/20-12-2026 23:59`                                                                                                                                                          | None            |
+| **Delete**                | `delete ct/CONTACT_INDICES...` e.g., `delete ct/3`<br>`delete ass/ASSIGNMENT_NAME` e.g., `delete ass/Assignment 1`<br>`delete c/CLASS_NAME` e.g., `delete c/CS2103T T10 1 T14`                                                                                         | None            |
+| **Clear**                 | `clear`                                                                                                                                                                                                                                                                | None            |
+| **Exit**                  | `exit`                                                                                                                                                                                                                                                                 | None            |
 
 </div>

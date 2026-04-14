@@ -13,7 +13,6 @@ public class AssignmentName {
             Assignment names must contain only alphanumeric characters, spaces, hyphens, and parentheses.
             The assignment name should not be blank.
             Hyphens "-" must be between two alphanumeric characters.
-            Open parenthesis "(" cannot be at the start of the name, and must have a closing parenthesis ")".
             Parentheses must:
                 - Not be at the start of the name
                 - Contain only spaces and alphanumeric characters, with at least 1 alphanumeric character

@@ -106,7 +106,7 @@ class JsonSerializableAddressBook {
         }
 
         for (JsonAdaptedClassGroup jsonAdaptedClassGroup : this.classGroups) {
-            ClassGroup classGroup = jsonAdaptedClassGroup.toModelType();
+            ClassGroup classGroup = jsonAdaptedClassGroup.toModelType(addressBook);
             if (addressBook.hasClassGroup(classGroup) || addressBook.hasClassGroupId(classGroup.getId())) {
                 throw new IllegalValueException(JsonSerializableAddressBook.MESSAGE_DUPLICATE_CLASS_GROUP);
             }

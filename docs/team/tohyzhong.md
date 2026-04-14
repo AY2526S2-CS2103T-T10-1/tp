@@ -5,6 +5,10 @@
 
 ## Project: Classroom Plus Plus
 
+**Developer's name:** Yi Zhong
+
+**Role(s):** Project Lead, DG Manager, PE-D Bug Triage Co-lead
+
 Classroom Plus Plus is a desktop teaching management application used to manage contacts and assignments. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 20 kLoC. This is around 10 kLoC more than the original AddressBook-Level3 codebase, which is around 10 kLoC.
 
 Of the 10385 lines of functional code in the project, I have contributed 6530 lines (inclusive of ~200 lines of reformatting lines).
@@ -41,7 +45,8 @@ Given below are my contributions to the project.
 * **Code contributed**: [RepoSense link](https://nus-cs2103-ay2526-s2.github.io/tp-dashboard/?search=&sort=totalCommits%20dsc&sortWithin=title&timeframe=commit&mergegroup=&groupSelect=groupByRepos&breakdown=true&checkedFileTypes=docs~functional-code~test-code~other&since=2026-02-20T00%3A00%3A00&filteredFileName=&tabOpen=true&tabType=authorship&tabAuthor=tohyzhong&tabRepo=AY2526S2-CS2103T-T10-1%2Ftp%5Bmaster%5D&authorshipIsMergeGroup=false&authorshipFileTypes=docs~functional-code~test-code~other&authorshipIsBinaryFileTypeChecked=false&authorshipIsIgnoredFilesChecked=false)
 
 * **Project management**:
-  * Managed releases `v1.1` - `v1.6` (6 releases) on GitHub
+  * Managed releases `v1.1` - `v1.4` and `v1.6` (5 releases) on GitHub
+  * Co-managed release `v1.5` with [Blerargh](./blerargh.md)
   * Added GitHub project safeguards: enabled branch protection rules (PR protection)
   * Enabled the issue tracker with custom issues
   * Created milestones for release planning
@@ -53,7 +58,7 @@ Given below are my contributions to the project.
   * Set up repository-wide code formatting and markdown linting + formatting
   * Maintained bulk of issue trackers together with [Blerargh](./blerargh.md)
   * Updated all non-code documentation (e.g. README, project site) to reflect the new project name and features
-  * Reviewed and merged [53 pull requests](https://github.com/AY2526S2-CS2103T-T10-1/tp/issues?q=is%3Apr%20state%3Aclosed%20reviewed-by%3Atohyzhong%20sort%3Acomments-desc) from other team members out of the 103 PRs closed
+  * Reviewed and merged [56 pull requests](https://github.com/AY2526S2-CS2103T-T10-1/tp/issues?q=is%3Apr%20state%3Aclosed%20reviewed-by%3Atohyzhong%20sort%3Acomments-desc) from other team members out of the 108 PRs closed
   * Went through all bug reports in PE-D with [Blerargh](./blerargh.md), and organised the bug reports by removing duplicates and assigning them
   * Added code coverage, CI, and deployment status badges to the README file and project site
 

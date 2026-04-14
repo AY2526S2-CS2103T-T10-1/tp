@@ -89,7 +89,7 @@ public class AddAssignmentCommandParserTest {
                 .replace("13-12-2020 10:00", "12-13-2020 10:00");
         CommandParserTestUtil.assertParseFailure(this.parser,
                 invalidDeadlineDetails,
-                "Invalid date and time format. Please use the format: dd-MM-yyyy HH:mm");
+                ParserUtil.MESSAGE_INVALID_DATETIME);
 
         // two invalid values
         CommandParserTestUtil.assertParseFailure(this.parser,

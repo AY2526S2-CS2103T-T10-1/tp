@@ -21,7 +21,7 @@ With CPP, educators can easily add, edit, and search for contacts, classes and a
 * **Contact Management**: Store and manage student contact details, including names, phone numbers, email addresses, and more.
 * **Class Organization**: Group students into classes for better organization and easy access to class-specific information.
 * **Assignment Tracking**: Keep track of student assignments, deadlines in one convenient location.
-* **Quick Access with Fuzzy Search**: Find details quickly using fuzzy search, even with partial or misspelled queries.
+* **Quick Access with Substring Matching**: Find details quickly with partial matching, making it easier to locate information even if you don't remember the exact details.
 * **CLI Interface**: Interact with CPP through a command-line interface, allowing for quick and efficient management of contacts and assignments.
 
 For the detailed documentation of this project, see the **[CPP Product Website](https://ay2526s2-cs2103t-t10-1.github.io/tp/)**.
